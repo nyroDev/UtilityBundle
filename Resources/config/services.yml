@@ -1,0 +1,73 @@
+parameters:
+    nyrodev_utility.mainService.class: NyroDev\UtilityBundle\Services\MainService
+    nyrodev_utility.shareService.class: NyroDev\UtilityBundle\Services\ShareService
+    nyrodev_utility.memberService.class: NyroDev\UtilityBundle\Services\MemberService
+    nyrodev_utility.imageService.class: NyroDev\UtilityBundle\Services\ImageService
+    nyrodev_utility.formService.class: NyroDev\UtilityBundle\Services\FormService
+    nyrodev_utility.formFilterService.class: NyroDev\UtilityBundle\Services\FormFilterService
+    nyrodev_utility.admin.nbPerPage: 25
+
+services:
+    nyrodev:
+        class: %nyrodev_utility.mainService.class%
+        arguments: [@service_container]
+        tags:
+          - { name: templating.helper, alias: nyrodev }
+    nyrodev_share:
+        class: %nyrodev_utility.shareService.class%
+        arguments: [@service_container]
+        tags:
+          - { name: templating.helper, alias: nyrodev_share }
+    nyrodev_member:
+        class: %nyrodev_utility.memberService.class%
+        arguments: [@service_container]
+        tags:
+          - { name: templating.helper, alias: nyrodev_member }
+    nyrodev_image:
+        class: %nyrodev_utility.imageService.class%
+        arguments: [@service_container]
+        tags:
+          - { name: templating.helper, alias: nyrodev_image }
+    nyrodev_form:
+        class: %nyrodev_utility.formService.class%
+        arguments: [@service_container]
+    nyrodev_formFilter:
+        class: %nyrodev_utility.formFilterService.class%
+        arguments: [@service_container]
+    form.type.filter:
+        class: NyroDev\UtilityBundle\Form\Type\FilterType
+        tags:
+          - { name: form.type, alias: filter}
+    form.type.filter_date:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDateType
+        tags:
+          - { name: form.type, alias: filter_date}
+    form.type.filter_int:
+        class: NyroDev\UtilityBundle\Form\Type\FilterIntType
+        tags:
+          - { name: form.type, alias: filter_int}
+    form.type.filter_bool:
+        class: NyroDev\UtilityBundle\Form\Type\FilterBoolType
+        tags:
+          - { name: form.type, alias: filter_bool}
+    form.type.filter_dbRow:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowType
+        tags:
+          - { name: form.type, alias: filter_dbRow}
+    form.type.filter_dbRowMultiple:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleType
+        tags:
+          - { name: form.type, alias: filter_dbRowMultiple}
+    form.type.filter_dbRowMultipleSingleChoice:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleSingleChoiceType
+        tags:
+          - { name: form.type, alias: filter_dbRowMultipleSingleChoice}
+    form.type.tinymce:
+        class: NyroDev\UtilityBundle\Form\Type\TinymceType
+        arguments: [@service_container]
+        tags:
+          - { name: form.type, alias: tinymce}
+    form.type.dummy_captcha:
+        class: NyroDev\UtilityBundle\Form\Type\DummyCaptchaType
+        tags:
+          - { name: form.type, alias: dummy_captcha}

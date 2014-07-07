@@ -1,0 +1,214 @@
+form {
+    position: relative;
+}
+.form_row_dummy_captcha {
+	display: none;
+}
+.form_row, .form_button {
+    position: relative;
+    margin-bottom: 1em;
+    width: 720px;
+}
+label {
+    width: 200px;
+    display: inline-block;
+    margin-right: 15px;
+    text-align: right;
+}
+input[type=text], input[type=email], input[type=url], input[type=password] {
+    border: 1px solid #ccc;
+    padding: 3px;
+    width: 450px;
+}
+input[readonly] {
+    background: #eee;
+}
+textarea {
+	min-height: 5em;
+    width: 450px;
+    width: 450px;
+    width: 450px;
+}
+select {
+    width: 457px;
+}
+.formIndicator {
+    font-weight: bold;
+    font-size: 1.2em;
+    display: none;
+}
+.form_required .formIndicator, .formRequiredFields .formIndicator {
+    display: inline;
+}
+.form_error label,.form_error .formIndicator {
+    color: #f00;
+}
+
+.form_row_checkbox {
+    text-align: right;
+	width: 688px;
+}
+.form_row_checkbox label {
+    width: auto;
+    font-weight: normal;
+    margin-right: 3px;
+}
+.form_button {
+    overflow: auto;
+	width: 678px;
+}
+.form_button button {
+    border: none;
+    background: #000;
+    color: #fff;
+    text-transform: uppercase;
+    float: right;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.form_button button:hover {
+	background: #333;
+}
+.form_errors, .form_row .form_errors {
+    list-style-type: none;
+    color: red;
+    margin: 3px 0 3px 220px;
+    padding: 0;
+}
+.formRequiredFields {
+    font-weight: bold;
+}
+.formRequiredFields .formIndicator {
+    right: auto;
+    left: 0;
+    top: 0.8rem;
+}
+#main .formCentered {
+    width: 47rem;
+    margin: 1em auto;
+}
+.form_row_choice ul {
+    display: inline-block;
+    vertical-align: top;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 27.5rem;
+}
+.form_row_choice li {
+    margin-bottom: 0.5em;
+}
+.form_row_choice ul label {
+    width: auto;
+    display: inline;
+}
+.autocomplete {
+    overflow: hidden;
+    height: 2.2rem;
+}
+.myUploadBut {
+    color: #fff;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+	font-weight: 700;
+    font-size: 1.4rem;
+	line-height: 2.5rem;
+    padding: 0.1rem 1rem 0.1rem 3.5rem;
+    background: #7a8087 url(images/upload.png) no-repeat 1rem 0.5rem;
+    border-radius: 0.5rem;
+    width: 12rem;
+    margin: 0.5rem auto;
+    text-align: center;
+    display: block;
+}
+.myUploadHandle label {
+	display: none;
+}
+.myUploadLine {
+    overflow: auto;
+    position: relative;
+}
+.myUploadLine .pluploadCancel {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.myUploadLine span {
+    font-style: italic;
+	font-weight: 600;
+}
+.myUploadLine .pluploadLoader {
+    width: 87%;
+    display: inline-block;
+    height: 1rem;
+    border: 3px solid #9fd0fd;
+    background: #9fd0fd;
+    border-radius: 1rem;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    vertical-align: bottom;
+}
+.myUploadLine .pluploadLoading {
+    width: 100%;
+    background: #fff;
+    height: 1rem;
+    border-radius: 1rem;
+    float: right;
+}
+.pluploadError strong {
+	color: red;
+	display: block;
+}
+
+
+.form_row_filter label {
+    width: 150px;
+}
+.form_row_filter .row_form_transformer select {
+    width: 120px;
+}
+.form_row_filter input {
+    width: 350px;
+}
+.form_row_filter select {
+    width: 356px;
+}
+.form_row_filter .formIndicator {
+    display: none;
+}
+.form_row_filter_date div {
+    display: inline;
+}
+.form_row_filter_date div select {
+    width: auto;
+}
+.filterForm .form_button {
+    width: 650px;
+}
+.filterForm .formRequiredFields {
+	display: none;
+}
+.clearFilter {
+    position: relative;
+    top: -50px;
+    left: 170px;
+}
+.form_row_tinymce {
+    width: 100%;
+    overflow: auto;
+}
+.form_row_tinymce label {
+    float: left;
+}
+.form_row_tinymce .formIndicator {
+    margin-left: 10px;
+}
+.form_row_tinymce .mce-tinymce {
+    float: left;
+}
+.form_row_date div {
+    display: inline;
+}
+.form_row_date select {
+    width: auto;
+}

@@ -1,0 +1,37 @@
+date:
+  long: "%#d %B %Y à %H:%M"
+  short: %d/%m/%Y
+login:
+  errors:
+    "Bad credentials": "Désolé, votre adresse email ne correspond à aucun compte existant."
+    "The presented key does not match.": "La connexion automatique a échouée. Veuillez vous connecter noramlement."
+    "The credentials were changed from another session.": "Le mot de passe a été changé dans une autre session."
+    "The presented password cannot be empty.": "Le mot de passe est erroné."
+    "The presented password is invalid.": "Désolé, le mot de passe n'est pas correct. Veuillez rééssayer."
+admin:
+  misc:
+    actions: Actions
+    send: Envoyer
+    filter: Filtrer
+    clearFilter: Vider le filtre
+    export: Exporter
+  pager:
+    next: Suivant
+    prev: Précédent
+nyrodev:
+  required: "*Champs requis"
+  browser:
+    title: Navigateur
+    file: Fichier
+    send: Envoyer
+    search: Rechercher
+    files: Fichiers
+    noFiles: Aucun fichier
+    delete: Supprimer
+    name: Nom
+    size: Taille
+    date: Date
+    confirmDelete: "Êtes-vous sûr de vouloir supprimer ce fichier ?"
+    directory: Dossier
+    addDir: Ajouter un dossier
+    rootDir: racine

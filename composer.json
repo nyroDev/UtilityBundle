@@ -1,0 +1,23 @@
+{
+    "name": "nyrodev/utility-bundle",
+    "type": "symfony-bundle",
+    "description": "Utility Bundle for Symfony, provide many shortcut and useful functionnalities",
+    "homepage": "https://github.com/nyroDev/UtilityBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cédric Nirousset",
+            "email": "cedric@nyrodev.com",
+            "homepage": "http://nyrodev.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/symfony": ">=2.3"
+    },
+    "target-dir": "NyroDev/UtilityBundle",
+    "autoload": {
+        "psr-4": { "NyroDev\\UtilityBundle\\": "" }
+    }
+}

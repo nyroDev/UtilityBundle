@@ -1,0 +1,26 @@
+.listButtons {
+	overflow: auto;
+	margin-bottom: 1em;
+}
+.listButtons a {
+	display: inline-block;
+	float: right;
+    font-size: 1.2em;
+	margin-left: 2em;
+}
+table.data {
+    width: 100%;
+}
+table.data thead th {
+    background: #ddd;
+    text-align: left;
+}
+table.data th, table.data td {
+    padding: 5px;
+}
+table.data tbody tr:nth-child(even) {
+    background: #eee;
+}
+.pagination {
+    text-align: center;
+}
