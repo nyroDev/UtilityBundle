@@ -18,6 +18,13 @@ class MainService extends AbstractService {
 		return str_replace('%2C', ',', $this->get('router')->generate($name, $parameters, $absolute));
 	}
 	
+	public function getFullUrl($path) {
+		$request = $this->get('request');
+		if ($path[0] != '/')
+			$path = '/'.$path;
+		return $request->getScheme().'://'.$request->getHttpHost().$request->getBasePath().$path;
+	}
+	
 	/**
 	 * Set a templating slot
 	 *
