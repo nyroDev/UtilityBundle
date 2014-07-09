@@ -50,6 +50,10 @@ abstract class AbstractUploadable {
 		}
 	}
 	
+	public function getWebPath($field) {
+		return $this->getFilePath($field, AbstractUploadable::PATH_WEB);
+	}
+	
 	public function setFilePath($field, $value) {
 		$accessor = PropertyAccess::createPropertyAccessor();
 		$accessor->setValue($this, $this->getFileConfig($field, AbstractUploadable::CONFIG_FIELD), $value);
@@ -65,7 +69,7 @@ abstract class AbstractUploadable {
 			case AbstractUploadable::CONFIG_DIR:
 				return 'uploads/'.$field;
 			case AbstractUploadable::CONFIG_ROOTDIR:
-				return __DIR__.'/../../../../web/'.$this->getFileConfig($field, AbstractUploadable::CONFIG_DIR);
+				return __DIR__.'/../../../../../../web/'.$this->getFileConfig($field, AbstractUploadable::CONFIG_DIR);
 		}
 		return null;
 	}
