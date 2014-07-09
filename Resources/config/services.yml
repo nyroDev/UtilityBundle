@@ -67,6 +67,11 @@ services:
         arguments: [@service_container]
         tags:
           - { name: form.type, alias: tinymce}
+    form.type.rawhtml:
+        class: NyroDev\UtilityBundle\Form\Type\RawHtmlType
+        arguments: [@service_container]
+        tags:
+          - { name: form.type, alias: rawhtml}
     form.type.dummy_captcha:
         class: NyroDev\UtilityBundle\Form\Type\DummyCaptchaType
         tags:
