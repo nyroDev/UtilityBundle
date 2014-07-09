@@ -11,7 +11,7 @@ abstract class AbstractAdminController extends AbstractController {
 	const ADD = 'add';
 	const EDIT = 'edit';
 
-	protected function createList($repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, QueryBuilder $queryBuilder = null, $exportConfig = false) {
+	protected function createList($repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, QueryBuilder $queryBuilder = null, $exportConfig = false) {
 		$nbPerPage = $this->container->getParameter('nyrodev_utility.admin.nbPerPage');
 		
 		$tmpList = $this->getListElements($repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder);
@@ -97,7 +97,7 @@ abstract class AbstractAdminController extends AbstractController {
 			exit;
 		}
 		
-		$routePrm = array('sort'=>$sort, 'order'=>$order);
+		$routePrm = array_merge($routePrm, array('sort'=>$sort, 'order'=>$order));
 		if (!is_null($filter))
 			$routePrm = array_merge($routePrm, $this->get('nyrodev_formFilter')->getPrmForUrl($filter));
 		$pager = $this->get('nyrodev')->getPager($route, $routePrm, $total, $page, $nbPerPage);
@@ -230,11 +230,11 @@ abstract class AbstractAdminController extends AbstractController {
 		
 		$form->handleRequest($this->getRequest());
 		if ($form->isValid()) {
-			if ($action == AbstractAdminController::ADD)
-				$this->getDoctrine()->getManager()->persist($row);
-			
 			if (!is_null($callbackFlush))
 				$this->$callbackFlush($action, $row, $form);
+			
+			if ($action == AbstractAdminController::ADD)
+				$this->getDoctrine()->getManager()->persist($row);
 			
 			$this->getDoctrine()->getManager()->flush();
 			return $this->redirect($this->generateUrl($route, $routePrm));

@@ -45,4 +45,3 @@ class MemberService extends AbstractService {
 	}
 
 }
-

@@ -8,6 +8,11 @@
     font-size: 1.2em;
 	margin-left: 2em;
 }
+.add {
+    display: block;
+    text-align: right;
+    font-size: 1.2em;
+}
 table.data {
     width: 100%;
 }

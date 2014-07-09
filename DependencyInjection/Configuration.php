@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
 						->scalarNode('title')->defaultValue('')->end()
 						->scalarNode('description')->defaultValue('')->end()
 						->scalarNode('keywords')->defaultValue('')->end()
+						->scalarNode('image')->defaultValue('')->end()
 					->end()
 				->end()
 				->arrayNode('image')

@@ -11,5 +11,5 @@ abstract class AbstractFilterType extends AbstractType {
 			->setMethod('get')
 			->add('submit', 'submit', array('label'=>$this->trans('admin.misc.filter')));
 	}
-
+	
 }

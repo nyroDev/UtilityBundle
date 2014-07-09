@@ -14,6 +14,7 @@ class ShareService extends AbstractService {
 	 * @param boolean $useProperty Indicates if the default should use property
 	 */
 	public function set($type, $value, $useProperty = false) {
+		$value = $this->trans($value);
 		$keys = array();
 		$keysProp = array();
 		switch($type) {
@@ -30,6 +31,8 @@ class ShareService extends AbstractService {
 			case 'image':
 				$keysProp[] = 'og:image';
 				$keys[] = 'twitter:image:src';
+				if (strpos($value, '://') === false)
+					$value = $this->get('nyrodev')->getFullUrl($value);
 				break;
 			default:
 				if ($useProperty)
@@ -110,9 +113,11 @@ class ShareService extends AbstractService {
 		if (!isset($this->metas['title']) && $this->getParameter('nyroDev_utility.share.title'))
 			$this->setTitle(trim($this->getParameter('nyroDev_utility.share.title')));
 		if (!isset($this->metas['description']) && $this->getParameter('nyroDev_utility.share.description'))
-			$this->metas['description'] = trim($this->getParameter('nyroDev_utility.share.description'));
+			$this->setDescription(trim($this->getParameter('nyroDev_utility.share.description')));
 		if (!isset($this->metas['keywords']) && $this->getParameter('nyroDev_utility.share.keywords'))
-			$this->metas['keywords'] = trim($this->getParameter('nyroDev_utility.share.keywords'));
+			$this->set('keywords', trim($this->getParameter('nyroDev_utility.share.keywords')));
+		if (!isset($this->metas['og:image']) && $this->getParameter('nyroDev_utility.share.image'))
+			$this->setImage(trim($this->getParameter('nyroDev_utility.share.image')));
 		
 		if (isset($this->metas['title']) && $this->metas['title']) {
 			$ret[] = '<title>'.$this->metas['title'].'</title>';
@@ -188,4 +193,3 @@ class ShareService extends AbstractService {
 	}
 	
 }
-

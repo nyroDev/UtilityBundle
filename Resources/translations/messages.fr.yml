@@ -14,7 +14,11 @@ admin:
     send: Envoyer
     filter: Filtrer
     clearFilter: Vider le filtre
+    add: Ajouter
+    edit: Modifier
     export: Exporter
+    delete: Supprimer
+    noResults: Pas de résultats
   pager:
     next: Suivant
     prev: Précédent
