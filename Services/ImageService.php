@@ -122,10 +122,10 @@ class ImageService extends AbstractService {
 			if (isset($config['fit']) && $config['fit']) {
 				if ($scaleW > $scaleH) {
 					$srcH = round($config['h'] / $scaleW);
-					$srcY = round(($info['w'] - $srcH) / 2);
+					$srcY = round(($info['h'] - $srcH) / 2);
 				} else {
 					$srcW = round($config['w'] / $scaleH);
-					$srcX = round(($info['h'] - $srcW) / 2);
+					$srcX = round(($info['w'] - $srcW) / 2);
 				}
 			} else {
 				if ($scaleW > $scaleH) {
