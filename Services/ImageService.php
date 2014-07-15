@@ -68,9 +68,17 @@ class ImageService extends AbstractService {
 		}
 	}
 	
-	public function _resize($file, array $config, $force = false) {
-		$cachePath = $this->getCachePath($file);
-		$dest = $cachePath.$config['name'].'.jpg';
+	public function _resize($file, array $config, $force = false, $dest = null) {
+		if (is_null($dest)) {
+			$info = getimagesize($file);
+			$ext = 'jpg';
+			switch($info[2]) {
+				case IMAGETYPE_GIF:	$ext = 'gif'; break;
+				case IMAGETYPE_PNG:	$ext = 'png'; break;
+			}
+			$cachePath = $this->getCachePath($file);
+			$dest = $cachePath.$config['name'].'.'.$ext;
+		}
 		
 		if ($force || !file_exists($dest)) {
 			$imgDst = $this->resizeResource($this->createImgSrc($file), $config);
