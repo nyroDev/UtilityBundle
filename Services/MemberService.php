@@ -23,7 +23,7 @@ class MemberService extends AbstractService {
 	 * @return boolean
 	 */
 	public function isLogged() {
-		return $this->get('security.context')->getToken()->isAuthenticated() && is_object($this->getUser());
+		return $this->get('security.context')->getToken() && $this->get('security.context')->getToken()->isAuthenticated() && is_object($this->getUser());
 	}
 	
 	/**
