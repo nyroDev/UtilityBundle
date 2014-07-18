@@ -53,7 +53,7 @@ class cssImagesCommand extends ContainerAwareCommand {
 		}
 		
 		if ($found) {
-			$dest = dirname(dirname(dirname(dirname(__DIR__)))).DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
+			$dest = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
 			if (!file_exists($dest)) {
 				if (false === @mkdir($dest, 0777, true)) {
 					throw new \RuntimeException('Unable to create directory '.$dest);
