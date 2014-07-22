@@ -14,9 +14,8 @@ class VideoService extends AbstractService {
 		$cacheKey = $this->getChacheKey($url, 'videoUrlParser_');
 		if ($force || !$cache->contains($cacheKey)) {
 			
-			$embedUrl = new \Embed\Url($url);
-			$service = \Embed\Embed::create($embedUrl);
-			/* @var $service \Embed\Adapters\Adapter */
+			$service = \Embed\Embed::create($url);
+			/* @var $service \Embed\Adapters\AdapterInterface */
 			
 			if ($service) {
 				$data = array(
