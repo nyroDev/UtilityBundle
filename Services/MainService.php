@@ -225,10 +225,11 @@ class MainService extends AbstractService {
 	 */
 	public function html2text($html) {
 		if (!$this->html2textLoaded) {
-			require(dirname(__FILE__).'/../Utility/html2text.php');
+			require(dirname(__FILE__).'/../Utility/Html2text.php');
 			$this->html2textLoaded = true;
 		}
-		return \convert_html_to_text($html);
+		$html2text = new \Html2Text\Html2Text($html);
+		return $html2text->get_text();
 	}
 
 	
