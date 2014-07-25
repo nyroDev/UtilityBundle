@@ -18,7 +18,8 @@
     },
     "suggest": {
         "embed/embed": "Required to use VideoService",
-        "winzou/cache-bundle": "Required to use VideoService"
+        "winzou/cache-bundle": "Required to use VideoService",
+        "sabberworm/php-css-parser": "Required to use rem2px command"
     },
     "target-dir": "NyroDev/UtilityBundle",
     "autoload": {
