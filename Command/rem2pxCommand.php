@@ -23,6 +23,7 @@ class rem2pxCommand extends ContainerAwareCommand {
 			->setDescription('Convert CSS files into px')
 			->addArgument('src', InputArgument::REQUIRED, 'Which files to parse?')
 			->addArgument('dst', InputArgument::REQUIRED, 'Where to save the file?')
+			->addArgument('selector', InputArgument::OPTIONAL, 'Selector for files to parse?', '*')
 			->addOption('append', 'a', InputOption::VALUE_NONE, 'Append to dst file?');
 	}
 	
@@ -35,6 +36,7 @@ class rem2pxCommand extends ContainerAwareCommand {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$src = $input->getArgument('src');
 		$dst = $input->getArgument('dst');
+		$selector = $input->getArgument('selector');
 		$append = $input->getOption('append');
 		
 		// Create CSS dest object
@@ -46,7 +48,7 @@ class rem2pxCommand extends ContainerAwareCommand {
 					->files()
 					->depth(0)
 					->in($src)
-					->name('*.css');
+					->name($selector.'.css');
 		
 		foreach($resources as $res) {
 			$output->writeln('CSS Found: '.$res->getRealPath());
