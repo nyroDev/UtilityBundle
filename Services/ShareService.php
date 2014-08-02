@@ -155,7 +155,7 @@ class ShareService extends AbstractService {
 				if (isset($tmpJson['shares']))
 					$data['facebook'] = $tmpJson['shares'];
 			}
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 
 		// Twitter shares
 		try {
@@ -165,7 +165,7 @@ class ShareService extends AbstractService {
 				if (isset($tmpJson['count']))
 					$data['twitter'] = $tmpJson['count'];
 			}
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 
 		// Google+ shares
 		try {
@@ -176,7 +176,7 @@ class ShareService extends AbstractService {
 				if(0 != $ret)
 					$data['google'] = str_replace('.0', '', $ret);
 			}
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 
 		// Pinterest shares
 		try {
@@ -187,7 +187,7 @@ class ShareService extends AbstractService {
 				if (isset($tmpJson['count']))
 					$data['pinterest'] = $tmpJson['count'];
 			}
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 		
 		return $data;
 	}
