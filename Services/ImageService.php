@@ -203,7 +203,7 @@ class ImageService extends AbstractService {
 				break;
 		}
 		if (!$src)
-			throw new \Exception('Error while reading source image: '.$file, 500, 'Error');
+			throw new \Exception('Error while reading source image: '.$file, 500);
 
 		if ($isTransparent) {
 			imagealphablending($src, false);
