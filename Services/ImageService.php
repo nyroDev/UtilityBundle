@@ -192,14 +192,14 @@ class ImageService extends AbstractService {
 		$isTransparent = true;
 		switch ($info[2]) {
 			case IMAGETYPE_JPEG:
-				$src = imagecreatefromjpeg($file);
+				$src = @imagecreatefromjpeg($file);
 				$isTransparent = false;
 				break;
 			case IMAGETYPE_GIF:
-				$src = imagecreatefromgif($file);
+				$src = @imagecreatefromgif($file);
 				break;
 			case IMAGETYPE_PNG:
-				$src = imagecreatefrompng($file);
+				$src = @imagecreatefrompng($file);
 				break;
 		}
 		if (!$src)
