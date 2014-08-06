@@ -126,10 +126,10 @@ function filescount($path) {
 
 function create_folder($path=false,$path_thumbs=false){
     $oldumask = umask(0);
-    if ($path && !file_exists($path))
-        mkdir($path, 0777, true); // or even 01777 so you get the sticky bit set 
-    if($path_thumbs && !file_exists($path_thumbs)) 
-        mkdir($path_thumbs, 0777, true) or die("$path_thumbs cannot be found"); // or even 01777 so you get the sticky bit set 
+    if ($path && !file_exists(dirname(__FILE__).'/../'.$path))
+        mkdir(dirname(__FILE__).'/../'.$path, 0777, true); // or even 01777 so you get the sticky bit set 
+    if($path_thumbs && !file_exists(dirname(__FILE__).'/../'.$path_thumbs)) 
+        mkdir(dirname(__FILE__).'/../'.$path_thumbs, 0777, true) or die("$path_thumbs cannot be found"); // or even 01777 so you get the sticky bit set 
     umask($oldumask);
 }
 
