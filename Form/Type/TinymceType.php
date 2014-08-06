@@ -30,10 +30,18 @@ class TinymceType extends AbstractType {
 		if (isset($options['tinymceBrowser'])) {
 			$canBrowse = isset($options['tinymceBrowser']['url']) || $this->container->hasParameter('nyrodev_utility.tinymce.browserRoute');
 			if ($canBrowse) {
+				$attrs[$prefixTinymce.'plugins'].= ',responsivefilemanager';
+				
+				$attrs[$prefixTinymce.'external_filemanager_path'] = (isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get('nyrodev')->generateUrl($this->container->getParameter('nyrodev_utility.tinymce.browserRoute'))).'/';
+				$attrs[$prefixTinymce.'filemanager_title'] = isset($options['tinymceBrowser']['title']) ? $options['tinymceBrowser']['title'] : $this->container->get('translator')->trans('nyrodev.browser.title');
+				$attrs[$prefixTinymce.'external_plugins'] = json_encode(array('filemanager'=>$attrs[$prefixTinymce.'external_filemanager_path'].'plugin.min.js'));
+				
+				/*
 				$attrs['data-browser_url'] = isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get('nyrodev')->generateUrl($this->container->getParameter('nyrodev_utility.tinymce.browserRoute'));
 				$attrs['data-browser_width'] = isset($options['tinymceBrowser']['width']) ? $options['tinymceBrowser']['width'] : 800;
 				$attrs['data-browser_height'] = isset($options['tinymceBrowser']['height']) ? $options['tinymceBrowser']['height'] : 600;
 				$attrs['data-browser_title'] = isset($options['tinymceBrowser']['title']) ? $options['tinymceBrowser']['title'] : $this->container->get('translator')->trans('nyrodev.browser.title');
+				 */
 			}
 		}
 		
