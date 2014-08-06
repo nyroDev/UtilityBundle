@@ -137,11 +137,11 @@ class TinymceController extends AbstractController {
 			$create_folders	 	= $this->container->getParameter('nyroDev_utility.browser.allowAddDir');
 			$delete_folders	 	= TRUE;
 			$upload_files	 	  = TRUE;
-			$rename_files	 	  = TRUE;
+			$rename_files	 	  = false;
 			$rename_folders	 	= false;
-			$duplicate_files 	= TRUE;
-			$copy_cut_files	 	= TRUE; // for copy/cut files
-			$copy_cut_dirs	 	= TRUE; // for copy/cut directories
+			$duplicate_files 	= false;
+			$copy_cut_files	 	= false; // for copy/cut files
+			$copy_cut_dirs	 	= false; // for copy/cut directories
 			$chmod_files 	 	  = FALSE; // change file permissions
 			$chmod_dirs		 	  = FALSE; // change folder permissions
 			$preview_text_files = TRUE; // eg.: txt, log etc.
