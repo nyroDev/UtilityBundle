@@ -45,7 +45,11 @@ function create_img_gd($imgfile, $imgthumb, $newwidth, $newheight="",$option="cr
 	require_once('php_image_magician.php');
 	$magicianObj = new imageLib($imgfile);
 	$magicianObj -> resizeImage($newwidth, $newheight, $option);
-	$magicianObj -> saveImage(dirname(__FILE__).'/'.$imgthumb,80);
+	$dest = dirname(dirname(__FILE__)).'/'.$imgthumb;
+	$dirDest = dirname($dest);
+	if (!file_exists($dirDest))
+		mkdir($dirDest, 0777, true);
+	$magicianObj -> saveImage($dest,80);
 	return true;
     }
     return false;
@@ -56,7 +60,11 @@ function create_img($imgfile, $imgthumb, $newwidth, $newheight="",$option="auto"
 	require_once('php_image_magician.php');  
 	$magicianObj = new imageLib($imgfile);
 	$magicianObj -> resizeImage($newwidth, $newheight, $option);  
-	$magicianObj -> saveImage(dirname(__FILE__).'/'.$imgthumb,80);
+	$dest = dirname(dirname(__FILE__)).'/'.$imgthumb;
+	$dirDest = dirname($dest);
+	if (!file_exists($dirDest))
+		mkdir($dirDest, 0777, true);
+	$magicianObj -> saveImage($dest,80);
 	return true;
     }else{
 	return false;

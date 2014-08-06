@@ -55,6 +55,8 @@ class TinymceController extends AbstractController {
 
 			if (!file_exists($current_path))
 				mkdir($current_path, 0777, true);
+			if (!file_exists($fileManagerDir.$thumbs_base_path))
+				mkdir($fileManagerDir.$thumbs_base_path, 0777, true);
 			
 			// OPTIONAL SECURITY
 			// if set to true only those will access RF whose url contains the access key(akey) like: 
@@ -265,6 +267,9 @@ class TinymceController extends AbstractController {
 			$response->setContent($content);
 		} else {
 			$response = new \Symfony\Component\HttpFoundation\BinaryFileResponse($path);
+			$response->setPublic();
+			$response->setSharedMaxAge(3600);
+			$response->setMaxAge(3600);
 		}
 		
 		return $response;
