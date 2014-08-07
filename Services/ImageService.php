@@ -83,7 +83,7 @@ class ImageService extends AbstractService {
 		if ($force || !file_exists($dest)) {
 			$imgDst = $this->resizeResource($this->createImgSrc($file), $config);
 			
-			switch($ext) {
+			switch($this->get('nyrodev')->getExt($dest)) {
 				case 'jpg':
 					imagejpeg($imgDst, $dest, isset($config['quality']) ? $config['quality'] : 100);
 					break;
@@ -91,7 +91,10 @@ class ImageService extends AbstractService {
 					imagegif($imgDst, $dest);
 					break;
 				case 'png':
-					imagepng($imgDst, $dest, isset($config['quality']) ? $config['quality'] : 100);
+					$quality = isset($config['quality']) ? $config['quality'] : 100;
+					if ($quality > 9)
+						$quality = round($quality / 100);
+					imagepng($imgDst, $dest, $quality);
 					break;
 			}
 			imagedestroy($imgDst);
@@ -249,51 +252,98 @@ class ImageService extends AbstractService {
 	}
 	
 	/**
-	 * Creates function imagecreatefrombmp, since PHP doesn't have one
-	 * @return resource An image identifier, similar to imagecreatefrompng
-	 * @param string $filename Path to the BMP image
-	 * @see imagecreatefrompng
-	 * @author Glen Solsberry <glens@networldalliance.com>
+	 * Create a GD image source from BMP.
+	 * http://php.net/manual/fr/function.imagecreatefromwbmp.php#86214
+	 *
+	 * @param string $filename File path
+	 * @return resource
 	 */
 	protected function imagecreatefrombmp($filename) {
-		$file = fopen($filename, 'rb');
-		$read = fread($file, 10);
-		while(!feof($file) && $read != '')
-			$read.= fread($file, 1024);
-		
-		$temp = unpack('H*', $read);
-		$hex = $temp[1];
-		$header = substr($hex, 0, 104);
-		$body = str_split(substr($hex, 108), 6);
-		if(substr($header, 0, 4) == '424d') {
-			$header = substr($header, 4);
-			// Remove some stuff?
-			$header = substr($header, 32);
-			// Get the width
-			$width = hexdec(substr($header, 0, 2));
-			// Remove some stuff?
-			$header = substr($header, 8);
-			// Get the height
-			$height = hexdec(substr($header, 0, 2));
-			unset($header);
-		}
-		
-		$x = 0;
-		$y = 1;
-		$image = imagecreatetruecolor($width, $height);
-		foreach($body as $rgb) {
-			$r = hexdec(substr($rgb, 4, 2));
-			$g = hexdec(substr($rgb, 2, 2));
-			$b = hexdec(substr($rgb, 0, 2));
-			$color = imagecolorallocate($image, $r, $g, $b);
-			imagesetpixel($image, $x, $height-$y, $color);
-			$x++;
-			if($x >= $width) {
-				$x = 0;
+		//    Load the image into a string
+		$file    =    fopen($filename, "rb");
+		$read    =    fread($file,10);
+		while(!feof($file)&&($read<>""))
+			$read    .=    fread($file,1024);
+
+		$temp    =    unpack("H*",$read);
+		$hex    =    $temp[1];
+		$header    =    substr($hex,0,108);
+
+		//    Process the header
+		//    Structure: http://www.fastgraph.com/help/bmp_header_format.html
+		if (substr($header,0,4)=="424d") {
+			//    Cut it in parts of 2 bytes
+			$header_parts    =    str_split($header,2);
+
+			//    Get the width        4 bytes
+			$width            =    hexdec($header_parts[19].$header_parts[18]);
+
+			//    Get the height        4 bytes
+			$height            =    hexdec($header_parts[23].$header_parts[22]);
+
+			//    Unset the header params
+			unset($header_parts);
+		} 
+
+		//    Define starting X and Y
+		$x                =    0;
+		$y                =    1;
+
+		//    Create newimage
+		$image            =    imagecreatetruecolor($width,$height);
+
+		//    Grab the body from the image
+		$body            =    substr($hex,108);
+
+		//    Calculate if padding at the end-line is needed
+		//    Divided by two to keep overview.
+		//    1 byte = 2 HEX-chars
+		$body_size        =    (strlen($body)/2);
+		$header_size    =    ($width*$height);
+
+		//    Use end-line padding? Only when needed
+		$usePadding        =    ($body_size>($header_size*3)+4);
+
+		//    Using a for-loop with index-calculation instaid of str_split to avoid large memory consumption
+		//    Calculate the next DWORD-position in the body
+		for ($i=0;$i<$body_size;$i+=3) {
+			//    Calculate line-ending and padding
+			if ($x>=$width) {
+				//    If padding needed, ignore image-padding
+				//    Shift i to the ending of the current 32-bit-block
+				if ($usePadding)
+					$i    +=    $width%4;
+
+				//    Reset horizontal position
+				$x    =    0;
+
+				//    Raise the height-position (bottom-up)
 				$y++;
+
+				//    Reached the image-height? Break the for-loop
+				if ($y>$height)
+					break;
 			}
+
+			//    Calculation of the RGB-pixel (defined as BGR in image-data)
+			//    Define $i_pos as absolute position in the body
+			$i_pos    =    $i*2;
+			$r        =    hexdec($body[$i_pos+4].$body[$i_pos+5]);
+			$g        =    hexdec($body[$i_pos+2].$body[$i_pos+3]);
+			$b        =    hexdec($body[$i_pos].$body[$i_pos+1]);
+
+			//    Calculate and draw the pixel
+			$color    =    imagecolorallocate($image,$r,$g,$b);
+			imagesetpixel($image,$x,$height-$y,$color);
+
+			//    Raise the horizontal position
+			$x++;
 		}
-		
+
+		//    Unset the body / free the memory
+		unset($body);
+
+		//    Return image-object
 		return $image;
 	}
 
