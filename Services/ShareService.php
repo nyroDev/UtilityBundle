@@ -142,6 +142,10 @@ class ShareService extends AbstractService {
 		$urlEncoded = urlencode($url);
 		$data = array(
 			'facebook'=>0,
+			'facebookShare'=>0,
+			'facebookLike'=>0,
+			'facebookComment'=>0,
+			'facebookClick'=>0,
 			'twitter'=>0,
 			'google'=>0,
 			'pinterest'=>0
@@ -149,11 +153,21 @@ class ShareService extends AbstractService {
 
 		// Facebook shares
 		try {
-			$tmp = file_get_contents('http://graph.facebook.com/?id='.$urlEncoded);
+			$tmp = file_get_contents('https://api.facebook.com/method/fql.query?format=json&query=select%20%20like_count,share_count,comment_count,click_count,total_count%20from%20link_stat%20where%20url=%22'.$urlEncoded.'%22');
 			if ($tmp) {
 				$tmpJson = json_decode($tmp, true);
-				if (isset($tmpJson['shares']))
-					$data['facebook'] = $tmpJson['shares'];
+				if (is_array($tmpJson) && count($tmpJson)) {
+					if (isset($tmpJson[0]['like_count']))
+						$retCache['facebookLike'] = $tmpJson[0]['like_count'];
+					if (isset($tmpJson[0]['comment_count']))
+						$retCache['facebookComment'] = $tmpJson[0]['comment_count'];
+					if (isset($tmpJson[0]['click_count']))
+						$retCache['facebookClick'] = $tmpJson[0]['click_count'];
+					if (isset($tmpJson[0]['share_count']))
+						$retCache['facebookShare'] = $tmpJson[0]['share_count'];
+					if (isset($tmpJson[0]['total_count']))
+						$retCache['facebook'] = $tmpJson[0]['total_count'];
+				}
 			}
 		} catch (\Exception $e) {}
 
