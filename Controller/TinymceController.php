@@ -6,7 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TinymceController extends AbstractController {
 	
-	public function browserAction(Request $request, $file = null) {
+	public static function handleBrowserAction($container, Request $request, $file = null, $dirName = 'tinymce') {
+		
 		$fileManagerDir = dirname(dirname(__FILE__)).'/Resources/views/filemanager/';
 		
 		$path = $fileManagerDir.$file;
@@ -18,6 +19,7 @@ class TinymceController extends AbstractController {
 				switch ($_GET['lang']) {
 					case 'fr': $_GET['lang'] = 'fr_FR'; break;
 					case 'en': $_GET['lang'] = 'en_EN'; break;
+					case 'br': $_GET['lang'] = 'pt_BR'; break;
 				}
 			}
 			set_include_path(get_include_path() . PATH_SEPARATOR . $fileManagerDir);
@@ -46,12 +48,12 @@ class TinymceController extends AbstractController {
 			 */
 			$base_url = $request->getScheme().'://'.$request->getHost().$request->getBasePath();
 			
-			$upload_dir = '/uploads/tinymce/'; // path from base_url to base of upload folder (with start and final /)
+			$upload_dir = '/uploads/'.$dirName.'/'; // path from base_url to base of upload folder (with start and final /)
 			
-			$current_path = $this->container->getParameter('kernel.root_dir').'/../web/uploads/tinymce/'; // relative path from filemanager folder to upload folder (with final /)
+			$current_path = $container->getParameter('kernel.root_dir').'/../web/uploads/'.$dirName.'/'; // relative path from filemanager folder to upload folder (with final /)
 			//thumbs folder can't put inside upload folder
-			$thumbs_base_path = '../../../../../../../../../web/uploads/tinymceThumbs/'; // relative path from filemanager folder to thumbs folder (with final /)
-			$thumbs_base_path_url = $base_url.'/uploads/tinymceThumbs/';
+			$thumbs_base_path = '../../../../../../../../../web/uploads/'.$dirName.'Thumbs/'; // relative path from filemanager folder to thumbs folder (with final /)
+			$thumbs_base_path_url = $base_url.'/uploads/'.$dirName.'Thumbs/';
 
 			if (!file_exists($current_path))
 				mkdir($current_path, 0777, true);
@@ -79,7 +81,7 @@ class TinymceController extends AbstractController {
 			// $akey = md5($username.$salt);
 			// DO NOT use 'key' as access key!
 			// Keys are CASE SENSITIVE!
-			$access_keys = array('nyrodev/utility-bundle',$this->container->getParameter('secret'));
+			$access_keys = array('nyrodev/utility-bundle', $container->getParameter('secret'));
 
 			//--------------------------------------------------------------------------------------------------------
 			// YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS
@@ -136,7 +138,7 @@ class TinymceController extends AbstractController {
 			//Permissions configuration
 			//******************
 			$delete_files	 	  = TRUE;
-			$create_folders	 	= $this->container->getParameter('nyroDev_utility.browser.allowAddDir');
+			$create_folders	 	= $container->getParameter('nyroDev_utility.browser.allowAddDir');
 			$delete_folders	 	= TRUE;
 			$upload_files	 	  = TRUE;
 			$rename_files	 	  = false;
@@ -257,7 +259,7 @@ class TinymceController extends AbstractController {
 			$relative_image_creation_option         = array('crop','crop'); //set the type of the crop
 
 
-			$nyrodev = $this->get('nyrodev');
+			$nyrodev = $container->get('nyrodev');
 			
 			require($path);
 			$content = ob_get_contents();
@@ -273,6 +275,10 @@ class TinymceController extends AbstractController {
 		}
 		
 		return $response;
+	}
+	
+	public function browserAction(Request $request, $file = null) {
+		return self::handleBrowserAction($this->container, $request, $file);
 		
 		
 		

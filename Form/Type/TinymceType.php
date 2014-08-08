@@ -27,8 +27,8 @@ class TinymceType extends AbstractType {
 			$prefixTinymce.'relative_urls'=>false,
 		));
 		
-		if (isset($options['tinymceBrowser'])) {
-			$canBrowse = isset($options['tinymceBrowser']['url']) || $this->container->hasParameter('nyrodev_utility.tinymce.browserRoute');
+		if ((isset($options['tinymceBrowser']) && $options['tinymceBrowser']) || $this->container->hasParameter('nyrodev_utility.tinymce.enableBrowser')) {
+			$canBrowse = isset($options['tinymceBrowser']['url']) || ($this->container->hasParameter('nyrodev_utility.tinymce.browserRoute') && $this->container->getParameter('nyrodev_utility.tinymce.browserRoute'));
 			if ($canBrowse) {
 				$attrs[$prefixTinymce.'plugins'].= ',responsivefilemanager';
 				

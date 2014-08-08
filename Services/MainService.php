@@ -232,13 +232,19 @@ class MainService extends AbstractService {
 		return $html2text->get_text();
 	}
 
-	
+	/**
+	 * Join rows in a single string
+	 *
+	 * @param array $rows
+	 * @param string $separator
+	 * @return string
+	 */
 	public function joinRows($rows, $separator = ', ') {
 		$ret = array();
 		foreach($rows as $r)
 			$ret[] = $r.'';
 		return implode($separator, $ret);
 	}
-
+	
 }
 
