@@ -27,12 +27,12 @@ class TinymceType extends AbstractType {
 			$prefixTinymce.'relative_urls'=>false,
 		));
 		
-		if ((isset($options['tinymceBrowser']) && $options['tinymceBrowser']) || ($this->container->hasParameter('nyrodev_utility.tinymce.enableBrowser') && $this->container->getParameter('nyrodev_utility.tinymce.enableBrowser'))) {
-			$canBrowse = isset($options['tinymceBrowser']['url']) || ($this->container->hasParameter('nyrodev_utility.tinymce.browserRoute') && $this->container->getParameter('nyrodev_utility.tinymce.browserRoute'));
+		if ((isset($options['tinymceBrowser']) && $options['tinymceBrowser']) || ($this->container->hasParameter('nyrodev_utility.browser.defaultEnable') && $this->container->getParameter('nyrodev_utility.browser.defaultEnable'))) {
+			$canBrowse = isset($options['tinymceBrowser']['url']) || ($this->container->hasParameter('nyrodev_utility.browser.defaultRoute') && $this->container->getParameter('nyrodev_utility.browser.defaultRoute'));
 			if ($canBrowse) {
 				$attrs[$prefixTinymce.'plugins'].= ',responsivefilemanager';
 				
-				$attrs[$prefixTinymce.'external_filemanager_path'] = (isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get('nyrodev')->generateUrl($this->container->getParameter('nyrodev_utility.tinymce.browserRoute'))).'/';
+				$attrs[$prefixTinymce.'external_filemanager_path'] = (isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get('nyrodev')->generateUrl($this->container->getParameter('nyrodev_utility.browser.defaultRoute'))).'/';
 				$attrs[$prefixTinymce.'filemanager_title'] = isset($options['tinymceBrowser']['title']) ? $options['tinymceBrowser']['title'] : $this->container->get('translator')->trans('nyrodev.browser.title');
 				$attrs[$prefixTinymce.'external_plugins'] = json_encode(array('filemanager'=>$attrs[$prefixTinymce.'external_filemanager_path'].'plugin.min.js'));
 				
