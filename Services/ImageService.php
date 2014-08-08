@@ -199,7 +199,7 @@ class ImageService extends AbstractService {
 		return $imgDst;
 	}
 	
-	public function createImgSrc($file) {
+	public function createImgSrc($file, $allowTransparent = true) {
 		$info = getimagesize($file);
 		$src = null;
 		$isTransparent = true;
@@ -221,7 +221,7 @@ class ImageService extends AbstractService {
 		if (!$src)
 			throw new \Exception('Error while reading source image: '.$file, 500);
 
-		if ($isTransparent) {
+		if ($isTransparent && $allowTransparent) {
 			imagealphablending($src, false);
 			imagesavealpha($src, true);
 		}
