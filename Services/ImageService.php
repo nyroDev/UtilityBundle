@@ -199,7 +199,7 @@ class ImageService extends AbstractService {
 		return $imgDst;
 	}
 	
-	protected function createImgSrc($file) {
+	public function createImgSrc($file) {
 		$info = getimagesize($file);
 		$src = null;
 		$isTransparent = true;
