@@ -52,7 +52,7 @@ class TinymceController extends AbstractController {
 			
 			$current_path = $container->getParameter('kernel.root_dir').'/../web/uploads/'.$dirName.'/'; // relative path from filemanager folder to upload folder (with final /)
 			//thumbs folder can't put inside upload folder
-			$thumbs_base_path = '../../../../../../../../../web/uploads/'.$dirName.'Thumbs/'; // relative path from filemanager folder to thumbs folder (with final /)
+			$thumbs_base_path = '../../../../../../../../web/uploads/'.$dirName.'Thumbs/'; // relative path from filemanager folder to thumbs folder (with final /)
 			$thumbs_base_path_url = $base_url.'/uploads/'.$dirName.'Thumbs/';
 
 			if (!file_exists($current_path))
