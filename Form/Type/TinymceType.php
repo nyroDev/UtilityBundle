@@ -24,7 +24,7 @@ class TinymceType extends AbstractType {
 			$prefixTinymce.'plugins'=>'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount'.(isset($options['tinymcePlugins']) && $options['tinymcePlugins'] ? ','.$options['tinymcePlugins'] : null),
 			$prefixTinymce.'toolbar'=>'undo redo | styleselect | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
 			$prefixTinymce.'menubar'=>'insert edit view table tools',
-			$prefixTinymce.'relative_urls'=>false,
+			$prefixTinymce.'relative_urls'=>'false',
 		));
 		
 		if ((isset($options['tinymceBrowser']) && $options['tinymceBrowser']) || ($this->container->hasParameter('nyrodev_utility.browser.defaultEnable') && $this->container->getParameter('nyrodev_utility.browser.defaultEnable'))) {
