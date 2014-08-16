@@ -192,7 +192,7 @@ abstract class AbstractAdminController extends AbstractController {
 			$form->get('id')->setData($row->getId());
 		}
 		
-		$classMetadata = $this->get('validator.mapping.class_metadata_factory')->getMetadataFor(get_class($row));
+		$classMetadata = $this->get('validator')->getMetadataFor(get_class($row));
 		
 		foreach($fields as $f) {
 			$options = array(
