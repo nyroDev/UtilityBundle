@@ -23,7 +23,7 @@ class VideoValidatorService extends AbstractService implements Validator\Constra
 			if (count($this->context->getViolations()) === 0) {
 				$dataUrl = $this->get('nyrodev_video')->data($value);
 				$error = null;
-				if (!is_array($dataUrl)) {
+				if (!is_array($dataUrl) || count($dataUrl) === 0) {
 					$error = 'NotFetched';
 				} else if ($dataUrl['type'] != 'video') {
 					$error = 'NoVideo';
