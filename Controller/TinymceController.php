@@ -269,6 +269,12 @@ class TinymceController extends AbstractController {
 			$response->setContent($content);
 		} else {
 			$response = new \Symfony\Component\HttpFoundation\BinaryFileResponse($path);
+			
+			switch($response->getFile()->getExtension()) {
+				case 'js': $response->headers->set('Content-Type', 'application/javascript'); break;
+				case 'css': $response->headers->set('Content-Type', 'text/css'); break;
+			}
+			
 			$response->setPublic();
 			$response->setSharedMaxAge(3600);
 			$response->setMaxAge(3600);
