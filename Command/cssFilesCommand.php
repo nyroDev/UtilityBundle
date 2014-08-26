@@ -41,6 +41,7 @@ class cssFilesCommand extends ContainerAwareCommand {
 		
 		$ds = DIRECTORY_SEPARATOR;
 		$found = false;
+		$hasFonts = false;
 		$subFolders = array();
 		$subFolderTests = array(
 			$ds.'public'.$ds.'css'.$ds.'images'.$ds,
@@ -53,21 +54,33 @@ class cssFilesCommand extends ContainerAwareCommand {
 					$found = true;
 					$finder->in($resPath.$subFolder);
 					$subFolders[] = $resPath.$subFolder;
+					$tmp = explode($ds, $subFolder);
+					if ($tmp[count($tmp)-2] == 'fonts')
+						$hasFonts = true;
 				}
 			}
 		}
 		
 		if ($found) {
-			$dest = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR;
+			$dest = $this->getContainer()->getParameter('kernel.root_dir').$ds.'..'.$ds.'web'.$ds.'css'.$ds.'images'.$ds;
 			if (!file_exists($dest)) {
 				if (false === @mkdir($dest, 0777, true)) {
 					throw new \RuntimeException('Unable to create directory '.$dest);
 				}
 				$output->writeln('Directory creeated: '.$dest);
 			}
+			if ($hasFonts) {
+				$destFonts = $this->getContainer()->getParameter('kernel.root_dir').$ds.'..'.$ds.'web'.$ds.'css'.$ds.'fonts'.$ds;
+				if (!file_exists($destFonts)) {
+					if (false === @mkdir($dest, 0777, true)) {
+						throw new \RuntimeException('Unable to create directory '.$destFonts);
+					}
+					$output->writeln('Directory creeated: '.$destFonts);
+				}
+			}
 			$imgs = $finder->files();
 			foreach($imgs as $img) {
-				$d = $dest.str_replace($subFolders, '', $img->getRealPath());
+				$d = (strpos($img->getRealPath(), $ds.'fonts'.$ds) !== false ? $destFonts : $dest).str_replace($subFolders, '', $img->getRealPath());
 				$dir = dirname($d);
 				if (!file_exists($dir)) {
 					if (false === @mkdir($dir, 0777, true)) {
@@ -79,7 +92,7 @@ class cssFilesCommand extends ContainerAwareCommand {
 				$output->writeln('Copying: '.$img->getRealPath());
 			}
 		} else {
-			$output->writeln('<comment>No images folder found</comment>');
+			$output->writeln('<comment>No images or fonts folder found</comment>');
 		}
 		
 	}
