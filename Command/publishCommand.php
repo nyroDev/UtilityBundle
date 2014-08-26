@@ -28,7 +28,7 @@ class publishCommand extends ContainerAwareCommand {
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$args = array(
-			'command'=>'nyrodev:cssImages',
+			'command'=>'nyrodev:cssFiles',
 			'--env'=>'prod',
 			'--no-debug'=>true
 		);

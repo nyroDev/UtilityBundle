@@ -10,15 +10,15 @@ use Symfony\Component\Finder\Finder;
 /**
  * Symfony2 command to copy CSS images in public directories into web directories 
  */
-class cssImagesCommand extends ContainerAwareCommand {
+class cssFilesCommand extends ContainerAwareCommand {
 	
 	/**
 	 * Configure the command 
 	 */
 	protected function configure() {
 		$this
-			->setName('nyrodev:cssImages')
-			->setDescription('Publish CSS Images');
+			->setName('nyrodev:cssFiles')
+			->setDescription('Publish CSS Files');
 	}
 	
 	/**
@@ -42,13 +42,18 @@ class cssImagesCommand extends ContainerAwareCommand {
 		$ds = DIRECTORY_SEPARATOR;
 		$found = false;
 		$subFolders = array();
-		$subFolder = $ds.'public'.$ds.'css'.$ds.'images'.$ds;
+		$subFolderTests = array(
+			$ds.'public'.$ds.'css'.$ds.'images'.$ds,
+			$ds.'public'.$ds.'css'.$ds.'fonts'.$ds,
+		);
 		foreach($resources as $res) {
 			$resPath = $res->getRealpath();
-			if (file_exists($resPath.$subFolder)) {
-				$found = true;
-				$finder->in($resPath.$subFolder);
-				$subFolders[] = $resPath.$subFolder;
+			foreach($subFolderTests as $subFolder) {
+				if (file_exists($resPath.$subFolder)) {
+					$found = true;
+					$finder->in($resPath.$subFolder);
+					$subFolders[] = $resPath.$subFolder;
+				}
 			}
 		}
 		
