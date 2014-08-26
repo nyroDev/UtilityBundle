@@ -29,7 +29,7 @@ class cssFilesCommand extends ContainerAwareCommand {
 	 * @throws \RuntimeException 
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$output->writeln('Searching for CSS images');
+		$output->writeln('Searching for CSS files');
 		
 		$finder = new Finder();
 		$finderRes = new Finder();
@@ -72,7 +72,7 @@ class cssFilesCommand extends ContainerAwareCommand {
 			if ($hasFonts) {
 				$destFonts = $this->getContainer()->getParameter('kernel.root_dir').$ds.'..'.$ds.'web'.$ds.'css'.$ds.'fonts'.$ds;
 				if (!file_exists($destFonts)) {
-					if (false === @mkdir($dest, 0777, true)) {
+					if (false === @mkdir($destFonts, 0777, true)) {
 						throw new \RuntimeException('Unable to create directory '.$destFonts);
 					}
 					$output->writeln('Directory creeated: '.$destFonts);
