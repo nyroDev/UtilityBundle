@@ -66,6 +66,23 @@ class MainService extends AbstractService {
 	}
 	
 	/**
+	 * Get url with assetic version if configured
+	 *
+	 * @param string $url
+	 * @return string
+	 */
+	public function getAsseticVersionUrl($url) {
+		$tmp = $this->getParameter('assetic_versions');
+		
+		if ($tmp && is_array($tmp)) {
+			$tmpUrl = basename($url);
+			$url.= '?'.(isset($tmp[$tmpUrl]) && $tmp[$tmpUrl] ? $tmp[$tmpUrl] : (isset($tmp['global']) ? $tmp['global'] : ''));
+		}
+		
+		return $url;
+	}
+	
+	/**
 	 * Urlify a string
 	 * 
 	 * @param string $text
