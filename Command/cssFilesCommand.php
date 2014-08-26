@@ -80,7 +80,7 @@ class cssFilesCommand extends ContainerAwareCommand {
 			}
 			$imgs = $finder->files();
 			foreach($imgs as $img) {
-				$d = (strpos($img->getRealPath(), $ds.'fonts'.$ds) !== false ? $destFonts : $dest).str_replace($subFolders, '', $img->getRealPath());
+				$d = ($hasFonts && strpos($img->getRealPath(), $ds.'fonts'.$ds) !== false ? $destFonts : $dest).str_replace($subFolders, '', $img->getRealPath());
 				$dir = dirname($d);
 				if (!file_exists($dir)) {
 					if (false === @mkdir($dir, 0777, true)) {
