@@ -120,14 +120,14 @@ class ShareService extends AbstractService {
 			$this->setImage(trim($this->getParameter('nyroDev_utility.share.image')));
 		
 		if (isset($this->metas['title']) && $this->metas['title']) {
-			$ret[] = '<title>'.$this->metas['title'].'</title>';
+			$ret[] = '<title>'.trim($this->metas['title']).'</title>';
 			unset($this->metas['title']);
 		}
 		
 		foreach($this->metas as $k=>$v)
-			$ret[] = '<meta name="'.$k.'" content="'.str_replace('"', '&quot;', $v).'" />';
+			$ret[] = '<meta name="'.$k.'" content="'.trim(str_replace('"', '&quot;', $v)).'" />';
 		foreach($this->metasProp as $k=>$v)
-			$ret[] = '<meta property="'.$k.'" content="'.str_replace('"', '&quot;', $v).'" />';
+			$ret[] = '<meta property="'.$k.'" content="'.trim(str_replace('"', '&quot;', $v)).'" />';
 		return implode("\n", $ret);
 	}
 	
