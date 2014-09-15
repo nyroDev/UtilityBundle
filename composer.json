@@ -17,8 +17,8 @@
         "symfony/symfony": ">=2.3"
     },
     "suggest": {
-        "embed/embed": "Required to use VideoService",
-        "winzou/cache-bundle": "Required to use VideoService",
+        "embed/embed": "Required to use EmbedService",
+        "winzou/cache-bundle": "Required to use EmbedService",
         "sabberworm/php-css-parser": "Required to use rem2px command"
     },
     "target-dir": "NyroDev/UtilityBundle",

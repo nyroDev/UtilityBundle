@@ -1,7 +1,7 @@
 <?php
 namespace NyroDev\UtilityBundle\Services;
 
-class VideoService extends AbstractService {
+class EmbedService extends AbstractService {
 
 	public function getChacheKey($url, $prefix = '') {
 		return $prefix.sha1($url);
@@ -11,7 +11,7 @@ class VideoService extends AbstractService {
 		$cache = $this->get('winzou_cache');
 		/* @var $cache \winzou\CacheBundle\Cache\LifetimeFileCache */
 		
-		$cacheKey = $this->getChacheKey($url, 'videoUrlParser_');
+		$cacheKey = $this->getChacheKey($url, 'embedUrlParser_');
 		if ($force || !$cache->contains($cacheKey)) {
 			
 			$service = \Embed\Embed::create($url);
@@ -31,6 +31,8 @@ class VideoService extends AbstractService {
 					'urlEmbed'=>null
 				);
 				if ($data['code'] && strpos($data['code'], '<iframe') === 0) {
+					if (strpos($data['url'], 'soundcloud.com') !== false)
+						$data['code'] = str_replace('&', '&amp;', $data['code']);
 					$dom = new \DOMDocument();
 					$dom->loadHTML($data['code']);
 					$data['urlEmbed'] = $dom->getElementsByTagName('iframe')->item(0)->getAttribute('src');

@@ -3,8 +3,7 @@ namespace NyroDev\UtilityBundle\Services;
 
 use Symfony\Component\Validator;
 
-
-class VideoValidatorService extends AbstractService implements Validator\ConstraintValidatorInterface {
+class EmbedValidatorService extends AbstractService implements Validator\ConstraintValidatorInterface {
 
     /**
      * @var ExecutionContextInterface
@@ -21,18 +20,20 @@ class VideoValidatorService extends AbstractService implements Validator\Constra
 			$urlValidator->initialize($this->context);
 			$urlValidator->validate($value, new Validator\Constraints\Url());
 			if (count($this->context->getViolations()) === 0) {
-				$dataUrl = $this->get('nyrodev_video')->data($value);
+				$dataUrl = $this->get('nyrodev_embed')->data($value);
 				$error = null;
+				$prms = array();
 				if (!is_array($dataUrl) || count($dataUrl) === 0) {
 					$error = 'NotFetched';
-				} else if ($dataUrl['type'] != 'video') {
-					$error = 'NoVideo';
+				} else if ($dataUrl['type'] != $constraint->type) {
+					$error = 'NoEmbed';
+					$prms = array('%type'=>$constraint->type);
 				} else if (!isset($dataUrl['urlEmbed']) || !$dataUrl['urlEmbed']) {
 					$error = 'NoEmbed';
 				}
 				if (!is_null($error)) {
 					$errorMessage = 'message'.$error;
-					$this->context->addViolation($constraint->$errorMessage);
+					$this->context->addViolation($constraint->$errorMessage, $prms);
 				}
 			}
 		}

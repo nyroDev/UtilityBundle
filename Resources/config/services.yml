@@ -5,8 +5,8 @@ parameters:
     nyrodev_utility.imageService.class: NyroDev\UtilityBundle\Services\ImageService
     nyrodev_utility.formService.class: NyroDev\UtilityBundle\Services\FormService
     nyrodev_utility.formFilterService.class: NyroDev\UtilityBundle\Services\FormFilterService
-    nyrodev_utility.videoService.class: NyroDev\UtilityBundle\Services\VideoService
-    nyrodev_utility.videoValidatorService.class: NyroDev\UtilityBundle\Services\VideoValidatorService
+    nyrodev_utility.embedService.class: NyroDev\UtilityBundle\Services\EmbedService
+    nyrodev_utility.embedValidatorService.class: NyroDev\UtilityBundle\Services\EmbedValidatorService
     nyrodev_utility.admin.nbPerPage: 25
 
 services:
@@ -36,16 +36,16 @@ services:
     nyrodev_formFilter:
         class: %nyrodev_utility.formFilterService.class%
         arguments: [@service_container]
-    nyrodev_video:
-        class: %nyrodev_utility.videoService.class%
+    nyrodev_embed:
+        class: %nyrodev_utility.embedService.class%
         arguments: [@service_container]
         tags:
-          - { name: templating.helper, alias: nyrodev_video }
-    nyrodev_video_validator:
-        class: %nyrodev_utility.videoValidatorService.class%
+          - { name: templating.helper, alias: nyrodev_embed }
+    nyrodev_embed_validator:
+        class: %nyrodev_utility.embedValidatorService.class%
         arguments: [@service_container]
         tags:
-          - { name: validator.constraint_validator, alias: nyrodev_video_validator }
+          - { name: validator.constraint_validator, alias: nyrodev_embed_validator }
     form.type.filter:
         class: NyroDev\UtilityBundle\Form\Type\FilterType
         tags:
