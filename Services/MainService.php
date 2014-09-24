@@ -263,5 +263,25 @@ class MainService extends AbstractService {
 		return implode($separator, $ret);
 	}
 	
+	/**
+	 * Check if the current URL is matching the desired URL and return a redirect response if not
+	 *
+	 * @param string $url The desired URL
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|boolean
+	 */
+	public function redirectIfNotUrl($url) {
+		if ($url != $this->get('request')->getRequestUri()) {
+			$redirect = true;
+			try {
+				$tmp = parse_url($this->get('request')->getRequestUri());
+				if (isset($tmp['path']) && $tmp['path'] == $url)
+					$redirect = false;
+			} catch (\Exception $e) {}
+			if ($redirect)
+				return new \Symfony\Component\HttpFoundation\RedirectResponse($url, 301);
+		}
+		return false;
+	}
+	
 }
 
