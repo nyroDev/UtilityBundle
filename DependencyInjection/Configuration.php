@@ -51,6 +51,12 @@ class Configuration implements ConfigurationInterface
 						->end()
 					->end()
 				->end()
+				->arrayNode('embed')
+					->addDefaultsIfNotSet()
+					->children()
+						->booleanNode('useIPv4')->defaultTrue()->end()
+					->end()
+				->end()
 			->end();
 
         return $treeBuilder;

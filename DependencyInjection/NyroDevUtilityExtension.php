@@ -40,6 +40,12 @@ class NyroDevUtilityExtension extends Extension
 			}
 		}
 		
+		if (isset($config['embed']) && is_array($config['embed'])) {
+			foreach($config['embed'] as $k=>$v) {
+				$container->setParameter('nyroDev_utility.embed.'.$k, $v);
+			}
+		}
+		
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
