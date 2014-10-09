@@ -14,7 +14,7 @@ class EmbedService extends AbstractService {
 		$cacheKey = $this->getChacheKey($url, 'embedUrlParser_');
 		if ($force || !$cache->contains($cacheKey)) {
 			
-			$this->setDefaultResolver();
+			$this->setDefaultResolver($url);
 			
 			$service = \Embed\Embed::create($url);
 			/* @var $service \Embed\Adapters\AdapterInterface */
@@ -52,9 +52,14 @@ class EmbedService extends AbstractService {
 		return $data;
 	}
 	
-	protected function setDefaultResolver() {
-		if ($this->getParameter('nyroDev_utility.embed.useIPv4')) {
-			\Embed\Request::setDefaultResolver('NyroDev\\UtilityBundle\\Embed\\RequestResolvers\\CurlIPv4');
+	protected function setDefaultResolver($url) {
+		$ipv4For = $this->getParameter('nyroDev_utility.embed.useIPv4For');
+		if ($ipv4For) {
+			$useIPv4 = false;
+			foreach(explode('|', $ipv4For) as $tmp)
+				$useIPv4 = $useIPv4 || strpos($url, $tmp) !== false;
+			if ($useIPv4)
+				\Embed\Request::setDefaultResolver('NyroDev\\UtilityBundle\\Embed\\RequestResolvers\\CurlIPv4');
 		}
 	}
 
