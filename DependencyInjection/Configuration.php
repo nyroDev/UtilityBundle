@@ -54,7 +54,7 @@ class Configuration implements ConfigurationInterface
 				->arrayNode('embed')
 					->addDefaultsIfNotSet()
 					->children()
-						->scalarNode('nyroDev_utility.embed.useIPv4For')->defaultValue('youtube.com')->end()
+						->scalarNode('useIPv4For')->defaultValue('youtube.com')->end()
 					->end()
 				->end()
 			->end();
