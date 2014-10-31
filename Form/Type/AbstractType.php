@@ -16,6 +16,26 @@ abstract class AbstractType extends SrcAbstractType {
 	}
 	
 	/**
+	 * Get an application parameter
+	 *
+	 * @param string $parameter
+	 * @return mixed
+	 */
+	public function getParameter($parameter) {
+		return $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
+	}
+	
+	/**
+     * Gets a service by id.
+     *
+     * @param string $id The service id
+     * @return object The service
+     */
+	public function get($id) {
+		return $this->container->get($id);
+	}
+	
+	/**
 	 * Get the translation for a given keyword
 	 *
 	 * @param string $key Translation key

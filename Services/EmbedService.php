@@ -60,6 +60,8 @@ class EmbedService extends AbstractService {
 				$useIPv4 = $useIPv4 || strpos($url, $tmp) !== false;
 			if ($useIPv4)
 				\Embed\Request::setDefaultResolver('NyroDev\\UtilityBundle\\Embed\\RequestResolvers\\CurlIPv4');
+			else
+				\Embed\Request::setDefaultResolver('Embed\\RequestResolvers\\Curl');
 		}
 	}
 
