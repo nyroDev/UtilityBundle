@@ -4,7 +4,7 @@ $(function() {
 			if (!tinymceLoaded) {
 				window.tinyMCEPreInit = {
 					'base': url.substr(0, url.lastIndexOf('/')),
-					'suffix': '.min',
+					'suffix': '.min'
 				};
 				$.ajax({
 					url: url,
