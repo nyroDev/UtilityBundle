@@ -4,6 +4,7 @@ date:
 login:
   errors:
     "Bad credentials": "Sorry, your email address does not match an existing account."
+    "Bad credentials.": "Sorry, your email address does not match an existing account."
     "The presented key does not match.": "The automatic connection did not work. Please log in regularly."
     "The credentials were changed from another session.": "The password were changed in a previous session."
     "The presented password cannot be empty.": "Please enter your correct password."

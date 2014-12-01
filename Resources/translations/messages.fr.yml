@@ -4,6 +4,7 @@ date:
 login:
   errors:
     "Bad credentials": "Désolé, votre adresse email ne correspond à aucun compte existant."
+    "Bad credentials.": "Désolé, votre adresse email ne correspond à aucun compte existant."
     "The presented key does not match.": "La connexion automatique a échouée. Veuillez vous connecter noramlement."
     "The credentials were changed from another session.": "Le mot de passe a été changé dans une autre session."
     "The presented password cannot be empty.": "Le mot de passe est erroné."
