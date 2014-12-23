@@ -22,12 +22,6 @@ class NyroDevUtilityExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-		if (isset($config['asseticFilter']) && is_array($config['asseticFilter'])) {
-			foreach($config['asseticFilter'] as $k=>$v) {
-				$container->setParameter('nyroDev_utility.asseticFilter.'.$k, $v);
-			}
-		}
-
 		if (isset($config['browser']) && is_array($config['browser'])) {
 			foreach($config['browser'] as $k=>$v) {
 				$container->setParameter('nyroDev_utility.browser.'.$k, $v);
