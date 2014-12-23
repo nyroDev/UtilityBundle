@@ -8,7 +8,7 @@
 
 	<?php foreach ($view['assetic']->stylesheets(
 		array('@NyroDevUtilityBundle/Resources/public/css/nyrodevBrowser.css'),
-		array('?yui_css'),
+		array($view['nyrodev']->getAsseticFilter('css')),
 		array('output'=>'css/nyrodevBrowser.css')) as $url): ?>
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $view->escape($url) ?>" />
 	<?php endforeach; ?>
@@ -93,7 +93,7 @@
 	</fieldset>
 	<?php foreach ($view['assetic']->javascripts(
 		array('@NyroDevUtilityBundle/Resources/public/js/*jquery.js'),
-		array('?yui_js'),
+		array($view['nyrodev']->getAsseticFilter('js')),
 		array('output'=>'js/jquery.js')) as $url): ?>
 		<script src="<?php echo $view->escape($url) ?>" type="text/javascript"></script>
 	<?php endforeach; ?>

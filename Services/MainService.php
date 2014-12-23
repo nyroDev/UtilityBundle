@@ -66,6 +66,17 @@ class MainService extends AbstractService {
 	}
 	
 	/**
+	 * Get the configured Assetic filter
+	 *
+	 * @param string $type js or css
+	 * @return string
+	 */
+	public function getAsseticFilter($type) {
+		$ret = $this->getParameter('nyroDev_utility.asseticFilter.'.$type);
+		return $ret ? '?'.$ret : null;
+	}
+	
+	/**
 	 * Get url with assetic version if configured
 	 *
 	 * @param string $url

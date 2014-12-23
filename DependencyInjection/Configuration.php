@@ -22,6 +22,13 @@ class Configuration implements ConfigurationInterface
 		
 		$rootNode
 			->children()
+				->arrayNode('asseticFilter')
+					->addDefaultsIfNotSet()
+					->children()
+						->scalarNode('js')->defaultValue('yui_js')->end()
+						->scalarNode('css')->defaultValue('yui_css')->end()
+					->end()
+				->end()
 				->arrayNode('browser')
 					->addDefaultsIfNotSet()
 					->children()
