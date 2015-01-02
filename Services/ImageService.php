@@ -383,7 +383,11 @@ class ImageService extends AbstractService {
 			// We have everything to resize the imagen let's dot it
 			$w = $node->hasAttribute('width') ? $node->getAttribute('width') : null;
 			$h = $node->hasAttribute('height') ? $node->getAttribute('height') : null;
-			$webFile = trim(str_replace($this->get('request')->getBasePath(), '', $node->getAttribute('src')), '/');
+			$baseUrl = $this->get('router')->getContext()->getBaseUrl();
+			$fileUrl = basename($baseUrl);
+			if (strpos($fileUrl, '.php'))
+				$baseUrl = dirname($baseUrl);
+			$webFile = trim(str_replace($baseUrl, '', $node->getAttribute('src')), '/');
 			$webDir = $this->get('kernel')->getRootDir().'/../web/';
 			$file = $webDir.$webFile;
 			$src = str_replace($webDir, '', $this->_resize($file, array(

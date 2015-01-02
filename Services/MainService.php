@@ -19,10 +19,13 @@ class MainService extends AbstractService {
 	}
 	
 	public function getFullUrl($path) {
-		$request = $this->get('request');
+		$router = $this->get('router');
 		if ($path[0] != '/')
 			$path = '/'.$path;
-		return $request->getScheme().'://'.$request->getHttpHost().$request->getBasePath().$path;
+		$baseUrl = $router->getContext()->getBaseUrl();
+		if ($baseUrl[0] != '/')
+			$baseUrl = '/'.$baseUrl;
+		return $router->getContext()->getScheme().'://'.$router->getContext()->getHost().$baseUrl.$path;
 	}
 	
 	/**
