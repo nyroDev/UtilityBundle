@@ -23,7 +23,7 @@ class MainService extends AbstractService {
 		if ($path[0] != '/')
 			$path = '/'.$path;
 		$baseUrl = $router->getContext()->getBaseUrl();
-		if ($baseUrl[0] != '/')
+		if ($baseUrl && $baseUrl[0] != '/')
 			$baseUrl = '/'.$baseUrl;
 		return $router->getContext()->getScheme().'://'.$router->getContext()->getHost().$baseUrl.$path;
 	}

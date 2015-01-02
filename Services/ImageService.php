@@ -387,7 +387,8 @@ class ImageService extends AbstractService {
 			$fileUrl = basename($baseUrl);
 			if (strpos($fileUrl, '.php'))
 				$baseUrl = dirname($baseUrl);
-			$webFile = trim(str_replace($baseUrl, '', $node->getAttribute('src')), '/');
+			
+			$webFile = trim($baseUrl && $baseUrl != '/' ? str_replace($baseUrl, '', $node->getAttribute('src')) : $node->getAttribute('src'), '/');
 			$webDir = $this->get('kernel')->getRootDir().'/../web/';
 			$file = $webDir.$webFile;
 			$src = str_replace($webDir, '', $this->_resize($file, array(
