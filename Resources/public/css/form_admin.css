@@ -27,8 +27,6 @@ input[readonly], textarea[readonly] {
 textarea {
 	min-height: 5em;
     width: 450px;
-    width: 450px;
-    width: 450px;
 }
 select {
     width: 457px;
