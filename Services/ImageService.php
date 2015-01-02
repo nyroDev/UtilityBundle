@@ -347,4 +347,59 @@ class ImageService extends AbstractService {
 		return $image;
 	}
 
+	/**
+	 * Resize images in HTML regarding thei width and/or height attributes
+	 *
+	 * @param string $html HTML content
+	 * @param boolean $absolutizeUrl Indicates if the src should be absolutized
+	 * @param boolean $addBody Indicates if the content contains body
+	 * @return string
+	 */
+	public function resizeImagesInHtml($html, $absolutizeUrl = false, $addBody = false) {
+		$this->get('nyrodev')->increasePhpLimits();
+		$dom = new \DOMDocument();
+		$html = utf8_decode($html);
+		if ($addBody)
+			$html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>'.$html.'</body></html>';
+		$dom->loadHTML($html);
+
+		$body = $dom->getElementsByTagName('body')->item(0);
+		$this->resizeImagesInHtmlDom($body, $absolutizeUrl);
+		
+		return $addBody ? (str_replace(
+				array('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">', '<head><meta charset="UTF-8"></head>', '<html><body>', '</body></html>'),
+				array('', '', '', ''),
+				$dom->saveHTML())) : $dom->saveHtml();
+	}
+	
+	/**
+	 * Resize images in HTML regarding thei width and/or height attributes, internal use
+	 *
+	 * @param \DOMElement $node
+	 * @param boolean $absolutizeUrl Indicates if the src should be absolutized
+	 */
+	protected function resizeImagesInHtmlDom(\DOMElement $node, $absolutizeUrl = false) {
+		if (strtolower($node->tagName) == 'img' && ($node->hasAttribute('width') || $node->hasAttribute('height')) && $node->hasAttribute('src')) {
+			// We have everything to resize the imagen let's dot it
+			$w = $node->hasAttribute('width') ? $node->getAttribute('width') : null;
+			$h = $node->hasAttribute('height') ? $node->getAttribute('height') : null;
+			$webFile = trim(str_replace($this->get('request')->getBasePath(), '', $node->getAttribute('src')), '/');
+			$webDir = $this->get('kernel')->getRootDir().'/../web/';
+			$file = $webDir.$webFile;
+			$src = str_replace($webDir, '', $this->_resize($file, array(
+				'name'=>$w.'_'.$h,
+				'w'=>$w,
+				'h'=>$h
+			)));
+			if ($absolutizeUrl)
+				$src = $this->get('nyrodev')->getFullUrl($src);
+			
+			$node->setAttribute('src', $src);
+		}
+		foreach($node->childNodes as $n) {
+			if ($n instanceof \DOMElement) 
+				$this->resizeImagesInHtmlDom($n, $absolutizeUrl);
+		}
+	}
+	
 }
