@@ -14,7 +14,7 @@ class ShareService extends AbstractService {
 	 * @param boolean $useProperty Indicates if the default should use property
 	 */
 	public function set($type, $value, $useProperty = false) {
-		$value = $this->trans($value);
+		$value = trim(preg_replace('/\s\s+/', ' ', $this->trans($value)));
 		$keys = array();
 		$keysProp = array();
 		switch($type) {
@@ -111,23 +111,23 @@ class ShareService extends AbstractService {
 		$ret = array();
 		
 		if (!isset($this->metas['title']) && $this->getParameter('nyroDev_utility.share.title'))
-			$this->setTitle(trim($this->getParameter('nyroDev_utility.share.title')));
+			$this->setTitle($this->getParameter('nyroDev_utility.share.title'));
 		if (!isset($this->metas['description']) && $this->getParameter('nyroDev_utility.share.description'))
-			$this->setDescription(trim($this->getParameter('nyroDev_utility.share.description')));
+			$this->setDescription($this->getParameter('nyroDev_utility.share.description'));
 		if (!isset($this->metas['keywords']) && $this->getParameter('nyroDev_utility.share.keywords'))
-			$this->set('keywords', trim($this->getParameter('nyroDev_utility.share.keywords')));
+			$this->set('keywords', $this->getParameter('nyroDev_utility.share.keywords'));
 		if (!isset($this->metasProp['og:image']) && $this->getParameter('nyroDev_utility.share.image'))
-			$this->setImage(trim($this->getParameter('nyroDev_utility.share.image')));
+			$this->setImage($this->getParameter('nyroDev_utility.share.image'));
 		
 		if (isset($this->metas['title']) && $this->metas['title']) {
-			$ret[] = '<title>'.trim($this->metas['title']).'</title>';
+			$ret[] = '<title>'.$this->metas['title'].'</title>';
 			unset($this->metas['title']);
 		}
 		
 		foreach($this->metas as $k=>$v)
-			$ret[] = '<meta name="'.$k.'" content="'.trim(str_replace('"', '&quot;', $v)).'" />';
+			$ret[] = '<meta name="'.$k.'" content="'.str_replace('"', '&quot;', $v).'" />';
 		foreach($this->metasProp as $k=>$v)
-			$ret[] = '<meta property="'.$k.'" content="'.trim(str_replace('"', '&quot;', $v)).'" />';
+			$ret[] = '<meta property="'.$k.'" content="'.str_replace('"', '&quot;', $v).'" />';
 		return implode("\n", $ret);
 	}
 	
