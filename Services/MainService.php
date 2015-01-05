@@ -12,7 +12,10 @@ class MainService extends AbstractService {
 	 */
 	public function onKernelRequest(GetResponseEvent $event) {
 		if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
-			setlocale(LC_ALL, $event->getRequest()->getLocale());
+			$locale = $event->getRequest()->getLocale();
+			if (strlen($locale) == 2)
+				$locale.= '_'.strtoupper($locale);
+			setlocale(LC_ALL, $locale);
 		}
 	}
 	
