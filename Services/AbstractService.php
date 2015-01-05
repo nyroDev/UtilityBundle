@@ -23,6 +23,15 @@ abstract class AbstractService extends Helper {
 	public function getParameter($parameter) {
 		return $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
 	}
+
+    /**
+     * Shortcut to return the request service.
+     *
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest() {
+        return $this->container->get('request_stack')->getCurrentRequest();
+    }
 	
 	/**
      * Gets a service by id.

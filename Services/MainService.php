@@ -18,6 +18,12 @@ class MainService extends AbstractService {
 		return str_replace('%2C', ',', $this->get('router')->generate($name, $parameters, $absolute));
 	}
 	
+	/**
+	 * Absolutize an URL
+	 *
+	 * @param string $path
+	 * @return string
+	 */
 	public function getFullUrl($path) {
 		$router = $this->get('router');
 		if ($path[0] != '/')
@@ -127,10 +133,23 @@ class MainService extends AbstractService {
 		return $ret;
 	}
 	
+	/**
+	 * Indicates if the request is post
+	 *
+	 * @return boolean
+	 */
 	public function isPost() {
-		return $this->get('request')->isMethod('POST');
+		return $this->getRequest()->isMethod('POST');
 	}
 	
+	/**
+	 * Get a new random uniq key for a specific field on a given repository
+	 *
+	 * @param \Doctrine\ORM\EntityRepository $repository The repository
+	 * @param string $field Field name
+	 * @param int $length Random string length
+	 * @return string
+	 */
 	public function getNewUniqRandomKey(\Doctrine\ORM\EntityRepository $repository, $field, $length) {
 		$entity = true;
 		while ($entity) {
@@ -148,7 +167,7 @@ class MainService extends AbstractService {
 	 * @return boolean
 	 */
 	public function isAjax() {
-		return $this->get('request')->isXmlHttpRequest();
+		return $this->getRequest()->isXmlHttpRequest();
 	}
 	
 	protected $isExternalAgent;
@@ -202,6 +221,13 @@ class MainService extends AbstractService {
 		return pathinfo($file, PATHINFO_EXTENSION);
 	}
 	
+	/**
+	 * Get a new uniq filename in a directory
+	 *
+	 * @param string $dir Destination directory
+	 * @param string $name Original filename
+	 * @return string
+	 */
 	public function getUniqFileName($dir, $name) {
 		$name = mb_strtolower($name);
 		$ext = $this->getExt($name);
@@ -273,10 +299,10 @@ class MainService extends AbstractService {
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|boolean
 	 */
 	public function redirectIfNotUrl($url) {
-		if ($url != $this->get('request')->getRequestUri()) {
+		if ($url != $this->getRequest()->getRequestUri()) {
 			$redirect = true;
 			try {
-				$tmp = parse_url($this->get('request')->getRequestUri());
+				$tmp = parse_url($this->getRequest()->getRequestUri());
 				if (isset($tmp['path']) && $tmp['path'] == $url)
 					$redirect = false;
 			} catch (\Exception $e) {}
