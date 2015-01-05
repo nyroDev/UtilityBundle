@@ -116,7 +116,7 @@ class ShareService extends AbstractService {
 			$this->setDescription(trim($this->getParameter('nyroDev_utility.share.description')));
 		if (!isset($this->metas['keywords']) && $this->getParameter('nyroDev_utility.share.keywords'))
 			$this->set('keywords', trim($this->getParameter('nyroDev_utility.share.keywords')));
-		if (!isset($this->metas['og:image']) && $this->getParameter('nyroDev_utility.share.image'))
+		if (!isset($this->metasProp['og:image']) && $this->getParameter('nyroDev_utility.share.image'))
 			$this->setImage(trim($this->getParameter('nyroDev_utility.share.image')));
 		
 		if (isset($this->metas['title']) && $this->metas['title']) {
