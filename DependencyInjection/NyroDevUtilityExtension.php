@@ -22,6 +22,8 @@ class NyroDevUtilityExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+		$container->setParameter('nyroDev_utility.setLocale', isset($config['setLocale']) && $config['setLocale']);
+
 		if (isset($config['browser']) && is_array($config['browser'])) {
 			foreach($config['browser'] as $k=>$v) {
 				$container->setParameter('nyroDev_utility.browser.'.$k, $v);

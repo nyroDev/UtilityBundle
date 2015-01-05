@@ -1,8 +1,20 @@
 <?php
 namespace NyroDev\UtilityBundle\Services;
 
+use \Symfony\Component\HttpKernel\Event\GetResponseEvent;
+
 class MainService extends AbstractService {
 	
+	/**
+	 * Kernel request listener to setLocale if configured
+	 *
+	 * @param GetResponseEvent $event Kernel request event
+	 */
+	public function onKernelRequest(GetResponseEvent $event) {
+		if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
+			setlocale(LC_ALL, $event->getRequest()->getLocale());
+		}
+	}
 	
     /**
      * Generates a URL from the given parameters, allowing extra parameters (like comma)
