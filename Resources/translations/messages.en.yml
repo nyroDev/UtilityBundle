@@ -10,6 +10,10 @@ login:
     "The credentials were changed from another session.": "The password were changed in a previous session."
     "The presented password cannot be empty.": "Please enter your correct password."
     "The presented password is invalid.": "Sorry, the password you entered was not correct. Please try again."
+    "User account is disabled.": "User account is disabled."
+    "User account is locked.": "User account is locked."
+    "User account has expired.": "User account has expired."
+    "User credentials have expired.": "User credentials have expired."
 admin:
   misc:
     actions: Actions

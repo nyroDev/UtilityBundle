@@ -10,6 +10,10 @@ login:
     "The credentials were changed from another session.": "Le mot de passe a été changé dans une autre session."
     "The presented password cannot be empty.": "Le mot de passe est erroné."
     "The presented password is invalid.": "Désolé, le mot de passe n'est pas correct. Veuillez rééssayer."
+    "User account is disabled.": "Le compte utilisateur a été désactivé."
+    "User account is locked.": "Le compte utilisateur est verrouillé."
+    "User account has expired.": "Le compte utilisateur a expiré."
+    "User credentials have expired.": "Les informations d'identification ont expiré."
 admin:
   misc:
     actions: Actions
