@@ -27,14 +27,29 @@ class MemberService extends AbstractService {
 	}
 	
 	/**
+	 * Check if the user is logged and granted with the given role
+	 *
+	 * @param string $role Role name
+	 * @return boolean
+	 */
+	public function isGranted($role) {
+		return $this->isLogged() && $this->get('security.context')->isGranted($role);
+	}
+	
+	/**
 	 * Indicates if the logged user is impersonated
 	 *
 	 * @return boolean
 	 */
 	public function isImpersonated() {
-		return $this->isLogged() && $this->get('security.context')->isGranted('ROLE_PREVIOUS_ADMIN');
+		return $this->isGranted('ROLE_PREVIOUS_ADMIN');
 	}
 	
+	/**
+	 * Log user correctly
+	 *
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
+	 */
 	public function logUser(\Symfony\Component\Security\Core\User\UserInterface $user) {
 		// Here, "main" is the name of the firewall in your security.yml
 		$token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
