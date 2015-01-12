@@ -26,6 +26,9 @@ $(function() {
 			opts = {};
 		$.each(me.data(), function(i, e) {
 			if (i.indexOf(tinymceKey) == 0) {
+				if (typeof e == 'string' &&  e.indexOf('function(') == 0) {
+					eval('e = '+e);
+				}
 				opts[i.substring(tinymceKeyLn)] = e;
 			}
 		});
