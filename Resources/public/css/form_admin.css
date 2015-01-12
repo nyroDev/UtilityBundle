@@ -206,9 +206,9 @@ select {
 .form_row_tinymce .mce-tinymce, .form_row_rawhtml .form_rawhtml {
     float: left;
 }
-.form_row_date div {
+.form_row_date div, .form_row_datetime div {
     display: inline;
 }
-.form_row_date select {
+.form_row_date select, .form_row_datetime select {
     width: auto;
 }

@@ -283,8 +283,8 @@ class TinymceController extends AbstractController {
 		return $response;
 	}
 	
-	public function browserAction(Request $request, $file = null) {
-		return self::handleBrowserAction($this->container, $request, $file);
+	public function browserAction(Request $request, $file = null, $dirName = 'tinymce') {
+		return self::handleBrowserAction($this->container, $request, $file, $dirName);
 		
 		
 		

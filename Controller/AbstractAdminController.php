@@ -195,13 +195,19 @@ abstract class AbstractAdminController extends AbstractController {
 		$classMetadata = $this->get('validator')->getMetadataFor(get_class($row));
 		
 		foreach($fields as $f) {
+			$type = null;
 			$options = array(
 				'label'=>$this->trans('admin.'.$name.'.'.$f),
 				'required'=>false,
 			);
 			
-			if (isset($moreOptions[$f]))
+			if (isset($moreOptions[$f])) {
+				if (isset($moreOptions[$f]['type'])) {
+					$type = $moreOptions[$f]['type'];
+					unset($moreOptions[$f]['type']);
+				}
 				$options = array_merge($options, $moreOptions[$f]);
+			}
 		
 			if ($classMetadata->hasMemberMetadatas($f)) {
 				$memberMetadatas = $classMetadata->getMemberMetadatas($f);
@@ -219,7 +225,7 @@ abstract class AbstractAdminController extends AbstractController {
 					}
 				}
 			}
-			$form->add($f, null, $options);
+			$form->add($f, $type, $options);
 		}
 		
 		$form->add('submit', 'submit', array('label'=>$this->trans('admin.misc.send')));
