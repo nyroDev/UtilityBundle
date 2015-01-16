@@ -29,7 +29,8 @@ $(function() {
 				if (typeof e == 'string' && e.indexOf('function(') == 0) {
 					eval('window.tinyval = '+e+';');
 					e = window.tinyval;
-					unset(window.tinyval);
+					delete(window.tinyval);
+					window.tinyval = null;
 				}
 				opts[i.substring(tinymceKeyLn)] = e;
 			}
