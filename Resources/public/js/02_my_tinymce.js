@@ -30,7 +30,6 @@ $(function() {
 					eval('window.tinyval = '+e+';');
 					e = window.tinyval;
 					delete(window.tinyval);
-					window.tinyval = null;
 				}
 				opts[i.substring(tinymceKeyLn)] = e;
 			}
