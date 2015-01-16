@@ -222,6 +222,16 @@ class MainService extends AbstractService {
 		}
 	}
 
+	/**
+	 * Create a pager
+	 *
+	 * @param string $route Route name
+	 * @param array $routePrm Route parameters
+	 * @param int $total Total number of results
+	 * @param int $page Current page
+	 * @param int $nbPerPage Number per page
+	 * @return \NyroDev\UtilityBundle\Utility\Pager
+	 */
 	public function getPager($route, $routePrm, $total, $page, $nbPerPage) {
 		return new \NyroDev\UtilityBundle\Utility\Pager($this, $route, $routePrm, $total, $page, $nbPerPage);
 	}
@@ -327,5 +337,15 @@ class MainService extends AbstractService {
 		return false;
 	}
 	
+	/**
+	 * Format a date using strftime
+	 *
+	 * @param \DateTime $datetime
+	 * @param string $format Format translation ident
+	 * @return string
+	 */
+	public function formatDate(\DateTime $datetime, $format) {
+		return utf8_encode(strftime($this->trans($format), $datetime->getTimestamp()));
+	}
 }
 
