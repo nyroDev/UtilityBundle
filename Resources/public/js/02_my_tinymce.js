@@ -1,6 +1,3 @@
-// ==ClosureCompiler==
-// @js_externs tinyval
-// ==/ClosureCompiler==
 $(function() {
 	var tinymceLoaded = false,
 		tinymceLoad = function(url, clb) {
@@ -27,12 +24,14 @@ $(function() {
 	$('textarea.tinymce').each(function() {
 		var me = $(this),
 			opts = {};
-		$.each(me.data(), function(i, tinyval) {
+		$.each(me.data(), function(i, e) {
 			if (i.indexOf(tinymceKey) == 0) {
-				if (typeof tinyval == 'string' && tinyval.indexOf('function(') == 0) {
-					eval('tinyval = '+tinyval+';');
+				if (typeof e == 'string' && e.indexOf('function(') == 0) {
+					eval('window.tinyval = '+e+';');
+					e = window.tinyval;
+					unset(window.tinyval);
 				}
-				opts[i.substring(tinymceKeyLn)] = tinyval;
+				opts[i.substring(tinymceKeyLn)] = e;
 			}
 		});
 		tinymceLoad(me.data('tinymceurl'), function() {
