@@ -54,6 +54,10 @@ abstract class AbstractUploadable {
 		return $this->getFilePath($field, AbstractUploadable::PATH_WEB);
 	}
 	
+	public function getAbsolutePath($field) {
+		return $this->getFilePath($field, AbstractUploadable::PATH_ABSOLUTE);
+	}
+	
 	public function setFilePath($field, $value) {
 		$accessor = PropertyAccess::createPropertyAccessor();
 		$accessor->setValue($this, $this->getFileConfig($field, AbstractUploadable::CONFIG_FIELD), $value);
