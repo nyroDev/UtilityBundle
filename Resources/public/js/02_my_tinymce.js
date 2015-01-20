@@ -1,7 +1,12 @@
 $(function() {
 	var tinymceLoaded = false,
+		tinymceLoading = false,
+		tinymceLoadingQueue = [],
 		tinymceLoad = function(url, clb) {
-			if (!tinymceLoaded) {
+			if (tinymceLoading) {
+				tinymceLoadingQueue.push(clb);
+			} else if (!tinymceLoaded) {
+				tinymceLoading = true;
 				window.tinyMCEPreInit = {
 					'base': url.substr(0, url.lastIndexOf('/')),
 					'suffix': '.min'
@@ -11,8 +16,14 @@ $(function() {
 					cache: true,
 					dataType: 'script'
 				}).done(function() {
+					tinymceLoading = false;
 					tinymceLoaded = true;
 					clb();
+					if (tinymceLoadingQueue.length) {
+						$.each(tinymceLoadingQueue, function(k, v) {
+							v();
+						});
+					}
 				});
 			} else {
 				clb();
