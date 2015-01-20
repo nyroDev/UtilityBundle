@@ -1223,6 +1223,9 @@ function close_window() {
 	if ($('#popup').val()==1){
 		window.close();
 	}else{
+		if(typeof parent.jQuery !== "undefined" && parent.jQuery && parent.jQuery.nmTop) {
+			parent.jQuery.nmTop().close();
+		} else
 		if(typeof parent.jQuery !== "undefined" && parent.jQuery) {
 		  parent.jQuery.fancybox.close();   
 		}else{
