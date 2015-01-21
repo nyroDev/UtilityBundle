@@ -34,7 +34,11 @@ $(function() {
 	
 	$('textarea.tinymce').each(function() {
 		var me = $(this),
-			opts = {};
+			opts = {
+				oninit: function(ed) {
+					me.trigger('tinmceInit', [ed]);
+				}
+			};
 		$.each(me.data(), function(i, e) {
 			if (i.indexOf(tinymceKey) == 0) {
 				if (typeof e == 'string' && e.indexOf('function(') == 0) {
