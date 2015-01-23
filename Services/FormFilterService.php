@@ -16,7 +16,7 @@ class FormFilterService extends AbstractService {
 	 * @param Form $form
 	 * @param QueryBuilder $queryBuilder
 	 */
-	public function buildQuery(Form $form, QueryBuilder $queryBuilder) {
+	public function buildQuery(Form $form, $queryBuilder) {
 		$data = $form->getData();
 		
 		foreach($data as $name=>$val) {
