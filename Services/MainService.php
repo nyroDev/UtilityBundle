@@ -345,7 +345,7 @@ class MainService extends AbstractService {
 	 * @return string
 	 */
 	public function formatDate(\DateTime $datetime, $format) {
-		return utf8_encode(strftime($this->trans($format), $datetime->getTimestamp()));
+		return utf8_encode(strftime(utf8_encode($this->trans($format)), $datetime->getTimestamp()));
 	}
 }
 
