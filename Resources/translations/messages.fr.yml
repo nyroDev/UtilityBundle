@@ -1,7 +1,8 @@
 date:
   long: "%#d %B %Y à %H:%M"
-  short: %d/%m/%Y
+  short: "%d/%m/%Y"
   shortText: "%d %B %Y"
+  full: "d/%m/%Y à %H:%M"
 login:
   errors:
     "Bad credentials": "Désolé, votre adresse email ne correspond à aucun compte existant."
