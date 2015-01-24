@@ -47,7 +47,7 @@ class TinymceType extends AbstractType {
 		
 		if (isset($options['tinymce']) && is_array($options['tinymce'])) {
 			foreach($options['tinymce'] as $k=>$v)
-				$attrs[$prefixTinymce.$k] = $v;
+				$attrs[$prefixTinymce.$k] = is_array($v) ? json_encode($v) : $v;
 		}
 		
 		$view->vars['attr'] = $attrs;
