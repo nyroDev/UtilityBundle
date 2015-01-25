@@ -358,7 +358,7 @@ class ImageService extends AbstractService {
 	public function resizeImagesInHtml($html, $absolutizeUrl = false, $addBody = false) {
 		$this->get('nyrodev')->increasePhpLimits();
 		$dom = new \DOMDocument();
-		$html = utf8_decode($html);
+		//$html = utf8_decode($html);
 		if ($addBody)
 			$html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>'.$html.'</body></html>';
 		$dom->loadHTML($html);
