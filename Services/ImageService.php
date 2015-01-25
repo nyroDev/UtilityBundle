@@ -379,7 +379,7 @@ class ImageService extends AbstractService {
 	 * @param boolean $absolutizeUrl Indicates if the src should be absolutized
 	 */
 	protected function resizeImagesInHtmlDom(\DOMElement $node, $absolutizeUrl = false) {
-		if (strtolower($node->tagName) == 'img' && ($node->hasAttribute('width') || $node->hasAttribute('height')) && $node->hasAttribute('src')) {
+		if (strtolower($node->tagName) == 'img' && ($node->hasAttribute('width') || $node->hasAttribute('height')) && $node->hasAttribute('src') && strpos($node->getAttribute('src'), 'http') !== 0) {
 			// We have everything to resize the imagen let's dot it
 			$w = $node->hasAttribute('width') ? $node->getAttribute('width') : null;
 			$h = $node->hasAttribute('height') ? $node->getAttribute('height') : null;
@@ -388,14 +388,17 @@ class ImageService extends AbstractService {
 			if (strpos($fileUrl, '.php'))
 				$baseUrl = dirname($baseUrl);
 			
-			$webFile = trim($baseUrl && $baseUrl != '/' ? str_replace($baseUrl, '', $node->getAttribute('src')) : $node->getAttribute('src'), '/');
+			$src = $node->getAttribute('src');
+			$webFile = trim($baseUrl && $baseUrl != '/' ? str_replace($baseUrl, '', $src) : $src, '/');
 			$webDir = $this->get('kernel')->getRootDir().'/../web/';
 			$file = $webDir.$webFile;
-			$src = str_replace($webDir, '', $this->_resize($file, array(
-				'name'=>$w.'_'.$h,
-				'w'=>$w,
-				'h'=>$h
-			)));
+			if (file_exists($file)) {
+				$src = str_replace($webDir, '', $this->_resize($file, array(
+					'name'=>$w.'_'.$h,
+					'w'=>$w,
+					'h'=>$h
+				)));
+			}
 			if ($absolutizeUrl)
 				$src = $this->get('nyrodev')->getFullUrl($src);
 			
