@@ -401,6 +401,9 @@ class ImageService extends AbstractService {
 			
 			$node->setAttribute('src', $src);
 		}
+		if ($absolutizeUrl && strtolower($node->tagName) == 'a' && $node->hasAttribute('href')) {
+			$node->setAttribute('href', $this->get('nyrodev')->getFullUrl($node->getAttribute('href')));
+		}
 		foreach($node->childNodes as $n) {
 			if ($n instanceof \DOMElement) 
 				$this->resizeImagesInHtmlDom($n, $absolutizeUrl);

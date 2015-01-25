@@ -40,6 +40,8 @@ class MainService extends AbstractService {
 	 * @return string
 	 */
 	public function getFullUrl($path) {
+		if (strpos($path, 'http') === 0)
+			return $path;
 		$router = $this->get('router');
 		if ($path[0] != '/')
 			$path = '/'.$path;
