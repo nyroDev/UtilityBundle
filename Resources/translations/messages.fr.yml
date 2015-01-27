@@ -25,6 +25,7 @@ admin:
     edit: Modifier
     export: Exporter
     delete: Supprimer
+    cancel: Annuler
     noResults: Pas de résultats
   pager:
     next: Suivant

@@ -25,6 +25,7 @@ admin:
     edit: Edit
     export: Export
     delete: Delete
+    cancel: Cancel
     noResults: No results
   pager:
     next: Next
