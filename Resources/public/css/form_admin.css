@@ -56,7 +56,7 @@ select {
     overflow: auto;
 	width: 678px;
 }
-.form_button button {
+.form_button button, .button {
     border: none;
     background: #000;
     color: #fff;
@@ -65,7 +65,7 @@ select {
     padding: 5px 10px;
     border-radius: 5px;
 }
-.form_button button:hover {
+.form_button button:hover, .button:hover {
 	background: #333;
 }
 .form_errors, .form_row .form_errors {
