@@ -45,6 +45,8 @@ class Configuration implements ConfigurationInterface
 						->children()
 							->integerNode('w')->defaultValue(0)->end()
 							->integerNode('h')->defaultValue(0)->end()
+							->integerNode('maxw')->defaultValue(0)->end()
+							->integerNode('maxh')->defaultValue(0)->end()
 							->scalarNode('quality')->defaultValue(80)->end()
 							->booleanNode('fit')->defaultTrue()->end()
 							->booleanNode('useMaxResize')->defaultFalse()->end()

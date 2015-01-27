@@ -152,11 +152,15 @@ class ImageService extends AbstractService {
 		} else if ($config['w']) {
 			// Width is fixed
 			$config['h'] = round($srcH * $scaleW);
+			if ($config['maxh'] && $config['maxh'] > 0 && $config['h'] > $config['maxh'])
+				$config['h'] = $config['maxh'];
 			$dstH = round($srcH * $scaleW);
 			$config['fit'] = true;
 		} else if ($config['h']) {
 			// Height is fixed
 			$config['w'] = round($srcW * $scaleH);
+			if ($config['maxw'] && $config['maxw'] > 0 && $config['w'] > $config['maxw'])
+				$config['w'] = $config['maxw'];
 			$dstW = round($srcW * $scaleH);
 			$config['fit'] = true;
 		} else {
@@ -166,7 +170,7 @@ class ImageService extends AbstractService {
 			$dstW = $config['w'];
 			$dstH = $config['h'];
 		}
-
+		
 		$imgDst = imagecreatetruecolor($config['w'], $config['h']);
 		if ($isTransparent) {
 			imagealphablending($imgDst, false);
