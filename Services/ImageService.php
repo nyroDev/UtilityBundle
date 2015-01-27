@@ -130,6 +130,31 @@ class ImageService extends AbstractService {
 				$config['h'] = 0;
 			}
 		}
+		
+		if ($config['w']) {
+			// Width is fixed
+			$config['h'] = round($srcH * $scaleW);
+			if ($config['maxh'] && $config['maxh'] > 0 && $config['h'] > $config['maxh']) {
+				$config['h'] = $config['maxh'];
+				$scaleH = $config['h'] / $srcH;
+				$dstH = $config['h'];
+			} else {
+				$dstH = round($srcH * $scaleW);
+				$config['fit'] = true;
+			}
+		} else if ($config['h']) {
+			// Height is fixed
+			$config['w'] = round($srcW * $scaleH);
+			if ($config['maxw'] && $config['maxw'] > 0 && $config['w'] > $config['maxw']) {
+				$config['w'] = $config['maxw'];
+				$scaleW = $config['w'] / $srcW;
+				$dstW = $config['w'];
+			} else {
+				$dstW = round($srcW * $scaleH);
+				$config['fit'] = true;
+			}
+		}
+		
 		if (isset($config['w']) && $config['w'] && isset($config['h']) && $config['h']) {
 			// Dimensions are fixed
 			if (isset($config['fit']) && $config['fit']) {
@@ -149,21 +174,7 @@ class ImageService extends AbstractService {
 					$dstY = round(($config['h'] - $dstH) / 2);
 				}
 			}
-		} else if ($config['w']) {
-			// Width is fixed
-			$config['h'] = round($srcH * $scaleW);
-			if ($config['maxh'] && $config['maxh'] > 0 && $config['h'] > $config['maxh'])
-				$config['h'] = $config['maxh'];
-			$dstH = round($srcH * $scaleW);
-			$config['fit'] = true;
-		} else if ($config['h']) {
-			// Height is fixed
-			$config['w'] = round($srcW * $scaleH);
-			if ($config['maxw'] && $config['maxw'] > 0 && $config['w'] > $config['maxw'])
-				$config['w'] = $config['maxw'];
-			$dstW = round($srcW * $scaleH);
-			$config['fit'] = true;
-		} else {
+		} else if (!$config['h'] && !$config['w']) {
 			// No dimensions requested, use the imgAct dimensions
 			$config['w'] = $info['w'];
 			$config['h'] = $info['h'];
