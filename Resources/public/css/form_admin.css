@@ -62,12 +62,14 @@ select {
     background: #000;
     color: #fff;
 	text-align: center;
+	text-decoration: none;
     text-transform: uppercase;
     float: right;
     padding: 5px 10px;
     border-radius: 5px;
 }
 .form_button button:hover, .button:hover {
+	text-decoration: none;
 	background: #333;
 }
 .form_errors, .form_row .form_errors {
