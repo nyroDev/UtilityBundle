@@ -148,7 +148,7 @@ abstract class AbstractUploadable {
 				// check if we have an old image
 				if (isset($this->temps[$field])) {
 					// delete the old image
-					$this->removeFile($rootDir.'/'.$this->temps[$field]);
+					$this->removeFileReal($rootDir.'/'.$this->temps[$field]);
 					// clear the temp image path
 					unset($this->temps[$field]);
 				}
@@ -160,7 +160,7 @@ abstract class AbstractUploadable {
 
 	public function removeUpload() {
 		foreach($this->getFileFields() as $field=>$config)
-			$this->removeFile($this->getFilePath($field, AbstractUploadable::PATH_ABSOLUTE));
+			$this->removeFileReal($this->getFilePath($field, AbstractUploadable::PATH_ABSOLUTE));
 	}
 	
 	protected function removeFileReal($file) {
