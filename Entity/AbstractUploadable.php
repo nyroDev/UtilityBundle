@@ -62,6 +62,11 @@ abstract class AbstractUploadable {
 		$accessor = PropertyAccess::createPropertyAccessor();
 		$accessor->setValue($this, $this->getFileConfig($field, AbstractUploadable::CONFIG_FIELD), $value);
 	}
+	
+	public function removeFile($field) {
+		$this->removeFileReal($this->getFilePath($field, AbstractUploadable::PATH_ABSOLUTE));
+		$this->setFilePath($field, null);
+	}
 
 	protected function getFileConfig($field, $config) {
 		$fileFields = $this->getFileFields();
@@ -158,7 +163,7 @@ abstract class AbstractUploadable {
 			$this->removeFile($this->getFilePath($field, AbstractUploadable::PATH_ABSOLUTE));
 	}
 	
-	protected function removeFile($file) {
+	protected function removeFileReal($file) {
 		if ($file && file_exists($file)) {
 			unlink($file);
 			if ($this->service)
