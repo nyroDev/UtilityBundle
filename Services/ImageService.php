@@ -133,16 +133,16 @@ class ImageService extends AbstractService {
 		
 		if ($config['w'] && $config['maxh'] && $config['maxh'] > 0) {
 			// Width is fixed
-			$config['h'] = round($srcH * $scaleW);
-			if ($config['h'] > $config['maxh']) {
+			$tmpH = round($srcH * $scaleW);
+			if ($tmpH > $config['maxh']) {
 				$config['h'] = $config['maxh'];
 				$scaleH = $config['h'] / $srcH;
 				$dstH = $config['h'];
 			}
 		} else if ($config['h'] && $config['maxw'] && $config['maxw'] > 0) {
 			// Height is fixed
-			$config['w'] = round($srcW * $scaleH);
-			if ($config['w'] > $config['maxw']) {
+			$tmpW = round($srcW * $scaleH);
+			if ($tmpW > $config['maxw']) {
 				$config['w'] = $config['maxw'];
 				$scaleW = $config['w'] / $srcW;
 				$dstW = $config['w'];
