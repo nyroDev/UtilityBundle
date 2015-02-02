@@ -131,7 +131,7 @@ class ImageService extends AbstractService {
 			}
 		}
 		
-		if ($config['w'] && $config['maxh'] && $config['maxh'] > 0) {
+		if ($config['w'] && isset($config['maxh']) && $config['maxh'] && $config['maxh'] > 0) {
 			// Width is fixed
 			$tmpH = round($srcH * $scaleW);
 			if ($tmpH > $config['maxh']) {
@@ -139,7 +139,7 @@ class ImageService extends AbstractService {
 				$scaleH = $config['h'] / $srcH;
 				$dstH = $config['h'];
 			}
-		} else if ($config['h'] && $config['maxw'] && $config['maxw'] > 0) {
+		} else if ($config['h'] && isset($config['maxw']) && $config['maxw'] && $config['maxw'] > 0) {
 			// Height is fixed
 			$tmpW = round($srcW * $scaleH);
 			if ($tmpW > $config['maxw']) {
