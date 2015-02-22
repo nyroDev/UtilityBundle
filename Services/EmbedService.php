@@ -8,11 +8,12 @@ class EmbedService extends AbstractService {
 	}
 	
 	public function data($url, $force = false) {
-		$cache = $this->get('winzou_cache');
-		/* @var $cache \winzou\CacheBundle\Cache\LifetimeFileCache */
+		$cache = false;
+		if ($this->container->has('nyrodev_embed_cache'))
+			$cache = $this->get('nyrodev_embed_cache');
 		
-		$cacheKey = $this->getChacheKey($url, 'embedUrlParser_');
-		if ($force || !$cache->contains($cacheKey)) {
+		$cacheKey = $this->getChacheKey($url, 'urlParser_');
+		if ($force || !$cache || !$cache->contains($cacheKey)) {
 			
 			$service = \Embed\Embed::create($url, $this->getCreateOptions($url));
 			/* @var $service \Embed\Adapters\AdapterInterface */
@@ -43,7 +44,8 @@ class EmbedService extends AbstractService {
 				$data = array();
 			}
 			
-			$cache->save($cacheKey, $data, 24 * 60 * 60);
+			if ($cache)
+				$cache->save($cacheKey, $data, 24 * 60 * 60);
 		} else {
 			$data = $cache->fetch($cacheKey);
 		}
