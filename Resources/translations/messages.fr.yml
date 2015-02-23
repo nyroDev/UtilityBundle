@@ -26,6 +26,7 @@ admin:
     export: Exporter
     delete: Supprimer
     cancel: Annuler
+    currentFile: "Fichier actuel : %currentFile%"
     noResults: Pas de résultats
   pager:
     next: Suivant

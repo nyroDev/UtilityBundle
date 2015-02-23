@@ -75,6 +75,10 @@ services:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleSingleChoiceType
         tags:
           - { name: form.type, alias: filter_dbRowMultipleSingleChoice}
+    form.type.file_extension:
+        class: NyroDev\UtilityBundle\Form\Extension\FileTypeExtension
+        tags:
+          - { name: form.type_extension, alias: file }
     form.type.tinymce:
         class: NyroDev\UtilityBundle\Form\Type\TinymceType
         arguments: [@service_container]

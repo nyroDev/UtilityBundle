@@ -43,6 +43,18 @@ select {
     color: #f00;
 }
 
+.form_row_file {
+	position: relative;
+}
+.form_row_file .formIndicator {
+	position: absolute;
+	top: 0;
+	right: 30px;
+}
+.form_row_file .currentFile {
+	display: block;
+    margin: 3px 0 3px 220px;
+}
 .form_row_checkbox {
     text-align: right;
 	width: 688px;

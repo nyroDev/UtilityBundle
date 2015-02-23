@@ -350,5 +350,29 @@ class MainService extends AbstractService {
 		return utf8_encode(strftime(utf8_decode($this->trans($format)), $datetime->getTimestamp()));
 	}
 
+	/**
+	 * Truncate text to not be too large
+	 *
+	 * @param string $text Text to truncate
+	 * @param int $limit Limit
+	 * @param boolean $isFile Indicate if it should be treated as file to keep the extension
+	 * @return string Trucnated text
+	 */
+	public function truncate($text, $limit, $isFile = false) {
+		$ext = null;
+		if ($isFile) {
+			$ext = $this->getExt($text);
+			if ($ext) {
+				$limit-= mb_strlen($ext);
+				$text = mb_substr($text, 0, - mb_strlen($ext) - 1);
+			}
+		}
+		
+		if (mb_strlen($text) > $limit)
+			$text = mb_substr($text, 0, $limit - 3).'...';
+		
+		return $text.($ext ? '.'.$ext : null);
+	}
+
 }
 
