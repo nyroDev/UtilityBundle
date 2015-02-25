@@ -28,6 +28,9 @@ class FilterDbRowType extends FilterType {
 							foreach($options['where'] as $k=>$v) {
 								if (is_int($k)) {
 									$ret->andWhere('l.'.$v);
+								} else if (is_array($v)) {
+									$ret->andWhere($ret->expr()->in('l.'.$k, $v));
+									$nb++;
 								} else {
 									$ret
 										->andWhere('l.'.$k.' = :param'.$nb)
