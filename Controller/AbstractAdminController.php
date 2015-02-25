@@ -182,7 +182,7 @@ abstract class AbstractAdminController extends AbstractController {
 		);
 	}
 	
-	protected function createAdminForm($name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array()) {
+	protected function createAdminForm($name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null) {
 		if (is_null($groups))
 			$groups = array('Default', $action);
 		$form = $this->createFormBuilder($row, array('validation_groups'=>$groups));
@@ -243,7 +243,16 @@ abstract class AbstractAdminController extends AbstractController {
 				$this->getDoctrine()->getManager()->persist($row);
 			
 			$this->getDoctrine()->getManager()->flush();
-			return $this->redirect($this->generateUrl($route, $routePrm));
+			
+			$response = $this->redirect($this->generateUrl($route, $routePrm));
+			
+			if (!is_null($callbackAfterFlush)) {
+				$tmp = $this->$callbackAfterFlush($response, $action, $row);
+				if ($tmp && $tmp instanceof \Symfony\Component\HttpFoundation\Response)
+					$response = $tmp;
+			}
+			
+			return $response;
 		}
 		
 		return array(
