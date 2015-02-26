@@ -68,7 +68,7 @@ abstract class AbstractUploadable {
 		$this->setFilePath($field, null);
 	}
 
-	protected function getFileConfig($field, $config) {
+	public function getFileConfig($field, $config) {
 		$fileFields = $this->getFileFields();
 		if (isset($fileFields[$field]) && isset($fileFields[$field][$config]))
 			return $fileFields[$field][$config];
@@ -83,8 +83,12 @@ abstract class AbstractUploadable {
 		return null;
 	}
 	
-	public function setDirectFile($field, $source, $filename = null) {
-		$this->directs[$field] = array('source'=>$source, 'filename'=>$filename ? $filename : basename($source));
+	public function setDirectFile($field, $source, $filename = null, $sourceIsContent = false) {
+		$this->directs[$field] = array(
+			'source'=>$source,
+			'sourceIsContent'=>$sourceIsContent,
+			'filename'=>$filename ? $filename : basename($source)
+		);
 		$original = $this->getFilePath($field);
 		if ($original) {
 			$this->temps[$field] = $original;
@@ -142,7 +146,7 @@ abstract class AbstractUploadable {
 					$fs = new \Symfony\Component\Filesystem\Filesystem();
 					if (!$fs->exists($rootDir))
 						$fs->mkdir($rootDir);
-					file_put_contents($rootDir.'/'.$this->getFilePath($field), file_get_contents($file['source']));
+					file_put_contents($rootDir.'/'.$this->getFilePath($field), $file['sourceIsContent'] ? $file['source'] : file_get_contents($file['source']));
 				}
 
 				// check if we have an old image
