@@ -228,3 +228,9 @@ select {
 .form_row_date select, .form_row_datetime select {
     width: auto;
 }
+.form_row_filter_range_date div {
+	display: inline;
+}
+.form_row_filter_range_date div label {
+	width: 46px;
+}
