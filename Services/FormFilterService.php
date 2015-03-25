@@ -42,31 +42,38 @@ class FormFilterService extends AbstractService {
 		$data = array();
 		foreach($tmp as $k=>$v) {
 			if (isset($v['value'])) {
-				$value = $v['value'];
-				if ($value && is_object($value)) {
-					$class = get_class($value);
-					if ($class == 'DateTime') {
-						$value = array(
-							'day'=>$value->format('j'),
-							'month'=>$value->format('n'),
-							'year'=>$value->format('Y'),
-						);
-					} else if ($class == 'Doctrine\Common\Collections\ArrayCollection') {
-						$value = array();
-						foreach($value as $vv)
-							$value[] = $vv->getId();
-					} else {
-						$value = $value->getId();
-					}
-				}
+				$value = $this->prepareValueForSession($v['value']);
 				if ($value)
 					$data[$k] = array(
-						'transformer'=>$v['transformer'],
+						'transformer'=>isset($v['transformer']) ? $v['transformer'] : null,
 						'value'=>$value
 					);
 			}
 		}
 		$this->get('session')->set('filter_'.$route, $data);
+	}
+	
+	protected function prepareValueForSession($value) {
+		if (is_object($value)) {
+			$class = get_class($value);
+			if ($class == 'DateTime') {
+				$value = array(
+					'day'=>$value->format('j'),
+					'month'=>$value->format('n'),
+					'year'=>$value->format('Y'),
+				);
+			} else if ($class == 'Doctrine\Common\Collections\ArrayCollection') {
+				$value = array();
+				foreach($value as $vv)
+					$value[] = $vv->getId();
+			} else {
+				$value = $value->getId();
+			}
+		} else if ($value && is_array($value) && (isset($value['start']) || isset($value['end']))) {
+			$value['start'] = $this->prepareValueForSession($value['start']);
+			$value['end'] = $this->prepareValueForSession($value['end']);
+		}
+		return $value;
 	}
 	
 	public function getSessionPage($route) {
@@ -92,30 +99,37 @@ class FormFilterService extends AbstractService {
 	public function getPrmForUrl(Form $form) {
 		$ret = array();
 		foreach($form->getData() as $k=>$data) {
-			if (
-					isset($data['transformer']) && $data['transformer']
-				&&  isset($data['value'])
-				) {
-				if ($data['value'] instanceof \DateTime)
-					$data['value'] = array(
-						'year'=>intval($data['value']->format('Y')),
-						'month'=>intval($data['value']->format('m')),
-						'day'=>intval($data['value']->format('d'))
-					);
-				else if (is_object($data['value'])) {
-					if (get_class($data['value']) == 'Doctrine\Common\Collections\ArrayCollection') {
-						$value = array();
-						foreach($data['value'] as $vv)
-							$value[] = $vv->getId();
-						$data['value'] = $value;
-					} else {
-						$data['value'] = $data['value']->getId();
-					}
-				}
+			if (isset($data['value'])) {
+				$data['value'] = $this->prepareDataForUrl($data['value']);
 				$ret[$k] = $data;
 			}
 		}
 		return count($ret) ? array($form->getName()=>$ret) : array();
+	}
+	
+	protected function prepareDataForUrl($value) {
+		if ($value) {
+			if ($value instanceof \DateTime) {
+				$value = array(
+					'year'=>intval($value->format('Y')),
+					'month'=>intval($value->format('m')),
+					'day'=>intval($value->format('d'))
+				);
+			} else if (is_object($value)) {
+				if (get_class($value) == 'Doctrine\Common\Collections\ArrayCollection') {
+					$tmp = array();
+					foreach($value as $vv)
+						$tmp[] = $vv->getId();
+					$value = $tmp;
+				} else {
+					$value = $value->getId();
+				}
+			} else if (is_array($value) && (isset($value['start']) || isset($value['end']))) {
+				$value['start'] = $this->prepareDataForUrl($value['start']);
+				$value['end'] = $this->prepareDataForUrl($value['end']);
+			}
+		}
+		return $value;
 	}
 
 }

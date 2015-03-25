@@ -55,6 +55,14 @@ services:
         class: NyroDev\UtilityBundle\Form\Type\FilterDateType
         tags:
           - { name: form.type, alias: filter_date}
+    form.type.filter_range_date:
+        class: NyroDev\UtilityBundle\Form\Type\FilterRangeDateType
+        tags:
+          - { name: form.type, alias: filter_range_date}
+    form.type.filter_range_sub:
+        class: NyroDev\UtilityBundle\Form\Type\FilterRangeSubType
+        tags:
+          - { name: form.type, alias: filter_range_sub}
     form.type.filter_int:
         class: NyroDev\UtilityBundle\Form\Type\FilterIntType
         tags:

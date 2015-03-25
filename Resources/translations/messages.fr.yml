@@ -28,6 +28,8 @@ admin:
     cancel: Annuler
     currentFile: "Fichier actuel : %currentFile%"
     noResults: Pas de résultats
+    start: Début
+    end: Fin
   pager:
     next: Suivant
     prev: Précédent
