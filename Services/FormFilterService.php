@@ -44,10 +44,10 @@ class FormFilterService extends AbstractService {
 			if (isset($v['value'])) {
 				$value = $this->prepareValueForSession($v['value']);
 				if ($value)
-					$data[$k] = array(
+					$data[$k] = array_filter(array(
 						'transformer'=>isset($v['transformer']) ? $v['transformer'] : null,
 						'value'=>$value
-					);
+					));
 			}
 		}
 		$this->get('session')->set('filter_'.$route, $data);
