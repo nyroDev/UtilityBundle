@@ -14,7 +14,7 @@ class ShareService extends AbstractService {
 	 * @param boolean $useProperty Indicates if the default should use property
 	 */
 	public function set($type, $value, $useProperty = false) {
-		$value = utf8_encode(trim(preg_replace('/\s\s+/', ' ', utf8_decode($this->trans($value)))));
+		$value = preg_replace('/\s\s+/', ' ', $this->trans($value));
 		$keys = array();
 		$keysProp = array();
 		switch($type) {
