@@ -151,7 +151,9 @@ class ImageService extends AbstractService {
 		
 		if (isset($config['w']) && $config['w'] && isset($config['h']) && $config['h']) {
 			// Dimensions are fixed
-			if (isset($config['fit']) && $config['fit']) {
+			if (isset($config['useGivenDimensions']) && $config['useGivenDimensions']) {
+				// Change nothing here, just use given settings
+			} else if (isset($config['fit']) && $config['fit']) {
 				if ($scaleW > $scaleH) {
 					$srcH = round($config['h'] / $scaleW);
 					$srcY = round(($info['h'] - $srcH) / 2);
@@ -415,7 +417,8 @@ class ImageService extends AbstractService {
 				$src = str_replace($webDir, '', $this->_resize($file, array(
 					'name'=>$w.'_'.$h,
 					'w'=>$w,
-					'h'=>$h
+					'h'=>$h,
+					'useGivenDimensions'=>true
 				)));
 			}
 			if ($absolutizeUrl)

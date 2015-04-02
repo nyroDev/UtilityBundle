@@ -50,6 +50,7 @@ class Configuration implements ConfigurationInterface
 							->scalarNode('quality')->defaultValue(80)->end()
 							->booleanNode('fit')->defaultTrue()->end()
 							->booleanNode('useMaxResize')->defaultFalse()->end()
+							->booleanNode('useGivenDimensions')->defaultFalse()->end()
 							->scalarNode('bgColor')->defaultValue('ffffff')->end()
 						->end()
 					->end()
