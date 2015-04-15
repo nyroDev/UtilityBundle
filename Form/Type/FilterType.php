@@ -4,6 +4,7 @@ namespace NyroDev\UtilityBundle\Form\Type;
 use Symfony\Component\Form\AbstractType as SrcAbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Default Filter Type field for text fields 
@@ -18,12 +19,17 @@ class FilterType extends SrcAbstractType implements FilterTypeInterface {
 	 * @param array         $options The options
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
+		$choices = array(
+			'LIKE %...%'=>'LIKE %...%',
+			'='=>'=',
+		);
+		if ($options['addNullTransformer']) {
+			$choices['IS NULL'] = 'IS NULL';
+			$choices['IS NOT NULL'] = 'IS NOT NULL';
+		}
 		$builder
 			->add('transformer', 'choice', array(
-				'choices'=>array(
-					'LIKE %...%'=>'LIKE %...%',
-					'='=>'=',
-				),
+				'choices'=>$choices,
 			))
 			->add('value', 'text', array(
 				'required'=>false,
@@ -37,21 +43,33 @@ class FilterType extends SrcAbstractType implements FilterTypeInterface {
 			) {
 			$value = $this->applyValue($data['value']);
 			$transformer = $data['transformer'];
-			$paramName = $name.'_param';
-			$condMask = '%s.%s %s :%s';
 			
-			if ($transformer == 'LIKE %...%') {
-				$value = '%'.$value.'%';
-				$transformer = 'LIKE';
-			}
-			$condition = sprintf($condMask,
-				$queryBuilder->getRootAlias(),
-				$name,
-				$transformer,
-				$paramName
-			);
+			if ($transformer == 'IS NULL' || $transformer == 'IS NOT NULL') {
+				$condMask = '%s.%s %s';
+				$condition = sprintf($condMask,
+					$queryBuilder->getRootAlias(),
+					$name,
+					$transformer
+				);
 
-			$queryBuilder->andWhere($condition)->setParameter($paramName, $value, \PDO::PARAM_STR);
+				$queryBuilder->andWhere($condition);
+			} else {
+				$paramName = $name.'_param';
+				$condMask = '%s.%s %s :%s';
+
+				if ($transformer == 'LIKE %...%') {
+					$value = '%'.$value.'%';
+					$transformer = 'LIKE';
+				}
+				$condition = sprintf($condMask,
+					$queryBuilder->getRootAlias(),
+					$name,
+					$transformer,
+					$paramName
+				);
+
+				$queryBuilder->andWhere($condition)->setParameter($paramName, $value, \PDO::PARAM_STR);
+			}
 		}
 		
 		return $queryBuilder;
@@ -60,6 +78,15 @@ class FilterType extends SrcAbstractType implements FilterTypeInterface {
 	public function applyValue($value) {
 		return $value;
 	}
+	
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+		$resolver->setDefaults(array(
+			'addNullTransformer'=>false,
+		));
+    }
 	
 	/**
 	 * Returns the name of this type.

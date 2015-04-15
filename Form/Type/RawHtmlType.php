@@ -10,4 +10,5 @@ class RawHtmlType extends AbstractType {
 	public function getName() {
 		return 'rawhtml';
 	}
+
 }

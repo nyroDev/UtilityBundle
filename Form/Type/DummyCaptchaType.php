@@ -12,4 +12,5 @@ class DummyCaptchaType extends SrcAbstractType {
 	public function getName() {
 		return 'dummy_captcha';
 	}
+
 }
