@@ -50,3 +50,11 @@ nyrodev:
     directory: Dossier
     addDir: Ajouter un dossier
     rootDir: racine
+  plupload:
+    images: Images
+    browse: Parcourir...
+    waiting: En attente
+    error: Erreur
+    cancel: Annulé
+    complete: Terminé
+    cancelAll: Tout annuler
