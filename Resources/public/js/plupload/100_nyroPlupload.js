@@ -23,6 +23,9 @@ jQuery(function($) {
 					curOpts.url = me.closest('form').attr('action');
 				if (!curOpts.url)
 					curOpts.url = document.location.href;
+				curOpts.headers = {
+					'X-Requested-With': 'XMLHttpRequest'
+				};
 				
 				var uploader = new plupload.Uploader(curOpts);
 				uploader.bind('FilesAdded', function(up, files) {
