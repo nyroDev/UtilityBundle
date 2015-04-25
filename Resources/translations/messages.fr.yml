@@ -31,7 +31,7 @@ admin:
     start: Début
     end: Fin
     yes: Oui
-    no: No
+    no: Non
   pager:
     next: Suivant
     prev: Précédent
