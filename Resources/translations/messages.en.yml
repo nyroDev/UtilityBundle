@@ -30,6 +30,8 @@ admin:
     noResults: No results
     start: Start
     end: End
+    yes: Yes
+    no: No
   pager:
     next: Next
     prev: Previous

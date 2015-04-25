@@ -73,6 +73,8 @@ abstract class AbstractAdminController extends AbstractController {
 						} else {
 							$val = $val.'';
 						}
+					} else if (isset($exportConfig['boolFields']) && isset($exportConfig['boolFields'][$field]) && $exportConfig['boolFields'][$field]) {
+						$val = $this->trans('admin.misc.'.($val ? 'yes' : 'no'));
 					}
 					$sheet->setCellValueExplicitByColumnAndRow($col, $row, $val, \PHPExcel_Cell_DataType::TYPE_STRING);
 					//$sheet->setCellValueByColumnAndRow($col, $row, $val);
