@@ -16,6 +16,7 @@ services:
         tags:
           - { name: templating.helper, alias: nyrodev }
           - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
     nyrodev_share:
         class: %nyrodev_utility.shareService.class%
         arguments: [@service_container]

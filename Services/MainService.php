@@ -2,6 +2,7 @@
 namespace NyroDev\UtilityBundle\Services;
 
 use \Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use \Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class MainService extends AbstractService {
 	
@@ -16,6 +17,17 @@ class MainService extends AbstractService {
 			if (strlen($locale) == 2)
 				$locale.= '_'.strtoupper($locale);
 			setlocale(LC_ALL, $locale);
+		}
+	}
+	
+	/**
+	 * Kernel response listener to add content-language if configured
+	 *
+	 * @param FilterResponseEvent $event Kernel response event
+	 */
+	public function onKernelResponse(FilterResponseEvent $event) {
+		if ($this->getParameter('nyroDev_utility.setContentLanguageResponse') && $event->getResponse() && $event->getResponse()->headers && $event->getRequest()->getLocale()) {
+			$event->getResponse()->headers->set('Content-Language', $event->getRequest()->getLocale());
 		}
 	}
 	
