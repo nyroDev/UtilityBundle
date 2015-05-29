@@ -18,6 +18,13 @@ class FileTypeExtension extends AbstractTypeExtension {
         return 'file';
     }
 
+	public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver) {
+		$resolver->setDefaults(array(
+			'showCurrent'=>true,
+			'showDelete'=>false,
+		));
+	}
+	
     /**
      * Pass the image URL to the view
      *
@@ -29,8 +36,10 @@ class FileTypeExtension extends AbstractTypeExtension {
 		$data = $form->getParent()->getData();
 		if ($data instanceof AbstractUploadable) {
 			$currentFile = $data->getWebPath($form->getName());
-			if ($currentFile)
+			if ($currentFile) {
 				$view->vars['currentFile'] = $currentFile;
+				$view->vars['showDelete'] = $options['showDelete'] && is_string($options['showDelete']) ? $options['showDelete'] : false;
+			}
 		}
     }
 

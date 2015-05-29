@@ -51,9 +51,12 @@ select {
 	top: 0;
 	right: 30px;
 }
-.form_row_file .currentFile {
+.form_row_file .currentFile, .form_row_file .currentFileDelete {
 	display: block;
     margin: 3px 0 3px 220px;
+}
+.form_row_file .currentFileDelete {
+	color: red;
 }
 .form_row_checkbox {
     text-align: right;

@@ -27,6 +27,8 @@ admin:
     delete: Delete
     cancel: Cancel
     currentFile: "Current File: %currentFile%"
+    currentFileDelete: "Delete"
+    currentFileDeleteConfirm: "Are you sure you want to delete this file?"
     noResults: No results
     start: Start
     end: End
