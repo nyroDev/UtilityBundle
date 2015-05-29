@@ -6,6 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -24,6 +26,14 @@ class NyroDevUtilityExtension extends Extension
 
 		$container->setParameter('nyroDev_utility.setLocale', isset($config['setLocale']) && $config['setLocale']);
 		$container->setParameter('nyroDev_utility.setContentLanguageResponse', isset($config['setContentLanguageResponse']) && $config['setContentLanguageResponse']);
+		$container->setParameter('nyroDev_utility.translationDb', isset($config['translationDb']) && $config['translationDb'] ? $config['translationDb'] : false);
+		
+		if (isset($config['translationDb']) && $config['translationDb']) {
+			$definition = new Definition('NyroDev\UtilityBundle\Loader\DbLoader');
+			$definition->addArgument(new Reference('service_container'));
+			$definition->addTag('translation.loader', array('alias'=>'db'));
+			$container->setDefinition('nyrodev_utility.dbLoader', $definition);
+		}
 
 		if (isset($config['browser']) && is_array($config['browser'])) {
 			foreach($config['browser'] as $k=>$v) {

@@ -24,6 +24,7 @@ class Configuration implements ConfigurationInterface
 			->children()
 				->booleanNode('setLocale')->defaultFalse()->end()
 				->booleanNode('setContentLanguageResponse')->defaultFalse()->end()
+				->scalarNode('translationDb')->defaultValue('')->end()
 				->arrayNode('browser')
 					->addDefaultsIfNotSet()
 					->children()
