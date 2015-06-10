@@ -61,7 +61,7 @@ class TruncateHTML {
         return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', $dom->saveHTML());
     }
     
-    private static function removeProceedingNodes(DOMNode $domNode, DOMNode $topNode) {        
+    private static function removeProceedingNodes(\DOMNode $domNode, \DOMNode $topNode) {        
         $nextNode = $domNode->nextSibling;
         
         if($nextNode !== NULL) {
@@ -82,7 +82,7 @@ class TruncateHTML {
         }
     }
     
-    private static function insertEllipsis(DOMNode $domNode, $ellipsis) {    
+    private static function insertEllipsis(\DOMNode $domNode, $ellipsis) {    
         $avoid = array('a', 'strong', 'em', 'h1', 'h2', 'h3', 'h4', 'h5'); //html tags to avoid appending the ellipsis to
         
         if( in_array($domNode->parentNode->nodeName, $avoid) && $domNode->parentNode->parentNode !== NULL) {
