@@ -47,7 +47,7 @@ jQuery(function($) {
 			});
 			return opts;
 		},
-		myTinymce: function(options, skipDataSearch) {
+		myTinymce: function(options, tinymceurl) {
 			return this.each(function() {
 				var me = $(this),
 					opts = $.extend({
@@ -55,9 +55,9 @@ jQuery(function($) {
 							me.trigger('tinmceInit', [ed]);
 						}
 					}, options);
-				if (!skipDataSearch)
+				if (!tinymceurl)
 					$.extend(opts, me.myTinymceDataSearch());
-				tinymceLoad(me.data('tinymceurl'), function() {
+				tinymceLoad(tinymceurl ? tinymceurl : me.data('tinymceurl'), function() {
 					if (me.data('browser_url')) {
 						opts['file_browser_callback'] = function(field_name, url, type, win) {
 							parent.nyroBrowserField = field_name;
