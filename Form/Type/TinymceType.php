@@ -25,6 +25,7 @@ class TinymceType extends AbstractType {
 			$prefixTinymce.'toolbar'=>'undo redo | styleselect | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
 			$prefixTinymce.'menubar'=>'insert edit view table tools',
 			$prefixTinymce.'relative_urls'=>'false',
+			$prefixTinymce.'browser_spellcheck'=>'true',
 		));
 		
 		if ((isset($options['tinymceBrowser']) && $options['tinymceBrowser']) || ($this->container->hasParameter('nyrodev_utility.browser.defaultEnable') && $this->container->getParameter('nyrodev_utility.browser.defaultEnable'))) {
