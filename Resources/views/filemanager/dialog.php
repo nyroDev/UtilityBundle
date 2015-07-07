@@ -222,7 +222,7 @@ elseif($type_param==0 && $_GET['field_id']=='') $apply = 'apply_none';
 elseif($type_param==3) $apply = 'apply_video';
 else $apply = 'apply';
 
-$get_params = http_build_query(array(
+$get_params = array(
     'editor'    => $editor,
     'type'      => $type_param,
     'lang'      => $lang,
@@ -230,10 +230,18 @@ $get_params = http_build_query(array(
     'crossdomain' => $crossdomain,
     'field_id'  => $field_id,
     'relative_url' => $return_relative_url,
-    'akey' 		=> (isset($_GET['akey']) && $_GET['akey'] != '' ? $_GET['akey'] : 'key'),
-    'fldr'      => ''
-));
-?><!DOCTYPE html>
+    'akey' 		=> (isset($_GET['akey']) && $_GET['akey'] != '' ? $_GET['akey'] : 'key')
+);
+if(isset($_GET['CKEditorFuncNum'])){
+    $get_params['CKEditorFuncNum'] = $_GET['CKEditorFuncNum'];
+    $get_params['CKEditor'] = (isset($_GET['CKEditor'])? $_GET['CKEditor'] : '');
+}
+$get_params['fldr'] ='';
+
+$get_params = http_build_query($get_params);
+
+?>
+<!DOCTYPE html>
 <html xmlns="https://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
@@ -594,6 +602,11 @@ $files=array_merge(array($prev_folder),array($current_folder),$sorted);
 	<?php }
 	}
 	?>
+	<?php /*
+	 * nyrodev update
+	<li class="pull-right"><a class="btn-small" href="javascript:void('')" id="info"><i class="icon-question-sign"></i></a></li>
+	<li class="pull-right"><a class="btn-small" href="javascript:void('')" id="change_lang_btn"><i class="icon-globe"></i></a></li>
+	 */ ?>
 	<li class="pull-right"><a id="refresh" class="btn-small" href="dialog.php?<?php echo $get_params.$subdir."&".uniqid() ?>"><i class="icon-refresh"></i></a></li>
 
 	<li class="pull-right">

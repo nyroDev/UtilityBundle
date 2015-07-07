@@ -16,11 +16,11 @@ if ( ! function_exists('response'))
 	 * @param int    $statusCode
 	 * @param array  $headers
 	 *
-	 * @return \tripo\Filemanager\Response|\Illuminate\Http\Response
+	 * @return \Response|\Illuminate\Http\Response
 	 */
 	function response($content = '', $statusCode = 200, $headers = array())
 	{
-		$responseClass = class_exists('Illuminate\Http\Response') ? '\Illuminate\Http\Response' : '\tripo\Filemanager\Response';
+		$responseClass = class_exists('Illuminate\Http\Response') ? '\Illuminate\Http\Response' : 'Response';
 
 		return new $responseClass($content, $statusCode, $headers);
 	}
@@ -74,6 +74,7 @@ if ( ! function_exists('trans'))
 		$lang_vars = array();
 	}
 	
+	// nyrodev update
 	$GLOBALS['$lang_vars'] = $lang_vars;
 	
 	/**
@@ -85,6 +86,7 @@ if ( ! function_exists('trans'))
 	 */
 	function trans($var)
 	{
+		// nyrodev update
 		$lang_vars = $GLOBALS['$lang_vars'];
 
 		return (array_key_exists($var, $lang_vars)) ? $lang_vars[ $var ] : $var;

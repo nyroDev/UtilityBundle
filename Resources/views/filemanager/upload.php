@@ -33,6 +33,7 @@ if ($path_pos!==0
 	|| strpos($storeFolder,'./',strlen($current_path)) !== FALSE )
 		die('wrong path');
 
+
 $path = $storeFolder;
 $cycle = TRUE;
 $max_cycles = 50;
