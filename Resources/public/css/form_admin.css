@@ -28,6 +28,9 @@ textarea {
 	min-height: 5em;
     width: 450px;
 }
+.selectCont {
+	display: inline-block;
+}
 select {
     width: 457px;
 }
