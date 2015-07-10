@@ -3,9 +3,10 @@ jQuery(function($, undefined) {
 		autocompleteSelMul: function() {
 			return this.not('.autocompleteSelMulInited').each(function() {
 				var me = $(this).hide().addClass('autocompleteSelMulInited'),
+					meCont = me.parent().is('.selectCont') ? me.parent().hide() : me,
 					val = me.val(),
 					options = me.children('option'),
-					input = $('<input type="text" name="'+me.attr('id')+'_new" />').insertBefore(me),
+					input = $('<input type="text" name="'+me.attr('id')+'_new" />').insertBefore(meCont),
 					list = [],
 					cur = [],
 					sep = me.data('sep') || ',',
@@ -88,9 +89,10 @@ jQuery(function($, undefined) {
 		autocompleteSel: function() {
 			return this.not('.autocompleteSelInited').each(function() {
 				var me = $(this).hide().addClass('autocompleteSelInited'),
+					meCont = me.parent().is('.selectCont') ? me.parent().hide() : me,
 					val = me.val(),
 					options = me.children('option'),
-					input = $('<input type="text" name="'+me.attr('id')+'_new" '+(me.attr('required') ? 'required="required"' : '')+'/>').insertBefore(me),
+					input = $('<input type="text" name="'+me.attr('id')+'_new" '+(me.attr('required') ? 'required="required"' : '')+'/>').insertBefore(meCont),
 					list = [],
 					writeForm = function() {
 						var val = input.val(),

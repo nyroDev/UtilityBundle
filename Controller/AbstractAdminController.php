@@ -233,7 +233,11 @@ abstract class AbstractAdminController extends AbstractController {
 			$form->add($f, $type, $options);
 		}
 		
-		$form->add('submit', 'submit', array('label'=>$this->trans('admin.misc.send')));
+		$submitOptions = array('label'=>$this->trans('admin.misc.send'));
+		if (isset($moreOptions['submit']) && is_array($moreOptions['submit']))
+			$submitOptions = array_merge($submitOptions, $moreOptions['submit']);
+		$form->add('submit', 'submit', $submitOptions);
+		
 		if (!is_null($callbackForm))
 			$this->$callbackForm($action, $row, $form);
 		
