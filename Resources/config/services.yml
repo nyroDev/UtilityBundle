@@ -72,6 +72,10 @@ services:
         class: NyroDev\UtilityBundle\Form\Type\FilterBoolType
         tags:
           - { name: form.type, alias: filter_bool}
+    form.type.filter_choice:
+        class: NyroDev\UtilityBundle\Form\Type\FilterChoiceType
+        tags:
+          - { name: form.type, alias: filter_choice}
     form.type.filter_dbRow:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowType
         tags:
