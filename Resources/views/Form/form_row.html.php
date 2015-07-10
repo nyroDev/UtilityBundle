@@ -5,9 +5,15 @@
 		$help = $form->vars['attr']['help'];
 		unset($form->vars['attr']['help']);
 	}
+	$isCheckbox = in_array('checkbox', $form->vars['block_prefixes']);
 	?>
+	<?php if ($isCheckbox): ?>
+		<?php echo $view['form']->widget($form) ?>
+	<?php endif; ?>
     <?php echo $view['form']->label($form) ?>
-    <?php echo $view['form']->widget($form) ?>
+	<?php if (!$isCheckbox): ?>
+		<?php echo $view['form']->widget($form) ?>
+	<?php endif; ?>
 	<span class="formIndicator">*</span>
 	<?php if (isset($help) && $help) : ?>
 		<span class="help"><?php echo $help ?></span>
