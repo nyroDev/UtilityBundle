@@ -29,6 +29,24 @@ jQuery(function($) {
 				clb();
 			}
 		},
+		searchFuncOrRegexp = function(data) {
+			if (typeof data == 'string') {
+				if (data.indexOf('function(') === 0) {
+					eval('window.tinyval = '+data+';');
+					data = window.tinyval;
+					delete(window.tinyval);
+				} else if (data.indexOf('reg/') === 0 && data.lastIndexOf('/') === data.length - 1) {
+					data = new RegExp(data.substring(4, data.length - 1));
+				}
+			} else if (typeof data == 'object') {
+				var tmp = Object.prototype.toString.call(data) == '[object Array]' ? [] : {};
+				$.each(data, function(k, v) {
+					tmp[k] = searchFuncOrRegexp(v);
+				});
+				data = tmp;
+			}
+			return data;
+		},
 		tinymceKey = 'tinymce_',
 		tinymceKeyLn = tinymceKey.length;
 	
@@ -37,12 +55,7 @@ jQuery(function($) {
 			var opts = {};
 			$.each($(this).first().data(), function(i, e) {
 				if (i.indexOf(tinymceKey) == 0) {
-					if (typeof e == 'string' && e.indexOf('function(') == 0) {
-						eval('window.tinyval = '+e+';');
-						e = window.tinyval;
-						delete(window.tinyval);
-					}
-					opts[i.substring(tinymceKeyLn)] = e;
+					opts[i.substring(tinymceKeyLn)] = searchFuncOrRegexp(e);
 				}
 			});
 			return opts;
