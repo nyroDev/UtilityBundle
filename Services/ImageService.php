@@ -19,6 +19,7 @@ class ImageService extends AbstractService {
 			$config = array(
 				'w'=>$useMaskSize ? $mask['info']['w'] : $original['info']['w'],
 				'h'=>$useMaskSize ? $mask['info']['h'] : $original['info']['h'],
+				'fit'=>true
 			);
 			$originalResource = $this->resizeResource($original, $config);
 			$maskResource = $this->resizeResource($mask, $config);
