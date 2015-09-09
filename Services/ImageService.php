@@ -392,8 +392,8 @@ class ImageService extends AbstractService {
 		$this->resizeImagesInHtmlDom($body, $absolutizeUrl);
 		
 		return $addBody ? (str_replace(
-				array('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">', '<head><meta charset="UTF-8"></head>', '<html><body>', '</body></html>'),
-				array('', '', '', ''),
+				array('<!DOCTYPE html>', '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">', '<head><meta charset="UTF-8"></head>', '<html><body>', '</body></html>'),
+				array('', '', '', '', ''),
 				$dom->saveHTML())) : $dom->saveHtml();
 	}
 	
