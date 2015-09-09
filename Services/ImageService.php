@@ -370,7 +370,7 @@ class ImageService extends AbstractService {
 	}
 
 	/**
-	 * Resize images in HTML regarding thei width and/or height attributes
+	 * Resize images in HTML regarding their width and/or height attributes
 	 *
 	 * @param string $html HTML content
 	 * @param boolean $absolutizeUrl Indicates if the src should be absolutized
@@ -415,7 +415,7 @@ class ImageService extends AbstractService {
 			$webDir = $this->get('kernel')->getRootDir().'/../web/';
 			$file = $webDir.$webFile;
 			if (file_exists($file)) {
-				$src = str_replace($webDir, '', $this->_resize($file, array(
+				$src = str_replace($webDir, '/', $this->_resize($file, array(
 					'name'=>$w.'_'.$h,
 					'w'=>$w,
 					'h'=>$h,
