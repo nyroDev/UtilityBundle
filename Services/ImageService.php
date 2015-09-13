@@ -47,6 +47,8 @@ class ImageService extends AbstractService {
 	}
 	
 	public function getConfig($configKey = 'default') {
+		if (is_array($configKey))
+			return $configKey;
 		$prm = $this->getParameter('nyroDev_utility.imageService.configs.'.$configKey);
 		$prm['name'] = $configKey;
 		return $prm;
