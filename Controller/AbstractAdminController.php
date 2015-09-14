@@ -238,15 +238,21 @@ abstract class AbstractAdminController extends AbstractController {
 			$submitOptions = array_merge($submitOptions, $moreOptions['submit']);
 		$form->add('submit', 'submit', $submitOptions);
 		
-		if (!is_null($callbackForm))
-			$this->$callbackForm($action, $row, $form);
+		if (!is_null($callbackForm)) {
+			$tmp = $this->$callbackForm($action, $row, $form);
+			if ($tmp && $tmp instanceof \Symfony\Component\HttpFoundation\Response)
+				return $tmp;
+		}
 		
 		$form = $form->getForm();
 		
 		$form->handleRequest($this->getRequest());
 		if ($form->isValid()) {
-			if (!is_null($callbackFlush))
-				$this->$callbackFlush($action, $row, $form);
+			if (!is_null($callbackFlush)) {
+				$tmp = $this->$callbackFlush($action, $row, $form);
+				if ($tmp && $tmp instanceof \Symfony\Component\HttpFoundation\Response)
+					return $tmp;
+			}
 			
 			if ($action == AbstractAdminController::ADD)
 				$this->getDoctrine()->getManager()->persist($row);
