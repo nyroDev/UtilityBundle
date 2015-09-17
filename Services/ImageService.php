@@ -4,9 +4,14 @@ namespace NyroDev\UtilityBundle\Services;
 class ImageService extends AbstractService {
 
 	public function resize($file, $configKey = 'default', $force = false) {
-		$resizedPath = $this->_resize($file, $this->getConfig($configKey), $force);
-		$tmp = explode('/web/', $resizedPath);
-		return $this->container->get('templating.helper.assets')->getUrl($tmp[1]);
+		try {
+			$resizedPath = $this->_resize($file, $this->getConfig($configKey), $force);
+			$tmp = explode('/web/', $resizedPath);
+			$ret = $this->container->get('templating.helper.assets')->getUrl($tmp[1]);
+		} catch(\Exception $e) {
+			$ret = 'data:'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::CONTENT_TYPE.';base64,'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::IMAGE_CONTENT;
+		}
+		return $ret;
 	}
 	
 	public function mask($originalFile, $maskFile, $destName = 'masked', $useMaskSize = true, $force = false) {

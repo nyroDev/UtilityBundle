@@ -16,7 +16,7 @@ class TransparentPixelResponse extends Response {
 	 * Base 64 encoded contents for 1px transparent gif and png
 	 * @var string
 	 */
-	const IMAGE_CONTENT = 'R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==';
+	const IMAGE_CONTENT = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
 	/**
 	 * The response content type
