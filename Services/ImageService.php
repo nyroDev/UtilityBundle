@@ -77,6 +77,8 @@ class ImageService extends AbstractService {
 	}
 	
 	public function _resize($file, array $config, $force = false, $dest = null) {
+		if (!file_exists($file))
+			throw new \Exception('File '.$file.' not found');
 		if (is_null($dest)) {
 			$info = getimagesize($file);
 			$ext = 'jpg';
