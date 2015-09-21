@@ -47,15 +47,16 @@ jQuery(function($) {
 			}
 			return data;
 		},
-		tinymceKey = 'tinymce_',
-		tinymceKeyLn = tinymceKey.length;
+		tinymceKey = 'tinymce_';
 	
 	$.fn.extend({
-		myTinymceDataSearch: function() {
-			var opts = {};
+		myTinymceDataSearch: function(tKey) {
+			tKey = tKey || tinymceKey;
+			var opts = {},
+				tKeyLn = tKey.length;
 			$.each($(this).first().data(), function(i, e) {
-				if (i.indexOf(tinymceKey) == 0) {
-					opts[i.substring(tinymceKeyLn)] = searchFuncOrRegexp(e);
+				if (i.indexOf(tKey) == 0) {
+					opts[i.substring(tKeyLn)] = searchFuncOrRegexp(e);
 				}
 			});
 			return opts;
