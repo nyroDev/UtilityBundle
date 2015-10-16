@@ -260,6 +260,8 @@ class MainService extends AbstractService {
 		return pathinfo($file, PATHINFO_EXTENSION);
 	}
 	
+	protected $uniqFileNames = array();
+	
 	/**
 	 * Get a new uniq filename in a directory
 	 *
@@ -277,10 +279,11 @@ class MainService extends AbstractService {
 
 		$nameF = $name.'.'.$ext;
 		$i = 2;
-		while(file_exists($dir.'/'.$nameF)) {
+		while(isset($this->uniqFileNames[$dir.'/'.$nameF]) || file_exists($dir.'/'.$nameF)) {
 			$nameF = $name.'-'.$i.'.'.$ext;
 			$i++;
 		}
+		$this->uniqFileNames[$dir.'/'.$nameF] = true;
 		return $nameF;
 	}
 	
