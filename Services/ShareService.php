@@ -32,7 +32,7 @@ class ShareService extends AbstractService {
 				$keysProp[] = 'og:image';
 				$keys[] = 'twitter:image:src';
 				if (strpos($value, '://') === false)
-					$value = $this->get('nyrodev')->getFullUrl($value);
+					$value = $this->container->get('nyrodev')->getFullUrl($value);
 				break;
 			default:
 				if ($useProperty)
@@ -65,7 +65,7 @@ class ShareService extends AbstractService {
 	 * Get a share meta value
 	 *
 	 * @param string $type Meta name
-	 * @return string MEta value
+	 * @return string Meta value
 	 */
 	public function get($type) {
 		$ret = null;
@@ -271,6 +271,19 @@ class ShareService extends AbstractService {
 		} catch (\Exception $e) {}
 		
 		return $data;
+	}
+	
+	/**
+	 * Get the translation for a given keyword
+	 *
+	 * @param string $key Translation key
+	 * @param array $parameters Parameters to replace
+	 * @param string $domain Translation domain
+	 * @param string $locale Local to use
+	 * @return string The translation
+	 */
+	public function trans($key, array $parameters = array(), $domain = 'messages', $locale = null) {
+		return $this->container->get('translator')->trans($key, $parameters, $domain, $locale);
 	}
 	
 }
