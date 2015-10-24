@@ -80,7 +80,7 @@ class ShareService extends AbstractService {
 			else if ($this->getParameter('nyroDev_utility.share.'.$type))
 				$ret = $this->getParameter('nyroDev_utility.share.'.$type);
 		}
-		return $ret;
+		return preg_replace('/\s\s+/', ' ', $this->trans($ret));
 	}
 	
 	/**
