@@ -62,6 +62,28 @@ class ShareService extends AbstractService {
 	}
 	
 	/**
+	 * Get a share meta value
+	 *
+	 * @param string $type Meta name
+	 * @return string MEta value
+	 */
+	public function get($type) {
+		$ret = null;
+		if ($type == 'image') {
+			if (isset($this->metasProp['og:image']))
+				$ret = $this->metasProp['og:image'];
+			else if ($this->getParameter('nyroDev_utility.share.image'))
+				$ret = $this->getParameter('nyroDev_utility.share.image');
+		} else {
+			if (isset($this->metas[$type]))
+				$ret = $this->metas[$type];
+			else if ($this->getParameter('nyroDev_utility.share.'.$type))
+				$ret = $this->getParameter('nyroDev_utility.share.'.$type);
+		}
+		return $ret;
+	}
+	
+	/**
 	 * Set all default values at once
 	 *
 	 * @param string $title Title
@@ -85,6 +107,15 @@ class ShareService extends AbstractService {
 	}
 	
 	/**
+	 * Get the share title
+	 *
+	 * @return string
+	 */
+	public function getTitle() {
+		return $this->get('title');
+	}
+	
+	/**
 	 * Set the share description
 	 *
 	 * @param string $description
@@ -94,12 +125,48 @@ class ShareService extends AbstractService {
 	}
 	
 	/**
+	 * Get the share description
+	 *
+	 * @return string
+	 */
+	public function getDescription() {
+		return $this->get('description');
+	}
+	
+	/**
+	 * Set the share keywords
+	 *
+	 * @param string $keywords
+	 */
+	public function setKeywords($keywords) {
+		$this->set('keywords', $keywords);
+	}
+	
+	/**
+	 * Get the share keywords
+	 *
+	 * @return string
+	 */
+	public function getKeywords() {
+		return $this->get('keywords');
+	}
+	
+	/**
 	 * Set the share absolute image URL
 	 *
 	 * @param string $image Absolute image URL
 	 */
 	public function setImage($image) {
 		$this->set('image', $image);
+	}
+	
+	/**
+	 * Get the share absolute image URL
+	 *
+	 * @return string
+	 */
+	public function getImage() {
+		return $this->get('image');
 	}
 	
 	/**
