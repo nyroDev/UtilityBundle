@@ -164,12 +164,27 @@ class ImageService extends AbstractService {
 			if (isset($config['useGivenDimensions']) && $config['useGivenDimensions']) {
 				// Change nothing here, just use given settings
 			} else if (isset($config['fit']) && $config['fit']) {
+				$center = isset($config['center']) ? strtoupper($config['center']) : 'CC';
+				$hCenter = $center[0];
+				$vCenter = $center[1];
 				if ($scaleW > $scaleH) {
 					$srcH = round($config['h'] / $scaleW);
-					$srcY = round(($info['h'] - $srcH) / 2);
+					if ($vCenter == 'C') {
+						$srcY = round(($info['h'] - $srcH) / 2);
+					} else if ($vCenter == 'T') {
+						$srcY = 0;
+					} else if ($vCenter == 'B') {
+						$srcY = $info['h'] - $srcH;
+					}
 				} else {
 					$srcW = round($config['w'] / $scaleH);
-					$srcX = round(($info['w'] - $srcW) / 2);
+					if ($hCenter == 'C') {
+						$srcX = round(($info['w'] - $srcW) / 2);
+					} else if ($hCenter == 'L') {
+						$srcX = 0;
+					} else if ($hCenter == 'R') {
+						$srcX = $info['w'] - $srcW;
+					}
 				}
 			} else {
 				if ($scaleW > $scaleH) {

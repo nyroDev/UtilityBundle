@@ -51,6 +51,7 @@ class Configuration implements ConfigurationInterface
 							->integerNode('maxh')->defaultValue(0)->end()
 							->scalarNode('quality')->defaultValue(80)->end()
 							->booleanNode('fit')->defaultTrue()->end()
+							->scalarNode('center')->defaultValue('CC')->end() // First value is horizontal (L, C, R), second is vertical (T, C, B)
 							->booleanNode('useMaxResize')->defaultFalse()->end()
 							->booleanNode('useGivenDimensions')->defaultFalse()->end()
 							->scalarNode('bgColor')->defaultValue('ffffff')->end()
