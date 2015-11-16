@@ -18,10 +18,12 @@ abstract class AbstractService extends Helper {
 	 * Get an application parameter
 	 *
 	 * @param string $parameter
+	 * @param mixed $default
 	 * @return mixed
 	 */
-	public function getParameter($parameter) {
-		return $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
+	public function getParameter($parameter, $default = null) {
+		$value = $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
+		return !is_null($value) ? $value : $default;
 	}
 
     /**
