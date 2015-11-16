@@ -9,7 +9,7 @@ jQuery(function($) {
 				var row = me.closest('.form_row');
 				row
 					.append('<input type="hidden" name="'+me.data('name')+'" value="1" />')
-					.find('.currentFile').remove()
+					.find('.currentFile').remove();
 				me.remove();
 			}
 		});

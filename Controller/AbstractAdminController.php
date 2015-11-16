@@ -2,8 +2,11 @@
 
 namespace NyroDev\UtilityBundle\Controller;
 
-use NyroDev\UtilityBundle\Form\Type\AbstractFilterType;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\QueryBuilder;
+use NyroDev\UtilityBundle\Form\Type\AbstractFilterType;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 abstract class AbstractAdminController extends AbstractController {
@@ -71,7 +74,7 @@ abstract class AbstractAdminController extends AbstractController {
 					if (is_object($val)) {
 						if ($val instanceof \DateTime) {
 							$val = strftime($this->trans('date.short'), $val->getTimestamp());
-						} else if ($val instanceof \Doctrine\Common\Collections\Collection) {
+						} else if ($val instanceof Collection) {
 							$val = $this->get('nyrodev')->joinRows($val);
 						} else {
 							$val = $val.'';
@@ -154,11 +157,12 @@ abstract class AbstractAdminController extends AbstractController {
 			}
 		}
 		
+		if (is_string($repository))
+			$repository = $this->getDoctrine()->getRepository($repository);
+		
 		if (is_null($queryBuilder)) {
 			// initliaze a query builder
-			$queryBuilder = $this->getDoctrine()
-				->getRepository($repository)
-				->createQueryBuilder('l');
+			$queryBuilder = $repository->createQueryBuilder('l');
 		}
 
 		if (!is_null($filter))
@@ -168,8 +172,7 @@ abstract class AbstractAdminController extends AbstractController {
 		$orderBy = $queryBuilder->getRootAlias().'.'.$sort;
 		
 		// Retrieve the number of total results
-		$totalQb = $this->getDoctrine()
-			->getRepository($repository)
+		$totalQb = $repository
 			->createQueryBuilder('cpt')
 				->select('COUNT(cpt.id)')
 				->andWhere('cpt.id = ANY('.$queryBuilder->getDQL().')');
@@ -187,7 +190,7 @@ abstract class AbstractAdminController extends AbstractController {
 		);
 	}
 	
-	protected function createAdminForm($name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null) {
+	protected function createAdminForm($name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null) {
 		if (is_null($groups))
 			$groups = array('Default', $action);
 		$form = $this->createFormBuilder($row, array('validation_groups'=>$groups));
@@ -240,7 +243,7 @@ abstract class AbstractAdminController extends AbstractController {
 		
 		if (!is_null($callbackForm)) {
 			$tmp = $this->$callbackForm($action, $row, $form);
-			if ($tmp && $tmp instanceof \Symfony\Component\HttpFoundation\Response)
+			if ($tmp && $tmp instanceof Response)
 				return $tmp;
 		}
 		
@@ -250,20 +253,23 @@ abstract class AbstractAdminController extends AbstractController {
 		if ($form->isValid()) {
 			if (!is_null($callbackFlush)) {
 				$tmp = $this->$callbackFlush($action, $row, $form);
-				if ($tmp && $tmp instanceof \Symfony\Component\HttpFoundation\Response)
+				if ($tmp && $tmp instanceof Response)
 					return $tmp;
 			}
 			
-			if ($action == AbstractAdminController::ADD)
-				$this->getDoctrine()->getManager()->persist($row);
+			if (is_null($objectManager))
+				$objectManager = $this->getDoctrine()->getManager();
 			
-			$this->getDoctrine()->getManager()->flush();
+			if ($action == AbstractAdminController::ADD)
+				$objectManager->persist($row);
+			
+			$objectManager->flush();
 			
 			$response = $this->redirect($this->generateUrl($route, $routePrm));
 			
 			if (!is_null($callbackAfterFlush)) {
 				$tmp = $this->$callbackAfterFlush($response, $action, $row);
-				if ($tmp && $tmp instanceof \Symfony\Component\HttpFoundation\Response)
+				if ($tmp && $tmp instanceof Response)
 					$response = $tmp;
 			}
 			
