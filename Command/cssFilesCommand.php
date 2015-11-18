@@ -43,8 +43,8 @@ class cssFilesCommand extends ContainerAwareCommand {
 					->sort(function (\SplFileInfo $a, \SplFileInfo $b) {
 						$aPath = $a->getRealpath();
 						$bPath = $b->getRealpath();
-						$isANyrodev = strpos($aPath, 'nyrodev') !== false;
-						$isBNyrodev = strpos($bPath, 'nyrodev') !== false;
+						$isANyrodev = strpos($aPath, '/nyrodev/') !== false;
+						$isBNyrodev = strpos($bPath, '/nyrodev/') !== false;
 						if ($isANyrodev && $isBNyrodev) {
 							return strcmp($aPath, $bPath);
 						} else if ($isANyrodev) {
