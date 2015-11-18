@@ -21,8 +21,7 @@
         "doctrine/doctrine-cache-bundle": "Required to cache EmbedService result",
         "sabberworm/php-css-parser": "Required to use rem2px command"
     },
-    "target-dir": "NyroDev/UtilityBundle",
     "autoload": {
-        "psr-0": { "NyroDev\\UtilityBundle": "" }
+        "psr-4": { "NyroDev\\UtilityBundle\\": "" }
     }
 }
