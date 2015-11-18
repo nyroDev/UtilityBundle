@@ -40,6 +40,20 @@ class cssFilesCommand extends ContainerAwareCommand {
 						'./vendor/',
 						'./src/',
 					))
+					->sort(function (\SplFileInfo $a, \SplFileInfo $b) {
+						$aPath = $a->getRealpath();
+						$bPath = $b->getRealpath();
+						$isANyrodev = strpos($aPath, 'nyrodev') !== false;
+						$isBNyrodev = strpos($bPath, 'nyrodev') !== false;
+						if ($isANyrodev && $isBNyrodev) {
+							return strcmp($aPath, $bPath);
+						} else if ($isANyrodev) {
+							return -1;
+						} else if ($isBNyrodev) {
+							return 1;
+						}
+						return strcmp($aPath, $bPath);
+					})
 					->name('Resources');
 		
 		$ds = DIRECTORY_SEPARATOR;
