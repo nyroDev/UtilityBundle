@@ -36,7 +36,10 @@ class cssFilesCommand extends ContainerAwareCommand {
 		$resources = $finderRes
 					->directories()
 					->depth(2)
-					->in('./src/')
+					->in(array(
+						'./vendor/',
+						'./src/',
+					))
 					->name('Resources');
 		
 		$ds = DIRECTORY_SEPARATOR;
