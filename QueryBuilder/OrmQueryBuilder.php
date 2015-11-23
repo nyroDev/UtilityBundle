@@ -24,7 +24,8 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 							$tmp[] = $alias.'.'.$fieldOr.' '.$transformerOr;
 						} else {
 							$prm = 'param_'.$prmNb;
-							$tmp[] = $alias.'.'.$fieldOr.' '.$transformerOr.' :'.$prm;
+							$needParenthesis = trim(strtolower($transformerOr)) === 'in';
+							$tmp[] = $alias.'.'.$fieldOr.' '.$transformerOr.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : '');
 							$this->queryBuilder->setParameter($prm, $valueOr, $forceTypeOr);
 							$prmNb++;
 						}
@@ -36,8 +37,9 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 						$this->queryBuilder->andWhere($alias.'.'.$field.' '.$transformer);
 					} else {
 						$prm = 'param_'.$prmNb;
+						$needParenthesis = trim(strtolower($transformer)) === 'in';
 						$this->queryBuilder
-								->andWhere($alias.'.'.$field.' '.$transformer.' :'.$prm)
+								->andWhere($alias.'.'.$field.' '.$transformer.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : ''))
 								->setParameter($prm, $value, $forceType);
 						$prmNb++;
 					}
