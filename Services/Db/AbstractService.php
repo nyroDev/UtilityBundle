@@ -27,7 +27,7 @@ abstract class AbstractService extends AbstractServiceSrc {
 	 * @return \Doctrine\Common\Persistence\ObjectRepository
 	 */
 	public function getRepository($name) {
-		return $this->getObjectManager()->getRepository($name);
+		return is_object($name) ? $name : $this->getObjectManager()->getRepository($name);
 	}
 	
 	/**

@@ -73,7 +73,7 @@ class fillTranslationsCommand extends ContainerAwareCommand {
 		
 		$nbO = count($originals);
 		if ($nbO) {
-			$em = $this->getContainer()->get('nyrodev_db')->getManager();
+			$em = $this->getContainer()->get('nyrodev_db');
 			$repo = $em->getRepository($translationDb);
 			$this->className = $repo->getClassName();
 			$this->accessor = PropertyAccess::createPropertyAccessor();
