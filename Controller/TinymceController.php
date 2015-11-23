@@ -102,7 +102,7 @@ $config = array(
 	|
 	*/
 	//'current_path' => '../source/',
-	'current_path' => $fileManagerDir.'../../../../../../../web/uploads/'.$dirName.'/',
+	'current_path' => $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'/',
 	'current_path_url' => $baseUrl.'/uploads/'.$dirName.'/',
 
 	/*
@@ -115,7 +115,7 @@ $config = array(
 	|
 	*/
 	//'thumbs_base_path' => '../thumbs/',
-	'thumbs_base_path' => $fileManagerDir.'../../../../../../../web/uploads/'.$dirName.'Thumbs/',
+	'thumbs_base_path' => $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'Thumbs/',
 	'thumbs_base_path_url' => $baseUrl.'/uploads/'.$dirName.'Thumbs/',
 
 	/*
