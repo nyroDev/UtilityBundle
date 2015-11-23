@@ -13,14 +13,34 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 			foreach($this->config['where'] as $where) {
 				list($field, $transformer, $value, $forceType) = $where;
 				
-				if ($transformer == self::WHERE_IS_NOT_NULL || $transformer == self::WHERE_IS_NULL) {
-					$this->queryBuilder->andWhere($alias.'.'.$field.' '.$transformer);
+				if ($field == self::WHERE_OR) {
+					$tmp = array();
+					foreach($transformer as $whereOr) {
+						$fieldOr = $whereOr[0];
+						$transformerOr = $whereOr[1];
+						$valueOr = isset($whereOr[2]) ? $whereOr[2] : null;
+						$forceTypeOr = isset($whereOr[3]) ? $whereOr[3] : null;
+						if ($transformerOr == self::WHERE_IS_NOT_NULL || $transformerOr == self::WHERE_IS_NULL) {
+							$tmp[] = $alias.'.'.$fieldOr.' '.$transformerOr;
+						} else {
+							$prm = 'param_'.$prmNb;
+							$tmp[] = $alias.'.'.$fieldOr.' '.$transformerOr.' :'.$prm;
+							$this->queryBuilder->setParameter($prm, $valueOr, $forceTypeOr);
+							$prmNb++;
+						}
+					}
+					if (count($tmp))
+						$this->queryBuilder->andWhere(implode(' OR ', $tmp));
 				} else {
-					$prm = 'param_'.$prmNb;
-					$this->queryBuilder
-							->andWhere($alias.'.'.$field.' '.$transformer.' :'.$prm)
-							->setParameter($prm, $value, $forceType);
-					$prmNb++;
+					if ($transformer == self::WHERE_IS_NOT_NULL || $transformer == self::WHERE_IS_NULL) {
+						$this->queryBuilder->andWhere($alias.'.'.$field.' '.$transformer);
+					} else {
+						$prm = 'param_'.$prmNb;
+						$this->queryBuilder
+								->andWhere($alias.'.'.$field.' '.$transformer.' :'.$prm)
+								->setParameter($prm, $value, $forceType);
+						$prmNb++;
+					}
 				}
 			}
 		}

@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Exception\RuntimeException;
  */
 abstract class AbstractQueryBuilder {
 
+	const WHERE_OR = '__OR__';
 	const WHERE_IS_NULL = 'IS NULL';
 	const WHERE_IS_NOT_NULL = 'IS NOT NULL';
 	

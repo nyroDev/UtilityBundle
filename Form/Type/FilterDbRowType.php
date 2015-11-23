@@ -29,7 +29,11 @@ class FilterDbRowType extends FilterType {
 						if (isset($options['where']) && is_array($options['where'])) {
 							foreach($options['where'] as $k=>$v) {
 								if (is_int($k)) {
-									throw new \RuntimeException('Direct where setting is not supported anymore.');
+									if (is_array($v)) {
+										$ret->addWhere($v[0], $v[1], $v[2]);
+									} else {
+										throw new \RuntimeException('Direct where setting is not supported anymore.');
+									}
 								} else if (is_array($v)) {
 									$ret->addWhere($k, 'in', $v);
 								} else {
