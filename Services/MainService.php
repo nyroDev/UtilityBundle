@@ -3,6 +3,7 @@ namespace NyroDev\UtilityBundle\Services;
 
 use \Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use \Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Doctrine\Common\Persistence\ObjectRepository;
 
 class MainService extends AbstractService {
 	
@@ -174,12 +175,12 @@ class MainService extends AbstractService {
 	/**
 	 * Get a new random uniq key for a specific field on a given repository
 	 *
-	 * @param \Doctrine\ORM\EntityRepository $repository The repository
+	 * @param ObjectRepository $repository The repository
 	 * @param string $field Field name
 	 * @param int $length Random string length
 	 * @return string
 	 */
-	public function getNewUniqRandomKey(\Doctrine\ORM\EntityRepository $repository, $field, $length) {
+	public function getNewUniqRandomKey(ObjectRepository $repository, $field, $length) {
 		$entity = true;
 		while ($entity) {
 			$random = $this->randomStr($length);

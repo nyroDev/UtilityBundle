@@ -5,7 +5,7 @@ namespace NyroDev\UtilityBundle\Form\Extension;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use NyroDev\UtilityBundle\Entity\AbstractUploadable;
+use NyroDev\UtilityBundle\Model\AbstractUploadable;
 
 class FileTypeExtension extends AbstractTypeExtension {
 

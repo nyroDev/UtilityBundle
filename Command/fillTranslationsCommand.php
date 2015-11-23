@@ -73,7 +73,7 @@ class fillTranslationsCommand extends ContainerAwareCommand {
 		
 		$nbO = count($originals);
 		if ($nbO) {
-			$em = $this->getContainer()->get('doctrine')->getManager();
+			$em = $this->getContainer()->get('nyrodev_db')->getManager();
 			$repo = $em->getRepository($translationDb);
 			$this->className = $repo->getClassName();
 			$this->accessor = PropertyAccess::createPropertyAccessor();
@@ -147,7 +147,7 @@ class fillTranslationsCommand extends ContainerAwareCommand {
 				$row->setLocale($locale);
 				$row->setIdent($curPrefix);
 				$row->setTranslation(trim($v).'');
-				$this->getContainer()->get('doctrine')->getManager()->persist($row);
+				$this->getContainer()->get('nyrodev_db')->persist($row);
 				$nb++;
 			}
 		}

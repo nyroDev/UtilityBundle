@@ -3,10 +3,10 @@ namespace NyroDev\UtilityBundle\Services;
 
 use Symfony\Component\Form\Form;
 use NyroDev\UtilityBundle\Form\Type\FilterTypeInterface;
-use Doctrine\ORM\QueryBuilder;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
- * Service used to update QueryBuilder object regarding a form containing some FilterTypeInterface 
+ * Service used to update AbstractQueryBuilder object regarding a form containing some FilterTypeInterface 
  */
 class FormFilterService extends AbstractService {
 	
@@ -14,9 +14,9 @@ class FormFilterService extends AbstractService {
 	 * Build the QueryBuilder object
 	 *
 	 * @param Form $form
-	 * @param QueryBuilder $queryBuilder
+	 * @param AbstractQueryBuilder $queryBuilder
 	 */
-	public function buildQuery(Form $form, $queryBuilder) {
+	public function buildQuery(Form $form, AbstractQueryBuilder $queryBuilder) {
 		$data = $form->getData();
 		
 		foreach($data as $name=>$val) {

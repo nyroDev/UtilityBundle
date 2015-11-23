@@ -23,6 +23,9 @@ class NyroDevUtilityExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+		
+		$container->setParameter('nyroDev_utility.db_driver', $config['db_driver']);
+		$container->setParameter('nyroDev_utility.model_manager_name', $config['model_manager_name']);
 
 		$container->setParameter('nyroDev_utility.setLocale', isset($config['setLocale']) && $config['setLocale']);
 		$container->setParameter('nyroDev_utility.setContentLanguageResponse', isset($config['setContentLanguageResponse']) && $config['setContentLanguageResponse']);
@@ -61,5 +64,21 @@ class NyroDevUtilityExtension extends Extension
 		
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('services_'.$config['db_driver'].'.yml');
+		
+		if ('orm' === $config['db_driver']) {
+			$managerService = 'nyrodev.entity_manager';
+			$doctrineService = 'doctrine';
+		} else {
+			$managerService = 'nyrodev.document_manager';
+			$doctrineService = sprintf('doctrine_%s', $config['db_driver']);
+		}
+		$definition = $container->getDefinition($managerService);
+		if (method_exists($definition, 'setFactory')) {
+			$definition->setFactory(array(new Reference($doctrineService), 'getManager'));
+		} else {
+			$definition->setFactoryService($doctrineService);
+			$definition->setFactoryMethod('getManager');
+		}
     }
 }

@@ -2,7 +2,7 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class FilterDbRowType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
+		$nyrodevDb = $this->get('nyrodev_db');
 		$builder
 			->add('transformer', 'choice', array(
 				'choices'=>array(
@@ -21,27 +22,25 @@ class FilterDbRowType extends FilterType {
 					'required'=>false,
 					'class'=>$options['class'],
 					'property'=>isset($options['property']) ? $options['property'] : null,
-					'query_builder' => isset($options['where']) || isset($options['order']) ? function(EntityRepository $er) use($options) {
-						$ret = $er->createQueryBuilder('l');
+					'query_builder' => isset($options['where']) || isset($options['order']) ? function(ObjectRepository $er) use($options, $nyrodevDb) {
+						$ret = $nyrodevDb->getQueryBuilder($er);
+						/* @var $ret \NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder */
+						
 						if (isset($options['where']) && is_array($options['where'])) {
-							$nb = 1;
 							foreach($options['where'] as $k=>$v) {
 								if (is_int($k)) {
-									$ret->andWhere('l.'.$v);
+									throw new \RuntimeException('Direct where setting is not supported anymore.');
 								} else if (is_array($v)) {
-									$ret->andWhere($ret->expr()->in('l.'.$k, $v));
-									$nb++;
+									$ret->addWhere($k, 'in', $v);
 								} else {
-									$ret
-										->andWhere('l.'.$k.' = :param'.$nb)
-										->setParameter('param'.$nb, $v);
-									$nb++;
+									$ret->addWhere($k, '=', $v);
 								}
 							}
 						}
 						if (isset($options['order']))
-							$ret->orderBy('l.'.$options['order'], 'ASC');
-						return $ret;
+							$ret->orderBy($options['order'], 'ASC');
+						
+						return $ret->getQueryBuilder();
 					} : null
 				));
 	}

@@ -1,15 +1,14 @@
 <?php
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType as SrcAbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\QueryBuilder;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Default Filter Type field for text fields 
  */
-class FilterType extends SrcAbstractType implements FilterTypeInterface {
+class FilterType extends AbstractType implements FilterTypeInterface {
 	
 	/**
 	 * Builds the form.
@@ -36,7 +35,7 @@ class FilterType extends SrcAbstractType implements FilterTypeInterface {
 			));
 	}
 	
-    public function applyFilter(QueryBuilder $queryBuilder, $name, $data) {
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data) {
 		if (
 				isset($data['transformer']) && $data['transformer']
 			&&  isset($data['value']) && $data['value']
@@ -45,30 +44,13 @@ class FilterType extends SrcAbstractType implements FilterTypeInterface {
 			$transformer = $data['transformer'];
 			
 			if ($transformer == 'IS NULL' || $transformer == 'IS NOT NULL') {
-				$condMask = '%s.%s %s';
-				$condition = sprintf($condMask,
-					$queryBuilder->getRootAlias(),
-					$name,
-					$transformer
-				);
-
-				$queryBuilder->andWhere($condition);
+				$queryBuilder->addWhere($name, $transformer == 'IS NULL' ? AbstractQueryBuilder::WHERE_IS_NULL : AbstractQueryBuilder::WHERE_IS_NOT_NULL);
 			} else {
-				$paramName = $name.'_param';
-				$condMask = '%s.%s %s :%s';
-
 				if ($transformer == 'LIKE %...%') {
 					$value = '%'.$value.'%';
 					$transformer = 'LIKE';
 				}
-				$condition = sprintf($condMask,
-					$queryBuilder->getRootAlias(),
-					$name,
-					$transformer,
-					$paramName
-				);
-
-				$queryBuilder->andWhere($condition)->setParameter($paramName, $value, \PDO::PARAM_STR);
+				$queryBuilder->addWhere($name, $transformer, $value, \PDO::PARAM_STR);
 			}
 		}
 		

@@ -50,42 +50,52 @@ services:
           - { name: validator.constraint_validator, alias: nyrodev_embed_validator }
     form.type.filter:
         class: NyroDev\UtilityBundle\Form\Type\FilterType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter}
     form.type.filter_date:
         class: NyroDev\UtilityBundle\Form\Type\FilterDateType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_date}
     form.type.filter_range_date:
         class: NyroDev\UtilityBundle\Form\Type\FilterRangeDateType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_range_date}
     form.type.filter_range_sub:
         class: NyroDev\UtilityBundle\Form\Type\FilterRangeSubType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_range_sub}
     form.type.filter_int:
         class: NyroDev\UtilityBundle\Form\Type\FilterIntType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_int}
     form.type.filter_bool:
         class: NyroDev\UtilityBundle\Form\Type\FilterBoolType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_bool}
     form.type.filter_choice:
         class: NyroDev\UtilityBundle\Form\Type\FilterChoiceType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_choice}
     form.type.filter_dbRow:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_dbRow}
     form.type.filter_dbRowMultiple:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_dbRowMultiple}
     form.type.filter_dbRowMultipleSingleChoice:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleSingleChoiceType
+        arguments: [@service_container]
         tags:
           - { name: form.type, alias: filter_dbRowMultipleSingleChoice}
     form.type.file_extension:

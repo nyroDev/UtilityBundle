@@ -4,7 +4,7 @@ namespace NyroDev\UtilityBundle\Controller;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\QueryBuilder;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Form\Type\AbstractFilterType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -14,14 +14,13 @@ abstract class AbstractAdminController extends AbstractController {
 	const ADD = 'add';
 	const EDIT = 'edit';
 
-	protected function createList($repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, QueryBuilder $queryBuilder = null, $exportConfig = false) {
+	protected function createList($repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false) {
 		$nbPerPageParam = 'admin.nbPerPage.'.$route;
 		$nbPerPage = $this->container->hasParameter($nbPerPageParam) ?
 					$this->container->getParameter($nbPerPageParam) :
 					$this->container->getParameter('nyrodev_utility.admin.nbPerPage');
 		
 		$tmpList = $this->getListElements($repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder);
-		$orderBy = $tmpList['orderBy'];
 		$order = $tmpList['order'];
 		$sort = $tmpList['sort'];
 		$filter = $tmpList['filter'];
@@ -62,9 +61,7 @@ abstract class AbstractAdminController extends AbstractController {
 			if (isset($exportConfig['doubleFirstRows']) && $exportConfig['doubleFirstRows'])
 				$row++;
 			
-			$results = $queryBuilder
-							->orderBy($orderBy, $order)
-							->getQuery()->getResult();
+			$results = $queryBuilder->getQuery()->getResult();
 			
 			$accessor = PropertyAccess::createPropertyAccessor();
 			foreach($results as $r) {
@@ -113,7 +110,6 @@ abstract class AbstractAdminController extends AbstractController {
 		$results = $queryBuilder
 						->setFirstResult($pager->getStart())
 						->setMaxResults($nbPerPage)
-						->orderBy($orderBy, $order)
 						->getQuery()->getResult();
 		
 		return array(
@@ -127,7 +123,7 @@ abstract class AbstractAdminController extends AbstractController {
 		);
 	}
 	
-	protected function getListElements($repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, QueryBuilder $queryBuilder = null) {
+	protected function getListElements($repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, AbstractQueryBuilder $queryBuilder = null) {
 		$filter = null;
 		if (!is_null($filterType))
 			$filter = $this->createForm($filterType, array(), array('csrf_protection'=>false, 'attr'=>array('class'=>'filterForm')));
@@ -158,29 +154,23 @@ abstract class AbstractAdminController extends AbstractController {
 		}
 		
 		if (is_string($repository))
-			$repository = $this->getDoctrine()->getRepository($repository);
+			$repository = $this->get('nyrodev_db')->getRepository($repository);
 		
 		if (is_null($queryBuilder)) {
-			// initliaze a query builder
-			$queryBuilder = $repository->createQueryBuilder('l');
+			// initialize a query builder
+			$queryBuilder = $this->get('nyrodev_db')->getQueryBuilder($repository);
 		}
 
 		if (!is_null($filter))
 			// build the query from the given form object
 			$this->get('nyrodev_formFilter')->buildQuery($filter, $queryBuilder);
 		
-		$orderBy = $queryBuilder->getRootAlias().'.'.$sort;
+		$queryBuilder->orderBy($sort, $order);
 		
 		// Retrieve the number of total results
-		$totalQb = $repository
-			->createQueryBuilder('cpt')
-				->select('COUNT(cpt.id)')
-				->andWhere('cpt.id = ANY('.$queryBuilder->getDQL().')');
-		$totalQb->setParameters($queryBuilder->getParameters());
-		$total = $totalQb->getQuery()->getSingleScalarResult();
+		$total = $queryBuilder->count();
 		
 		return array(
-			'orderBy'=>$orderBy,
 			'order'=>$order,
 			'sort'=>$sort,
 			'filter'=>$filter,
@@ -258,7 +248,7 @@ abstract class AbstractAdminController extends AbstractController {
 			}
 			
 			if (is_null($objectManager))
-				$objectManager = $this->getDoctrine()->getManager();
+				$objectManager = $this->get('nyrodev_db')->getObjectManager();
 			
 			if ($action == AbstractAdminController::ADD)
 				$objectManager->persist($row);

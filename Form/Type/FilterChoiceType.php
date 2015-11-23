@@ -21,10 +21,6 @@ class FilterChoiceType extends FilterType {
 				)));
 	}
 	
-	public function applyValue($value) {
-		return $value->getId();
-	}
-	
     /**
      * {@inheritdoc}
      */

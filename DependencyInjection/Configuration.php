@@ -20,8 +20,20 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('nyro_dev_utility');
 		
+		$supportedDrivers = array('orm');
+		
 		$rootNode
 			->children()
+                ->scalarNode('db_driver')
+                    ->validate()
+                        ->ifNotInArray($supportedDrivers)
+                        ->thenInvalid('The driver %s is not supported. Please choose one of '.json_encode($supportedDrivers))
+                    ->end()
+                    ->cannotBeOverwritten()
+                    ->isRequired()
+                    ->cannotBeEmpty()
+				->end()
+				->scalarNode('model_manager_name')->defaultNull()->end()
 				->booleanNode('setLocale')->defaultFalse()->end()
 				->booleanNode('setContentLanguageResponse')->defaultFalse()->end()
 				->scalarNode('translationDb')->defaultValue('')->end()

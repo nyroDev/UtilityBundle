@@ -2,7 +2,7 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\QueryBuilder;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
  * Filter Type for Date range fields
@@ -19,23 +19,12 @@ class FilterRangeDateType extends FilterType {
 				));
 	}
 	
-    public function applyFilter(QueryBuilder $queryBuilder, $name, $data) {
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data) {
 		if (isset($data['value']) && $data['value']) {
 			$value = array_filter($this->applyValue($data['value']));
 			
-			foreach($value as $k=>$val) {
-				$paramName = $name.'_param_'.$k;
-				$condMask = '%s.%s %s :%s';
-
-				$condition = sprintf($condMask,
-					$queryBuilder->getRootAlias(),
-					$name,
-					$k == 'start' ? '>=' : '<=',
-					$paramName
-				);
-
-				$queryBuilder->andWhere($condition)->setParameter($paramName, $val, \PDO::PARAM_STR);
-			}
+			foreach($value as $k=>$val)
+				$queryBuilder->addWhere($name, $k == 'start' ? '>=' : '<=', $val, \PDO::PARAM_STR);
 		}
 		
 		return $queryBuilder;

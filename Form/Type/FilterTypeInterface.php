@@ -1,7 +1,7 @@
 <?php
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Doctrine\ORM\QueryBuilder;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
  * Interface to be used for FilterType elements
@@ -11,15 +11,15 @@ interface FilterTypeInterface {
 	/**
 	 * Apply the filter to the given QueryBuilder
 	 *
-	 * @param QueryBuilder $queryBuilder
+	 * @param AbstractQueryBuilder $queryBuilder
 	 * @param string $name Field name
 	 * @param array $data Data for the field
-	 * @return QueryBuilder
+	 * @return AbstractQueryBuilder
 	 */
-	public function applyFilter(QueryBuilder $queryBuilder, $name, $data);
+	public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data);
 	
 	/**
-	 * Prepare a value to be applied into QueryBuilder.
+	 * Prepare a value to be applied into AbstractQueryBuilder.
 	 * Useful for Object values 
 	 */
 	public function applyValue($value);

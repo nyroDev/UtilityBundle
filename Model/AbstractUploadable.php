@@ -1,6 +1,6 @@
 <?php
 
-namespace NyroDev\UtilityBundle\Entity;
+namespace NyroDev\UtilityBundle\Model;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PropertyAccess\PropertyAccess;
