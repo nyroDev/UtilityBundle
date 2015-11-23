@@ -78,7 +78,7 @@ abstract class AbstractUploadable {
 			case AbstractUploadable::CONFIG_DIR:
 				return 'uploads/'.$field;
 			case AbstractUploadable::CONFIG_ROOTDIR:
-				return __DIR__.'/../../../../../../web/'.$this->getFileConfig($field, AbstractUploadable::CONFIG_DIR);
+				return __DIR__.'/../../../../../web/'.$this->getFileConfig($field, AbstractUploadable::CONFIG_DIR);
 		}
 		return null;
 	}
