@@ -50,8 +50,10 @@ abstract class AbstractQueryBuilder {
 		return $this;
 	}
 	
-	public function addJoinWhere($table, array $whereId) {
-		return $this->add('joinWhere', array($table, $whereId), true);
+	public function addJoinWhere($table, $whereId, $subSelectField = 'id') {
+		if (!is_array($whereId))
+			$whereId = array($whereId);
+		return $this->add('joinWhere', array($table, $whereId, $subSelectField), true);
 	}
 	
 	public function addWhere($field, $transformer, $value = null, $forceType = null) {

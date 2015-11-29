@@ -49,13 +49,13 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 		
 		if (isset($this->config['joinWhere'])) {
 			foreach($this->config['joinWhere'] as $where) {
-				list($name, $values) = $where;
+				list($name, $values, $subSelectField) = $where;
 				$prm = 'param_'.$prmNb;
 				$this->queryBuilder
 					->join($alias.'.'.$name, $name)
-					->andWhere($name.'.id IN (:'.$prm.')')
+					->andWhere($name.'.'.$subSelectField.' IN (:'.$prm.')')
 					->setParameter($prm, $values);
-					$prmNb++;
+				$prmNb++;
 			}
 		}
 		
