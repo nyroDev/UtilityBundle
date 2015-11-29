@@ -5,8 +5,12 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 class OrmQueryBuilder extends AbstractQueryBuilder {
 	
 	protected function _buildRealQueryBuilder() {
+		return $this->getNewQueryBuilder();
+	}
+	
+	public function getNewQueryBuilder($complete = false) {
 		$alias = 'l';
-		$this->queryBuilder = $this->or->createQueryBuilder($alias);
+		$queryBuilder = $this->or->createQueryBuilder($alias);
 		
 		$prmNb = 0;
 		if (isset($this->config['where'])) {
@@ -26,19 +30,19 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 							$prm = 'param_'.$prmNb;
 							$needParenthesis = trim(strtolower($transformerOr)) === 'in';
 							$tmp[] = $alias.'.'.$fieldOr.' '.$transformerOr.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : '');
-							$this->queryBuilder->setParameter($prm, $valueOr, $forceTypeOr);
+							$queryBuilder->setParameter($prm, $valueOr, $forceTypeOr);
 							$prmNb++;
 						}
 					}
 					if (count($tmp))
-						$this->queryBuilder->andWhere(implode(' OR ', $tmp));
+						$queryBuilder->andWhere(implode(' OR ', $tmp));
 				} else {
 					if ($transformer == self::WHERE_IS_NOT_NULL || $transformer == self::WHERE_IS_NULL) {
-						$this->queryBuilder->andWhere($alias.'.'.$field.' '.$transformer);
+						$queryBuilder->andWhere($alias.'.'.$field.' '.$transformer);
 					} else {
 						$prm = 'param_'.$prmNb;
 						$needParenthesis = trim(strtolower($transformer)) === 'in';
-						$this->queryBuilder
+						$queryBuilder
 								->andWhere($alias.'.'.$field.' '.$transformer.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : ''))
 								->setParameter($prm, $value, $forceType);
 						$prmNb++;
@@ -51,7 +55,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 			foreach($this->config['joinWhere'] as $where) {
 				list($name, $values, $subSelectField) = $where;
 				$prm = 'param_'.$prmNb;
-				$this->queryBuilder
+				$queryBuilder
 					->join($alias.'.'.$name, $name)
 					->andWhere($name.'.'.$subSelectField.' IN (:'.$prm.')')
 					->setParameter($prm, $values);
@@ -62,19 +66,22 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 		if (isset($this->config['orderBy'])) {
 			foreach($this->config['orderBy'] as $orderBy) {
 				list($sort, $dir) = $orderBy;
-				$this->queryBuilder->addOrderBy($alias.'.'.$sort, $dir);
+				$queryBuilder->addOrderBy($alias.'.'.$sort, $dir);
 			}
 		}
 		
-		$this->count = $this->_count($this->queryBuilder);
+		if (!$complete) {
+			if (isset($this->config['firstResult']))
+				$queryBuilder->setFirstResult($this->config['firstResult']);
+			if (isset($this->config['maxResults']))
+				$queryBuilder->setMaxResults($this->config['maxResults']);
+		}
 		
-		if (isset($this->config['firstResult']))
-			$this->queryBuilder->setFirstResult($this->config['firstResult']);
-		if (isset($this->config['maxResults']))
-			$this->queryBuilder->setMaxResults($this->config['maxResults']);
+		return $queryBuilder;
 	}
 	
-	protected function _count($queryBuilder) {
+	protected function _count() {
+		$queryBuilder = $this->getNewQueryBuilder(true);
 		return $this->or
 			->createQueryBuilder('cpt')
 				->select('COUNT(cpt.id)')

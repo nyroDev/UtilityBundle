@@ -50,6 +50,10 @@ abstract class AbstractQueryBuilder {
 		return $this;
 	}
 	
+	public function get($type) {
+		return isset($this->config[$type]) ? $this->config[$type] : null;
+	}
+	
 	public function addJoinWhere($table, $whereId, $subSelectField = 'id') {
 		if (!is_array($whereId))
 			$whereId = array($whereId);
@@ -85,13 +89,10 @@ abstract class AbstractQueryBuilder {
 		if ($this->built)
 			throw new RuntimeException('NyroDev\UtilityBundle\Utility\QueryBuilder can be built only once.');
 		
-		$this->_buildRealQueryBuilder();
+		$this->queryBuilder = $this->_buildRealQueryBuilder();
 		
 		if (is_null($this->queryBuilder))
 			throw new RuntimeException(get_class($this).' did not built query builder correctly.');
-		
-		if (is_null($this->count))
-			throw new RuntimeException(get_class($this).' did not fill count correctly.');
 		
 		$this->built = true;
 	}
@@ -109,7 +110,11 @@ abstract class AbstractQueryBuilder {
 	}
 	
 	public function count() {
+		if (is_null($this->count))
+			$this->count = $this->_count();
 		return $this->count;
 	}
+	
+	abstract protected function _count();
 	
 }
