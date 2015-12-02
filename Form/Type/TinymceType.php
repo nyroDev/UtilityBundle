@@ -16,7 +16,7 @@ class TinymceType extends AbstractType {
 		
 		$attrs = array_merge($attrs, array(
 			'class'=>'tinymce'.(isset($attrs['class']) && $attrs['class'] ? ' '.$attrs['class'] : ''),
-			'data-tinymceurl'=>$this->container->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
+			'data-tinymceurl'=>$this->container->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.jquery.min.js'),
 			$prefixTinymce.'language'=>$this->container->get('request')->getLocale(),
 			$prefixTinymce.'height'=>450,
 			$prefixTinymce.'width'=>720,
