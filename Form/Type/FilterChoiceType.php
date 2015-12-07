@@ -2,7 +2,8 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Filter Type for Integer fields 
@@ -11,12 +12,12 @@ class FilterChoiceType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('transformer', 'choice', array(
+			->add('transformer', ChoiceType::class, array(
 				'choices'=>array(
 					'='=>'=',
 				),
 			))
-			->add('value', 'choice', array_merge($options['choiceOptions'], array(
+			->add('value', ChoiceType::class, array_merge($options['choiceOptions'], array(
 					'required'=>false,
 				)));
 	}
@@ -24,16 +25,16 @@ class FilterChoiceType extends FilterType {
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setRequired(array('choiceOptions'));
     }
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter_choice';
 	}
 	
 	public function getParent() {
-		return 'filter';
+		return FilterType::class;
 	}
 
 }

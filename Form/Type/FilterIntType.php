@@ -2,6 +2,8 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 /**
  * Filter Type for Integer fields 
@@ -10,7 +12,7 @@ class FilterIntType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('transformer', 'choice', array(
+			->add('transformer', ChoiceType::class, array(
 				'choices'=>array(
 					'='=>'=',
 					'>='=>'>=',
@@ -19,17 +21,17 @@ class FilterIntType extends FilterType {
 					'<'=>'<',
 				),
 			))
-			->add('value', 'integer', array(
+			->add('value', IntegerType::class, array(
 					'required'=>false,
 				));
 	}
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter_int';
 	}
 	
 	public function getParent() {
-		return 'filter';
+		return FilterType::class;
 	}
 
 }

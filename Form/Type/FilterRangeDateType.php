@@ -13,7 +13,7 @@ class FilterRangeDateType extends FilterType {
 		if ($builder->has('transformer'))
 			$builder->remove('transformer');
 		$builder
-			->add('value', 'filter_range_sub', array(
+			->add('value', FilterRangeSubType::class, array(
 					'type'=>'date',
 					'required'=>false,
 				));
@@ -38,12 +38,12 @@ class FilterRangeDateType extends FilterType {
 		return $value;
 	}
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter_range_date';
 	}
 	
 	public function getParent() {
-		return 'filter';
+		return FilterType::class;
 	}
 
 }

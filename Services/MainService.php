@@ -1,9 +1,10 @@
 <?php
 namespace NyroDev\UtilityBundle\Services;
 
-use \Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use \Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MainService extends AbstractService {
 	
@@ -43,7 +44,7 @@ class MainService extends AbstractService {
 	public function generateUrl($name, $parameters = array(), $absolute = false) {
 		if ($name == '#')
 			return '#';
-		return str_replace('%2C', ',', $this->get('router')->generate($name, $parameters, $absolute));
+		return str_replace('%2C', ',', $this->get('router')->generate($name, $parameters, $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH));
 	}
 	
 	/**

@@ -3,7 +3,9 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class TinymceType extends AbstractType {
 	
@@ -57,7 +59,7 @@ class TinymceType extends AbstractType {
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
 			'tinymceBrowser'=>array(),
 			'tinymce'=>array(),
@@ -66,10 +68,10 @@ class TinymceType extends AbstractType {
     }
 	
 	public function getParent() {
-		return 'textarea';
+		return TextareaType::class;
 	}
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'tinymce';
 	}
 }

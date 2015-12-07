@@ -2,14 +2,15 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType as SrcAbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class DummyCaptchaType extends SrcAbstractType {
 	
 	public function getParent() {
-		return 'text';
+		return TextType::class;
 	}
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'dummy_captcha';
 	}
 

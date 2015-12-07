@@ -2,6 +2,8 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 /**
  * Filter Type for Date fields
@@ -10,7 +12,7 @@ class FilterDateType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('transformer', 'choice', array(
+			->add('transformer', ChoiceType::class, array(
 				'choices'=>array(
 					'='=>'=',
 					'>='=>'>=',
@@ -19,7 +21,7 @@ class FilterDateType extends FilterType {
 					'<'=>'<',
 				),
 			))
-			->add('value', 'date', array(
+			->add('value', DateType::class, array(
 					'required'=>false
 				));
 	}
@@ -28,12 +30,12 @@ class FilterDateType extends FilterType {
 		return is_object($value) ? $value->format('Y-m-d') : $value;
 	}
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter_date';
 	}
 	
 	public function getParent() {
-		return 'filter';
+		return FilterType::class;
 	}
 
 }
