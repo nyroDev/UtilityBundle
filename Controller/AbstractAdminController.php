@@ -18,7 +18,7 @@ abstract class AbstractAdminController extends AbstractController {
 	const ADD = 'add';
 	const EDIT = 'edit';
 
-	protected function createList(Request $request, $repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false) {
+	protected function createList(Request $request, $repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false) {
 		$nbPerPageParam = 'admin.nbPerPage.'.$route;
 		$nbPerPage = $this->container->hasParameter($nbPerPageParam) ?
 					$this->container->getParameter($nbPerPageParam) :
@@ -127,7 +127,7 @@ abstract class AbstractAdminController extends AbstractController {
 		);
 	}
 	
-	protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, AbstractQueryBuilder $queryBuilder = null) {
+	protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null) {
 		$filter = null;
 		if (!is_null($filterType))
 			$filter = $this->createForm($filterType, array(), array('csrf_protection'=>false, 'attr'=>array('class'=>'filterForm')));
