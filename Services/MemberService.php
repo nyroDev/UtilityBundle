@@ -14,7 +14,7 @@ class MemberService extends AbstractService {
 	 * @return string|Entity
 	 */
 	public function getUser() {
-		return $this->get('security.context')->getToken()->getUser();
+		return $this->get('security.token_storage')->getToken()->getUser();
 	}
 	
 	/**
@@ -23,7 +23,7 @@ class MemberService extends AbstractService {
 	 * @return boolean
 	 */
 	public function isLogged() {
-		return $this->get('security.context')->getToken() && $this->get('security.context')->getToken()->isAuthenticated() && is_object($this->getUser());
+		return $this->get('security.token_storage')->getToken() && $this->get('security.token_storage')->getToken()->isAuthenticated() && is_object($this->getUser());
 	}
 	
 	/**
@@ -33,7 +33,7 @@ class MemberService extends AbstractService {
 	 * @return boolean
 	 */
 	public function isGranted($role) {
-		return $this->isLogged() && $this->get('security.context')->isGranted($role);
+		return $this->isLogged() && $this->get('security.authorization_checker')->isGranted($role);
 	}
 	
 	/**
@@ -53,7 +53,7 @@ class MemberService extends AbstractService {
 	public function logUser(\Symfony\Component\Security\Core\User\UserInterface $user) {
 		// Here, "main" is the name of the firewall in your security.yml
 		$token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-		$this->get('security.context')->setToken($token);
+		$this->get('security.token_storage')->setToken($token);
 
 		// Fire the login event
 		$this->get('event_dispatcher')->dispatch(AuthenticationEvents::AUTHENTICATION_SUCCESS, new AuthenticationEvent($token));

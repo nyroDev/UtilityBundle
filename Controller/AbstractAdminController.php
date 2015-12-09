@@ -6,21 +6,25 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Form\Type\AbstractFilterType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 abstract class AbstractAdminController extends AbstractController {
 	
 	const ADD = 'add';
 	const EDIT = 'edit';
 
-	protected function createList($repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false) {
+	protected function createList(Request $request, $repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false) {
 		$nbPerPageParam = 'admin.nbPerPage.'.$route;
 		$nbPerPage = $this->container->hasParameter($nbPerPageParam) ?
 					$this->container->getParameter($nbPerPageParam) :
 					$this->container->getParameter('nyrodev_utility.admin.nbPerPage');
 		
-		$tmpList = $this->getListElements($repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder);
+		$tmpList = $this->getListElements($request, $repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder);
 		$order = $tmpList['order'];
 		$sort = $tmpList['sort'];
 		$filter = $tmpList['filter'];
@@ -29,7 +33,7 @@ abstract class AbstractAdminController extends AbstractController {
 		$total = $tmpList['total'];
 		
 		$canExport = $exportConfig && is_array($exportConfig) && isset($exportConfig['fields']);
-		if ($canExport && $this->getRequest()->query->get('export')) {
+		if ($canExport && $request->query->get('export')) {
 			// Start XLS export
 			$this->get('nyrodev')->increasePhpLimits();
 			$phpExcel = new \PHPExcel();
@@ -123,29 +127,29 @@ abstract class AbstractAdminController extends AbstractController {
 		);
 	}
 	
-	protected function getListElements($repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', AbstractFilterType $filterType = null, AbstractQueryBuilder $queryBuilder = null) {
+	protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null) {
 		$filter = null;
 		if (!is_null($filterType))
 			$filter = $this->createForm($filterType, array(), array('csrf_protection'=>false, 'attr'=>array('class'=>'filterForm')));
 		
-		$page = $this->getRequest()->query->get('page', $this->getRequest()->getSession()->get('admin_list_'.$route.'_page', 1));
+		$page = $request->query->get('page', $request->getSession()->get('admin_list_'.$route.'_page', 1));
 		if (!$page)
 			$page = 1;
-		$this->getRequest()->getSession()->set('admin_list_'.$route.'_page', $page);
-		$sort = $this->getRequest()->query->get('sort', $this->getRequest()->getSession()->get('admin_list_'.$route.'_sort', $defaultSort));
-		$this->getRequest()->getSession()->set('admin_list_'.$route.'_sort', $sort);
-		$order = $this->getRequest()->query->get('order', $this->getRequest()->getSession()->get('admin_list_'.$route.'_order', $defaultOrder));
-		$this->getRequest()->getSession()->set('admin_list_'.$route.'_order', $order);
+		$request->getSession()->set('admin_list_'.$route.'_page', $page);
+		$sort = $request->query->get('sort', $request->getSession()->get('admin_list_'.$route.'_sort', $defaultSort));
+		$request->getSession()->set('admin_list_'.$route.'_sort', $sort);
+		$order = $request->query->get('order', $request->getSession()->get('admin_list_'.$route.'_order', $defaultOrder));
+		$request->getSession()->set('admin_list_'.$route.'_order', $order);
 		
 		if (!is_null($filter)) {
 			// bind values from the request
-			if ($this->getRequest()->query->has('clearFilter')) {
+			if ($request->query->has('clearFilter')) {
 				$filter->submit(array('page'=>1));
 				$this->get('nyrodev_formFilter')->saveSession($filter, $route);
-			} else if ($this->getRequest()->query->has($filter->getName())) {
-				$filter->handleRequest($this->getRequest());
+			} else if ($request->query->has($filter->getName())) {
+				$filter->handleRequest($request);
 				$this->get('nyrodev_formFilter')->saveSession($filter, $route);
-				$tmp = $this->getRequest()->query->get($filter->getName());
+				$tmp = $request->query->get($filter->getName());
 				if (isset($tmp['submit']))
 					$page = 1;
 			} else {
@@ -180,13 +184,13 @@ abstract class AbstractAdminController extends AbstractController {
 		);
 	}
 	
-	protected function createAdminForm($name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null) {
+	protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null) {
 		if (is_null($groups))
 			$groups = array('Default', $action);
 		$form = $this->createFormBuilder($row, array('validation_groups'=>$groups));
 		
 		if ($action != AbstractAdminController::ADD) {
-			$form->add('id', 'text', array('label'=>$this->trans('admin.'.$name.'.id'), 'read_only'=>true, 'mapped'=>false));
+			$form->add('id', TextType::class, array('label'=>$this->trans('admin.'.$name.'.id'), 'attr'=>array('readonly'=>'readonly'), 'mapped'=>false));
 			$form->get('id')->setData($row->getId());
 		}
 		
@@ -207,8 +211,8 @@ abstract class AbstractAdminController extends AbstractController {
 				$options = array_merge($options, $moreOptions[$f]);
 			}
 		
-			if ($classMetadata->hasMemberMetadatas($f)) {
-				$memberMetadatas = $classMetadata->getMemberMetadatas($f);
+			if ($classMetadata->hasPropertyMetadata($f)) {
+				$memberMetadatas = $classMetadata->getPropertyMetadata($f);
 				foreach ($memberMetadatas as $memberMetadata) {
 					$constraints = $memberMetadata->getConstraints();
 					foreach ($constraints as $constraint) {
@@ -229,7 +233,7 @@ abstract class AbstractAdminController extends AbstractController {
 		$submitOptions = array('label'=>$this->trans('admin.misc.send'));
 		if (isset($moreOptions['submit']) && is_array($moreOptions['submit']))
 			$submitOptions = array_merge($submitOptions, $moreOptions['submit']);
-		$form->add('submit', 'submit', $submitOptions);
+		$form->add('submit', SubmitType::class, $submitOptions);
 		
 		if (!is_null($callbackForm)) {
 			$tmp = $this->$callbackForm($action, $row, $form);
@@ -239,7 +243,7 @@ abstract class AbstractAdminController extends AbstractController {
 		
 		$form = $form->getForm();
 		
-		$form->handleRequest($this->getRequest());
+		$form->handleRequest($request);
 		if ($form->isValid()) {
 			if (!is_null($callbackFlush)) {
 				$tmp = $this->$callbackFlush($action, $row, $form);

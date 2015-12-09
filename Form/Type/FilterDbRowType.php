@@ -3,7 +3,9 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * Filter Type for Integer fields 
@@ -13,12 +15,12 @@ class FilterDbRowType extends FilterType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$nyrodevDb = $this->get('nyrodev_db');
 		$builder
-			->add('transformer', 'choice', array(
+			->add('transformer', ChoiceType::class, array(
 				'choices'=>array(
 					'='=>'=',
 				),
 			))
-			->add('value', 'entity', array(
+			->add('value', EntityType::class, array(
 					'required'=>false,
 					'class'=>$options['class'],
 					'property'=>isset($options['property']) ? $options['property'] : null,
@@ -56,7 +58,7 @@ class FilterDbRowType extends FilterType {
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
 			'class'=>null,
 			'property'=>null,
@@ -65,12 +67,12 @@ class FilterDbRowType extends FilterType {
 		));
     }
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter_dbRow';
 	}
 	
 	public function getParent() {
-		return 'filter';
+		return FilterType::class;
 	}
 
 }

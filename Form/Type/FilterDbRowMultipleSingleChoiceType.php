@@ -4,7 +4,9 @@ namespace NyroDev\UtilityBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * Filter Type for Integer fields 
@@ -14,12 +16,12 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$nyrodevDb = $this->get('nyrodev_db');
 		$builder
-			->add('transformer', 'choice', array(
+			->add('transformer', ChoiceType::class, array(
 				'choices'=>array(
 					'IN'=>'=',
 				),
 			))
-			->add('value', 'entity', array(
+			->add('value', EntityType::class, array(
 					'required'=>false,
 					'multiple'=>false,
 					'class'=>$options['class'],
@@ -68,7 +70,7 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType {
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
 			'class'=>null,
 			'property'=>null,
@@ -77,12 +79,12 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType {
 		));
     }
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter_dbRowMultipleSingleChoice';
 	}
 	
 	public function getParent() {
-		return 'filter';
+		return FilterType::class;
 	}
 
 }

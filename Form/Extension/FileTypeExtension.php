@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class FileTypeExtension extends AbstractTypeExtension {
 
@@ -15,10 +18,10 @@ class FileTypeExtension extends AbstractTypeExtension {
      * @return string The name of the type being extended
      */
     public function getExtendedType() {
-        return 'file';
+        return FileType::class;
     }
 
-	public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver) {
+	public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
 			'showCurrent'=>true,
 			'showDelete'=>false,

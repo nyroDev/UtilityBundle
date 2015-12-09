@@ -2,6 +2,7 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Filter Type for Boolean fields 
@@ -10,12 +11,12 @@ class FilterBoolType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('transformer', 'choice', array(
+			->add('transformer', ChoiceType::class, array(
 				'choices'=>array(
 					'='=>'='
 				),
 			))
-			->add('value', 'choice', array(
+			->add('value', ChoiceType::class, array(
 					'required'=>false,
 					'choices'=>array(
 						'1'=>'Oui',
@@ -28,12 +29,12 @@ class FilterBoolType extends FilterType {
 		return $value == 'no' ? 0 : 1;
 	}
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter_bool';
 	}
 	
 	public function getParent() {
-		return 'filter';
+		return FilterType::class;
 	}
 
 }

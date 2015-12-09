@@ -1,0 +1,69 @@
+services:
+    nyrodev.filter.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.filter_date.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDateType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.filter_range_date.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterRangeDateType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.filter_range_sub.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterRangeSubType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.filter_int.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterIntType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.filter_bool.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterBoolType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.filter_choice.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterChoiceType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.filter_dbRow.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type filter_dbRow}
+    nyrodev.filter_dbRowMultiple.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type filter_dbRowMultiple}
+    nyrodev.filter_dbRowMultipleSingleChoice.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleSingleChoiceType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type filter_dbRowMultipleSingleChoice}
+    nyrodev.file_extension.form.type:
+        class: NyroDev\UtilityBundle\Form\Extension\FileTypeExtension
+        tags:
+          - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }
+    nyrodev.tinymce.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\TinymceType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.rawhtml.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\RawHtmlType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.dummy_captcha.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\DummyCaptchaType
+        tags:
+          - { name: form.type }

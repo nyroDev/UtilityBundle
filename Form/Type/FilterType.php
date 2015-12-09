@@ -3,7 +3,11 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Default Filter Type field for text fields 
@@ -27,10 +31,10 @@ class FilterType extends AbstractType implements FilterTypeInterface {
 			$choices['IS NOT NULL'] = 'IS NOT NULL';
 		}
 		$builder
-			->add('transformer', 'choice', array(
+			->add('transformer', ChoiceType::class, array(
 				'choices'=>$choices,
 			))
-			->add('value', 'text', array(
+			->add('value', TextType::class, array(
 				'required'=>false,
 			));
 	}
@@ -64,7 +68,7 @@ class FilterType extends AbstractType implements FilterTypeInterface {
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
 			'addNullTransformer'=>false,
 		));
@@ -75,7 +79,7 @@ class FilterType extends AbstractType implements FilterTypeInterface {
 	 *
 	 * @return string The name of this type
 	 */
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter';
 	}
 	
@@ -85,7 +89,7 @@ class FilterType extends AbstractType implements FilterTypeInterface {
 	 * @return string|null The name of the parent type if any otherwise null
 	 */
 	public function getParent() {
-		return 'form';
+		return FormType::class;
 	}
 
 }

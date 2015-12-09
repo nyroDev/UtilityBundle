@@ -3,7 +3,8 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType as SrcAbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 
 /**
  * Filter Type for Date rang sub fields
@@ -22,18 +23,18 @@ class FilterRangeSubType extends SrcAbstractType {
 			), $options['options']));
 	}
 	
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function configureOptions(OptionsResolver $resolver) {
 		$resolver
 			->setRequired(array('type'))
 			->setDefaults(array('options'=>array()));
     }
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return 'filter_range_sub';
 	}
 	
 	public function getParent() {
-		return 'form';
+		return FormType::class;
 	}
 
 }
