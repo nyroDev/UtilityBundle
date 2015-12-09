@@ -64,6 +64,7 @@ class Configuration implements ConfigurationInterface
 							->scalarNode('quality')->defaultValue(80)->end()
 							->booleanNode('fit')->defaultTrue()->end()
 							->scalarNode('center')->defaultValue('CC')->end() // First value is horizontal (L, C, R), second is vertical (T, C, B)
+							->booleanNode('tile')->defaultFalse()->end() // Used with center to create 9 tiles from original image
 							->booleanNode('useMaxResize')->defaultFalse()->end()
 							->booleanNode('useGivenDimensions')->defaultFalse()->end()
 							->scalarNode('bgColor')->defaultValue('ffffff')->end()

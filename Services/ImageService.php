@@ -159,7 +159,31 @@ class ImageService extends AbstractService {
 			}
 		}
 		
-		if (isset($config['w']) && $config['w'] && isset($config['h']) && $config['h']) {
+		if (isset($config['tile']) && $config['tile']) {
+			$center = isset($config['center']) ? strtoupper($config['center']) : 'CC';
+			$hCenter = $center[0];
+			$vCenter = $center[1];
+
+			$srcW = $srcW / 3;
+			$srcH = $srcH / 3;
+			
+			if ($hCenter == 'C') {
+				$srcX = $srcW;
+			} else if ($hCenter == 'R') {
+				$srcX = $srcW * 2;
+			}
+			
+			if ($vCenter == 'C') {
+				$srcY = $srcH;
+			} else if ($vCenter == 'B') {
+				$srcY = $srcH * 2;
+			}
+			
+			$dstW = $srcW;
+			$dstH = $srcH;
+			$config['w'] = $dstW;
+			$config['h'] = $dstH;
+		} else if (isset($config['w']) && $config['w'] && isset($config['h']) && $config['h']) {
 			// Dimensions are fixed
 			if (isset($config['useGivenDimensions']) && $config['useGivenDimensions']) {
 				// Change nothing here, just use given settings
