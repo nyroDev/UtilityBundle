@@ -2,6 +2,7 @@
 namespace NyroDev\UtilityBundle\Services;
 
 use Symfony\Component\Form\Form;
+use NyroDev\UtilityBundle\Form\Type\DummyCaptchaType;
 
 /**
  * Service used to handle forms to add more features
@@ -9,7 +10,7 @@ use Symfony\Component\Form\Form;
 class FormService extends AbstractService {
 	
 	public function addDummyCaptcha(Form $form) {
-		$form->add('dummytcha', 'dummy_captcha', array(
+		$form->add('dummytcha', DummyCaptchaType::class, array(
 			'mapped'=>false,
 			'required'=>false,
 			'position'=>'first',
