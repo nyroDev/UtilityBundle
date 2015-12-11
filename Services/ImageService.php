@@ -99,7 +99,7 @@ class ImageService extends AbstractService {
 				// animated file, copy it directly to destination and/or ignore force
 				$force = false;
 				if (!file_exists($dest))
-					copy($ext, $dest);
+					copy($file, $dest);
 			}
 		}
 		
