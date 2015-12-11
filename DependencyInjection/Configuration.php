@@ -68,6 +68,7 @@ class Configuration implements ConfigurationInterface
 							->booleanNode('useMaxResize')->defaultFalse()->end()
 							->booleanNode('useGivenDimensions')->defaultFalse()->end()
 							->scalarNode('bgColor')->defaultValue('ffffff')->end()
+							->booleanNode('ignoreAnimatedGif')->defaultFalse()->end()
 						->end()
 					->end()
 				->end()

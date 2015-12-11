@@ -79,6 +79,8 @@ class ImageService extends AbstractService {
 	public function _resize($file, array $config, $force = false, $dest = null) {
 		if (!file_exists($file))
 			throw new \Exception('File '.$file.' not found');
+		
+		$info = null;
 		if (is_null($dest)) {
 			$info = getimagesize($file);
 			$ext = 'jpg';
@@ -88,6 +90,17 @@ class ImageService extends AbstractService {
 			}
 			$cachePath = $this->getCachePath($file);
 			$dest = $cachePath.$config['name'].'.'.$ext;
+		}
+		
+		if (isset($config['ignoreAnimatedGif'])) {
+			if (is_null($info))
+				$info = getimagesize($file);
+			if ($info[2] === IMAGETYPE_GIF && $this->isAnimatedGif($file)) {
+				// animated file, copy it directly to destination and/or ignore force
+				$force = false;
+				if (!file_exists($dest))
+					copy($ext, $dest);
+			}
 		}
 		
 		if ($force || !file_exists($dest)) {
@@ -305,6 +318,32 @@ class ImageService extends AbstractService {
 			),
 			'isTransparent'=>$isTransparent
 		);
+	}
+	
+	// From http://php.net/manual/en/function.imagecreatefromgif.php#59787
+	public function isAnimatedGif($file) {
+		$filecontents = file_get_contents($file);
+
+		$str_loc = $count = 0;
+		while ($count < 2) {
+			// There is no point in continuing after we find a 2nd frame
+			$where1 = strpos($filecontents, "\x00\x21\xF9\x04", $str_loc);
+			if ($where1 === false) {
+				break;
+			} else {
+				$str_loc = $where1 + 1;
+				$where2 = strpos($filecontents, "\x00\x2C", $str_loc);
+				if ($where2 === false) {
+					break;
+				} else {
+					if ($where1 + 8 == $where2)
+						$count++;
+					$str_loc = $where2 + 1;
+				}
+			}
+		}
+
+		return $count > 1;
 	}
 	
 	/**
