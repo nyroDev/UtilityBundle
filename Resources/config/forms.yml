@@ -38,17 +38,17 @@ services:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowType
         arguments: ['@service_container']
         tags:
-          - { name: form.type filter_dbRow}
+          - { name: form.type }
     nyrodev.filter_dbRowMultiple.form.type:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleType
         arguments: ['@service_container']
         tags:
-          - { name: form.type filter_dbRowMultiple}
+          - { name: form.type }
     nyrodev.filter_dbRowMultipleSingleChoice.form.type:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleSingleChoiceType
         arguments: ['@service_container']
         tags:
-          - { name: form.type filter_dbRowMultipleSingleChoice}
+          - { name: form.type }
     nyrodev.file_extension.form.type:
         class: NyroDev\UtilityBundle\Form\Extension\FileTypeExtension
         tags:
