@@ -72,7 +72,7 @@ class MainService extends AbstractService {
 	 * @param mixed $value Slot value
 	 */
 	public function setSlot($name, $value) {
-		$this->get('templating.engine.php')->get('slots')->set($name, $value);
+		$this->get('templating.helper.slots')->set($name, $value);
 	}
 	
 	/**
