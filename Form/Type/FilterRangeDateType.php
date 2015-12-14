@@ -13,10 +13,10 @@ class FilterRangeDateType extends FilterType {
 		if ($builder->has('transformer'))
 			$builder->remove('transformer');
 		$builder
-			->add('value', FilterRangeSubType::class, array(
+			->add('value', FilterRangeSubType::class, array_merge(array(
 					'type'=>'date',
 					'required'=>false,
-				));
+				), $options['valueOptions']));
 	}
 	
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data) {

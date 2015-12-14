@@ -12,14 +12,14 @@ class FilterChoiceType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('transformer', ChoiceType::class, array(
+			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
 					'='=>'=',
 				),
-			))
+			), $options['transformerOptions']))
 			->add('value', ChoiceType::class, array_merge($options['choiceOptions'], array(
 					'required'=>false,
-				)));
+				), $options['valueOptions']));
 	}
 	
     /**

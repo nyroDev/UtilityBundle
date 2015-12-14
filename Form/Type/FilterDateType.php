@@ -2,6 +2,7 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
@@ -12,19 +13,35 @@ class FilterDateType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('transformer', ChoiceType::class, array(
+			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
-					'='=>'=',
+					'LIKE'=>'=',
 					'>='=>'>=',
 					'<='=>'<=',
 					'>'=>'>',
 					'<'=>'<',
 				),
-			))
-			->add('value', DateType::class, array(
+			), $options['transformerOptions']))
+			->add('value', DateType::class, array_merge(array(
 					'required'=>false
-				));
+				), $options['valueOptions']));
 	}
+	
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data) {
+		if (
+				isset($data['transformer']) && $data['transformer']
+			&&  isset($data['value']) && $data['value']
+			) {
+			$value = $this->applyValue($data['value']);
+			$transformer = $data['transformer'];
+
+			if ($transformer == 'LIKE')
+				$value = $value.'%';
+			$queryBuilder->addWhere($name, $transformer, $value, \PDO::PARAM_STR);
+		}
+		
+		return $queryBuilder;
+    }
 	
 	public function applyValue($value) {
 		return is_object($value) ? $value->format('Y-m-d') : $value;

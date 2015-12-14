@@ -31,12 +31,12 @@ class FilterType extends AbstractType implements FilterTypeInterface {
 			$choices['IS NOT NULL'] = 'IS NOT NULL';
 		}
 		$builder
-			->add('transformer', ChoiceType::class, array(
+			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>$choices,
-			))
-			->add('value', TextType::class, array(
+			), $options['transformerOptions']))
+			->add('value', TextType::class, array_merge(array(
 				'required'=>false,
-			));
+			), $options['valueOptions']));
 	}
 	
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data) {
@@ -71,6 +71,8 @@ class FilterType extends AbstractType implements FilterTypeInterface {
     public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
 			'addNullTransformer'=>false,
+			'transformerOptions'=>array(),
+			'valueOptions'=>array(),
 		));
     }
 	

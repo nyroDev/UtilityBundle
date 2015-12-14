@@ -16,12 +16,12 @@ class FilterDbRowMultipleType extends FilterDbRowType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$nyrodevDb = $this->get('nyrodev_db');
 		$builder
-			->add('transformer', ChoiceType::class, array(
+			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
 					'IN'=>'IN',
 				),
-			))
-			->add('value', EntityType::class, array(
+			),$options['transformerOptions']))
+			->add('value', EntityType::class, array_merge(array(
 					'required'=>false,
 					'multiple'=>true,
 					'attr'=>array(
@@ -53,7 +53,7 @@ class FilterDbRowMultipleType extends FilterDbRowType {
 						
 						return $ret->getQueryBuilder();
 					} : null
-				));
+				), $options['valueOptions']));
 	}
 	
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data) {

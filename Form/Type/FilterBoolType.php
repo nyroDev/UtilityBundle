@@ -11,18 +11,18 @@ class FilterBoolType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('transformer', ChoiceType::class, array(
+			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
 					'='=>'='
 				),
-			))
-			->add('value', ChoiceType::class, array(
+			), $options['transformerOptions']))
+			->add('value', ChoiceType::class, array_merge(array(
 					'required'=>false,
 					'choices'=>array(
 						'1'=>'Oui',
 						'no'=>'Non'
 					),
-				));
+				), $options['valueOptions']));
 	}
 	
 	public function applyValue($value) {

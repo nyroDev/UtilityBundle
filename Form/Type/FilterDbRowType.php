@@ -15,12 +15,12 @@ class FilterDbRowType extends FilterType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$nyrodevDb = $this->get('nyrodev_db');
 		$builder
-			->add('transformer', ChoiceType::class, array(
+			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
 					'='=>'=',
 				),
-			))
-			->add('value', EntityType::class, array(
+			), $options['transformerOptions']))
+			->add('value', EntityType::class, array_merge(array(
 					'required'=>false,
 					'class'=>$options['class'],
 					'property'=>isset($options['property']) ? $options['property'] : null,
@@ -48,7 +48,7 @@ class FilterDbRowType extends FilterType {
 						
 						return $ret->getQueryBuilder();
 					} : null
-				));
+				), $options['valueOptions']));
 	}
 	
 	public function applyValue($value) {

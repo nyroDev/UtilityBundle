@@ -12,7 +12,7 @@ class FilterIntType extends FilterType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('transformer', ChoiceType::class, array(
+			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
 					'='=>'=',
 					'>='=>'>=',
@@ -20,10 +20,10 @@ class FilterIntType extends FilterType {
 					'>'=>'>',
 					'<'=>'<',
 				),
-			))
-			->add('value', IntegerType::class, array(
+			), $options['transformerOptions']))
+			->add('value', IntegerType::class, array_merge(array(
 					'required'=>false,
-				));
+				), $options['valueOptions']));
 	}
 	
 	public function getBlockPrefix() {
