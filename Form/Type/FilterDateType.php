@@ -15,11 +15,11 @@ class FilterDateType extends FilterType {
 		$builder
 			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
-					'LIKE'=>'=',
-					'>='=>'>=',
-					'<='=>'<=',
-					'>'=>'>',
-					'<'=>'<',
+					AbstractQueryBuilder::OPERATOR_LIKEDATE=>'=',
+					AbstractQueryBuilder::OPERATOR_GTE=>'>=',
+					AbstractQueryBuilder::OPERATOR_LTE=>'<=',
+					AbstractQueryBuilder::OPERATOR_GT=>'>',
+					AbstractQueryBuilder::OPERATOR_LT=>'<',
 				),
 			), $options['transformerOptions']))
 			->add('value', DateType::class, array_merge(array(
@@ -35,8 +35,6 @@ class FilterDateType extends FilterType {
 			$value = $this->applyValue($data['value']);
 			$transformer = $data['transformer'];
 
-			if ($transformer == 'LIKE')
-				$value = $value.'%';
 			$queryBuilder->addWhere($name, $transformer, $value, \PDO::PARAM_STR);
 		}
 		

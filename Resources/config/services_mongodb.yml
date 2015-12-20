@@ -1,0 +1,11 @@
+parameters:
+    nyrodev_utility.mongodbDbService.class: NyroDev\UtilityBundle\Services\Db\MongodbService
+    nyrodev_utility.mongodbQueryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\MongodbQueryBuilder
+    
+services:
+    nyrodev_db:
+        class: %nyrodev_utility.mongodbDbService.class%
+        arguments: ['@service_container', '@nyrodev.document_manager']
+    nyrodev.document_manager:
+        class: Doctrine\ODM\MongoDB\DocumentManager
+        arguments: [%nyroDev_utility.model_manager_name%]

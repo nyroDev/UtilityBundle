@@ -3,6 +3,7 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
  * Filter Type for Boolean fields 
@@ -13,7 +14,7 @@ class FilterBoolType extends FilterType {
 		$builder
 			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
-					'='=>'='
+					AbstractQueryBuilder::OPERATOR_EQUALS=>'='
 				),
 			), $options['transformerOptions']))
 			->add('value', ChoiceType::class, array_merge(array(

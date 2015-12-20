@@ -36,7 +36,7 @@ abstract class AbstractService extends AbstractServiceSrc {
 	 */
 	public function getQueryBuilder($name) {
 		$class = $this->getParameter('nyrodev_utility.ormQueryBuilder.class');
-		return new $class(is_object($name) ? $name : $this->getRepository($name), $this->getObjectManager());
+		return new $class(is_object($name) ? $name : $this->getRepository($name), $this->getObjectManager(), $this);
 	}
 	
 	public function getNew($name, $persist = true) {

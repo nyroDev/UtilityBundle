@@ -4,6 +4,7 @@ namespace NyroDev\UtilityBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
  * Filter Type for Integer fields 
@@ -14,7 +15,7 @@ class FilterChoiceType extends FilterType {
 		$builder
 			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
-					'='=>'=',
+					AbstractQueryBuilder::OPERATOR_EQUALS=>'='
 				),
 			), $options['transformerOptions']))
 			->add('value', ChoiceType::class, array_merge($options['choiceOptions'], array(

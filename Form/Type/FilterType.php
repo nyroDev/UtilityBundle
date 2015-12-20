@@ -23,12 +23,12 @@ class FilterType extends AbstractType implements FilterTypeInterface {
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$choices = array(
-			'LIKE %...%'=>'LIKE %...%',
-			'='=>'=',
+			AbstractQueryBuilder::OPERATOR_CONTAINS=>'LIKE %...%',
+			AbstractQueryBuilder::OPERATOR_EQUALS=>'=',
 		);
 		if ($options['addNullTransformer']) {
-			$choices['IS NULL'] = 'IS NULL';
-			$choices['IS NOT NULL'] = 'IS NOT NULL';
+			$choices[AbstractQueryBuilder::OPERATOR_IS_NULL] = 'IS NULL';
+			$choices[AbstractQueryBuilder::OPERATOR_IS_NOT_NULL] = 'IS NOT NULL';
 		}
 		$builder
 			->add('transformer', ChoiceType::class, array_merge(array(
@@ -47,13 +47,9 @@ class FilterType extends AbstractType implements FilterTypeInterface {
 			$value = $this->applyValue($data['value']);
 			$transformer = $data['transformer'];
 			
-			if ($transformer == 'IS NULL' || $transformer == 'IS NOT NULL') {
-				$queryBuilder->addWhere($name, $transformer == 'IS NULL' ? AbstractQueryBuilder::WHERE_IS_NULL : AbstractQueryBuilder::WHERE_IS_NOT_NULL);
+			if ($transformer == AbstractQueryBuilder::OPERATOR_IS_NULL || $transformer == AbstractQueryBuilder::OPERATOR_IS_NOT_NULL) {
+				$queryBuilder->addWhere($name, $transformer);
 			} else {
-				if ($transformer == 'LIKE %...%') {
-					$value = '%'.$value.'%';
-					$transformer = 'LIKE';
-				}
 				$queryBuilder->addWhere($name, $transformer, $value, \PDO::PARAM_STR);
 			}
 		}

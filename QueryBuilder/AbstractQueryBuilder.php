@@ -3,7 +3,7 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use NyroDev\UtilityBundle\Services\MainService;
+use NyroDev\UtilityBundle\Services\Db\AbstractService;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 
 /**
@@ -12,13 +12,22 @@ use Symfony\Component\Serializer\Exception\RuntimeException;
 abstract class AbstractQueryBuilder {
 
 	const WHERE_OR = '__OR__';
-	const WHERE_IS_NULL = 'IS NULL';
-	const WHERE_IS_NOT_NULL = 'IS NOT NULL';
+	
+	const OPERATOR_EQUALS = '=';
+	const OPERATOR_GT = '>';
+	const OPERATOR_GTE = '>=';
+	const OPERATOR_LT = '<';
+	const OPERATOR_LTE = '<=';
+	const OPERATOR_LIKE = 'LIKE';
+	const OPERATOR_LIKEDATE = 'LIKE%';
+	const OPERATOR_CONTAINS = 'LIKE %...%';
+	const OPERATOR_IN = 'IN';
+	
+	const OPERATOR_IS_NULL = 'IS NULL';
+	const OPERATOR_IS_NOT_NULL = 'IS NOT NULL';
 	
 	/**
-	 * nyroDev service object used to generate the URL
-	 *
-	 * @var MainService
+	 * @var AbstractService
 	 */
 	protected $service;
 	
@@ -34,9 +43,10 @@ abstract class AbstractQueryBuilder {
 	 */
 	protected $om;
 	
-	public function __construct(ObjectRepository $or, ObjectManager $om) {
+	public function __construct(ObjectRepository $or, ObjectManager $om, AbstractService $service) {
 		$this->or = $or;
 		$this->om = $om;
+		$this->service = $service;
 	}
 	
 	protected $config = array();

@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
  * Filter Type for Integer fields 
@@ -17,7 +18,7 @@ class FilterDbRowType extends FilterType {
 		$builder
 			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
-					'='=>'=',
+					AbstractQueryBuilder::OPERATOR_EQUALS=>'=',
 				),
 			), $options['transformerOptions']))
 			->add('value', EntityType::class, array_merge(array(
@@ -37,9 +38,9 @@ class FilterDbRowType extends FilterType {
 										throw new \RuntimeException('Direct where setting is not supported anymore.');
 									}
 								} else if (is_array($v)) {
-									$ret->addWhere($k, 'in', $v);
+									$ret->addWhere($k, AbstractQueryBuilder::OPERATOR_IN, $v);
 								} else {
-									$ret->addWhere($k, '=', $v);
+									$ret->addWhere($k, AbstractQueryBuilder::OPERATOR_EQUALS, $v);
 								}
 							}
 						}

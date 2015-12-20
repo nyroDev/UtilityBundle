@@ -18,7 +18,7 @@ class FilterDbRowMultipleType extends FilterDbRowType {
 		$builder
 			->add('transformer', ChoiceType::class, array_merge(array(
 				'choices'=>array(
-					'IN'=>'IN',
+					AbstractQueryBuilder::OPERATOR_IN=>'IN',
 				),
 			),$options['transformerOptions']))
 			->add('value', EntityType::class, array_merge(array(
@@ -42,9 +42,9 @@ class FilterDbRowMultipleType extends FilterDbRowType {
 										throw new \RuntimeException('Direct where setting is not supported anymore.');
 									}
 								} else if (is_array($v)) {
-									$ret->addWhere($k, 'in', $v);
+									$ret->addWhere($k, AbstractQueryBuilder::OPERATOR_IN, $v);
 								} else {
-									$ret->addWhere($k, '=', $v);
+									$ret->addWhere($k, AbstractQueryBuilder::OPERATOR_EQUALS, $v);
 								}
 							}
 						}

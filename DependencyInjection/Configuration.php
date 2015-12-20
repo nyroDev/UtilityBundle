@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('nyro_dev_utility');
 		
-		$supportedDrivers = array('orm');
+		$supportedDrivers = array('orm', 'mongodb');
 		
 		$rootNode
 			->children()

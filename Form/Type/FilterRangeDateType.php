@@ -24,7 +24,7 @@ class FilterRangeDateType extends FilterType {
 			$value = array_filter($this->applyValue($data['value']));
 			
 			foreach($value as $k=>$val)
-				$queryBuilder->addWhere($name, $k == 'start' ? '>=' : '<=', $val, \PDO::PARAM_STR);
+				$queryBuilder->addWhere($name, $k == 'start' ? AbstractQueryBuilder::OPERATOR_GTE : AbstractQueryBuilder::OPERATOR_LTE, $val, \PDO::PARAM_STR);
 		}
 		
 		return $queryBuilder;
