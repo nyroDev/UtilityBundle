@@ -1,6 +1,6 @@
 parameters:
     nyrodev_utility.mongodbDbService.class: NyroDev\UtilityBundle\Services\Db\MongodbService
-    nyrodev_utility.mongodbQueryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\MongodbQueryBuilder
+    nyrodev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\MongodbQueryBuilder
     
 services:
     nyrodev_db:

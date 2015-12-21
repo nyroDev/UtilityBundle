@@ -65,7 +65,7 @@ abstract class AbstractAdminController extends AbstractController {
 			if (isset($exportConfig['doubleFirstRows']) && $exportConfig['doubleFirstRows'])
 				$row++;
 			
-			$results = $queryBuilder->getQuery()->getResult();
+			$results = $queryBuilder->getResult();
 			
 			$accessor = PropertyAccess::createPropertyAccessor();
 			foreach($results as $r) {
@@ -114,7 +114,7 @@ abstract class AbstractAdminController extends AbstractController {
 		$results = $queryBuilder
 						->setFirstResult($pager->getStart())
 						->setMaxResults($nbPerPage)
-						->getQuery()->getResult();
+						->getResult();
 		
 		return array(
 			'filter'=>!is_null($filter) ? $filter->createView() : null,

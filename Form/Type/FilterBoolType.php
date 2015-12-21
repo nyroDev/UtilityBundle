@@ -26,8 +26,29 @@ class FilterBoolType extends FilterType {
 				), $options['valueOptions']));
 	}
 	
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data) {
+		if (
+				isset($data['transformer']) && $data['transformer']
+			&&  isset($data['value']) && $data['value']
+			) {
+			$value = $this->applyValue($data['value']);
+			$transformer = $data['transformer'];
+			
+			if ($value === false) {
+				$queryBuilder->addWhere(AbstractQueryBuilder::WHERE_OR, array(
+					array($name, AbstractQueryBuilder::OPERATOR_EQUALS, false),
+					array($name, AbstractQueryBuilder::OPERATOR_IS_NULL),
+				));
+			} else {
+				$queryBuilder->addWhere($name, $transformer, $value);
+			}
+		}
+		
+		return $queryBuilder;
+    }
+	
 	public function applyValue($value) {
-		return $value == 'no' ? 0 : 1;
+		return $value == 'no' ? false : true;
 	}
 	
 	public function getBlockPrefix() {

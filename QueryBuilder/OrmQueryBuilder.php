@@ -94,6 +94,11 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 		return $queryBuilder;
 	}
 	
+	public function getResult() {
+		return $this->getQuery()
+				->getResult();
+	}
+	
 	protected function _count() {
 		$queryBuilder = $this->getNewQueryBuilder(true);
 		return $this->or

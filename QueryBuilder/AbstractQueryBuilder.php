@@ -119,6 +119,8 @@ abstract class AbstractQueryBuilder {
 		return $this->getQueryBuilder()->getQuery();
 	}
 	
+	abstract public function getResult();
+
 	public function count() {
 		if (is_null($this->count))
 			$this->count = $this->_count();

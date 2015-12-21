@@ -8,6 +8,11 @@ class MongodbQueryBuilder extends AbstractQueryBuilder {
 		return $this->getNewQueryBuilder();
 	}
 	
+	/**
+	 * 
+	 * @param boolean $complete
+	 * @return \Doctrine\ODM\MongoDB\Query\Builder
+	 */
 	public function getNewQueryBuilder($complete = false) {
 		$queryBuilder = $this->or->createQueryBuilder();
 		
@@ -24,8 +29,11 @@ class MongodbQueryBuilder extends AbstractQueryBuilder {
 						$valueOr = isset($whereOr[2]) ? $whereOr[2] : null;
 						$forceTypeOr = isset($whereOr[3]) ? $whereOr[3] : null;
 
-						if ($this->applyFilter($exprOr, $fieldOr, $transformerOr, $valueOr, $queryBuilder))
+						$expr = $queryBuilder->expr();
+						if ($this->applyFilter($expr, $fieldOr, $transformerOr, $valueOr, $queryBuilder)) {
+							$exprOr->addOr($expr);
 							$nbOr++;
+						}
 					}
 					if ($nbOr)
 						$queryBuilder->addAnd($exprOr);
@@ -90,10 +98,10 @@ class MongodbQueryBuilder extends AbstractQueryBuilder {
 				$object->field($field)->lte($value);
 				break;
 			case self::OPERATOR_LIKE:
-				$object->field($field)->gt(new \MongoRegex('/'.preg_quote($value, '/').'/i'));
+				$object->field($field)->equals(new \MongoRegex('/'.preg_quote($value, '/').'/i'));
 				break;
 			case self::OPERATOR_CONTAINS:
-				$object->field($field)->gt(new \MongoRegex('/.*'.preg_quote($value, '/').'.*/i'));
+				$object->field($field)->equals(new \MongoRegex('/.*'.preg_quote($value, '/').'.*/i'));
 				break;
 			case self::OPERATOR_LIKEDATE:
 				$dateStart = new \DateTime($value);
@@ -127,11 +135,16 @@ class MongodbQueryBuilder extends AbstractQueryBuilder {
 		return true;
 	}
 	
+	public function getResult() {
+		return $this->getQuery()
+				->execute();
+	}
+	
 	protected function _count() {
 		return $this->getNewQueryBuilder(true)
 				->count()
 				->getQuery()
-				->count();
+				->execute();
 	}
 
 }

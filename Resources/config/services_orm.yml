@@ -1,6 +1,6 @@
 parameters:
     nyrodev_utility.ormDbService.class: NyroDev\UtilityBundle\Services\Db\OrmService
-    nyrodev_utility.ormQueryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\OrmQueryBuilder
+    nyrodev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\OrmQueryBuilder
     
 services:
     nyrodev_db:
