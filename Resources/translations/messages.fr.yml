@@ -2,6 +2,7 @@ date:
   long: "%#d %B %Y à %H:%M"
   short: "%d/%m/%Y"
   shortText: "%d %B %Y"
+  fullDate: "%A %d %B %Y"
   full: "%d/%m/%Y à %H:%M"
 login:
   errors:
