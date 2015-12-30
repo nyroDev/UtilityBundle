@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * Filter Type for Integer fields 
@@ -21,7 +20,7 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType {
 					AbstractQueryBuilder::OPERATOR_IN=>'=',
 				),
 			), $options['transformerOptions']))
-			->add('value', EntityType::class, array_merge(array(
+			->add('value', $this->get('nyrodev_db')->getFormType(), array_merge(array(
 					'required'=>false,
 					'multiple'=>false,
 					'class'=>$options['class'],

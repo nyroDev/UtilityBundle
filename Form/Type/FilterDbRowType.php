@@ -5,7 +5,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
@@ -21,7 +20,7 @@ class FilterDbRowType extends FilterType {
 					AbstractQueryBuilder::OPERATOR_EQUALS=>'=',
 				),
 			), $options['transformerOptions']))
-			->add('value', EntityType::class, array_merge(array(
+			->add('value', $this->get('nyrodev_db')->getFormType(), array_merge(array(
 					'required'=>false,
 					'class'=>$options['class'],
 					'property'=>isset($options['property']) ? $options['property'] : null,
