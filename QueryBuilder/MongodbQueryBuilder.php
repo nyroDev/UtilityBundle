@@ -46,12 +46,17 @@ class MongodbQueryBuilder extends AbstractQueryBuilder {
 		if (isset($this->config['joinWhere'])) {
 			foreach($this->config['joinWhere'] as $where) {
 				list($name, $values, $subSelectField) = $where;
-				// @todo test it
-				if ($subSelectField == 'id') {
+				if ($subSelectField === 'id') {
 					$queryBuilder->field($name)->in($values);
 				} else {
 					$founds = array();
-					$tmp = $this->service->getRepository($name)->findBy(array($subSelectField=>$values));
+					$className = explode('\\', $this->or->getClassName());
+					unset($className[count($className) - 1]);
+					$tmp = $this->service->getRepository(implode('\\', $className).'\\'.ucfirst($name))
+							->createQueryBuilder()
+								->field($subSelectField)->in($values)
+								->getQuery()
+								->execute();
 					foreach($tmp as $t)
 						$founds[] = $t->getId();
 					if (count($founds)) {

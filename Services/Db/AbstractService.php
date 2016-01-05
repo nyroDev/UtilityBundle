@@ -66,4 +66,6 @@ abstract class AbstractService extends AbstractServiceSrc {
 		$this->getObjectManager()->flush();
 	}
 	
+	abstract public function getFormType();
+	
 }
