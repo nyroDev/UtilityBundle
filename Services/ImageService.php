@@ -279,6 +279,26 @@ class ImageService extends AbstractService {
 		if ($destroySrcResource)
 			imagedestroy($src);
 		
+		if (isset($config['filters']) && is_array($config['filters'])) {
+			foreach($config['filters'] as $filter) {
+				$arg1 = $arg2 = $arg3 = $arg4 = null;
+				if (is_array($filter)) {
+					$filterName = $filter[0];
+					for($i = 1; $i <= 4; $i++) {
+						if (isset($filter[$i])) {
+							$name = 'arg'.$i;
+							$$name = $filter[$i];
+						}
+					}
+				} else {
+					$filterName = $filter;
+				}
+				
+				if (defined($filterName) && strpos($filterName, 'IMG_FILTER_') === 0)
+					imagefilter($imgDst, constant($filterName), $arg1, $arg2, $arg3, $arg4);
+			}
+		}
+		
 		return $imgDst;
 	}
 	
