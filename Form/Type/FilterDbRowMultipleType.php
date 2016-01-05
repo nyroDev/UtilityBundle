@@ -36,7 +36,7 @@ class FilterDbRowMultipleType extends FilterDbRowType {
 							foreach($options['where'] as $k=>$v) {
 								if (is_int($k)) {
 									if (is_array($v)) {
-										$ret->addWhere($v[0], $v[1], $v[2]);
+										$ret->addWhere($v[0], $v[1], isset($v[2]) ? $v[2] : null);
 									} else {
 										throw new \RuntimeException('Direct where setting is not supported anymore.');
 									}
