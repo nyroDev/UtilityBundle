@@ -23,6 +23,7 @@ class FileTypeExtension extends AbstractTypeExtension {
 
 	public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
+			'currentFile'=>false,
 			'showCurrent'=>true,
 			'showDelete'=>false,
 		));
@@ -37,8 +38,8 @@ class FileTypeExtension extends AbstractTypeExtension {
      */
     public function buildView(FormView $view, FormInterface $form, array $options) {
 		$data = $form->getParent()->getData();
-		if ($data instanceof AbstractUploadable) {
-			$currentFile = $data->getWebPath($form->getName());
+		if ($options['currentFile'] || $data instanceof AbstractUploadable) {
+			$currentFile = isset($options['currentFile']) && $options['currentFile'] ? $options['currentFile'] : $data->getWebPath($form->getName());
 			if ($currentFile) {
 				$view->vars['currentFile'] = $currentFile;
 				$view->vars['showDelete'] = $options['showDelete'] && is_string($options['showDelete']) ? $options['showDelete'] : false;
