@@ -105,24 +105,27 @@ class ImageService extends AbstractService {
 		
 		if ($force || !file_exists($dest)) {
 			$imgDst = $this->resizeResource($this->createImgSrc($file), $config);
-			
-			switch($this->get('nyrodev')->getExt($dest)) {
-				case 'jpg':
-					imagejpeg($imgDst, $dest, isset($config['quality']) ? $config['quality'] : 100);
-					break;
-				case 'gif':
-					imagegif($imgDst, $dest);
-					break;
-				case 'png':
-					$quality = isset($config['quality']) ? $config['quality'] : 100;
-					if ($quality > 9)
-						$quality = round($quality / 100);
-					imagepng($imgDst, $dest, $quality);
-					break;
-			}
-			imagedestroy($imgDst);
+			$this->saveImageResource($dest, $imgDst, isset($config['quality']) ? $config['quality'] : 100);
 		}
 		return $dest;
+	}
+	
+	public function saveImageResource($dest, $img, $quality = 100) {
+		switch($this->get('nyrodev')->getExt($dest)) {
+			case 'jpg':
+				imagejpeg($img, $dest, $quality);
+				break;
+			case 'gif':
+				imagegif($img, $dest);
+				break;
+			case 'png':
+				$quality = $quality;
+				if ($quality > 9)
+					$quality = round($quality / 100);
+				imagepng($img, $dest, $quality);
+				break;
+		}
+		imagedestroy($img);
 	}
 	
 	public function resizeResource(array $imageData, array $config, $destroySrcResource = true) {
@@ -340,6 +343,71 @@ class ImageService extends AbstractService {
 		);
 	}
 	
+	public function writeMultilineTextWithLines($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $lineHeight = 1.5) {
+		$texts = explode("\n", $text);
+		foreach($texts as $t)
+			$y = $this->writeMultilineText($img, $font, $fontSize, $color, $t, $x, $y, $maxWidth, $alignement, $lineHeight);
+		return $y;
+	}
+	
+	public function writeMultilineText($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $lineHeight = 1.5) {
+		$words = preg_split('/[\s]+/', $text);
+		$string = '';
+		$tmpString = '';
+		$nbWords = count($words);
+
+		for($i = 0; $i < $nbWords; $i++) {
+			$tmpString.= $words[$i].' ';
+
+			//check size of string
+			$dim = imagettfbbox($fontSize, 0, $font, trim($tmpString));
+
+			if ($dim[4] < $maxWidth) {
+				$string = trim($tmpString);
+				$curWidth = $dim[4];
+			} else {
+				$i--;
+				$tmpString = '';
+				
+				switch($alignement) {
+					case 'L':
+						$curX = $x;
+						break;
+					case 'C':
+						$curX = $x + round(($maxWidth - $curWidth) / 2);
+						break;
+					case 'R':
+						$curX = $x + $maxWidth - $curWidth;
+						break;
+				}
+				
+				imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
+
+				$string = '';
+				$y+= abs($dim[5]) * $lineHeight;
+				$curWidth = 0;
+			} 
+		}
+
+		if ($string) {
+			switch($alignement) {
+				case 'L':
+					$curX = $x;
+					break;
+				case 'C':
+					$curX = $x + round(($maxWidth - $curWidth) / 2);
+					break;
+				case 'R':
+					$curX = $x + $maxWidth - $curWidth;
+					break;
+			}       
+			imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
+			$y+= abs($dim[5]) * $lineHeight;
+		}
+		
+		return $y;
+	}
+	
 	// From http://php.net/manual/en/function.imagecreatefromgif.php#59787
 	public function isAnimatedGif($file) {
 		$filecontents = file_get_contents($file);
@@ -372,7 +440,7 @@ class ImageService extends AbstractService {
 	 * @param string $col The hexadecimal color
 	 * @return array Numeric index (0: R, 1: V and 2: B)
 	 */
-	protected function hexa2dec($col) {
+	public function hexa2dec($col) {
 		return array(
 			base_convert(substr($col, 0, 2), 16, 10),
 			base_convert(substr($col, 2, 2), 16, 10),
