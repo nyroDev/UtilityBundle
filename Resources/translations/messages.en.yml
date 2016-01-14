@@ -4,6 +4,7 @@ date:
   shortText: "%B, %d, %Y"
   fullDate: "%A, %B, %d, %Y"
   full: "%m/%d/%Y at %I:%M %P"
+  hour: "%I:%M %P"
 login:
   errors:
     "Bad credentials": "Sorry, your email address does not match an existing account."
