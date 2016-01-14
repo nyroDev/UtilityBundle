@@ -366,7 +366,7 @@ class MainService extends AbstractService {
 	 * @return string
 	 */
 	public function formatDate(\DateTime $datetime, $format) {
-		return strftime($this->trans($format), $datetime->getTimestamp();
+		return strftime($this->trans($format), $datetime->getTimestamp());
 	}
 
 	/**
