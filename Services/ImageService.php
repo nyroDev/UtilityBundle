@@ -386,7 +386,7 @@ class ImageService extends AbstractService {
 				imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
 
 				$string = '';
-				$y+= abs($dim[5]) * $lineHeight;
+				$y+= round(abs($dim[5]) * $lineHeight);
 				$curWidth = 0;
 			} 
 		}
@@ -406,7 +406,7 @@ class ImageService extends AbstractService {
 			if ($falseBold)
 				imagettftext($img, $fontSize, 0, $curX+$falseBold, $y, $color, $font, $string);
 			imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
-			$y+= abs($dim[5]) * $lineHeight;
+			$y+= round(abs($dim[5]) * $lineHeight);
 		}
 		
 		return $y;
