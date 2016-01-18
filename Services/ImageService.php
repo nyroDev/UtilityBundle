@@ -346,29 +346,53 @@ class ImageService extends AbstractService {
 	public function writeMultilineTextWithLines($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5) {
 		$texts = explode("\n", $text);
 		foreach($texts as $t)
-			$y = $this->writeMultilineText($img, $font, $fontSize, $color, $t, $x, $y, $maxWidth, $alignement, $falseBold, $lineHeight);
+			$y = $this->writeMultilineText($img, $font, $fontSize, $color, trim($t), $x, $y, $maxWidth, $alignement, $falseBold, $lineHeight);
 		return $y;
 	}
 	
 	public function writeMultilineText($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5) {
-		$words = preg_split('/[\s]+/', $text);
-		$string = '';
-		$tmpString = '';
-		$nbWords = count($words);
+		if ($text) {
+			$words = preg_split('/[\s]+/', $text);
+			$string = '';
+			$tmpString = '';
+			$nbWords = count($words);
 
-		for($i = 0; $i < $nbWords; $i++) {
-			$tmpString.= $words[$i].' ';
+			for($i = 0; $i < $nbWords; $i++) {
+				$tmpString.= $words[$i].' ';
 
-			//check size of string
-			$dim = imagettfbbox($fontSize, 0, $font, trim($tmpString));
+				//check size of string
+				$dim = imagettfbbox($fontSize, 0, $font, trim($tmpString));
 
-			if ($dim[4] < $maxWidth) {
-				$string = trim($tmpString);
-				$curWidth = $dim[4];
-			} else {
-				$i--;
-				$tmpString = '';
-				
+				if ($dim[4] < $maxWidth) {
+					$string = trim($tmpString);
+					$curWidth = $dim[4];
+				} else {
+					$i--;
+					$tmpString = '';
+
+					switch($alignement) {
+						case 'L':
+							$curX = $x;
+							break;
+						case 'C':
+							$curX = $x + round(($maxWidth - $curWidth) / 2);
+							break;
+						case 'R':
+							$curX = $x + $maxWidth - $curWidth;
+							break;
+					}
+
+					if ($falseBold)
+						imagettftext($img, $fontSize, 0, $curX+$falseBold, $y, $color, $font, $string);
+					imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
+
+					$string = '';
+					$y+= round(abs($dim[5]) * $lineHeight);
+					$curWidth = 0;
+				} 
+			}
+
+			if ($string) {
 				switch($alignement) {
 					case 'L':
 						$curX = $x;
@@ -380,32 +404,13 @@ class ImageService extends AbstractService {
 						$curX = $x + $maxWidth - $curWidth;
 						break;
 				}
-				
 				if ($falseBold)
 					imagettftext($img, $fontSize, 0, $curX+$falseBold, $y, $color, $font, $string);
 				imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
-
-				$string = '';
 				$y+= round(abs($dim[5]) * $lineHeight);
-				$curWidth = 0;
-			} 
-		}
-
-		if ($string) {
-			switch($alignement) {
-				case 'L':
-					$curX = $x;
-					break;
-				case 'C':
-					$curX = $x + round(($maxWidth - $curWidth) / 2);
-					break;
-				case 'R':
-					$curX = $x + $maxWidth - $curWidth;
-					break;
 			}
-			if ($falseBold)
-				imagettftext($img, $fontSize, 0, $curX+$falseBold, $y, $color, $font, $string);
-			imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
+		} else {
+			$dim = imagettfbbox($fontSize, 0, $font, '-');
 			$y+= round(abs($dim[5]) * $lineHeight);
 		}
 		
