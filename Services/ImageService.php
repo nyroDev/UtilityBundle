@@ -588,7 +588,13 @@ class ImageService extends AbstractService {
 	 * @param boolean $absolutizeUrl Indicates if the src should be absolutized
 	 */
 	protected function resizeImagesInHtmlDom(\DOMElement $node, $absolutizeUrl = false) {
-		if (strtolower($node->tagName) == 'img' && ($node->hasAttribute('width') || $node->hasAttribute('height')) && $node->hasAttribute('src') && strpos($node->getAttribute('src'), 'http') !== 0) {
+		if (
+				strtolower($node->tagName) == 'img' &&
+				(
+					($node->hasAttribute('width') && strpos($node->getAttribute('width'), '%') === false) ||
+					($node->hasAttribute('height') && strpos($node->getAttribute('height'), '%') === false)
+				) &&
+				$node->hasAttribute('src') && strpos($node->getAttribute('src'), 'http') !== 0) {
 			// We have everything to resize the imagen let's dot it
 			$w = $node->hasAttribute('width') ? $node->getAttribute('width') : null;
 			$h = $node->hasAttribute('height') ? $node->getAttribute('height') : null;
