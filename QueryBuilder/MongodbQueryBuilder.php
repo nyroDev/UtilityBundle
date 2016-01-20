@@ -16,32 +16,8 @@ class MongodbQueryBuilder extends AbstractQueryBuilder {
 	public function getNewQueryBuilder($complete = false) {
 		$queryBuilder = $this->or->createQueryBuilder();
 		
-		if (isset($this->config['where'])) {
-			foreach($this->config['where'] as $where) {
-				list($field, $transformer, $value, $forceType) = $where;
-				
-				if ($field === self::WHERE_OR) {
-					$exprOr = $queryBuilder->expr();
-					$nbOr = 0;
-					foreach($transformer as $whereOr) {
-						$fieldOr = $whereOr[0];
-						$transformerOr = $whereOr[1];
-						$valueOr = isset($whereOr[2]) ? $whereOr[2] : null;
-						$forceTypeOr = isset($whereOr[3]) ? $whereOr[3] : null;
-
-						$expr = $queryBuilder->expr();
-						if ($this->applyFilter($expr, $fieldOr, $transformerOr, $valueOr, $queryBuilder)) {
-							$exprOr->addOr($expr);
-							$nbOr++;
-						}
-					}
-					if ($nbOr)
-						$queryBuilder->addAnd($exprOr);
-				} else {
-					$this->applyFilter($queryBuilder, $field, $transformer, $value, $queryBuilder);
-				}
-			}
-		}
+		if (isset($this->config['where']))
+			$this->applyFilterArr($queryBuilder, $this->config['where'], $queryBuilder);
 		
 		if (isset($this->config['joinWhere'])) {
 			foreach($this->config['joinWhere'] as $where) {
@@ -83,6 +59,46 @@ class MongodbQueryBuilder extends AbstractQueryBuilder {
 		}
 		
 		return $queryBuilder;
+	}
+	
+	protected function applyFilterArr($object, array $whereArr, $queryBuilder) {
+		$nbWhere = 0;
+		foreach($whereArr as $where) {
+			list($field, $transformer, $value, $forceType) = array_merge($where, array_fill(0, 4, false));
+
+			if ($field === self::WHERE_OR) {
+				$exprOr = $queryBuilder->expr();
+				$nbOr = 0;
+				foreach($transformer as $whereOr) {
+					$fieldOr = $whereOr[0];
+					$transformerOr = $whereOr[1];
+					if ($fieldOr === self::WHERE_SUB) {
+						$expr = $queryBuilder->expr();
+						if ($this->applyFilterArr($expr, $transformerOr, $queryBuilder)) {
+							$exprOr->addOr($expr);
+							$nbOr++;
+						}
+					} else {
+						$valueOr = isset($whereOr[2]) ? $whereOr[2] : null;
+						$forceTypeOr = isset($whereOr[3]) ? $whereOr[3] : null;
+
+						$expr = $queryBuilder->expr();
+						if ($this->applyFilter($expr, $fieldOr, $transformerOr, $valueOr, $queryBuilder)) {
+							$exprOr->addOr($expr);
+							$nbOr++;
+						}
+					}
+				}
+				if ($nbOr) {
+					$object->addAnd($exprOr);
+					$nbWhere++;
+				}
+			} else {
+				if ($this->applyFilter($object, $field, $transformer, $value, $queryBuilder))
+					$nbWhere++;
+			}
+		}
+		return $nbWhere;
 	}
 	
 	protected function applyFilter($object, $field, $transformer, $value, $queryBuilder) {

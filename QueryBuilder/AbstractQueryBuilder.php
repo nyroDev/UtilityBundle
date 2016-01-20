@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Exception\RuntimeException;
 abstract class AbstractQueryBuilder {
 
 	const WHERE_OR = '__OR__';
+	const WHERE_SUB = '__SUB__';
 	
 	const OPERATOR_EQUALS = '=';
 	const OPERATOR_GT = '>';
