@@ -13,8 +13,11 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 		$queryBuilder = $this->or->createQueryBuilder($alias);
 		
 		$this->prmNb = 0;
-		if (isset($this->config['where']))
-			$this->applyFilterArr($queryBuilder, $alias, $this->config['where']);
+		if (isset($this->config['where'])) {
+			$filters = $this->applyFilterArr($alias, $this->config['where'], $queryBuilder);
+			foreach($filters as $f)
+				$queryBuilder->andWhere($f);
+		}
 		
 		if (isset($this->config['joinWhere'])) {
 			foreach($this->config['joinWhere'] as $where) {
@@ -57,66 +60,58 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 				->select('COUNT(cpt.id)')
 				->andWhere('cpt.id = ANY('.$queryBuilder->getDQL().')')
 				->setParameters($queryBuilder->getParameters())
-				->getQuery()->getSingleScalarResult();
+				->getQuery()
+				->getSingleScalarResult();
 	}
 
-	protected function applyFilterArr($object, $alias, array $whereArr, $queryBuilder) {
-		$nbWhere = 0;
+	protected function applyFilterArr($alias, array $whereArr, $queryBuilder) {
+		$filters = array();
 		foreach($whereArr as $where) {
 			list($field, $transformer, $value, $forceType) = array_merge($where, array_fill(0, 4, false));
 
 			if ($field === self::WHERE_OR) {
-				$exprOr = $queryBuilder->expr();
-				$nbOr = 0;
+				$tmpOr = array();
 				
 				foreach($transformer as $whereOr) {
 					$fieldOr = $whereOr[0];
 					$transformerOr = $whereOr[1];
 					if ($fieldOr === self::WHERE_SUB) {
-						$expr = $queryBuilder->expr();
-						if ($this->applyFilterArr($expr, $alias, $transformerOr, $queryBuilder)) {
-							$exprOr->orWhere($expr);
-							$nbOr++;
-						}
+						$tmpSub = $this->applyFilterArr($alias, $transformerOr, $queryBuilder);
+						if (count($tmpSub))
+							$tmpOr[] = implode(' AND ', $tmpSub);
 					} else {
 						$valueOr = isset($whereOr[2]) ? $whereOr[2] : null;
 						$forceTypeOr = isset($whereOr[3]) ? $whereOr[3] : null;
 
-						$expr = $queryBuilder->expr();
-						if ($this->applyFilter($expr, $alias, $fieldOr, $transformerOr, $valueOr, $forceTypeOr, $queryBuilder)) {
-							$exprOr->orWhere($expr);
-							$nbOr++;
-						}
+						$tmpOr[] = $this->applyFilter($alias, $fieldOr, $transformerOr, $valueOr, $forceTypeOr, $queryBuilder);
 					}
 				}
-				
-				if ($nbOr) {
-					$object->andWhere($exprOr);
-					$nbWhere++;
-				}
+				$tmpOr = array_filter($tmpOr);
+				if (count($tmpOr))
+					$filters[] = implode(' OR ', $tmpOr);
 			} else {
-				if ($this->applyFilter($object, $alias, $field, $transformer, $value, $forceType, $queryBuilder))
-					$nbWhere++;
+				$filters[] = $this->applyFilter($alias, $field, $transformer, $value, $forceType, $queryBuilder);
 			}
 		}
-		$nbWhere++;
+		return array_filter($filters);
 	}
 	
-	protected function applyFilter($object, $alias, $field, $transformer, $value, $forceType, $queryBuilder) {
+	protected function applyFilter($alias, $field, $transformer, $value, $forceType, $queryBuilder) {
+		$ret = null;
 		switch($transformer) {
 			case self::OPERATOR_IS_NULL:
 			case self::OPERATOR_IS_NOT_NULL:
-				$object->andWhere($alias.'.'.$field.' '.$transformer);
+				$ret = $alias.'.'.$field.' '.$transformer;
 				break;
 			case self::OPERATOR_CONTAINS:
 				$prm = 'param_'.$this->prmNb;
-				$object->andWhere($alias.'.'.$field.' LIKE :'.$prm);
+				$ret = $alias.'.'.$field.' LIKE :'.$prm;
 				$queryBuilder->setParameter($prm, '%'.$value.'%', $forceType);
 				$this->prmNb++;
 				break;
 			case self::OPERATOR_LIKEDATE:
 				$prm = 'param_'.$this->prmNb;
-				$object->andWhere($alias.'.'.$field.' LIKE :'.$prm);
+				$ret = $alias.'.'.$field.' LIKE :'.$prm;
 				$queryBuilder->setParameter($prm, $value.'%', $forceType);
 				$this->prmNb++;
 				break;
@@ -130,11 +125,13 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 					$transformer = 'LIKE';
 					$value = $value.'%';
 				}
-				$object->andWhere($alias.'.'.$field.' '.$transformer.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : ''));
+				/* @var $object \Doctrine\ORM\Query\Expr */
+				$ret = $alias.'.'.$field.' '.$transformer.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : '');
 				$queryBuilder->setParameter($prm, $value.'%', $forceType);
 				$this->prmNb++;
 				break;
 		}
+		return $ret;
 	}
 
 }
