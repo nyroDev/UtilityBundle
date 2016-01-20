@@ -2,7 +2,7 @@ date:
   long: "%B, %#d, %Y at %I:%M %P"
   short: "%m/%d/%Y"
   shortText: "%B, %d, %Y"
-  fullDate: "%A, %B, %d, %Y"
+  fullDate: "%A, %B %d, %Y"
   full: "%m/%d/%Y at %I:%M %P"
   hour: "%I:%M %P"
 login:
