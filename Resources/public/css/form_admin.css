@@ -93,6 +93,11 @@ select {
 	text-decoration: none;
 	background: #333;
 }
+.form_button button[disabled], .form_button button.disabled, .button[disabled], .button.disabled {
+	opacity: 0.6;
+    background: #000;
+	cursor: not-allowed;
+}
 .form_errors, .form_row .form_errors {
     list-style-type: none;
     color: red;
