@@ -352,11 +352,25 @@ class ImageService extends AbstractService {
 	
 	public function writeMultilineText($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5) {
 		if ($text) {
-			$words = preg_split('/[\s]+/', $text);
+			$rawWords = preg_split('/[\s]+/', $text);
 			$string = '';
 			$tmpString = '';
+			
+			// Start by detecting and splitting word larger than maxwidth
+			$words = array();
+			foreach($rawWords as $word) {
+				$dim = imagettfbbox($fontSize, 0, $font, trim($word));
+				if ($dim[4] > $maxWidth) {
+					$ln = strlen($word);
+					$ratio = $dim[4] / $maxWidth;
+					$lnSplit = floor($ln / $ratio) - 2;
+					$words = array_merge($words, str_split(trim($word), $lnSplit));
+				} else {
+					$words[] = $word;
+				}
+			}
+			
 			$nbWords = count($words);
-
 			for($i = 0; $i < $nbWords; $i++) {
 				$tmpString.= $words[$i].' ';
 
@@ -389,7 +403,7 @@ class ImageService extends AbstractService {
 					$string = '';
 					$y+= round(abs($dim[5]) * $lineHeight);
 					$curWidth = 0;
-				} 
+				}
 			}
 
 			if ($string) {
