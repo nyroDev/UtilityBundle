@@ -35,6 +35,8 @@ services:
     nyrodev_form:
         class: %nyrodev_utility.formService.class%
         arguments: ['@service_container']
+        tags:
+          - { name: templating.helper, alias: nyrodev_form }
     nyrodev_formFilter:
         class: %nyrodev_utility.formFilterService.class%
         arguments: ['@service_container']

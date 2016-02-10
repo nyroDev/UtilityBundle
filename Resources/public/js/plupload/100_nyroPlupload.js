@@ -15,7 +15,8 @@ jQuery(function($) {
 					
 				var list = $('<div id="pluploadList'+myPluploadNb+'" class="pluploadList" />').appendTo(cont);
 				
-				curOpts.file_data_name = me.attr('name');
+				if (!curOpts.file_data_name)
+					curOpts.file_data_name = me.attr('name');
 				curOpts.container = 'pluploadCont'+myPluploadNb;
 				curOpts.drop_element = 'pluploadCont'+myPluploadNb;
 				curOpts.browse_button = 'pluploadBrowse'+myPluploadNb;
@@ -33,7 +34,7 @@ jQuery(function($) {
 						var curFile = files[i],
 							name = curFile.name;
 						if (name.length > 30)
-							name = name.substr(0, 30) + '...'
+							name = name.substr(0, 30) + '...';
 						curFiles[curFile.id] = $('<div>'+name+' (' + plupload.formatSize(curFile.size) + ') - <strong>'+curOpts.texts.waiting+'</strong><div class="pluploadProgress"><div class="pluploadProgressBar"></div></div><a href="#" class="pluploadCancel" rel="'+curFile.id+'">Cancel</a></div>');
 						curFiles[curFile.id].find('.pluploadCancel').on('click', function(e) {
 							e.preventDefault();
@@ -75,7 +76,7 @@ jQuery(function($) {
 							curFiles[file.id].remove();
 							curFiles[file.id] = undefined;
 							delete(curFiles[file.id]);
-						})
+						});
 					}
 				});
 				uploader.bind('FilesRemoved', function(up, files) {
@@ -87,7 +88,7 @@ jQuery(function($) {
 								curFiles[file.id].remove();
 								curFiles[file.id] = undefined;
 								delete(curFiles[file.id]);
-							})
+							});
 						}
 					}
 				});
@@ -118,7 +119,7 @@ jQuery(function($) {
 	
 	$('form.pluploadInit').each(function() {
 		var me = $(this).addClass('pluploadForm'),
-			input = me.find('input[type="file"]')
+			input = me.find('input[type="file"]');
 		input.nyroPlupload({
 			showCancelAll: true,
 			addFormVars: true,
