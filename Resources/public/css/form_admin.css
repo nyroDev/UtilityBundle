@@ -236,10 +236,10 @@ select {
 .form_row_tinymce .mce-tinymce, .form_row_rawhtml .form_rawhtml {
     float: left;
 }
-.form_row_date div, .form_row_datetime div {
+.form_row_date div, .form_row_datetime div, .form_row_time div {
     display: inline;
 }
-.form_row_date select, .form_row_datetime select {
+.form_row_date select, .form_row_datetime select, .form_row_time select {
     width: auto;
 }
 .form_row_filter_range_date div {
