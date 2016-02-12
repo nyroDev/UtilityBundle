@@ -24,7 +24,7 @@ class FilterRangeDateType extends FilterType {
 			$value = array_filter($this->applyValue($data['value']));
 			
 			foreach($value as $k=>$val)
-				$queryBuilder->addWhere($name, $k == 'start' ? AbstractQueryBuilder::OPERATOR_GTE : AbstractQueryBuilder::OPERATOR_LTE, $val, \PDO::PARAM_STR);
+				$queryBuilder->addWhere($name, $k == 'start' ? AbstractQueryBuilder::OPERATOR_GTE : AbstractQueryBuilder::OPERATOR_LTE, $val);
 		}
 		
 		return $queryBuilder;
@@ -32,9 +32,9 @@ class FilterRangeDateType extends FilterType {
 	
 	public function applyValue($value) {
 		if (isset($value['start']) && is_object($value['start']))
-			$value['start'] = $value['start']->format('Y-m-d');
+			$value['start']->setTime(0, 0, 0);
 		if (isset($value['end']) && is_object($value['end']))
-			$value['end'] = $value['end']->format('Y-m-d');
+			$value['end']->setTime(23, 59, 59);
 		return $value;
 	}
 	

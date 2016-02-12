@@ -248,3 +248,6 @@ select {
 .form_row_filter_range_date div label {
 	width: 46px;
 }
+.form_row_filter_range_date input {
+	width: 6em;
+}

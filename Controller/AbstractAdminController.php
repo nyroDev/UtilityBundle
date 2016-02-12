@@ -23,7 +23,7 @@ abstract class AbstractAdminController extends AbstractController {
 		$nbPerPage = $this->container->hasParameter($nbPerPageParam) ?
 					$this->container->getParameter($nbPerPageParam) :
 					$this->container->getParameter('nyrodev_utility.admin.nbPerPage');
-		
+		$nbPerPage = 2;
 		$tmpList = $this->getListElements($request, $repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder);
 		$order = $tmpList['order'];
 		$sort = $tmpList['sort'];
