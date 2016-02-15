@@ -342,13 +342,22 @@ class MainService extends AbstractService {
 	 * Check if the current URL is matching the desired URL and return a redirect response if not
 	 *
 	 * @param string $url The desired URL
+	 * @param array $allowParams List of allowed parameters
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|boolean
 	 */
-	public function redirectIfNotUrl($url) {
+	public function redirectIfNotUrl($url, array $allowParams = array()) {
 		if ($url != $this->getRequest()->getRequestUri()) {
 			$redirect = true;
 			try {
 				$tmp = parse_url($this->getRequest()->getRequestUri());
+				if (isset($tmp['query'])) {
+					parse_str($tmp['query'], $args);
+					foreach($allowParams as $k) {
+						if (isset($args[$k]))
+							$newArgs[$k] = $args[$k];
+					}
+					$redirect = count($newArgs) != count($args);
+				}
 				if (isset($tmp['path']) && $tmp['path'] == $url)
 					$redirect = false;
 			} catch (\Exception $e) {}
