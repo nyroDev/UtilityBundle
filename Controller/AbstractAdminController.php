@@ -18,13 +18,13 @@ abstract class AbstractAdminController extends AbstractController {
 	const ADD = 'add';
 	const EDIT = 'edit';
 
-	protected function createList(Request $request, $repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false) {
+	protected function createList(Request $request, $repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false, array $filterDefaults = array()) {
 		$nbPerPageParam = 'admin.nbPerPage.'.$route;
 		$nbPerPage = $this->container->hasParameter($nbPerPageParam) ?
 					$this->container->getParameter($nbPerPageParam) :
 					$this->container->getParameter('nyrodev_utility.admin.nbPerPage');
 		
-		$tmpList = $this->getListElements($request, $repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder);
+		$tmpList = $this->getListElements($request, $repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder, $filterDefaults);
 		$order = $tmpList['order'];
 		$sort = $tmpList['sort'];
 		$filter = $tmpList['filter'];
@@ -127,10 +127,10 @@ abstract class AbstractAdminController extends AbstractController {
 		);
 	}
 	
-	protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null) {
+	protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, array $filterDefaults = array()) {
 		$filter = null;
 		if (!is_null($filterType))
-			$filter = $this->createForm($filterType, array(), array('csrf_protection'=>false, 'attr'=>array('class'=>'filterForm')));
+			$filter = $this->createForm($filterType, $filterDefaults, array('csrf_protection'=>false, 'attr'=>array('class'=>'filterForm')));
 		
 		$page = $request->query->get('page', $request->getSession()->get('admin_list_'.$route.'_page', 1));
 		if (!$page)
