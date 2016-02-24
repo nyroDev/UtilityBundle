@@ -356,6 +356,8 @@ class ImageService extends AbstractService {
 			$string = '';
 			$tmpString = '';
 			
+			$dimLineHeight = imagettfbbox($fontSize, 0, $font, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+			
 			// Start by detecting and splitting word larger than maxwidth
 			$words = array();
 			foreach($rawWords as $word) {
@@ -401,7 +403,7 @@ class ImageService extends AbstractService {
 					imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
 
 					$string = '';
-					$y+= round(abs($dim[5]) * $lineHeight);
+					$y+= round(abs($dimLineHeight[5]) * $lineHeight);
 					$curWidth = 0;
 				}
 			}
@@ -421,7 +423,7 @@ class ImageService extends AbstractService {
 				if ($falseBold)
 					imagettftext($img, $fontSize, 0, $curX+$falseBold, $y, $color, $font, $string);
 				imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
-				$y+= round(abs($dim[5]) * $lineHeight);
+				$y+= round(abs($dimLineHeight[5]) * $lineHeight);
 			}
 		} else {
 			$dim = imagettfbbox($fontSize, 0, $font, '-');
