@@ -58,6 +58,11 @@ services:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
+    nyrodev.config.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\ConfigType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
     nyrodev.rawhtml.form.type:
         class: NyroDev\UtilityBundle\Form\Type\RawHtmlType
         arguments: ['@service_container']
