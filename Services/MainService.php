@@ -372,10 +372,11 @@ class MainService extends AbstractService {
 	 *
 	 * @param \DateTime $datetime
 	 * @param string $format Format translation ident
+	 * @param boolean $useOffset Use offset of datetime
 	 * @return string
 	 */
-	public function formatDate(\DateTime $datetime, $format) {
-		return strftime($this->trans($format), $datetime->getTimestamp() + $datetime->getOffset());
+	public function formatDate(\DateTime $datetime, $format, $useOffset = false) {
+		return strftime($this->trans($format), $datetime->getTimestamp() + ($useOffset ? $datetime->getOffset() : 0));
 	}
 
 	/**
