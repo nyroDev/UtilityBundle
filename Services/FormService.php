@@ -20,7 +20,7 @@ class FormService extends AbstractService {
 		));
 	}
 	
-	public function getPluploadAttrs($filters = 'images') {
+	public function getPluploadAttrs($filters = 'images', $pluploadKey = 'plupload_') {
 		if ($filters == 'images') {
 			$filters = array(
 				array(
@@ -29,18 +29,25 @@ class FormService extends AbstractService {
 				)
 			);
 		}
-		return array(
+		
+		$ret = array(
 			'class'=>'pluploadInit',
-			'data-plupload_browse'=>$this->trans('nyrodev.plupload.browse'),
-			'data-plupload_waiting'=>$this->trans('nyrodev.plupload.waiting'),
-			'data-plupload_error'=>$this->trans('nyrodev.plupload.error'),
-			'data-plupload_cancel'=>$this->trans('nyrodev.plupload.cancel'),
-			'data-plupload_complete'=>$this->trans('nyrodev.plupload.complete'),
-			'data-plupload_cancelall'=>$this->trans('nyrodev.plupload.cancelAll'),
-			'data-plupload_filters'=>json_encode($filters),
-			'data-plupload_swf'=>$this->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.swf'),
-			'data-plupload_xap'=>$this->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.xap'),
+			'data-'.$pluploadKey.'browse'=>$this->trans('nyrodev.plupload.browse'),
+			'data-'.$pluploadKey.'waiting'=>$this->trans('nyrodev.plupload.waiting'),
+			'data-'.$pluploadKey.'error'=>$this->trans('nyrodev.plupload.error'),
+			'data-'.$pluploadKey.'cancel'=>$this->trans('nyrodev.plupload.cancel'),
+			'data-'.$pluploadKey.'complete'=>$this->trans('nyrodev.plupload.complete'),
+			'data-'.$pluploadKey.'cancelall'=>$this->trans('nyrodev.plupload.cancelAll'),
+			'data-'.$pluploadKey.'filters'=>json_encode($filters),
+			'data-'.$pluploadKey.'swf'=>$this->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.swf'),
+			'data-'.$pluploadKey.'xap'=>$this->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.xap'),
 		);
+		
+		$pluploadMaxFileSize = $this->getParameter('nyroDev_utility.pluploadMaxFileSize');
+		if ($pluploadMaxFileSize)
+			$ret['data-'.$pluploadKey.'max_file_size'] = $pluploadMaxFileSize;
+		
+		return $ret;
 	}
 
 }

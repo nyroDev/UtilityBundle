@@ -38,13 +38,15 @@ class NyroDevUtilityExtension extends Extension
 			$definition->addTag('translation.loader', array('alias'=>'db'));
 			$container->setDefinition('nyrodev_utility.dbLoader', $definition);
 		}
+		
+		$container->setParameter('nyroDev_utility.pluploadMaxFileSize', isset($config['pluploadMaxFileSize']) && $config['pluploadMaxFileSize'] ? $config['pluploadMaxFileSize'] : false);
 
 		if (isset($config['browser']) && is_array($config['browser'])) {
 			foreach($config['browser'] as $k=>$v) {
 				$container->setParameter('nyroDev_utility.browser.'.$k, $v);
 			}
 		}
-
+		
 		if (isset($config['share']) && is_array($config['share'])) {
 			foreach($config['share'] as $k=>$v) {
 				$container->setParameter('nyroDev_utility.share.'.$k, $v);
