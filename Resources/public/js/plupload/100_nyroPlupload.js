@@ -1,5 +1,25 @@
 jQuery(function($) {
-	var pluploadNb = 0;
+	var pluploadNb = 0,
+		searchFuncOrRegexp = function(data) {
+			if (typeof data == 'string') {
+				if (data.indexOf('function(') === 0) {
+					eval('window.tinyval = '+data+';');
+					data = window.tinyval;
+					delete(window.tinyval);
+				} else if (data.indexOf('reg/') === 0 && data.lastIndexOf('/') === data.length - 1) {
+					data = new RegExp(data.substring(4, data.length - 1));
+				}
+			} else if (typeof data == 'object') {
+				var tmp = Object.prototype.toString.call(data) == '[object Array]' ? [] : {};
+				$.each(data, function(k, v) {
+					tmp[k] = searchFuncOrRegexp(v);
+				});
+				data = tmp;
+			}
+			return data;
+		},
+		pluploadKey = 'plupload_';
+
 	$.fn.extend({
 		nyroPlupload: function(opts) {
 			return this.each(function() {
@@ -114,30 +134,44 @@ jQuery(function($) {
 				uploader.init();
 				me.data('nyroPluploader', uploader);
 			});
+		},
+		nyroPluploadDataSearch: function(defOpts, pKey) {
+			if (!defOpts)
+				defOpts = {};
+			pKey = pKey || pluploadKey;
+			var me = $(this).first(),
+				opts = $.extend(true, {}, defOpts, {
+					showCancelAll: true,
+					addFormVars: true,
+					hideDelay: 750,
+					filters: me.data(pKey+'filters'),
+					flash_swf_url: me.data(pKey+'swf'),
+					silverlight_xap_url: me.data(pKey+'xap'),
+					texts: {
+						browse: me.data(pKey+'browse'),
+						waiting: me.data(pKey+'waiting'),
+						error: me.data(pKey+'error'),
+						cancel: me.data(pKey+'cancel'),
+						complete: me.data(pKey+'complete'),
+						cancelAll: me.data(pKey+'cancelall')
+					},
+					onAllComplete: function() {
+						document.location.reload();
+					}
+				}),
+				pKeyLn = pKey.length;
+			$.each(me.data(), function(i, e) {
+				if (i.indexOf(pKey) == 0) {
+					opts[i.substring(pKeyLn)] = searchFuncOrRegexp(e);
+				}
+			});
+			return opts;
 		}
 	});
 	
 	$('form.pluploadInit').each(function() {
 		var me = $(this).addClass('pluploadForm'),
 			input = me.find('input[type="file"]');
-		input.nyroPlupload({
-			showCancelAll: true,
-			addFormVars: true,
-			hideDelay: 750,
-			filters: me.data('plupload_filters'),
-			flash_swf_url: me.data('plupload_swf'),
-			silverlight_xap_url: me.data('plupload_xap'),
-			texts: {
-				browse: me.data('plupload_browse'),
-				waiting: me.data('plupload_waiting'),
-				error: me.data('plupload_error'),
-				cancel: me.data('plupload_cancel'),
-				complete: me.data('plupload_complete'),
-				cancelAll: me.data('plupload_cancelall')
-			},
-			onAllComplete: function() {
-				document.location.reload();
-			}
-		});
+		input.nyroPlupload(me.nyroPluploadDataSearch());
 	});
 });
