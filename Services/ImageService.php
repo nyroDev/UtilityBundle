@@ -379,7 +379,7 @@ class ImageService extends AbstractService {
 				//check size of string
 				$dim = imagettfbbox($fontSize, 0, $font, trim($tmpString));
 
-				if ($dim[4] < $maxWidth) {
+				if ($dim[4] <= $maxWidth) {
 					$string = trim($tmpString);
 					$curWidth = $dim[4];
 				} else {
