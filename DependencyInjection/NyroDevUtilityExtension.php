@@ -27,6 +27,7 @@ class NyroDevUtilityExtension extends Extension
 		$container->setParameter('nyroDev_utility.db_driver', $config['db_driver']);
 		$container->setParameter('nyroDev_utility.model_manager_name', $config['model_manager_name']);
 
+		$container->setParameter('nyroDev_utility.dateFormatUseOffsetDefault', isset($config['dateFormatUseOffsetDefault']) && $config['dateFormatUseOffsetDefault']);
 		$container->setParameter('nyroDev_utility.setLocale', isset($config['setLocale']) && $config['setLocale']);
 		$container->setParameter('nyroDev_utility.setContentLanguageResponse', isset($config['setContentLanguageResponse']) && $config['setContentLanguageResponse']);
 		$container->setParameter('nyroDev_utility.translationDb', isset($config['translationDb']) && $config['translationDb'] ? $config['translationDb'] : false);

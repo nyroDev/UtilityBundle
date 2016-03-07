@@ -376,6 +376,8 @@ class MainService extends AbstractService {
 	 * @return string
 	 */
 	public function formatDate(\DateTime $datetime, $format, $useOffset = false) {
+		if (!$useOffset)
+			$useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');
 		return strftime($this->trans($format), $datetime->getTimestamp() + ($useOffset ? $datetime->getOffset() : 0));
 	}
 
