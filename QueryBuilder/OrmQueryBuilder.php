@@ -127,7 +127,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder {
 				}
 				/* @var $object \Doctrine\ORM\Query\Expr */
 				$ret = $alias.'.'.$field.' '.$transformer.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : '');
-				$queryBuilder->setParameter($prm, $value.'%', $forceType);
+				$queryBuilder->setParameter($prm, $value, $forceType);
 				$this->prmNb++;
 				break;
 		}
