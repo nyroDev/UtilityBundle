@@ -466,6 +466,8 @@ class ImageService extends AbstractService {
 	 * @return array Numeric index (0: R, 1: V and 2: B)
 	 */
 	public function hexa2dec($col) {
+		if (substr($col, 0, 1) === '#')
+			$col = substr($col, 1);
 		return array(
 			base_convert(substr($col, 0, 2), 16, 10),
 			base_convert(substr($col, 2, 2), 16, 10),
