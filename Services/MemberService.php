@@ -14,7 +14,7 @@ class MemberService extends AbstractService {
 	 * @return string|Entity
 	 */
 	public function getUser() {
-		return $this->get('security.token_storage')->getToken()->getUser();
+		return $this->get('security.token_storage')->getToken() ? $this->get('security.token_storage')->getToken()->getUser() : null;
 	}
 	
 	/**
