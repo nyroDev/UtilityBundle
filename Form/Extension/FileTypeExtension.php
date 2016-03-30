@@ -24,6 +24,7 @@ class FileTypeExtension extends AbstractTypeExtension {
 	public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
 			'currentFile'=>false,
+			'currentFileUrl'=>false,
 			'showCurrent'=>true,
 			'showDelete'=>false,
 		));
@@ -42,6 +43,7 @@ class FileTypeExtension extends AbstractTypeExtension {
 			$currentFile = isset($options['currentFile']) && $options['currentFile'] ? $options['currentFile'] : $data->getWebPath($form->getName());
 			if ($currentFile) {
 				$view->vars['currentFile'] = $currentFile;
+				$view->vars['currentFileUrl'] = isset($options['currentFileUrl']) && $options['currentFileUrl'] ? $options['currentFileUrl'] : false;
 				$view->vars['showDelete'] = $options['showDelete'] && is_string($options['showDelete']) ? $options['showDelete'] : false;
 			}
 		}
