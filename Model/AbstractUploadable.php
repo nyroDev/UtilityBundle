@@ -175,7 +175,7 @@ abstract class AbstractUploadable {
 					if ($file['sourceIsContent']) {
 						$fs->dumpFile($rootDir.'/'.$this->getFilePath($field), $file['source']);
 					} else {
-						$fs->copy($rootDir.'/'.$this->getFilePath($field), $file['source']);
+						$fs->copy($file['source'], $rootDir.'/'.$this->getFilePath($field));
 					}
 				}
 
