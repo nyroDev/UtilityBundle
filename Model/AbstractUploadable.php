@@ -142,7 +142,7 @@ abstract class AbstractUploadable {
 	protected function getNewFilenameInDir($dir, $originalName, $extension = null) {
 		$value = $originalName;
 		if ($this->service) {
-			$this->service->getUniqFileName($dir, $originalName);
+			$value = $this->service->getUniqFileName($dir, $originalName);
 		} else {
 			$fs = new Filesystem();
 			
