@@ -166,16 +166,17 @@ abstract class AbstractUploadable {
 			$file = isset($this->directs[$field]) ? $this->directs[$field] : $this->$field;
 			if (!is_null($file)) {
 				$rootDir = $this->getFileConfig($field, AbstractUploadable::CONFIG_ROOTDIR);
+				$fullPath = $rootDir.'/'.$this->getFilePath($field);
 				if ($file instanceof UploadedFile) {
-					$file->move($rootDir, $this->getFilePath($field));
+					$file->move(dirname($fullPath), basename($fullPath));
 				} else {
 					$fs = new Filesystem();
 					if (!$fs->exists($rootDir))
 						$fs->mkdir($rootDir);
 					if ($file['sourceIsContent']) {
-						$fs->dumpFile($rootDir.'/'.$this->getFilePath($field), $file['source']);
+						$fs->dumpFile($fullPath, $file['source']);
 					} else {
-						$fs->copy($file['source'], $rootDir.'/'.$this->getFilePath($field));
+						$fs->copy($file['source'], $fullPath);
 					}
 				}
 
