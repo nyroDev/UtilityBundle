@@ -4,6 +4,7 @@ namespace NyroDev\UtilityBundle\Model;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractUploadable {
 	
@@ -14,6 +15,11 @@ abstract class AbstractUploadable {
 	const PATH_ORIGINAL = 'original';
 	const PATH_ABSOLUTE = 'absolute';
 	const PATH_WEB = 'web';
+	
+	const FILEPATH_REMOVE = 'remove';
+	const FILEPATH_DIRECT = 'direct';
+	const FILEPATH_UPLOAD = 'upload';
+	const FILEPATH_PREUPLOAD = 'preupload';
 	
 	/**
 	 *
@@ -58,14 +64,14 @@ abstract class AbstractUploadable {
 		return $this->getFilePath($field, AbstractUploadable::PATH_ABSOLUTE);
 	}
 	
-	public function setFilePath($field, $value) {
+	public function setFilePath($field, $value, $step) {
 		$accessor = PropertyAccess::createPropertyAccessor();
 		$accessor->setValue($this, $this->getFileConfig($field, AbstractUploadable::CONFIG_FIELD), $value);
 	}
 	
 	public function removeFile($field) {
 		$this->removeFileReal($this->getFilePath($field, AbstractUploadable::PATH_ABSOLUTE));
-		$this->setFilePath($field, null);
+		$this->setFilePath($field, null, self::FILEPATH_REMOVE);
 	}
 
 	public function getFileConfig($field, $config) {
@@ -97,7 +103,7 @@ abstract class AbstractUploadable {
 			$value = 'initial';
 		}
 
-		$this->setFilePath($field, $value);
+		$this->setFilePath($field, $value, self::FILEPATH_DIRECT);
 	}
 	
 	protected function setUploadFile($field, UploadedFile $file = null) {
@@ -111,7 +117,7 @@ abstract class AbstractUploadable {
 			$value = 'initial';
 		}
 
-		$this->setFilePath($field, $value);
+		$this->setFilePath($field, $value, self::FILEPATH_UPLOAD);
 	}
 	
 	public function preUpload() {
@@ -120,19 +126,39 @@ abstract class AbstractUploadable {
 			if (!is_null($file)) {
 				$value = null;
 				if ($file instanceof UploadedFile) {
-					if ($this->service) {
-						$value = $this->service->getUniqFileName($this->getFileConfig($field, AbstractUploadable::CONFIG_ROOTDIR), $file->getClientOriginalName());
-					} else {
-						$filename = sha1(uniqid(mt_rand(), true));
-						$value = $filename.'.'.$file->guessExtension();
-					}
+					$value = $this->getNewFilename($field, $file->getClientOriginalName(), $file->guessExtension());
 				} else {
-					$value = $this->service->getUniqFileName($this->getFileConfig($field, AbstractUploadable::CONFIG_ROOTDIR), $file['filename']);
+					$value = $this->getNewFilename($field, $file['filename']);
 				}
-				
-				$this->setFilePath($field, $value);
+				$this->setFilePath($field, $value, self::FILEPATH_PREUPLOAD);
 			}
 		}
+	}
+	
+	protected function getNewFilename($field, $originalName, $extension = null) {
+		return $this->getNewFilenameInDir($this->getFileConfig($field, AbstractUploadable::CONFIG_ROOTDIR), $originalName, $extension);
+	}
+	
+	protected function getNewFilenameInDir($dir, $originalName, $extension = null) {
+		$value = $originalName;
+		if ($this->service) {
+			$value = $this->service->getUniqFileName($dir, $originalName);
+		} else {
+			$fs = new Filesystem();
+			
+			if (!$extension)
+				$extension = pathinfo($originalName, PATHINFO_EXTENSION);
+			
+			if ($extension)
+				$extension = '.'.$extension;
+			
+			$filename = sha1(uniqid(mt_rand(), true));
+			while($fs->exists($dir.'/'.$filename.$extension))
+				$filename = sha1(uniqid(mt_rand(), true));
+			
+			$value = $filename.$extension;
+		}
+		return $value;
 	}
 
 	public function upload() {
@@ -140,13 +166,18 @@ abstract class AbstractUploadable {
 			$file = isset($this->directs[$field]) ? $this->directs[$field] : $this->$field;
 			if (!is_null($file)) {
 				$rootDir = $this->getFileConfig($field, AbstractUploadable::CONFIG_ROOTDIR);
+				$fullPath = $rootDir.'/'.$this->getFilePath($field);
 				if ($file instanceof UploadedFile) {
-					$file->move($rootDir, $this->getFilePath($field));
+					$file->move(dirname($fullPath), basename($fullPath));
 				} else {
-					$fs = new \Symfony\Component\Filesystem\Filesystem();
+					$fs = new Filesystem();
 					if (!$fs->exists($rootDir))
 						$fs->mkdir($rootDir);
-					file_put_contents($rootDir.'/'.$this->getFilePath($field), $file['sourceIsContent'] ? $file['source'] : file_get_contents($file['source']));
+					if ($file['sourceIsContent']) {
+						$fs->dumpFile($fullPath, $file['source']);
+					} else {
+						$fs->copy($file['source'], $fullPath);
+					}
 				}
 
 				// check if we have an old image

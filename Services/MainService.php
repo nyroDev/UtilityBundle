@@ -372,10 +372,13 @@ class MainService extends AbstractService {
 	 *
 	 * @param \DateTime $datetime
 	 * @param string $format Format translation ident
+	 * @param boolean $useOffset Use offset of datetime
 	 * @return string
 	 */
-	public function formatDate(\DateTime $datetime, $format) {
-		return strftime($this->trans($format), $datetime->getTimestamp() + $datetime->getOffset());
+	public function formatDate(\DateTime $datetime, $format, $useOffset = false) {
+		if (!$useOffset)
+			$useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');
+		return strftime($this->trans($format), $datetime->getTimestamp() + ($useOffset ? $datetime->getOffset() : 0));
 	}
 
 	/**
@@ -384,20 +387,21 @@ class MainService extends AbstractService {
 	 * @param string $text Text to truncate
 	 * @param int $limit Limit
 	 * @param boolean $isFile Indicate if it should be treated as file to keep the extension
+	 * @parame string $encoding Encoding to use 
 	 * @return string Trucnated text
 	 */
-	public function truncate($text, $limit, $isFile = false) {
+	public function truncate($text, $limit, $isFile = false, $encoding = 'UTF-8') {
 		$ext = null;
 		if ($isFile) {
 			$ext = $this->getExt($text);
 			if ($ext) {
-				$limit-= mb_strlen($ext);
-				$text = mb_substr($text, 0, - mb_strlen($ext) - 1);
+				$limit-= mb_strlen($ext, $encoding);
+				$text = mb_substr($text, 0, - mb_strlen($ext, $encoding) - 1);
 			}
 		}
 		
-		if (mb_strlen($text) > $limit)
-			$text = mb_substr($text, 0, $limit - 3).'...';
+		if (mb_strlen($text, $encoding) > $limit)
+			$text = mb_substr($text, 0, $limit - 3, $encoding).'...';
 		
 		return $text.($ext ? '.'.$ext : null);
 	}

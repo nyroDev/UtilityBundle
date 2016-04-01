@@ -27,6 +27,7 @@ class NyroDevUtilityExtension extends Extension
 		$container->setParameter('nyroDev_utility.db_driver', $config['db_driver']);
 		$container->setParameter('nyroDev_utility.model_manager_name', $config['model_manager_name']);
 
+		$container->setParameter('nyroDev_utility.dateFormatUseOffsetDefault', isset($config['dateFormatUseOffsetDefault']) && $config['dateFormatUseOffsetDefault']);
 		$container->setParameter('nyroDev_utility.setLocale', isset($config['setLocale']) && $config['setLocale']);
 		$container->setParameter('nyroDev_utility.setContentLanguageResponse', isset($config['setContentLanguageResponse']) && $config['setContentLanguageResponse']);
 		$container->setParameter('nyroDev_utility.translationDb', isset($config['translationDb']) && $config['translationDb'] ? $config['translationDb'] : false);
@@ -37,13 +38,15 @@ class NyroDevUtilityExtension extends Extension
 			$definition->addTag('translation.loader', array('alias'=>'db'));
 			$container->setDefinition('nyrodev_utility.dbLoader', $definition);
 		}
+		
+		$container->setParameter('nyroDev_utility.pluploadMaxFileSize', isset($config['pluploadMaxFileSize']) && $config['pluploadMaxFileSize'] ? $config['pluploadMaxFileSize'] : false);
 
 		if (isset($config['browser']) && is_array($config['browser'])) {
 			foreach($config['browser'] as $k=>$v) {
 				$container->setParameter('nyroDev_utility.browser.'.$k, $v);
 			}
 		}
-
+		
 		if (isset($config['share']) && is_array($config['share'])) {
 			foreach($config['share'] as $k=>$v) {
 				$container->setParameter('nyroDev_utility.share.'.$k, $v);
