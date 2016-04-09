@@ -276,9 +276,11 @@ class MainService extends AbstractService {
 	public function getUniqFileName($dir, $name) {
 		$name = mb_strtolower($name);
 		$ext = $this->getExt($name);
-		$pos = strpos($name, $ext);
-		if ($pos > 0)
-			$name = substr($name, 0, $pos);
+		if ($ext) {
+			$pos = strpos($name, $ext);
+			if ($pos > 0)
+				$name = substr($name, 0, $pos);
+		}
 		$name = $this->urlify($name);
 
 		$nameF = $name.'.'.$ext;
