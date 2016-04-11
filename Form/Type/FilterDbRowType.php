@@ -24,8 +24,11 @@ class FilterDbRowType extends FilterType {
 					'required'=>false,
 					'class'=>$options['class'],
 					'property'=>isset($options['property']) ? $options['property'] : null,
-					'query_builder' => isset($options['where']) || isset($options['order']) ? function(ObjectRepository $er) use($options, $nyrodevDb) {
-						$ret = $nyrodevDb->getQueryBuilder($er);
+					'query_builder' => isset($options['query_builder']) || isset($options['where']) || isset($options['order']) ? function(ObjectRepository $or) use($options, $nyrodevDb) {
+						if (isset($options['query_builder']))
+							return $options['query_builder']($or);
+						
+						$ret = $nyrodevDb->getQueryBuilder($or);
 						/* @var $ret \NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder */
 						
 						if (isset($options['where']) && is_array($options['where'])) {
@@ -62,6 +65,7 @@ class FilterDbRowType extends FilterType {
 		$resolver->setDefaults(array(
 			'class'=>null,
 			'property'=>null,
+			'query_builder'=>null,
 			'where'=>null,
 			'order'=>null,
 		));
