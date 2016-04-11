@@ -30,6 +30,7 @@ abstract class AbstractAdminController extends AbstractController {
 		$filter = $tmpList['filter'];
 		$page = $tmpList['page'];
 		$queryBuilder = $tmpList['queryBuilder'];
+		$rawQueryBuilder = clone $queryBuilder;
 		$total = $tmpList['total'];
 		
 		$canExport = $exportConfig && is_array($exportConfig) && isset($exportConfig['fields']);
@@ -123,6 +124,7 @@ abstract class AbstractAdminController extends AbstractController {
 			'routePrm'=>$routePrm,
 			'total'=>$total,
 			'results'=>$results,
+			'queryBuilder'=>$rawQueryBuilder,
 			'canExport'=>$canExport
 		);
 	}
