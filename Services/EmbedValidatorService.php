@@ -24,7 +24,8 @@ class EmbedValidatorService extends AbstractService implements Validator\Constra
 				$error = null;
 				$prms = array();
 				if (!is_array($dataUrl) || count($dataUrl) === 0) {
-					$error = 'NotFetched';
+					if (!$constraint->allowNotFetched)
+						$error = 'NotFetched';
 				} else if (
 						(is_array($constraint->type) && !in_array($dataUrl['type'], $constraint->type))
 						||
