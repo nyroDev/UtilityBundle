@@ -353,6 +353,7 @@ class MainService extends AbstractService {
 			try {
 				$tmp = parse_url($this->getRequest()->getRequestUri());
 				if (isset($tmp['query'])) {
+					$newArgs = array();
 					parse_str($tmp['query'], $args);
 					foreach($allowParams as $k) {
 						if (isset($args[$k]))
