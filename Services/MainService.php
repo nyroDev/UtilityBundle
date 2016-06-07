@@ -409,5 +409,28 @@ class MainService extends AbstractService {
 		return $text.($ext ? '.'.$ext : null);
 	}
 
+	protected function getCryptKey() {
+		return pack('H*', sha1($this->getParameter('secret')));
+	}
+	
+	public function crypt($text, $excludeSlash = true) {
+		$key = $this->getCryptKey();
+		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+		$ret = base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $text, MCRYPT_MODE_CBC, $iv));
+		if ($excludeSlash && strpos($ret, '/') !== false)
+			$ret = $this->cryptId($text, $excludeSlash);
+		return $ret;
+	}
+	
+	public function decrypt($encoded) {
+		$key = $this->getCryptKey();
+		$ciphertext_dec = base64_decode($encoded);
+		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+		$iv_dec = substr($ciphertext_dec, 0, $iv_size);
+		$ciphertext_dec = substr($ciphertext_dec, $iv_size);
+		return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec), "\0\4");
+	}
+
 }
 
