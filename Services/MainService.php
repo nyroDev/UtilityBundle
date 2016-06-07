@@ -419,7 +419,7 @@ class MainService extends AbstractService {
 		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
 		$ret = base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $text, MCRYPT_MODE_CBC, $iv));
 		if ($excludeSlash && strpos($ret, '/') !== false)
-			$ret = $this->cryptId($text, $excludeSlash);
+			$ret = $this->crypt($text, $excludeSlash);
 		return $ret;
 	}
 	
