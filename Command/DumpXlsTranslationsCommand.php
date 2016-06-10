@@ -12,7 +12,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Symfony2 command to update confidentielles tags.
  */
-class dumpXlsTranslationsCommand extends ContainerAwareCommand
+class DumpXlsTranslationsCommand extends ContainerAwareCommand
 {
     /**
      * Configure the command.

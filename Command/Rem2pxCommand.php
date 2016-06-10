@@ -12,7 +12,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * Symfony2 command to convert CSS file from rem to px.
  */
-class rem2pxCommand extends ContainerAwareCommand
+class Rem2pxCommand extends ContainerAwareCommand
 {
     /**
      * Configure the command.

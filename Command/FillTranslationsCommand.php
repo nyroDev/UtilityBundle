@@ -14,7 +14,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 /**
  * Symfony2 command to update confidentielles tags.
  */
-class fillTranslationsCommand extends ContainerAwareCommand
+class FillTranslationsCommand extends ContainerAwareCommand
 {
     /**
      * Configure the command.

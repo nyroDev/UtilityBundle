@@ -10,7 +10,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * Symfony2 command to copy CSS images in public directories into web directories.
  */
-class cssFilesCommand extends ContainerAwareCommand
+class CssFilesCommand extends ContainerAwareCommand
 {
     /**
      * Configure the command.

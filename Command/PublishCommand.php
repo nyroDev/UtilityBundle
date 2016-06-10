@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 /**
  * Symfony2 command to call every command requested to publish all needed files.
  */
-class publishCommand extends ContainerAwareCommand
+class PublishCommand extends ContainerAwareCommand
 {
     /**
      * Configure the command.
