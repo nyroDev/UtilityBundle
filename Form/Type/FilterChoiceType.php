@@ -1,4 +1,5 @@
 <?php
+
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -7,35 +8,38 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
- * Filter Type for Integer fields 
+ * Filter Type for Integer fields.
  */
-class FilterChoiceType extends FilterType {
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder
-			->add('transformer', ChoiceType::class, array_merge(array(
-				'choices'=>array(
-					AbstractQueryBuilder::OPERATOR_EQUALS=>'='
-				),
-			), $options['transformerOptions']))
-			->add('value', ChoiceType::class, array_merge($options['choiceOptions'], array(
-					'required'=>false,
-				), $options['valueOptions']));
-	}
-	
+class FilterChoiceType extends FilterType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('transformer', ChoiceType::class, array_merge(array(
+                'choices' => array(
+                    AbstractQueryBuilder::OPERATOR_EQUALS => '=',
+                ),
+            ), $options['transformerOptions']))
+            ->add('value', ChoiceType::class, array_merge($options['choiceOptions'], array(
+                    'required' => false,
+                ), $options['valueOptions']));
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver) {
-		$resolver->setRequired(array('choiceOptions'));
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(array('choiceOptions'));
     }
-	
-	public function getBlockPrefix() {
-		return 'filter_choice';
-	}
-	
-	public function getParent() {
-		return FilterType::class;
-	}
 
+    public function getBlockPrefix()
+    {
+        return 'filter_choice';
+    }
+
+    public function getParent()
+    {
+        return FilterType::class;
+    }
 }

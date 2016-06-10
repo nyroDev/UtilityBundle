@@ -7,9 +7,9 @@
 	<meta name="title" content="<?php echo $view['translator']->trans('nyrodev.browser.title') ?>" />
 
 	<?php foreach ($view['assetic']->stylesheets(
-		array('@NyroDevUtilityBundle/Resources/public/css/nyrodevBrowser.css'),
-		array('?yui_css'),
-		array('output'=>'css/nyrodevBrowser.css')) as $url): ?>
+        array('@NyroDevUtilityBundle/Resources/public/css/nyrodevBrowser.css'),
+        array('?yui_css'),
+        array('output' => 'css/nyrodevBrowser.css')) as $url): ?>
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $view->escape($url) ?>" />
 	<?php endforeach; ?>
 </head>
@@ -34,20 +34,20 @@
 			</form>
 		<?php endif; ?>
 		<?php
-		if ($dir) {
-			$tmp = explode('/', $dir);
-			$curDir = '';
-			echo '<a href="'.$view['router']->generate($route, array_merge($routePrm, array('dir'=>$curDir))).'">'.$view['translator']->trans('nyrodev.browser.rootDir').'</a>';
-			foreach($tmp as $d) {
-				$curDir.= ($curDir ? '/' : '').$d;
-				echo ' / <a href="'.$view['router']->generate($route, array_merge($routePrm, array('dir'=>$curDir))).'">'.$d.'</a>';
-			}
-		}
-		?>
+        if ($dir) {
+            $tmp = explode('/', $dir);
+            $curDir = '';
+            echo '<a href="'.$view['router']->generate($route, array_merge($routePrm, array('dir' => $curDir))).'">'.$view['translator']->trans('nyrodev.browser.rootDir').'</a>';
+            foreach ($tmp as $d) {
+                $curDir .= ($curDir ? '/' : '').$d;
+                echo ' / <a href="'.$view['router']->generate($route, array_merge($routePrm, array('dir' => $curDir))).'">'.$d.'</a>';
+            }
+        }
+        ?>
 		<?php if (count($files) || count($dirs)): ?>
 			<?php if ($type == 'image'): ?>
 			<ul>
-				<?php foreach($dirs as $d): ?>
+				<?php foreach ($dirs as $d): ?>
 					<li>
 						<a href="<?php echo $d[0] ?>" title="<?php echo strftime($view['translator']->trans('date.short'), $d[2]->getTimestamp()) ?>" class="dir">
 							<?php echo $d[1] ?>
@@ -55,12 +55,13 @@
 						<a href="<?php echo $d[3] ?>" class="delete"><?php echo $view['translator']->trans('nyrodev.browser.delete') ?></a>
 					</li>
 				<?php endforeach; ?>
-				<?php foreach($files as $f): ?>
+				<?php foreach ($files as $f): ?>
 				<li>
 					<a href="<?php echo $f[0] ?>" title="<?php echo $f[3].', '.strftime($view['translator']->trans('date.short'), $f[4]->getTimestamp()) ?>" <?php
-						if (isset($f[6]) && is_array($f[6]))
-							echo 'data-width="'.$f[6][0].'" data-height="'.$f[6][1].'"'
-						?> class="fileLink">
+                        if (isset($f[6]) && is_array($f[6])) {
+                            echo 'data-width="'.$f[6][0].'" data-height="'.$f[6][1].'"';
+                        }
+                        ?> class="fileLink">
 						<img src="<?php echo $view['nyrodev_image']->resize($f[1], 'browser') ?>" alt="image" /><br />
 						<?php echo $f[2] ?>
 					</a>
@@ -75,7 +76,7 @@
 					<th class="size"><?php echo $view['translator']->trans('nyrodev.browser.size') ?></th>
 					<th class="date"><?php echo $view['translator']->trans('nyrodev.browser.date') ?></th>
 				</tr>
-				<?php foreach($files as $f): ?>
+				<?php foreach ($files as $f): ?>
 				<tr>
 					<td>
 						<a href="<?php echo $f[0] ?>" title="<?php echo $f[3].', '.strftime($view['translator']->trans('date.short'), $f[4]->getTimestamp()) ?>" class="fileLink"><?php echo $f[2] ?></a>
@@ -92,9 +93,9 @@
 		<?php endif; ?>
 	</fieldset>
 	<?php foreach ($view['assetic']->javascripts(
-		array('@NyroDevUtilityBundle/Resources/public/js/*jquery.js'),
-		array('?yui_js'),
-		array('output'=>'js/jquery.js')) as $url): ?>
+        array('@NyroDevUtilityBundle/Resources/public/js/*jquery.js'),
+        array('?yui_js'),
+        array('output' => 'js/jquery.js')) as $url): ?>
 		<script src="<?php echo $view->escape($url) ?>" type="text/javascript"></script>
 	<?php endforeach; ?>
 	<script type="text/javascript">
