@@ -440,13 +440,19 @@ class MainService extends AbstractService
      *
      * @return string
      */
-    public function formatDate(\DateTime $datetime, $format, $useOffset = false)
+    public function formatDate(\DateTime $datetime, $format, $useOffset = null)
     {
-        if (!$useOffset) {
+        if (is_null($useOffset)) {
             $useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');
         }
+        
+        $offset = 0;
+        if ($useOffset) {
+            $tz = new \DateTimeZone(date_default_timezone_get());
+            $offset = -1 * $tz->getOffset($datetime) + $datetime->getOffset();
+        }
 
-        return strftime($this->trans($format), $datetime->getTimestamp() + ($useOffset ? $datetime->getOffset() : 0));
+        return strftime($this->trans($format), $datetime->getTimestamp() + $offset);
     }
 
     /**
