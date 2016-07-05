@@ -148,6 +148,6 @@ jQuery(function($, undefined) {
 		}
 	});
 	
-	$('.autocompleteSelMul').autocompleteSelMul();
-	$('.autocompleteSel').autocompleteSel();
+	$('select.autocompleteSelMul').autocompleteSelMul();
+	$('select.autocompleteSel').autocompleteSel();
 });
