@@ -24,18 +24,36 @@ class EmbedService extends AbstractService
                 /* @var $service \Embed\Adapters\AdapterInterface */
 
                 if ($service) {
-                    $data = array(
-                        'type' => $service->getType(),
-                        'url' => $service->getUrl(),
-                        'title' => $service->getTitle(),
-                        'description' => $service->getDescription(),
-                        'image' => $service->getImage(),
-                        'code' => $service->getCode(),
-                        'width' => $service->getWidth(),
-                        'height' => $service->getHeight(),
-                        'aspectRatio' => $service->getAspectRatio(),
-                        'urlEmbed' => null,
+                    $data = array();
+                    $fields = array(
+                        'title',
+                        'description',
+                        'url',
+                        'type',
+                        'tags',
+                        'image',
+                        'imageWidth',
+                        'imageHeight',
+                        'images',
+                        'code',
+                        'source',
+                        'width',
+                        'height',
+                        'aspectRatio',
+                        'authorName',
+                        'authorUrl',
+                        'providerIcon',
+                        'providerIcons',
+                        'providerName',
+                        'providerUrl',
+                        'publishedTime',
+                        'license',
                     );
+                    foreach($fields as $field) {
+                        $data[$field] = $service->$field;
+                    }
+                    $data['urlEmned'] = null;
+                    
                     if ($data['code'] && strpos($data['code'], '<iframe') === 0) {
                         if (strpos($data['url'], 'soundcloud.com') !== false) {
                             $data['code'] = str_replace('&', '&amp;', $data['code']);
