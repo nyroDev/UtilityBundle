@@ -484,7 +484,7 @@ class ImageService extends AbstractService
                     break;
                 } else {
                     if ($where1 + 8 == $where2) {
-                        $count++;
+                        ++$count;
                     }
                     $str_loc = $where2 + 1;
                 }
@@ -715,37 +715,85 @@ class ImageService extends AbstractService
      * @package imagettftextblur
      *
      */
-    public function imagettftextblur(&$image, $size, $angle, $x, $y, $color, $fontfile, $text, $blur_intensity = null)
+    public function imagettftextblur(&$image, $size, $angle, $x, $y, $color, $fontfile, $text, $blurFactor = null)
     {
-        $blur_intensity = !is_null($blur_intensity) && is_numeric($blur_intensity) ? (int)$blur_intensity : 0;
-		
-        if ($blur_intensity > 0) {
+        if (!is_null($blurFactor)) {
             $color_values = imagecolorsforindex($image, $color);
             $color_opacity = (127 - $color_values['alpha']) / 127;
-            $text_shadow_image = imagecreatetruecolor(imagesx($image),imagesy($image));
-			
+            $text_shadow_image = imagecreatetruecolor(imagesx($image), imagesy($image));
+
             imagefill($text_shadow_image, 0, 0, imagecolorallocate($text_shadow_image, 0x00, 0x00, 0x00));
             imagettftext($text_shadow_image, $size, $angle, $x, $y, imagecolorallocate($text_shadow_image, 0xFF, 0xFF, 0xFF), $fontfile, $text);
-			
-            for ($blur = 1;$blur <= $blur_intensity;$blur++) {
-                imagefilter($text_shadow_image, IMG_FILTER_GAUSSIAN_BLUR);
-            }
-			
+
+            $this->blurImage($text_shadow_image, $blurFactor);
+
             $imageX = imagesx($text_shadow_image);
             $imageY = imagesy($text_shadow_image);
-            for ($x_offset = 0; $x_offset < $imageX; $x_offset++) {
-                for ($y_offset = 0; $y_offset < $imageY; $y_offset++) {
-                        $visibility = (imagecolorat($text_shadow_image, $x_offset, $y_offset) & 0xFF) / 255;
-                        $visibility *= $color_opacity;
+            for ($x_offset = 0; $x_offset < $imageX; ++$x_offset) {
+                for ($y_offset = 0; $y_offset < $imageY; ++$y_offset) {
+                    $visibility = (imagecolorat($text_shadow_image, $x_offset, $y_offset) & 0xFF) / 255;
+                    $visibility *= $color_opacity;
                     if ($visibility > 0) {
                         imagesetpixel($image, $x_offset, $y_offset, imagecolorallocatealpha($image, ($color >> 16) & 0xFF, ($color >> 8) & 0xFF, $color & 0xFF, (1 - $visibility) * 127));
                     }
                 }
             }
-			
+
             imagedestroy($text_shadow_image);
         } else {
-            return imagettftext($image,$size,$angle,$x,$y,$color,$fontfile,$text);
+            return imagettftext($image, $size, $angle, $x, $y, $color, $fontfile, $text);
         }
+    }
+
+    /**
+     * Strong Blur.
+     *
+     * @param resource $image
+     * @param int      $blurFactor optional This is the strength of the blur 0 = no blur, 3 = default, anything over 5 is extremely blurred
+     * @link http://php.net/manual/fr/function.imagefilter.php#114750
+     *
+     * @author Martijn Frazer, idea based on http://stackoverflow.com/a/20264482
+     */
+    public function blurImage(&$image, $blurFactor = 3)
+    {
+        // blurFactor has to be an integer
+        $blurFactor = round($blurFactor);
+
+        $originalWidth = imagesx($image);
+        $originalHeight = imagesy($image);
+
+        $smallestWidth = ceil($originalWidth * pow(0.5, $blurFactor));
+        $smallestHeight = ceil($originalHeight * pow(0.5, $blurFactor));
+
+        // for the first run, the previous image is the original input
+        $prevImage = $image;
+        $prevWidth = $originalWidth;
+        $prevHeight = $originalHeight;
+
+        // scale way down and gradually scale back up, blurring all the way
+        for ($i = 0; $i < $blurFactor; $i += 1) {
+            // determine dimensions of next image
+            $nextWidth = $smallestWidth * pow(2, $i);
+            $nextHeight = $smallestHeight * pow(2, $i);
+
+            // resize previous image to next size
+            $nextImage = imagecreatetruecolor($nextWidth, $nextHeight);
+            imagecopyresized($nextImage, $prevImage, 0, 0, 0, 0, $nextWidth, $nextHeight, $prevWidth, $prevHeight);
+
+            // apply blur filter
+            imagefilter($nextImage, IMG_FILTER_GAUSSIAN_BLUR);
+
+            // now the new image becomes the previous image for the next step
+            $prevImage = $nextImage;
+            $prevWidth = $nextWidth;
+            $prevHeight = $nextHeight;
+        }
+
+        // scale back to original size and blur one more time
+        imagecopyresized($image, $nextImage, 0, 0, 0, 0, $originalWidth, $originalHeight, $nextWidth, $nextHeight);
+        imagefilter($image, IMG_FILTER_GAUSSIAN_BLUR);
+
+        // clean up
+        imagedestroy($prevImage);
     }
 }
