@@ -50,9 +50,11 @@ class EmbedService extends AbstractService
                         'license',
                     );
                     foreach($fields as $field) {
-                        $data[$field] = $service->$field;
+                        try {
+                            $data[$field] = $service->$field;
+                        } catch (\Exception $e) {}
                     }
-                    $data['urlEmned'] = null;
+                    $data['urlEmbed'] = null;
                     
                     if ($data['code'] && strpos($data['code'], '<iframe') === 0) {
                         if (strpos($data['url'], 'soundcloud.com') !== false) {
@@ -72,8 +74,7 @@ class EmbedService extends AbstractService
                 if ($cache) {
                     $cache->save($cacheKey, $data, 24 * 60 * 60);
                 }
-            } catch (\Exception $e) {
-            }
+            } catch (\Exception $e) {}
         } else {
             $data = $cache->fetch($cacheKey);
         }
