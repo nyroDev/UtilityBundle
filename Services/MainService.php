@@ -183,10 +183,10 @@ class MainService extends AbstractService
             }
             $source = str_replace($tmp, '', $source);
         }
-        $$len = abs(intval($len));
+        $len = abs(intval($len));
         $n = strlen($source) - 1;
         $ret = '';
-        for ($i = 0; $i < $$len; ++$i) {
+        for ($i = 0; $i < $len; ++$i) {
             $ret .= $source{rand(0, $n)};
         }
 

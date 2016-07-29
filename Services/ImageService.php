@@ -314,7 +314,7 @@ class ImageService extends AbstractService
                     for ($i = 1; $i <= 4; ++$i) {
                         if (isset($filter[$i])) {
                             $name = 'arg'.$i;
-                            $$name = $filter[$i];
+                            ${$name} = $filter[$i];
                         }
                     }
                 } else {
