@@ -452,7 +452,7 @@ class MainService extends AbstractService
             $offset = -1 * $tz->getOffset($datetime) + $datetime->getOffset();
         }
 
-        return strftime($this->trans($format), $datetime->getTimestamp() + $offset);
+        return utf8_encode(strftime($this->trans($format), $datetime->getTimestamp() + $offset));
     }
 
     /**
