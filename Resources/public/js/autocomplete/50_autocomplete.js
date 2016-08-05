@@ -6,7 +6,8 @@ jQuery(function($, undefined) {
 					meCont = me.parent().is('.selectCont') ? me.parent().hide() : me,
 					val = me.val(),
 					options = me.children('option'),
-					input = $('<input type="text" name="'+me.attr('id')+'_new" />').insertBefore(meCont),
+                    keepValue = me.data('keepvalue'),
+					input = $('<input type="text" name="'+(keepValue && keepValue.length > 2 ? keepValue : me.attr('id')+'_new')+'" />').insertBefore(meCont),
 					list = [],
 					cur = [],
 					sep = me.data('sep') || ',',
@@ -19,14 +20,23 @@ jQuery(function($, undefined) {
 					},
 					writeForm = function() {
 						var tmp = split(input.val()),
-							val = [];
+							val = [],
+                            others = [];
 						$.each(tmp, function() {
-							var curOpt = options.filter('[rel="'+$.trim(this)+'"]');
-							if (curOpt.length)
+							var cur = $.trim(this),
+                                curOpt = options.filter('[rel="'+cur+'"]');
+							if (curOpt.length) {
 								val.push(curOpt.attr('value'));
+                            } else {
+                                others.push(cur);
+                            }
 						});
 						me.val(val);
-						input.attr('disabled', 'disabled');
+                        if (keepValue) {
+                            input.val(others.join(sepJoin));
+                        } else {
+                            input.attr('disabled', 'disabled');
+                        }
 					},
 					reenable = function() {
 						input.removeAttr('disabled');
