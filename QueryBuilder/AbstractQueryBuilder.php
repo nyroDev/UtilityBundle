@@ -16,6 +16,7 @@ abstract class AbstractQueryBuilder
     const WHERE_SUB = '__SUB__';
 
     const OPERATOR_EQUALS = '=';
+    const OPERATOR_NOT_EQUALS = '<>';
     const OPERATOR_GT = '>';
     const OPERATOR_GTE = '>=';
     const OPERATOR_LT = '<';
@@ -24,6 +25,7 @@ abstract class AbstractQueryBuilder
     const OPERATOR_LIKEDATE = 'LIKE%';
     const OPERATOR_CONTAINS = 'LIKE %...%';
     const OPERATOR_IN = 'IN';
+    const OPERATOR_NOT_IN = 'NOT IN';
 
     const OPERATOR_IS_NULL = 'IS NULL';
     const OPERATOR_IS_NOT_NULL = 'IS NOT NULL';
