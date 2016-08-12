@@ -4,6 +4,11 @@ services:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
+    nyrodev.filter_custom.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterCustomType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
     nyrodev.filter_date.form.type:
         class: NyroDev\UtilityBundle\Form\Type\FilterDateType
         arguments: ['@service_container']
@@ -36,6 +41,11 @@ services:
           - { name: form.type }
     nyrodev.filter_dbRow.form.type:
         class: NyroDev\UtilityBundle\Form\Type\FilterDbRowType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrodev.filter_dbRowExpanded.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowExpandedType
         arguments: ['@service_container']
         tags:
           - { name: form.type }

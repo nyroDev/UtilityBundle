@@ -251,3 +251,16 @@ select {
 .form_row_filter_range_date input {
 	width: 6em;
 }
+.form_row_filter ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 358px;
+    display: inline-block;
+}
+.form_row_filter ul input {
+    width: auto;
+}
+.form_row_filter ul label {
+    display: inline;
+}
