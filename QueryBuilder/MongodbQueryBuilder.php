@@ -116,6 +116,9 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
             case self::OPERATOR_EQUALS:
                 $object->field($field)->equals($value);
                 break;
+            case self::OPERATOR_NOT_EQUALS:
+                $object->field($field)->notEqual($value);
+                break;
             case self::OPERATOR_GT:
                 $object->field($field)->gt($value);
                 break;
@@ -145,6 +148,9 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
                 break;
             case self::OPERATOR_IN:
                 $object->field($field)->in($value);
+                break;
+            case self::OPERATOR_NOT_IN:
+                $object->field($field)->notIn($value);
                 break;
             case self::OPERATOR_IS_NULL:
                 $expr = $queryBuilder->expr();

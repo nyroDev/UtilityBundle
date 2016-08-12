@@ -130,7 +130,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder
                 break;
             default:
                 $prm = 'param_'.$this->prmNb;
-                $needParenthesis = $transformer === self::OPERATOR_IN;
+                $needParenthesis = $transformer === self::OPERATOR_IN || $transformer === self::OPERATOR_NOT_IN;
                 if ($transformer === self::OPERATOR_CONTAINS) {
                     $transformer = 'LIKE';
                     $value = '%'.$value.'%';
