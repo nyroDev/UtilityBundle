@@ -224,7 +224,7 @@ select {
 }
 .form_row_tinymce, .form_row_rawhtml {
     width: 100%;
-    overflow: auto;
+    overflow: hidden;
 }
 .form_row_tinymce label, .form_row_rawhtml label {
     float: left;
