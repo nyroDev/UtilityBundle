@@ -34,6 +34,8 @@ admin:
     noResults: Pas de résultats
     start: Début
     end: Fin
+    from: entre
+    to: et
     yes: Oui
     no: Non
   pager:

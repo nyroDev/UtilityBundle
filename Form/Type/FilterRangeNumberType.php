@@ -4,12 +4,12 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 /**
  * Filter Type for Date range fields.
  */
-class FilterRangeDateType extends FilterType
+class FilterRangeNumberType extends FilterType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -18,8 +18,7 @@ class FilterRangeDateType extends FilterType
         }
         $builder
             ->add('value', FilterRangeSubType::class, array_merge(array(
-                    'type' => DateType::class,
-                    'isDate' => true,
+                    'type' => NumberType::class,
                     'required' => false,
                 ), $options['valueOptions']));
     }
@@ -37,21 +36,9 @@ class FilterRangeDateType extends FilterType
         return $queryBuilder;
     }
 
-    public function applyValue($value)
-    {
-        if (isset($value['start']) && is_object($value['start'])) {
-            $value['start']->setTime(0, 0, 0);
-        }
-        if (isset($value['end']) && is_object($value['end'])) {
-            $value['end']->setTime(23, 59, 59);
-        }
-
-        return $value;
-    }
-
     public function getBlockPrefix()
     {
-        return 'filter_range_date';
+        return 'filter_range_number';
     }
 
     public function getParent()

@@ -135,7 +135,13 @@ abstract class AbstractAdminController extends AbstractController
     {
         $filter = null;
         if (!is_null($filterType)) {
-            $filter = $this->createForm($filterType, $filterDefaults, array('csrf_protection' => false, 'attr' => array('class' => 'filterForm')));
+            $filter = $this->createForm($filterType, $filterDefaults, [
+                'csrf_protection' => false,
+                'allow_extra_fields' => true,
+                'attr' => [
+                    'class' => 'filterForm'
+                ]
+            ]);
         }
 
         $page = $request->query->get('page', $request->getSession()->get('admin_list_'.$route.'_page', 1));
