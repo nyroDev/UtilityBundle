@@ -36,13 +36,13 @@ class FilterCustomType extends FilterType
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         $applyFilter = $this->applyFilters[$name];
-        return $applyFilter($queryBuilder, $name, $data);
+        return $applyFilter ? $applyFilter($queryBuilder, $name, $data) : $queryBuilder;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired('applyFilter');
         $resolver->setDefaults(array(
+            'applyFilter' => null,
             'transformerChoices' => array(
                 AbstractQueryBuilder::OPERATOR_EQUALS => '=',
             ),
