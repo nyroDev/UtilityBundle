@@ -14,15 +14,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class FilterCustomType extends FilterType
 {
     
-    protected $applyFilter;
+    protected $applyFilters = [];
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->applyFilter = $options['applyFilter'];
+        $this->applyFilters[$builder->getName()] = $options['applyFilter'];
+        if (isset($options['transformerChoices']) && $options['transformerChoices'] && count($options['transformerChoices'])) {
+            $builder
+                ->add('transformer', ChoiceType::class, array_merge(array(
+                    'choices' => $options['transformerChoices'],
+                ), $options['transformerOptions']));
+        } else if ($builder->has('transformer')) {
+            $builder->remove('transformer');
+        }
         $builder
-            ->add('transformer', ChoiceType::class, array_merge(array(
-                'choices' => $options['transformerChoices'],
-            ), $options['transformerOptions']))
             ->add('value', $options['valueType'], array_merge(array(
                 'required' => false,
             ), $options['valueOptions']));
@@ -30,14 +35,14 @@ class FilterCustomType extends FilterType
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
-        $applyFilter = $this->applyFilter;
-        return $applyFilter($queryBuilder, $name, $data);
+        $applyFilter = $this->applyFilters[$name];
+        return $applyFilter ? $applyFilter($queryBuilder, $name, $data) : $queryBuilder;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired('applyFilter');
         $resolver->setDefaults(array(
+            'applyFilter' => null,
             'transformerChoices' => array(
                 AbstractQueryBuilder::OPERATOR_EQUALS => '=',
             ),

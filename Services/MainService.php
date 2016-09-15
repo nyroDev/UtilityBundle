@@ -18,11 +18,24 @@ class MainService extends AbstractService
     {
         if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
             $locale = $event->getRequest()->getLocale();
+            $locales = [
+                $locale,
+                $locale.'@euro',
+                $locale.'.utf8',
+            ];
             if (strlen($locale) == 2) {
                 $locUp = strtoupper($locale);
                 $locale .= '_'.($locUp == 'ZH' ? 'CN' : $locUp);
+                $locales[] = $locale;
+                $locales[] = $locale.'@euro';
+                $locales[] = $locale.'.utf8';
             }
-            setlocale(LC_ALL, $locale);
+            foreach (array_reverse($locales) as $loc) {
+                $tmp = setlocale(LC_ALL, $loc);
+                if (mb_strtolower($tmp) == mb_strtolower($loc)) {
+                    break;
+                }
+            }
         }
     }
 
@@ -445,14 +458,14 @@ class MainService extends AbstractService
         if (is_null($useOffset)) {
             $useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');
         }
-        
+
         $offset = 0;
         if ($useOffset) {
             $tz = new \DateTimeZone(date_default_timezone_get());
             $offset = -1 * $tz->getOffset($datetime) + $datetime->getOffset();
         }
 
-        return utf8_encode(strftime($this->trans($format), $datetime->getTimestamp() + $offset));
+        return strftime($this->trans($format), $datetime->getTimestamp() + $offset);
     }
 
     /**
