@@ -122,7 +122,7 @@ abstract class AbstractAdminController extends AbstractController
         return array(
             'filter' => !is_null($filter) ? $filter->createView() : null,
             'pager' => $pager,
-            'route' => $route,
+            'routeName' => $route,
             'routePrm' => $routePrm,
             'page' => $page,
             'order' => $order,
