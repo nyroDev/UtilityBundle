@@ -4,11 +4,24 @@ namespace NyroDev\UtilityBundle\Services;
 
 class EmbedService extends AbstractService
 {
-    public function getChacheKey($url, $prefix = '')
+    
+    const CACHE_KEY_URLPARSER = 'urlParser_';
+    
+    public function getChacheKey($url, $prefix = self::CACHE_KEY_URLPARSER)
     {
         return $prefix.sha1($url);
     }
 
+    public function clearCache($url)
+    {
+        if (!$this->container->has('nyrodev_embed_cache')) {
+            return true;
+        }
+        
+        $cache = $this->get('nyrodev_embed_cache');
+        return $cache->delete($this->getChacheKey($url, self::CACHE_KEY_URLPARSER));
+    }
+    
     public function data($url, $force = false)
     {
         $cache = false;
@@ -17,7 +30,7 @@ class EmbedService extends AbstractService
         }
 
         $data = array();
-        $cacheKey = $this->getChacheKey($url, 'urlParser_');
+        $cacheKey = $this->getChacheKey($url, self::CACHE_KEY_URLPARSER);
         if ($force || !$cache || !$cache->contains($cacheKey)) {
             try {
                 $service = \Embed\Embed::create($url, $this->getCreateOptions($url));
