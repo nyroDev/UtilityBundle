@@ -19,6 +19,11 @@ services:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
+    nyrodev.filter_range_number.form.type:
+        class: NyroDev\UtilityBundle\Form\Type\FilterRangeNumberType
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
     nyrodev.filter_range_sub.form.type:
         class: NyroDev\UtilityBundle\Form\Type\FilterRangeSubType
         arguments: ['@service_container']
