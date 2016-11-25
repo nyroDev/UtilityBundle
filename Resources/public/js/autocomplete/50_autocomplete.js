@@ -143,8 +143,7 @@ jQuery(function($, undefined) {
 					select: function(event, ui) {
 						this.value = ui.item.label;
 						$(this).trigger('change');
-						me.val(ui.item.value);
-						me.trigger('change');
+						me.val(ui.item.value).trigger('change');
 						return false;
 					}
 				});
