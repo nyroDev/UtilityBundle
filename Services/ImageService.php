@@ -485,7 +485,7 @@ class ImageService extends AbstractService
         while(!feof($fh) && $count < 2) {
             $chunk = fread($fh, 1024 * 100); //read 100kb at a time
             $count += preg_match_all('#\x00\x21\xF9\x04.{4}\x00(\x2C|\x21)#s', $chunk, $matches);
-       }
+        }
 
         fclose($fh);
         return $count > 1;
