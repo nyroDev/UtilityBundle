@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Console\Input\ArrayInput;
 
 /**
  * Symfony2 command to copy CSS images in public directories into web directories.
@@ -116,5 +117,13 @@ class CssFilesCommand extends ContainerAwareCommand
         } else {
             $output->writeln('<comment>No images or fonts folder found</comment>');
         }
+
+        $args = array(
+            'command' => 'assets:install',
+            '--env' => 'prod',
+            '--no-debug' => true,
+        );
+        $command = $this->getApplication()->find($args['command']);
+        $command->run(new ArrayInput($args), $output);
     }
 }

@@ -45,13 +45,5 @@ class PublishCommand extends ContainerAwareCommand
         );
         $command = $this->getApplication()->find($args['command']);
         $command->run(new ArrayInput($args), $output);
-
-        $args = array(
-            'command' => 'assets:install',
-            '--env' => 'prod',
-            '--no-debug' => true,
-        );
-        $command = $this->getApplication()->find($args['command']);
-        $command->run(new ArrayInput($args), $output);
     }
 }
