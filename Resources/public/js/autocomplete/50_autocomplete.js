@@ -100,36 +100,45 @@ jQuery(function($, undefined) {
 			return this.not('.autocompleteSelInited').each(function() {
 				var me = $(this).hide().addClass('autocompleteSelInited'),
 					meCont = me.parent().is('.selectCont') ? me.parent().hide() : me,
-					val = me.val(),
-					options = me.children('option'),
+					val,
+					options,
 					input = $('<input type="text" name="'+me.attr('id')+'_new" '+(me.attr('required') ? 'required="required"' : '')+'/>').insertBefore(meCont),
-					list = [],
+					list,
 					writeForm = function() {
 						var val = input.val(),
 							curOpt = options.filter('[rel="'+$.trim(val)+'"]');
-						if (curOpt.length)
+						if (curOpt.length) {
 							me.val(curOpt.attr('value'));
+                        }
 						input.attr('disabled', 'disabled');
 					},
 					reenable = function() {
 						input.removeAttr('disabled');
-					};
+					},
+                    init = function() {
+                        options = me.children('option');
+                        list = [];
+                        options.each(function() {
+                            var opt = $(this),
+                                txt = $.trim(opt.text());
+                            opt.attr('rel', txt);
+                            list.push({
+                                value: opt.attr('value'),
+                                label: txt
+                            });
+                        });
+                        val = me.val();
+                        if (val && val.length) {
+                            input.val(options.filter('[value="'+val+'"]').text());
+                        }
+                    };
 
 				me.removeProp('required').removeAttr('required');
-				if (me.attr('placeholder'))
+				if (me.attr('placeholder')) {
 					input.attr('placeholder', me.attr('placeholder'));
+                }
 
-				options.each(function() {
-					var opt = $(this),
-						txt = $.trim(opt.text());
-					opt.attr('rel', txt);
-					list.push({
-						value: opt.attr('value'),
-						label: txt
-					});
-				});
-				if (val && val.length)
-					input.val(options.filter('[value="'+val+'"]').text());
+                init();
 
 				input.autocomplete({
 					minLength: 1,
@@ -151,9 +160,11 @@ jQuery(function($, undefined) {
 				me
 					.on('autocompleteWriteForm', writeForm)
 					.on('autocompleteReenable', reenable)
+					.on('autocompleteReinit', init)
 					.closest('form').on('submit', function(e) {
-						if (!e.isDefaultPrevented())
+						if (!e.isDefaultPrevented()) {
 							writeForm();
+                        }
 					});
 			}).end();
 		}
