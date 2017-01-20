@@ -79,12 +79,12 @@ $fs = new Filesystem();
 if (!$fs->exists($currentPath)) {
     $fs->mkdir($currentPath);   
 }
-$currentPath = realpath($currentPath);
+$currentPath = realpath($currentPath).'/';
 
 if (!$fs->exists($currentPathThumb)) {
     $fs->mkdir($currentPathThumb);   
 }
-$currentPathThumb = realpath($currentPathThumb);
+$currentPathThumb = realpath($currentPathThumb).'/';
 
 $configNyro = array(
 
@@ -425,16 +425,6 @@ $configNyro = array_merge(
 		),
 	)
 );
-
-            $fs = new \Symfony\Component\Filesystem\Filesystem();
-            if (!$fs->exists($configNyro['current_path'])) {
-                $fs->mkdir($configNyro['current_path']);
-            }
-            if (!$fs->exists($configNyro['thumbs_base_path'])) {
-                $fs->mkdir($configNyro['thumbs_base_path']);
-            }
-
-            $nyrodev = $container->get('nyrodev');
 
             require $path;
             $content = ob_get_contents();
