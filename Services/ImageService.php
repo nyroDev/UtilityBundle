@@ -466,31 +466,28 @@ class ImageService extends AbstractService
         return $y;
     }
 
-    // From http://php.net/manual/en/function.imagecreatefromgif.php#59787
+    // From http://php.net/manual/en/function.imagecreatefromgif.php#104473
     public function isAnimatedGif($file)
     {
-        $filecontents = file_get_contents($file);
+        if(!($fh = @fopen($file, 'rb'))) {
+            return false;
+        }
+        
+        //an animated gif contains multiple "frames", with each frame having a 
+        //header made up of:
+        // * a static 4-byte sequence (\x00\x21\xF9\x04)
+        // * 4 variable bytes
+        // * a static 2-byte sequence (\x00\x2C) (some variants may use \x00\x21 ?)
 
-        $str_loc = $count = 0;
-        while ($count < 2) {
-            // There is no point in continuing after we find a 2nd frame
-            $where1 = strpos($filecontents, "\x00\x21\xF9\x04", $str_loc);
-            if ($where1 === false) {
-                break;
-            } else {
-                $str_loc = $where1 + 1;
-                $where2 = strpos($filecontents, "\x00\x2C", $str_loc);
-                if ($where2 === false) {
-                    break;
-                } else {
-                    if ($where1 + 8 == $where2) {
-                        ++$count;
-                    }
-                    $str_loc = $where2 + 1;
-                }
-            }
+        // We read through the file til we reach the end of the file, or we've found 
+        // at least 2 frame headers
+        $count = 0;
+        while(!feof($fh) && $count < 2) {
+            $chunk = fread($fh, 1024 * 100); //read 100kb at a time
+            $count += preg_match_all('#\x00\x21\xF9\x04.{4}\x00(\x2C|\x21)#s', $chunk, $matches);
         }
 
+        fclose($fh);
         return $count > 1;
     }
 

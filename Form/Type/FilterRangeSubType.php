@@ -16,11 +16,11 @@ class FilterRangeSubType extends SrcAbstractType
     {
         $builder
             ->add('start', $options['type'], array_merge(array(
-                'label' => 'admin.misc.start',
+                'label' => 'admin.misc.'.($options['isDate'] ? 'start' : 'from'),
                 'required' => false,
             ), $options['options']))
             ->add('end', $options['type'], array_merge(array(
-                'label' => 'admin.misc.end',
+                'label' => 'admin.misc.'.($options['isDate'] ? 'end' : 'to'),
                 'required' => false,
             ), $options['options']));
     }
@@ -29,7 +29,10 @@ class FilterRangeSubType extends SrcAbstractType
     {
         $resolver
             ->setRequired(array('type'))
-            ->setDefaults(array('options' => array()));
+            ->setDefaults(array(
+                'isDate' => false,
+                'options' => array()
+            ));
     }
 
     public function getBlockPrefix()

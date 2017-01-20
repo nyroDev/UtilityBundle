@@ -69,7 +69,7 @@ class FilterDbRowExpandedType extends FilterType
             $value = $this->applyValue($data['value']);
 
             if (count($value) > 0) {
-                $queryBuilder->addWhere($name, $transformer, $value);
+                $queryBuilder->addWhere($name, $data['transformer'], $value);
             }
         }
 

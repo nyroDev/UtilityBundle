@@ -4,6 +4,7 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 /**
  * Filter Type for Date range fields.
@@ -17,7 +18,8 @@ class FilterRangeDateType extends FilterType
         }
         $builder
             ->add('value', FilterRangeSubType::class, array_merge(array(
-                    'type' => 'date',
+                    'type' => DateType::class,
+                    'isDate' => true,
                     'required' => false,
                 ), $options['valueOptions']));
     }
