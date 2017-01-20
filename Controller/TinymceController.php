@@ -3,6 +3,7 @@
 namespace NyroDev\UtilityBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TinymceController extends AbstractController
 {
@@ -70,6 +71,21 @@ define('DEBUG_ERROR_MESSAGE', true); // TRUE or FALSE
 |    |   |   |   |   |- plugin.min.js
 */
 
+$currentPath = $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'/';
+$currentPathThumb = $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'Thumbs/';
+
+$fs = new Filesystem();
+
+if (!$fs->exists($currentPath)) {
+    $fs->mkdir($currentPath);   
+}
+$currentPath = realpath($currentPath);
+
+if (!$fs->exists($currentPathThumb)) {
+    $fs->mkdir($currentPathThumb);   
+}
+$currentPathThumb = realpath($currentPathThumb);
+
 $configNyro = array(
 
 	/*
@@ -103,7 +119,7 @@ $configNyro = array(
 	|
 	*/
 	//'current_path' => '../source/',
-    'current_path' => $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'/',
+    'current_path' => $currentPath,
     'current_path_url' => $baseUrl.'/uploads/'.$dirName.'/',
 
 	/*
@@ -116,7 +132,7 @@ $configNyro = array(
 	|
 	*/
 	//'thumbs_base_path' => '../thumbs/',
-    'thumbs_base_path' => $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'Thumbs/',
+    'thumbs_base_path' => $currentPathThumb,
     'thumbs_base_path_url' => $baseUrl.'/uploads/'.$dirName.'Thumbs/',
 
 	/*
