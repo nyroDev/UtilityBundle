@@ -130,6 +130,8 @@ jQuery(function($, undefined) {
                         val = me.val();
                         if (val && val.length) {
                             input.val(options.filter('[value="'+val+'"]').text());
+                        } else {
+                            input.val('');
                         }
                     };
 
