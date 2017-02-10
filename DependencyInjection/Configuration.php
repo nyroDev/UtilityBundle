@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('model_manager_name')->defaultNull()->end()
+                ->booleanNode('show_edit_id')->defaultTrue()->end()
                 ->booleanNode('dateFormatUseOffsetDefault')->defaultFalse()->end()
                 ->booleanNode('setLocale')->defaultFalse()->end()
                 ->booleanNode('setContentLanguageResponse')->defaultFalse()->end()

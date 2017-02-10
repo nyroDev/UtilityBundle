@@ -4,6 +4,7 @@ namespace NyroDev\UtilityBundle\Controller;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
+use NyroDev\UtilityBundle\Utility\PhpExcelResponse;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,13 +100,11 @@ abstract class AbstractAdminController extends AbstractController
             $sheet->calculateColumnWidths();
 
             $filename = isset($exportConfig['filename']) ? $exportConfig['filename'] : (isset($exportConfig['prefix']) ? $exportConfig['prefix'] : 'export');
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');
-            header('Cache-Control: max-age=0');
-
-            $objWriter = \PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
-            $objWriter->save('php://output');
-            exit;
+            
+            $response = new PhpExcelResponse();
+			$response->setPhpExcel($filename.'.xlsx', $phpExcel);
+            
+			return $response;
         }
 
         $routePrm = array_merge($routePrm, array('sort' => $sort, 'order' => $order));
@@ -210,7 +209,7 @@ abstract class AbstractAdminController extends AbstractController
         }
         $form = $this->createFormBuilder($row, array('validation_groups' => $groups));
 
-        if ($action != self::ADD) {
+        if ($action != self::ADD && $this->getParameter('nyroDev_utility.show_edit_id')) {
             $form->add('id', TextType::class, array('label' => $this->trans('admin.'.$name.'.id'), 'attr' => array('readonly' => 'readonly'), 'mapped' => false));
             $form->get('id')->setData($row->getId());
         }
