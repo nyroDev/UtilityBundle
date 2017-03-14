@@ -202,12 +202,14 @@ abstract class AbstractAdminController extends AbstractController
         );
     }
 
-    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null)
+    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = array())
     {
         if (is_null($groups)) {
             $groups = array('Default', $action);
         }
-        $form = $this->createFormBuilder($row, array('validation_groups' => $groups));
+        $form = $this->createFormBuilder($row, array_merge($moreFormOptions, array(
+            'validation_groups' => $groups
+        )));
 
         if ($action != self::ADD && $this->getParameter('nyroDev_utility.show_edit_id')) {
             $form->add('id', TextType::class, array('label' => $this->trans('admin.'.$name.'.id'), 'attr' => array('readonly' => 'readonly'), 'mapped' => false));
