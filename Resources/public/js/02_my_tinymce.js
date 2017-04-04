@@ -21,7 +21,7 @@ jQuery(function($) {
 			return data;
 		},
 		tinymceKey = 'tinymce_';
-	
+
     $.extend({
 		tinymceLoad: function(url, clb) {
 			if (tinymceLoading) {
@@ -49,7 +49,14 @@ jQuery(function($) {
 			} else {
 				clb();
 			}
-		}
+		},
+        tinymceLoaded: function(clb) {
+			if (!tinymceLoaded) {
+				tinymceLoadingQueue.push(clb);
+            } else {
+                clb();
+            }
+        }
     });
     
 	$.fn.extend({
@@ -72,8 +79,9 @@ jQuery(function($) {
 							me.trigger('tinmceInit', [ed]);
 						}
 					}, options);
-				if (!tinymceurl)
+				if (!tinymceurl) {
 					$.extend(opts, me.myTinymceDataSearch());
+                }
 				$.tinymceLoad(tinymceurl ? tinymceurl : me.data('tinymceurl'), function() {
 					if (me.data('browser_url')) {
 						opts['file_browser_callback'] = function(field_name, url, type, win) {
