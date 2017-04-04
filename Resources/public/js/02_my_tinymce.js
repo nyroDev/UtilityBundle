@@ -23,7 +23,7 @@ jQuery(function($) {
 		tinymceKey = 'tinymce_';
 	
     $.extend({
-		tinymceLoad = function(url, clb) {
+		tinymceLoad: function(url, clb) {
 			if (tinymceLoading) {
 				tinymceLoadingQueue.push(clb);
 			} else if (!tinymceLoaded) {
