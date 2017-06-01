@@ -36,10 +36,14 @@ class FormFilterService extends AbstractService
 
     public function fillFromSession(Form $form, $route)
     {
+        $filled = false;
         $data = $this->get('session')->get('filter_'.$route);
-        if (is_array($data)) {
+        if (is_array($data) && count($data)) {
             $form->submit($data);
+            $filled = true;
         }
+        
+        return $filled;
     }
 
     public function saveSession(Form $form, $route)
