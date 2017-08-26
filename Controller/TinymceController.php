@@ -2,8 +2,11 @@
 
 namespace NyroDev\UtilityBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use NyroDev\UtilityBundle\Event\TinymceEvent;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TinymceController extends AbstractController
 {
@@ -426,14 +429,20 @@ $configNyro = array_merge(
 	)
 );
 
+            $tinymceBrowserConfigEvent = new TinymceEvent();
+            $tinymceBrowserConfigEvent->setConfig($configNyro);
+            $container->get('event_dispatcher')->dispatch(TinymceEvent::BROWSER_CONFIG, $tinymceBrowserConfigEvent);
+
+            $configNyro = $tinymceBrowserConfigEvent->getConfig();
+
             require $path;
             $content = ob_get_contents();
             ob_end_clean();
 
-            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response = new Response();
             $response->setContent($content);
         } else {
-            $response = new \Symfony\Component\HttpFoundation\BinaryFileResponse($path);
+            $response = new BinaryFileResponse($path);
 
             switch ($response->getFile()->getExtension()) {
                 case 'js': $response->headers->set('Content-Type', 'application/javascript'); break;
