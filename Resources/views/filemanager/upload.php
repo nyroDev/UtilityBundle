@@ -87,22 +87,32 @@ if ( ! empty($_FILES) || isset($_POST['url']))
 	}
 
 	$info = pathinfo($_FILES['file']['name']);
-	$mime_type = $_FILES['file']['type'];
-	if (function_exists('mime_content_type')){
-		$mime_type = mime_content_type($_FILES['file']['tmp_name']);
-	}elseif(function_exists('finfo_open')){
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$mime_type = finfo_file($finfo, $_FILES['file']['tmp_name']);
-	}else{
-		include 'include/mime_type_lib.php';
-		$mime_type = get_file_mime_type($_FILES['file']['tmp_name']);
-	}
+    
+    // nyro update
+    if (
+            $info['extension'] &&
+            isset($config['kepp_ext_original']) &&
+            is_array($config['kepp_ext_original']) &&
+            in_array($info['extension'], $config['kepp_ext_original'])) {
+        $extension = $info['extension'];
+    } else {
+        $mime_type = $_FILES['file']['type'];
+        if (function_exists('mime_content_type')){
+            $mime_type = mime_content_type($_FILES['file']['tmp_name']);
+        }elseif(function_exists('finfo_open')){
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime_type = finfo_file($finfo, $_FILES['file']['tmp_name']);
+        }else{
+            include 'include/mime_type_lib.php';
+            $mime_type = get_file_mime_type($_FILES['file']['tmp_name']);
+        }
 
-	$extension = get_extension_from_mime($mime_type);
+        $extension = get_extension_from_mime($mime_type);
 
-	if($extension=='so'){
-		$extension = $info['extension'];
-	}
+        if($extension=='so'){
+            $extension = $info['extension'];
+        }
+    }
 
 	if (in_array(fix_strtolower($extension), $ext))
 	{

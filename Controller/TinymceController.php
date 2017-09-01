@@ -384,6 +384,9 @@ $configNyro = array(
 	'ext_video'                               => array( 'mov', 'mpeg', 'm4v', 'mp4', 'avi', 'mpg', 'wma', "flv", "webm" ), //Video
 	'ext_music'                               => array( 'mp3', 'mpga', 'm4a', 'ac3', 'aiff', 'mid', 'ogg', 'wav' ), //Audio
 	'ext_misc'                                => array( 'zip', 'rar', 'gz', 'tar', 'iso', 'dmg' ), //Archives
+    
+    // nyro update
+    'kepp_ext_original'                       => false, // false or array of extension to keep
 
 	/******************
 	* AVIARY config
