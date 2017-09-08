@@ -69,8 +69,13 @@ class ImageService extends AbstractService
 
     public function getCachePath($file, $autoCreate = true)
     {
-        $tmp = explode('/web/', $file);
-        $dir = $tmp[0].'/web/cache/'.$tmp[1].'/';
+        if (strpos($file, '/web/cache/') !== false) {
+            $dir = $file.'_cache/';
+        } else {
+            $tmp = explode('/web/', $file);
+            $dir = $tmp[0].'/web/cache/'.$tmp[1].'/';
+        }
+        
         if ($autoCreate && !file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
