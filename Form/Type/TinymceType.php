@@ -29,6 +29,7 @@ class TinymceType extends AbstractType
             $prefixTinymce.'toolbar' => 'undo redo | styleselect | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
             $prefixTinymce.'menubar' => 'insert edit view table tools',
             $prefixTinymce.'relative_urls' => 'false',
+            $prefixTinymce.'branding' => 'false',
             $prefixTinymce.'browser_spellcheck' => 'true',
         ));
 

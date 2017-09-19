@@ -2,6 +2,8 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 class ImageService extends AbstractService
 {
     public function resize($file, $configKey = 'default', $force = false)
@@ -69,8 +71,13 @@ class ImageService extends AbstractService
 
     public function getCachePath($file, $autoCreate = true)
     {
-        $tmp = explode('/web/', $file);
-        $dir = $tmp[0].'/web/cache/'.$tmp[1].'/';
+        if (strpos($file, '/web/cache/') !== false) {
+            $dir = $file.'_cache/';
+        } else {
+            $tmp = explode('/web/', $file);
+            $dir = $tmp[0].'/web/cache/'.$tmp[1].'/';
+        }
+        
         if ($autoCreate && !file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
@@ -81,11 +88,9 @@ class ImageService extends AbstractService
     public function removeCache($file)
     {
         $dir = $this->getCachePath($file, false);
-        if (file_exists($dir)) {
-            foreach (glob($dir.'*') as $f) {
-                unlink($f);
-            }
-            rmdir($dir);
+        $fs = new Filesystem();
+        if ($fs->exists($dir)) {
+            $fs->remove($dir);
         }
     }
 

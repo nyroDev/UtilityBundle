@@ -222,8 +222,9 @@ abstract class AbstractUploadable
 
     protected function removeFileReal($file)
     {
-        if ($file && file_exists($file)) {
-            unlink($file);
+        $fs = new Filesystem();
+        if ($file && $fs->exists($file)) {
+            $fs->remove($file);
             if ($this->service) {
                 $this->service->get('nyrodev_image')->removeCache($file);
             }

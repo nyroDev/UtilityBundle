@@ -2,7 +2,28 @@ jQuery(function($) {
 	var tinymceLoaded = false,
 		tinymceLoading = false,
 		tinymceLoadingQueue = [],
-		tinymceLoad = function(url, clb) {
+		searchFuncOrRegexp = function(data) {
+			if (typeof data == 'string') {
+				if (data.indexOf('function(') === 0) {
+					eval('window.tinyval = '+data+';');
+					data = window.tinyval;
+					delete(window.tinyval);
+				} else if (data.indexOf('reg/') === 0 && data.lastIndexOf('/') === data.length - 1) {
+					data = new RegExp(data.substring(4, data.length - 1));
+				}
+			} else if (typeof data == 'object') {
+				var tmp = Object.prototype.toString.call(data) == '[object Array]' ? [] : {};
+				$.each(data, function(k, v) {
+					tmp[k] = searchFuncOrRegexp(v);
+				});
+				data = tmp;
+			}
+			return data;
+		},
+		tinymceKey = 'tinymce_';
+
+    $.extend({
+		tinymceLoad: function(url, clb) {
 			if (tinymceLoading) {
 				tinymceLoadingQueue.push(clb);
 			} else if (!tinymceLoaded) {
@@ -29,26 +50,15 @@ jQuery(function($) {
 				clb();
 			}
 		},
-		searchFuncOrRegexp = function(data) {
-			if (typeof data == 'string') {
-				if (data.indexOf('function(') === 0) {
-					eval('window.tinyval = '+data+';');
-					data = window.tinyval;
-					delete(window.tinyval);
-				} else if (data.indexOf('reg/') === 0 && data.lastIndexOf('/') === data.length - 1) {
-					data = new RegExp(data.substring(4, data.length - 1));
-				}
-			} else if (typeof data == 'object') {
-				var tmp = Object.prototype.toString.call(data) == '[object Array]' ? [] : {};
-				$.each(data, function(k, v) {
-					tmp[k] = searchFuncOrRegexp(v);
-				});
-				data = tmp;
-			}
-			return data;
-		},
-		tinymceKey = 'tinymce_';
-	
+        tinymceLoaded: function(clb) {
+			if (!tinymceLoaded) {
+				tinymceLoadingQueue.push(clb);
+            } else {
+                clb();
+            }
+        }
+    });
+    
 	$.fn.extend({
 		myTinymceDataSearch: function(tKey) {
 			tKey = tKey || tinymceKey;
@@ -69,9 +79,10 @@ jQuery(function($) {
 							me.trigger('tinmceInit', [ed]);
 						}
 					}, options);
-				if (!tinymceurl)
+				if (!tinymceurl) {
 					$.extend(opts, me.myTinymceDataSearch());
-				tinymceLoad(tinymceurl ? tinymceurl : me.data('tinymceurl'), function() {
+                }
+				$.tinymceLoad(tinymceurl ? tinymceurl : me.data('tinymceurl'), function() {
 					if (me.data('browser_url')) {
 						opts['file_browser_callback'] = function(field_name, url, type, win) {
 							parent.nyroBrowserField = field_name;

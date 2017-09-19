@@ -28,6 +28,7 @@ abstract class AbstractAdminController extends AbstractController
         $order = $tmpList['order'];
         $sort = $tmpList['sort'];
         $filter = $tmpList['filter'];
+        $filterFilled = $tmpList['filterFilled'];
         $page = $tmpList['page'];
         $queryBuilder = $tmpList['queryBuilder'];
         $rawQueryBuilder = clone $queryBuilder;
@@ -120,6 +121,7 @@ abstract class AbstractAdminController extends AbstractController
 
         return array(
             'filter' => !is_null($filter) ? $filter->createView() : null,
+            'filterFilled' => $filterFilled,
             'pager' => $pager,
             'routeName' => $route,
             'routePrm' => $routePrm,
@@ -156,6 +158,7 @@ abstract class AbstractAdminController extends AbstractController
         $order = $request->query->get('order', $request->getSession()->get('admin_list_'.$route.'_order', $defaultOrder));
         $request->getSession()->set('admin_list_'.$route.'_order', $order);
 
+        $filterFilled = false;
         if (!is_null($filter)) {
             // bind values from the request
             if ($request->query->has('clearFilter')) {
@@ -168,8 +171,9 @@ abstract class AbstractAdminController extends AbstractController
                 if (isset($tmp['submit'])) {
                     $page = 1;
                 }
+                $filterFilled = true;
             } else {
-                $this->get('nyrodev_formFilter')->fillFromSession($filter, $route);
+                $filterFilled = $this->get('nyrodev_formFilter')->fillFromSession($filter, $route);
             }
         }
 
@@ -196,18 +200,21 @@ abstract class AbstractAdminController extends AbstractController
             'order' => $order,
             'sort' => $sort,
             'filter' => $filter,
+            'filterFilled' => $filterFilled,
             'page' => $page,
             'queryBuilder' => $queryBuilder,
             'total' => $total,
         );
     }
 
-    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null)
+    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = array())
     {
         if (is_null($groups)) {
             $groups = array('Default', $action);
         }
-        $form = $this->createFormBuilder($row, array('validation_groups' => $groups));
+        $form = $this->createFormBuilder($row, array_merge($moreFormOptions, array(
+            'validation_groups' => $groups
+        )));
 
         if ($action != self::ADD && $this->getParameter('nyroDev_utility.show_edit_id')) {
             $form->add('id', TextType::class, array('label' => $this->trans('admin.'.$name.'.id'), 'attr' => array('readonly' => 'readonly'), 'mapped' => false));
