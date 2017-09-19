@@ -18,6 +18,15 @@ class MainService extends AbstractService
     {
         if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
             $locale = $event->getRequest()->getLocale();
+            
+            if (strpos($locale, 'change_') === 0) {
+                $tmp = explode('change_', $locale);
+                $locale = $tmp[1];
+                // Update already instanciated objects
+                $event->getRequest()->setLocale($locale);
+                $this->get('translator')->setLocale($locale);
+            }
+            
             $locales = [
                 $locale,
                 $locale.'@euro',
