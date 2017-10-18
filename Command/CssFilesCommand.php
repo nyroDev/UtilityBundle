@@ -37,6 +37,14 @@ class CssFilesCommand extends ContainerAwareCommand
 
         $finder = new Finder();
         $finderRes = new Finder();
+        $resourceDirs = [];
+
+        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $appDir = realpath('./app/Resources');
+        if ($fs->exists($appDir)) {
+            $resourceDirs[] = $appDir;
+        }
+
         $resources = $finderRes
                     ->directories()
                     ->depth(2)
@@ -60,6 +68,9 @@ class CssFilesCommand extends ContainerAwareCommand
                         return strcmp($aPath, $bPath);
                     })
                     ->name('Resources');
+        foreach ($resources as $res) {
+            $resourceDirs[] = $res->getRealpath();
+        }
 
         $ds = DIRECTORY_SEPARATOR;
         $found = false;
@@ -69,13 +80,12 @@ class CssFilesCommand extends ContainerAwareCommand
             $ds.'public'.$ds.'css'.$ds.'images'.$ds,
             $ds.'public'.$ds.'css'.$ds.'fonts'.$ds,
         );
-        foreach ($resources as $res) {
-            $resPath = $res->getRealpath();
+        foreach ($resourceDirs as $resourceDir) {
             foreach ($subFolderTests as $subFolder) {
-                if (file_exists($resPath.$subFolder)) {
+                if (file_exists($resourceDir.$subFolder)) {
                     $found = true;
-                    $finder->in($resPath.$subFolder);
-                    $subFolders[] = $resPath.$subFolder;
+                    $finder->in($resourceDir.$subFolder);
+                    $subFolders[] = $resourceDir.$subFolder;
                     $tmp = explode($ds, $subFolder);
                     if ($tmp[count($tmp) - 2] == 'fonts') {
                         $hasFonts = true;
