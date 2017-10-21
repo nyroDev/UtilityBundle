@@ -42,7 +42,13 @@ class FileTypeExtension extends AbstractTypeExtension
     {
         $data = $form->getParent()->getData();
         if ($options['currentFile'] || $data instanceof AbstractUploadable) {
-            $currentFile = isset($options['currentFile']) && $options['currentFile'] ? $options['currentFile'] : $data->getWebPath($form->getName());
+            try {
+                $currentFile = isset($options['currentFile']) && $options['currentFile'] ? $options['currentFile'] : $data->getWebPath($form->getName());
+            } catch (\Exception $e) {
+                // In some cases, getWebPath might throw an exception
+                $currentFile = null;
+            }
+
             if ($currentFile) {
                 $view->vars['currentFile'] = $currentFile;
                 $view->vars['currentFileUrl'] = isset($options['currentFileUrl']) && $options['currentFileUrl'] ? $options['currentFileUrl'] : false;
