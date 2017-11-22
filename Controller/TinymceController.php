@@ -27,7 +27,7 @@ class TinymceController extends AbstractController
                 }
             }
             set_include_path(get_include_path().PATH_SEPARATOR.$fileManagerDir);
-            
+
             $baseUrl = $request->getScheme().'://'.$request->getHost().$request->getBasePath();
 
 /*
@@ -80,12 +80,12 @@ $currentPathThumb = $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'T
 $fs = new Filesystem();
 
 if (!$fs->exists($currentPath)) {
-    $fs->mkdir($currentPath);   
+    $fs->mkdir($currentPath);
 }
 $currentPath = realpath($currentPath).'/';
 
 if (!$fs->exists($currentPathThumb)) {
-    $fs->mkdir($currentPathThumb);   
+    $fs->mkdir($currentPathThumb);
 }
 $currentPathThumb = realpath($currentPathThumb).'/';
 
@@ -99,7 +99,7 @@ $configNyro = array(
 	| without final / (DON'T TOUCH)
 	|
 	*/
-	'base_url' => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && ! in_array(strtolower($_SERVER['HTTPS']), array( 'off', 'no' ))) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'],
+	//'base_url' => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http"). "://". @$_SERVER['HTTP_HOST'],
     'base_url' => $baseUrl,
 
 	/*
@@ -123,6 +123,7 @@ $configNyro = array(
 	*/
 	//'current_path' => '../source/',
     'current_path' => $currentPath,
+    'thumbs_base_path' => $fs->makePathRelative($currentPath, $fileManagerDir),
     'current_path_url' => $baseUrl.'/uploads/'.$dirName.'/',
 
 	/*
@@ -138,33 +139,40 @@ $configNyro = array(
     'thumbs_base_path' => $currentPathThumb,
     'thumbs_base_path_url' => $baseUrl.'/uploads/'.$dirName.'Thumbs/',
 
+
 	/*
 	|--------------------------------------------------------------------------
 	| FTP configuration BETA VERSION
 	|--------------------------------------------------------------------------
 	|
 	| If you want enable ftp use write these parametres otherwise leave empty
-	| Remember to set base_url properly to point in the ftp server domain and 
+	| Remember to set base_url properly to point in the ftp server domain and
 	| upload dir will be ftp_base_folder + upload_dir so without final /
 	|
 	*/
-	'ftp_host'         => false,
+	'ftp_host'         => false, //put the FTP host
 	'ftp_user'         => "user",
 	'ftp_pass'         => "pass",
 	'ftp_base_folder'  => "base_folder",
 	'ftp_base_url'     => "http://site to ftp root",
-	/* --------------------------------------------------------------------------
-	| path from ftp_base_folder to base of thumbs folder with start and final |
-	|--------------------------------------------------------------------------*/
+	// Directory where place files before to send to FTP with final /
+	'ftp_temp_folder'  => "../temp/",
+	/*
+	|---------------------------------------------------------------------------
+	| path from ftp_base_folder to base of thumbs folder with start and final /
+	|---------------------------------------------------------------------------
+	*/
 	'ftp_thumbs_dir' => '/thumbs/',
 	'ftp_ssl' => false,
 	'ftp_port' => 21,
 
-
-	// 'ftp_host'         => "s108707.gridserver.com",
-	// 'ftp_user'         => "test@responsivefilemanager.com",
-	// 'ftp_pass'         => "Test.1234",
-	// 'ftp_base_folder'  => "/domains/responsivefilemanager.com/html",
+	/* EXAMPLE
+	'ftp_host'         => "host.com",
+	'ftp_user'         => "test@host.com",
+	'ftp_pass'         => "pass.1",
+	'ftp_base_folder'  => "",
+	'ftp_base_url'     => "http://host.com/testFTP",
+	*/
 
 
 	/*
@@ -183,7 +191,7 @@ $configNyro = array(
 	|
 	*/
 
-	'access_keys' => array('nyrodev/utility-bundle', $container->getParameter('secret')),
+    'access_keys' => array('nyrodev/utility-bundle', $container->getParameter('secret')),
 
 	//--------------------------------------------------------------------------------------------------------
 	// YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS
@@ -215,7 +223,8 @@ $configNyro = array(
 	|--------------------------------------------------------------------------
 	|
 	*/
-	'fileFolderPermission' => 0755,
+	'filePermission' => 0755,
+	'folderPermission' => 0777,
 
 
 	/*
@@ -244,7 +253,7 @@ $configNyro = array(
 	//Show or not show sorting feature in filemanager
 	'show_sorting_bar'						=> true,
 	//Show or not show filters button in filemanager
-	'show_filter_buttons'					=> true,
+	'show_filter_buttons'                   => true,
 	//Show or not language selection feature in filemanager
 	'show_language_selection'				=> false,
 	//active or deactive the transliteration (mean convert all strange characters in A..Za..z0..9 characters)
@@ -258,10 +267,6 @@ $configNyro = array(
 
 	//Add ?484899493349 (time value) to returned images to prevent cache
 	'add_time_to_img'                       => false,
-
-	// -1: There is no lazy loading at all, 0: Always lazy-load images, 0+: The minimum number of the files in a directory
-	// when lazy loading should be turned on.
-	'lazy_loading_file_number_threshold'	=> 0,
 
 
 	//*******************************************
@@ -298,7 +303,7 @@ $configNyro = array(
 	//******************
 	//
 	// WATERMARK IMAGE
-	// 
+	//
 	//Watermark url or false
 	'image_watermark'                          => false,
 	# Could be a pre-determined position such as:
@@ -362,11 +367,7 @@ $configNyro = array(
 
 	// Preview with Google Documents
 	'googledoc_enabled'                       => true,
-	'googledoc_file_exts'                     => array( 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx' ),
-
-	// Preview with Viewer.js
-	'viewerjs_enabled'                        => true,
-	'viewerjs_file_exts'                      => array( 'pdf', 'odt', 'odp', 'ods' ),
+	'googledoc_file_exts'                     => array( 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx' , 'pdf', 'odt', 'odp', 'ods'),
 
 	// defines size limit for paste in MB / operation
 	// set 'FALSE' for no limit
@@ -384,9 +385,6 @@ $configNyro = array(
 	'ext_video'                               => array( 'mov', 'mpeg', 'm4v', 'mp4', 'avi', 'mpg', 'wma', "flv", "webm" ), //Video
 	'ext_music'                               => array( 'mp3', 'mpga', 'm4a', 'ac3', 'aiff', 'mid', 'ogg', 'wav' ), //Audio
 	'ext_misc'                                => array( 'zip', 'rar', 'gz', 'tar', 'iso', 'dmg' ), //Archives
-    
-    // nyro update
-    'kepp_ext_original'                       => false, // false or array of extension to keep
 
 	/******************
 	* AVIARY config
@@ -415,13 +413,7 @@ $configNyro = array(
 	/*******************
 	* URL upload
 	*******************/
-	'url_upload'                             => false,
-
-	/*******************
-	* JAVA upload
-	*******************/
-	'java_upload'                             => false,
-	'JAVAMaxSizeUpload'                       => 200, //Gb
+	'url_upload'                             => true,
 
 
 	//************************************
