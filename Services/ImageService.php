@@ -77,7 +77,7 @@ class ImageService extends AbstractService
             $tmp = explode('/web/', $file);
             $dir = $tmp[0].'/web/cache/'.$tmp[1].'/';
         }
-        
+
         if ($autoCreate && !file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
@@ -102,7 +102,7 @@ class ImageService extends AbstractService
 
         $info = null;
         if (is_null($dest)) {
-            $info = getimagesize($file);
+            $info = $this->getImageSize($file);
             $ext = 'jpg';
             switch ($info[2]) {
                 case IMAGETYPE_GIF:    $ext = 'gif'; break;
@@ -114,7 +114,7 @@ class ImageService extends AbstractService
 
         if (isset($config['ignoreAnimatedGif'])) {
             if (is_null($info)) {
-                $info = getimagesize($file);
+                $info = $this->getImageSize($file);
             }
             if ($info[2] === IMAGETYPE_GIF && $this->isAnimatedGif($file)) {
                 // animated file, copy it directly to destination and/or ignore force
@@ -335,9 +335,41 @@ class ImageService extends AbstractService
         return $imgDst;
     }
 
+    /**
+     * Get image size array, possibily using a cache if configured
+     *
+     * @param string $file
+     * @param bool $force
+     * @return array
+     */
+    public function getImageSize($file, $force = false)
+    {
+        $cache = false;
+        if ($this->container->has('nyrodev_image_cache')) {
+            $cache = $this->get('nyrodev_image_cache');
+        }
+
+        $cacheKey = 'imageSize_'. sha1($file);
+        $imageSize = [];
+
+        if ($force || !$cache || !$cache->contains($cacheKey)) {
+            try {
+                $imageSize = getimagesize($file);
+                if ($cache) {
+                    $cache->save($cacheKey, $imageSize, 24 * 60 * 60); // cache for 24 hours
+                }
+            } catch (\Exception $ex) {
+            }
+        } else {
+            $imageSize = $cache->fetch($cacheKey);
+        }
+
+        return $imageSize;
+    }
+
     public function createImgSrc($file, $allowTransparent = true)
     {
-        $info = getimagesize($file);
+        $info = $this->getImageSize($file);
         $src = null;
         $isTransparent = true;
         switch ($info[2]) {
@@ -477,14 +509,14 @@ class ImageService extends AbstractService
         if(!($fh = @fopen($file, 'rb'))) {
             return false;
         }
-        
-        //an animated gif contains multiple "frames", with each frame having a 
+
+        //an animated gif contains multiple "frames", with each frame having a
         //header made up of:
         // * a static 4-byte sequence (\x00\x21\xF9\x04)
         // * 4 variable bytes
         // * a static 2-byte sequence (\x00\x2C) (some variants may use \x00\x21 ?)
 
-        // We read through the file til we reach the end of the file, or we've found 
+        // We read through the file til we reach the end of the file, or we've found
         // at least 2 frame headers
         $count = 0;
         while(!feof($fh) && $count < 2) {

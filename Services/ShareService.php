@@ -9,7 +9,7 @@ class ShareService extends AbstractService
 
     /**
      * Set a share meta value.
-     * 
+     *
      * @param string $type        Meta name
      * @param string $value       Meta value
      * @param bool   $useProperty Indicates if the default should use property
@@ -175,9 +175,16 @@ class ShareService extends AbstractService
      *
      * @param string $image Absolute image URL
      */
-    public function setImage($image)
+    public function setImage($image, $getAndSetDimensions = true)
     {
         $this->set('image', $image);
+        if ($getAndSetDimensions) {
+            $imageSize = $this->get('nyrodev_image')->getImageSize($image);
+            if (is_array($imageSize)) {
+                $this->set('og:image:width', $imageSize[0], true);
+                $this->set('og:image:height', $imageSize[1], true);
+            }
+        }
     }
 
     /**
@@ -230,7 +237,7 @@ class ShareService extends AbstractService
     /**
      * Get number of share for an URL.
      * Cache the response of this function!
-     * 
+     *
      * @param string $url
      *
      * @return array
