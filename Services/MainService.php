@@ -2,9 +2,12 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Html2Text\Html2Text;
+use NyroDev\UtilityBundle\Utility\Pager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MainService extends AbstractService
@@ -18,7 +21,7 @@ class MainService extends AbstractService
     {
         if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
             $locale = $event->getRequest()->getLocale();
-            
+
             if (strpos($locale, 'change_') === 0) {
                 $tmp = explode('change_', $locale);
                 $locale = $tmp[1];
@@ -26,7 +29,7 @@ class MainService extends AbstractService
                 $event->getRequest()->setLocale($locale);
                 $this->get('translator')->setLocale($locale);
             }
-            
+
             $locales = [
                 $locale,
                 $locale.'@euro',
@@ -115,7 +118,7 @@ class MainService extends AbstractService
 
     /**
      * Get parametred analytics UA.
-     * 
+     *
      * @return string
      */
     public function getAnalyticsUA()
@@ -167,7 +170,7 @@ class MainService extends AbstractService
 
     /**
      * Urlify a string.
-     * 
+     *
      * @param string $text
      *
      * @return string
@@ -307,11 +310,11 @@ class MainService extends AbstractService
      * @param int    $page      Current page
      * @param int    $nbPerPage Number per page
      *
-     * @return \NyroDev\UtilityBundle\Utility\Pager
+     * @return Pager
      */
     public function getPager($route, $routePrm, $total, $page, $nbPerPage)
     {
-        return new \NyroDev\UtilityBundle\Utility\Pager($this, $route, $routePrm, $total, $page, $nbPerPage);
+        return new Pager($this, $route, $routePrm, $total, $page, $nbPerPage);
     }
 
     /**
@@ -393,7 +396,7 @@ class MainService extends AbstractService
             require dirname(__FILE__).'/../Utility/Html2Text.php';
             $this->html2textLoaded = true;
         }
-        $html2text = new \Html2Text\Html2Text($html);
+        $html2text = new Html2Text($html);
 
         return $html2text->get_text();
     }
@@ -422,7 +425,7 @@ class MainService extends AbstractService
      * @param string $url         The desired URL
      * @param array  $allowParams List of allowed parameters
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|bool
+     * @return RedirectResponse|bool
      */
     public function redirectIfNotUrl($url, array $allowParams = array())
     {
@@ -430,23 +433,25 @@ class MainService extends AbstractService
             $redirect = true;
             try {
                 $tmp = parse_url($this->getRequest()->getRequestUri());
+                if (isset($tmp['path']) && $tmp['path'] == $url) {
+                    $redirect = false;
+                }
                 if (isset($tmp['query'])) {
                     $newArgs = array();
                     parse_str($tmp['query'], $args);
-                    foreach ($allowParams as $k) {
+                    $alloweds = array_merge($allowParams, $this->getParameter('nyroDev_utility.redirectIfNotUrl_params', array()));
+                    foreach ($alloweds as $k) {
                         if (isset($args[$k])) {
                             $newArgs[$k] = $args[$k];
                         }
                     }
                     $redirect = count($newArgs) != count($args);
                 }
-                if (isset($tmp['path']) && $tmp['path'] == $url) {
-                    $redirect = false;
-                }
             } catch (\Exception $e) {
+                $redirect = false;
             }
             if ($redirect) {
-                return new \Symfony\Component\HttpFoundation\RedirectResponse($url, 301);
+                return new RedirectResponse($url.(count($newArgs) ? '?'.http_build_query($newArgs) : ''), 301);
             }
         }
 
@@ -483,7 +488,7 @@ class MainService extends AbstractService
      * @param string $text   Text to truncate
      * @param int    $limit  Limit
      * @param bool   $isFile Indicate if it should be treated as file to keep the extension
-     * @parame string $encoding Encoding to use 
+     * @parame string $encoding Encoding to use
      *
      * @return string Trucnated text
      */

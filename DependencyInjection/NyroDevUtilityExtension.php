@@ -66,6 +66,10 @@ class NyroDevUtilityExtension extends Extension
             }
         }
 
+        if (isset($config['redirectIfNotUrl_params']) && is_array($config['redirectIfNotUrl_params'])) {
+            $container->setParameter('nyroDev_utility.redirectIfNotUrl_params', $config['redirectIfNotUrl_params']);
+        }
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('forms.yml');

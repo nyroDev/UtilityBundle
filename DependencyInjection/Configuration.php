@@ -85,6 +85,10 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('useIPv4For')->defaultValue('youtube.com')->end()
                     ->end()
                 ->end()
+                ->arrayNode('redirectIfNotUrl_params')
+                    ->defaultValue(array('utm_medium', 'utm_source', 'utm_campaign', 'utm_content', 'utm_term'))
+                    ->scalarPrototype()->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
