@@ -87,7 +87,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('redirectIfNotUrl_params')
                     ->defaultValue(array('utm_medium', 'utm_source', 'utm_campaign', 'utm_content', 'utm_term'))
-                    ->scalarPrototype()->end()
+                    ->prototype('scalar')->end()
                 ->end()
             ->end();
 
