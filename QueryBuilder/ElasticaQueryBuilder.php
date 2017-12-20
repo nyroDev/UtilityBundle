@@ -85,7 +85,14 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
         }
 
         if (isset($this->config['joinWhere']) && count($this->config['joinWhere'])) {
-            throw new \Exception('joinWhere is not supported for ElasticaQueryBuilder.');
+            foreach ($this->config['joinWhere'] as $where) {
+                list($name, $values, $subSelectField) = $where;
+                if ($subSelectField === 'id') {
+                    $boolQuery->addFilter(new Terms($name, $values));
+                } else {
+                    throw new \Exception('joinWhere for ElasticaQueryBuilder supports only linearized id fields .');
+                }
+            }
         }
 
         $queryBuilder = new Query($boolQuery);
