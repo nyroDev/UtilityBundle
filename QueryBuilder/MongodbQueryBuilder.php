@@ -4,10 +4,6 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 class MongodbQueryBuilder extends AbstractQueryBuilder
 {
-    protected function _buildRealQueryBuilder()
-    {
-        return $this->getNewQueryBuilder();
-    }
 
     /**
      * @param bool $complete

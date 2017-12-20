@@ -125,7 +125,17 @@ abstract class AbstractQueryBuilder
         $this->built = true;
     }
 
-    abstract protected function _buildRealQueryBuilder();
+    protected function _buildRealQueryBuilder()
+    {
+        return $this->getNewQueryBuilder();
+    }
+
+    /**
+     * @param bool $complete
+     *
+     * @return Specific query builder
+     */
+    abstract public function getNewQueryBuilder($complete = false);
 
     public function getQueryBuilder()
     {

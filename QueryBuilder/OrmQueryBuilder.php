@@ -4,10 +4,6 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 class OrmQueryBuilder extends AbstractQueryBuilder
 {
-    protected function _buildRealQueryBuilder()
-    {
-        return $this->getNewQueryBuilder();
-    }
 
     public function getNewQueryBuilder($complete = false)
     {
@@ -134,9 +130,6 @@ class OrmQueryBuilder extends AbstractQueryBuilder
                 if ($transformer === self::OPERATOR_CONTAINS) {
                     $transformer = 'LIKE';
                     $value = '%'.$value.'%';
-                } elseif ($transformer === self::OPERATOR_LIKEDATE) {
-                    $transformer = 'LIKE';
-                    $value = $value.'%';
                 }
                 /* @var $object \Doctrine\ORM\Query\Expr */
                 $ret = $alias.'.'.$field.' '.$transformer.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : '');
