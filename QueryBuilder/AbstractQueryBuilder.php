@@ -51,6 +51,13 @@ abstract class AbstractQueryBuilder
         $this->om = $om;
         $this->service = $service;
     }
+    
+    public function __clone()
+    {
+        $this->built = null;
+        $this->queryBuilder = null;
+        $this->count = null;
+    }
 
     protected $config = array();
 
