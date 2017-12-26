@@ -144,7 +144,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
 
                         $subQuery2 = new BoolQuery();
                         if ($this->applyFilter($subQuery2, $fieldOr, $transformerOr, $valueOr)) {
-                            $subQuery2->addShould($subQuery2);
+                            $subQuery->addShould($subQuery2);
                             ++$nbOr;
                         }
                     }
