@@ -513,6 +513,7 @@ class ImageService extends AbstractService
                 $y+= $h;
             }
         } else {
+            $dim = imagettfbbox($fontSize, 0, $font, '-');
             $h = round(abs($dim[5]) * $lineHeight);
             $lines[] = [
                 'text' => '',
@@ -521,7 +522,6 @@ class ImageService extends AbstractService
                 'x' => 0,
                 'w' => 0,
             ];
-            $dim = imagettfbbox($fontSize, 0, $font, '-');
             $y+= $h;
         }
 
