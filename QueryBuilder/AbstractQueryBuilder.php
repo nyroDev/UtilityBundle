@@ -51,6 +51,13 @@ abstract class AbstractQueryBuilder
         $this->om = $om;
         $this->service = $service;
     }
+    
+    public function __clone()
+    {
+        $this->built = null;
+        $this->queryBuilder = null;
+        $this->count = null;
+    }
 
     protected $config = array();
 
@@ -125,7 +132,17 @@ abstract class AbstractQueryBuilder
         $this->built = true;
     }
 
-    abstract protected function _buildRealQueryBuilder();
+    protected function _buildRealQueryBuilder()
+    {
+        return $this->getNewQueryBuilder();
+    }
+
+    /**
+     * @param bool $complete
+     *
+     * @return Specific query builder
+     */
+    abstract public function getNewQueryBuilder($complete = false);
 
     public function getQueryBuilder()
     {

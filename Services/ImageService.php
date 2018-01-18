@@ -410,17 +410,17 @@ class ImageService extends AbstractService
         );
     }
 
-    public function writeMultilineTextWithLines($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5)
+    public function writeMultilineTextWithLines($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5, array &$lines = array())
     {
         $texts = explode("\n", $text);
         foreach ($texts as $t) {
-            $y = $this->writeMultilineText($img, $font, $fontSize, $color, trim($t), $x, $y, $maxWidth, $alignement, $falseBold, $lineHeight);
+            $y = $this->writeMultilineText($img, $font, $fontSize, $color, trim($t), $x, $y, $maxWidth, $alignement, $falseBold, $lineHeight, $lines);
         }
 
         return $y;
     }
 
-    public function writeMultilineText($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5)
+    public function writeMultilineText($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5, array &$lines = array())
     {
         if ($text) {
             $rawWords = preg_split('/[\s]+/', $text);
@@ -473,9 +473,17 @@ class ImageService extends AbstractService
                         imagettftext($img, $fontSize, 0, $curX + $falseBold, $y, $color, $font, $string);
                     }
                     imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
+                    $h = round(abs($dimLineHeight[5]) * $lineHeight);
+                    $lines[] = [
+                        'text' => $string,
+                        'x' => $curX,
+                        'y' => $y - $h + $dimLineHeight[1],
+                        'w' => $curWidth,
+                        'h' => $h,
+                    ];
 
                     $string = '';
-                    $y += round(abs($dimLineHeight[5]) * $lineHeight);
+                    $y+= $h;
                     $curWidth = 0;
                 }
             }
@@ -496,11 +504,28 @@ class ImageService extends AbstractService
                     imagettftext($img, $fontSize, 0, $curX + $falseBold, $y, $color, $font, $string);
                 }
                 imagettftext($img, $fontSize, 0, $curX, $y, $color, $font, $string);
-                $y += round(abs($dimLineHeight[5]) * $lineHeight);
+                $h = round(abs($dimLineHeight[5]) * $lineHeight);
+                $lines[] = [
+                    'text' => $string,
+                    'x' => $curX,
+                    'y' => $y - $h + $dimLineHeight[1],
+                    'w' => $curWidth,
+                    'h' => $h,
+                ];
+
+                $y+= $h;
             }
         } else {
             $dim = imagettfbbox($fontSize, 0, $font, '-');
-            $y += round(abs($dim[5]) * $lineHeight);
+            $h = round(abs($dim[5]) * $lineHeight);
+            $lines[] = [
+                'text' => '',
+                'y' => $y - $h + $dim[1],
+                'h' => $h,
+                'x' => 0,
+                'w' => 0,
+            ];
+            $y+= $h;
         }
 
         return $y;
