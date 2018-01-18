@@ -355,7 +355,7 @@ class ImageService extends AbstractService
         if ($force || !$cache || !$cache->contains($cacheKey)) {
             try {
                 $fs = new Filesystem();
-                if ($fs->exists($file)) {
+                if (filter_var($file, FILTER_VALIDATE_URL) || $fs->exists($file)) {
                     $imageSize = @getimagesize($file);
                     if (is_array($imageSize) && count($imageSize) && $cache) {
                         $cache->save($cacheKey, $imageSize, 24 * 60 * 60); // cache for 24 hours
