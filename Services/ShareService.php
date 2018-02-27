@@ -180,7 +180,7 @@ class ShareService extends AbstractService
         $this->set('image', $image);
         if ($getAndSetDimensions) {
             $imageSize = $this->container->get('nyrodev_image')->getImageSize($image);
-            if (is_array($imageSize)) {
+            if (is_array($imageSize) && count($imageSize)) {
                 $this->set('og:image:width', $imageSize[0], true);
                 $this->set('og:image:height', $imageSize[1], true);
             }

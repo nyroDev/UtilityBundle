@@ -354,9 +354,12 @@ class ImageService extends AbstractService
 
         if ($force || !$cache || !$cache->contains($cacheKey)) {
             try {
-                $imageSize = getimagesize($file);
-                if ($cache) {
-                    $cache->save($cacheKey, $imageSize, 24 * 60 * 60); // cache for 24 hours
+                $fs = new Filesystem();
+                if (filter_var($file, FILTER_VALIDATE_URL) || $fs->exists($file)) {
+                    $imageSize = @getimagesize($file);
+                    if (is_array($imageSize) && count($imageSize) && $cache) {
+                        $cache->save($cacheKey, $imageSize, 24 * 60 * 60); // cache for 24 hours
+                    }
                 }
             } catch (\Exception $ex) {
             }
@@ -513,6 +516,7 @@ class ImageService extends AbstractService
                 $y+= $h;
             }
         } else {
+            $dim = imagettfbbox($fontSize, 0, $font, '-');
             $h = round(abs($dim[5]) * $lineHeight);
             $lines[] = [
                 'text' => '',
@@ -521,7 +525,6 @@ class ImageService extends AbstractService
                 'x' => 0,
                 'w' => 0,
             ];
-            $dim = imagettfbbox($fontSize, 0, $font, '-');
             $y+= $h;
         }
 
