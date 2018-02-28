@@ -158,6 +158,13 @@ jQuery(function($, undefined) {
 					focus: function() {
 						return false;
 					},
+                    search: function(e, ui) {
+                        if ($.ui.version.indexOf('1.12') === 0) {
+                            // Fix bug in jQuery.ui somewhere where menu.bindings just grows and grows
+                            // See https://bugs.jqueryui.com/ticket/10050
+                            $(this).data('ui-autocomplete').menu.bindings = $();
+                        }
+                    },
 					select: function(event, ui) {
 						this.value = ui.item.label;
 						$(this).trigger('change');
