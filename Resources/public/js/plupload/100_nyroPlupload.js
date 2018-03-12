@@ -29,32 +29,37 @@ jQuery(function($) {
 					cont = $('<div id="pluploadCont'+myPluploadNb+'" class="pluploadCont" />').insertAfter(me),
 					curFiles = {},
 					browse = $('<a href="#" id="pluploadBrowse'+myPluploadNb+'" class="pluploadBrowse">'+curOpts.texts.browse+'</a>').appendTo(cont);
-				
-				if (opts.showCancelAll)
+
+				if (opts.showCancelAll) {
 					var cancelAll = $('<a href="#" id="pluploadCancelAll'+myPluploadNb+'" class="pluploadCancelAll">'+curOpts.texts.cancelAll+'</a>').appendTo(cont).hide();
-					
+                }
+
 				var list = $('<div id="pluploadList'+myPluploadNb+'" class="pluploadList" />').appendTo(cont);
-				
-				if (!curOpts.file_data_name)
+
+				if (!curOpts.file_data_name) {
 					curOpts.file_data_name = me.attr('name');
+                }
 				curOpts.container = 'pluploadCont'+myPluploadNb;
 				curOpts.drop_element = 'pluploadCont'+myPluploadNb;
 				curOpts.browse_button = 'pluploadBrowse'+myPluploadNb;
-				if (!curOpts.url)
+				if (!curOpts.url) {
 					curOpts.url = me.closest('form').attr('action');
-				if (!curOpts.url)
+                }
+				if (!curOpts.url) {
 					curOpts.url = document.location.href;
+                }
 				curOpts.headers = {
 					'X-Requested-With': 'XMLHttpRequest'
 				};
-				
+
 				var uploader = new plupload.Uploader(curOpts);
 				uploader.bind('FilesAdded', function(up, files) {
 					for (var i in files) {
 						var curFile = files[i],
 							name = curFile.name;
-						if (name.length > 30)
+						if (name.length > 30) {
 							name = name.substr(0, 30) + '...';
+                        }
 						curFiles[curFile.id] = $('<div>'+name+' (' + plupload.formatSize(curFile.size) + ') - <strong>'+curOpts.texts.waiting+'</strong><div class="pluploadProgress"><div class="pluploadProgressBar"></div></div><a href="#" class="pluploadCancel" rel="'+curFile.id+'">Cancel</a></div>');
 						curFiles[curFile.id].find('.pluploadCancel').on('click', function(e) {
 							e.preventDefault();
@@ -62,8 +67,9 @@ jQuery(function($) {
 						});
 						list.append(curFiles[curFile.id]);
 					}
-					if (opts.showCancelAll)
+					if (opts.showCancelAll) {
 						cancelAll.show();
+                    }
 					setTimeout(function() {uploader.start();}, 1);
 				});
 				if (opts.showCancelAll) {
@@ -119,22 +125,46 @@ jQuery(function($) {
 							.children('strong').html(curOpts.texts.error+'<br />'+obj.message+(obj.status ? ' ('+obj.status+')' : ''));
 					}
 				});
-				if (opts.showCancelAll)
+				if (opts.showCancelAll) {
 					uploader.bind('UploadComplete', function() {cancelAll.hide();});
+                }
 				if (curOpts.onAllComplete && $.isFunction(curOpts.onAllComplete)) {
 					uploader.bind('UploadComplete', function() {setTimeout(curOpts.onAllComplete, 20);});
 				}
-				
+
 				if (curOpts.events) {
 					$.each(curOpts.events, function(k, v) {
 						uploader.bind(k, v);
 					});
 				}
-				
+
 				uploader.init();
-				me.data('nyroPluploader', uploader);
+                me.data({
+                    nyroPluploader: uploader,
+                    nyroPluploadCont: cont
+                });
 			});
 		},
+        nyroPluploadOpen: function(clb) {
+            var me = this.first();
+            if (me.data('nyroPluploader') && me.data('nyroPluploadCont')) {
+
+                if (clb && $.isFunction(clb)) {
+                    var openClbComplete = function() {
+                        me.data('nyroPluploader').unbind('FileUploaded', clb);
+                        me.data('nyroPluploader').unbind('UploadComplete', openClbComplete);
+                        me.data('nyroPluploader').unbind('Error', openClbComplete);
+                    };
+
+                    me.data('nyroPluploader').bind('FileUploaded', clb);
+                    me.data('nyroPluploader').bind('UploadComplete', openClbComplete);
+                    me.data('nyroPluploader').bind('Error', openClbComplete);
+                }
+
+                me.data('nyroPluploadCont').find('input').trigger('click');
+            }
+            return this;
+        },
 		nyroPluploadDataSearch: function(defOpts, pKey) {
 			if (!defOpts)
 				defOpts = {};
@@ -168,7 +198,7 @@ jQuery(function($) {
 			return opts;
 		}
 	});
-	
+
 	$('form.pluploadInit').each(function() {
 		var me = $(this).addClass('pluploadForm'),
 			input = me.find('input[type="file"]');
