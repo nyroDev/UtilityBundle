@@ -3,6 +3,7 @@
 namespace NyroDev\UtilityBundle\Services;
 
 use Symfony\Component\Validator;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class EmbedValidatorService extends AbstractService implements Validator\ConstraintValidatorInterface
 {
@@ -11,7 +12,7 @@ class EmbedValidatorService extends AbstractService implements Validator\Constra
      */
     protected $context;
 
-    public function initialize(Validator\ExecutionContextInterface $context)
+    public function initialize(ExecutionContextInterface $context)
     {
         $this->context = $context;
     }

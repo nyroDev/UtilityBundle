@@ -13,9 +13,11 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "^4"
+        "symfony/framework-bundle": "^4",
+        "symfony/templating": "^4"
     },
     "suggest": {
+        "becklyn/ordered-form-bundle": "Used for form positionning",
         "embed/embed": "Required to use EmbedService",
         "doctrine/doctrine-cache-bundle": "Required to cache EmbedService result",
         "sabberworm/php-css-parser": "Required to use rem2px command"

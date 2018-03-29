@@ -4,8 +4,8 @@ parameters:
     
 services:
     nyrodev_db:
-        class: %nyrodev_utility.ormDbService.class%
+        class: "%nyrodev_utility.ormDbService.class%"
         arguments: ['@service_container', '@nyrodev.entity_manager']
     nyrodev.entity_manager:
         class: Doctrine\ORM\EntityManager
-        arguments: [%nyroDev_utility.model_manager_name%]
+        arguments: ["%nyroDev_utility.model_manager_name%"]

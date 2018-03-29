@@ -1,6 +1,6 @@
 <?php
 
-namespace NyroDev\UtilityBundle\Listener;
+namespace NyroDev\UtilityBundle\EventListener;
 
 use Gedmo\Translatable\TranslatableListener as SrcTranslatableListener;
 use Doctrine\Common\EventArgs;

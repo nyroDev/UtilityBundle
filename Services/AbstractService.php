@@ -2,9 +2,9 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Symfony\Component\Templating\Helper\Helper;
+use Symfony\Component\Templating\Helper\HelperInterface;
 
-abstract class AbstractService extends Helper
+abstract class AbstractService implements HelperInterface
 {
     /**
      * @var ContainerInterface
@@ -102,5 +102,14 @@ abstract class AbstractService extends Helper
         $tmp = explode('\\', get_class($this));
 
         return $tmp[count($tmp) - 1];
+    }
+
+    public function setCharset($charset)
+    {
+    }
+
+    public function getCharset()
+    {
+        return 'utf-8';
     }
 }

@@ -6,12 +6,23 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ImageService extends AbstractService
 {
+    /**
+     * @var AssetsHelper
+     */
+    protected $assetsHelper;
+
+    public function __construct($container, AssetsHelper $assetsHelper)
+    {
+        parent::__construct($container);
+        $this->assetsHelper = $assetsHelper;
+    }
+
     public function resize($file, $configKey = 'default', $force = false)
     {
         try {
             $resizedPath = $this->_resize($file, $this->getConfig($configKey), $force);
-            $tmp = explode('/web/', $resizedPath);
-            $ret = $this->container->get('templating.helper.assets')->getUrl($tmp[1]);
+            $tmp = explode('/public/', $resizedPath);
+            $ret = $this->assetsHelper->getUrl($tmp[1]);
         } catch (\Exception $e) {
             $ret = 'data:'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::CONTENT_TYPE.';base64,'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::IMAGE_CONTENT;
         }
@@ -53,9 +64,9 @@ class ImageService extends AbstractService
 
             imagepng($dstResource, $destFile, 9);
         }
-        $tmp = explode('/web/', $destFile);
+        $tmp = explode('/public/', $destFile);
 
-        return $this->container->get('templating.helper.assets')->getUrl($tmp[1]);
+        return $this->assetsHelper->getUrl($tmp[1]);
     }
 
     public function getConfig($configKey = 'default')
@@ -71,11 +82,11 @@ class ImageService extends AbstractService
 
     public function getCachePath($file, $autoCreate = true)
     {
-        if (strpos($file, '/web/cache/') !== false) {
+        if (strpos($file, '/public/cache/') !== false) {
             $dir = $file.'_cache/';
         } else {
-            $tmp = explode('/web/', $file);
-            $dir = $tmp[0].'/web/cache/'.$tmp[1].'/';
+            $tmp = explode('/public/', $file);
+            $dir = $tmp[0].'/public/cache/'.$tmp[1].'/';
         }
 
         if ($autoCreate && !file_exists($dir)) {
@@ -735,7 +746,7 @@ class ImageService extends AbstractService
 
             $src = $node->getAttribute('src');
             $webFile = trim($baseUrl && $baseUrl != '/' ? str_replace($baseUrl, '', $src) : $src, '/');
-            $webDir = $this->get('kernel')->getRootDir().'/../web/';
+            $webDir = $this->get('kernel')->getRootDir().'/../public/';
             $file = $webDir.$webFile;
             if (file_exists($file)) {
                 $src = str_replace($webDir, '/', $this->_resize($file, array(

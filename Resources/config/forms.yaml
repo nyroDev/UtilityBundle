@@ -70,7 +70,7 @@ services:
           - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }
     nyrodev.tinymce.form.type:
         class: NyroDev\UtilityBundle\Form\Type\TinymceType
-        arguments: ['@service_container']
+        arguments: ['@service_container', '@templating.helper.assets']
         tags:
           - { name: form.type }
     nyrodev.config.form.type:

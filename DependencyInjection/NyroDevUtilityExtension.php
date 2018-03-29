@@ -9,11 +9,6 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * This is the class that loads and manages your bundle configuration.
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class NyroDevUtilityExtension extends Extension
 {
     /**
@@ -36,7 +31,7 @@ class NyroDevUtilityExtension extends Extension
         if (isset($config['translationDb']) && $config['translationDb']) {
             $definition = new Definition('NyroDev\UtilityBundle\Loader\DbLoader');
             $definition->addArgument(new Reference('service_container'));
-            $definition->addTag('translation.loader', array('alias' => 'db'));
+            $definition->addTag('translation.loader', ['alias' => 'db']);
             $container->setDefinition('nyrodev_utility.dbLoader', $definition);
         }
 
@@ -71,9 +66,9 @@ class NyroDevUtilityExtension extends Extension
         }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-        $loader->load('forms.yml');
-        $loader->load('services_'.$config['db_driver'].'.yml');
+        $loader->load('services.yaml');
+        $loader->load('forms.yaml');
+        $loader->load('services_'.$config['db_driver'].'.yaml');
 
         if ('orm' === $config['db_driver']) {
             $managerService = 'nyrodev.entity_manager';
@@ -83,11 +78,6 @@ class NyroDevUtilityExtension extends Extension
             $doctrineService = sprintf('doctrine_%s', $config['db_driver']);
         }
         $definition = $container->getDefinition($managerService);
-        if (method_exists($definition, 'setFactory')) {
-            $definition->setFactory(array(new Reference($doctrineService), 'getManager'));
-        } else {
-            $definition->setFactoryService($doctrineService);
-            $definition->setFactoryMethod('getManager');
-        }
+        $definition->setFactory([new Reference($doctrineService), 'getManager']);
     }
 }
