@@ -1,6 +1,6 @@
 <?php
 
-namespace NyroDev\UtilityBundle\Listener;
+namespace NyroDev\UtilityBundle\EventListener;
 
 use Gedmo\Loggable\LoggableListener as SrcLoggableListener;
 

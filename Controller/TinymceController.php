@@ -74,8 +74,8 @@ define('DEBUG_ERROR_MESSAGE', true); // TRUE or FALSE
 |    |   |   |   |   |- plugin.min.js
 */
 
-$currentPath = $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'/';
-$currentPathThumb = $fileManagerDir.'../../../../../../web/uploads/'.$dirName.'Thumbs/';
+$currentPath = $fileManagerDir.'../../../../../../public/uploads/'.$dirName.'/';
+$currentPathThumb = $fileManagerDir.'../../../../../../public/uploads/'.$dirName.'Thumbs/';
 
 $fs = new Filesystem();
 

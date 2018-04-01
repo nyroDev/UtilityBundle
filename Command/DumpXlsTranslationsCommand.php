@@ -72,8 +72,8 @@ class DumpXlsTranslationsCommand extends ContainerAwareCommand
 
         foreach ($this->locales as $locale => $translations) {
             foreach ($translations as $domain => $trans) {
-                $output->writeln($dir.'/'.$domain.'.'.$locale.'.yml');
-                $fs->dumpFile($dir.'/'.$domain.'.'.$locale.'.yml', $dumper->dump($trans, 99));
+                $output->writeln($dir.'/'.$domain.'.'.$locale.'.yaml');
+                $fs->dumpFile($dir.'/'.$domain.'.'.$locale.'.yaml', $dumper->dump($trans, 99));
             }
         }
     }

@@ -25,12 +25,12 @@ class FilterType extends AbstractType implements FilterTypeInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $choices = array(
-            AbstractQueryBuilder::OPERATOR_CONTAINS => 'LIKE %...%',
-            AbstractQueryBuilder::OPERATOR_EQUALS => '=',
+            'LIKE %...%' => AbstractQueryBuilder::OPERATOR_CONTAINS,
+            '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
         );
         if ($options['addNullTransformer']) {
-            $choices[AbstractQueryBuilder::OPERATOR_IS_NULL] = 'IS NULL';
-            $choices[AbstractQueryBuilder::OPERATOR_IS_NOT_NULL] = 'IS NOT NULL';
+            $choices['IS NULL'] = AbstractQueryBuilder::OPERATOR_IS_NULL;
+            $choices['IS NOT NULL'] = AbstractQueryBuilder::OPERATOR_IS_NOT_NULL;
         }
         $builder
             ->add('transformer', ChoiceType::class, array_merge(array(

@@ -17,11 +17,11 @@ class FilterDateType extends FilterType
         $builder
             ->add('transformer', ChoiceType::class, array_merge(array(
                 'choices' => array(
-                    AbstractQueryBuilder::OPERATOR_LIKEDATE => '=',
-                    AbstractQueryBuilder::OPERATOR_GTE => '>=',
-                    AbstractQueryBuilder::OPERATOR_LTE => '<=',
-                    AbstractQueryBuilder::OPERATOR_GT => '>',
-                    AbstractQueryBuilder::OPERATOR_LT => '<',
+                    '=' => AbstractQueryBuilder::OPERATOR_LIKEDATE,
+                    '>=' => AbstractQueryBuilder::OPERATOR_GTE,
+                    '<=' => AbstractQueryBuilder::OPERATOR_LTE,
+                    '>' => AbstractQueryBuilder::OPERATOR_GT,
+                    '<' => AbstractQueryBuilder::OPERATOR_LT,
                 ),
             ), $options['transformerOptions']))
             ->add('value', DateType::class, array_merge(array(

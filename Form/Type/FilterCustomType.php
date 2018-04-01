@@ -44,7 +44,7 @@ class FilterCustomType extends FilterType
         $resolver->setDefaults(array(
             'applyFilter' => null,
             'transformerChoices' => array(
-                AbstractQueryBuilder::OPERATOR_EQUALS => '=',
+                '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
             ),
             'transformerOptions' => array(),
             'valueType' => TextType::class,

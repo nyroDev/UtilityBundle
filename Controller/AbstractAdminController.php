@@ -273,7 +273,7 @@ abstract class AbstractAdminController extends AbstractController
         $form = $form->getForm();
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             if (!is_null($callbackFlush)) {
                 $tmp = $this->$callbackFlush($action, $row, $form);
                 if ($tmp && $tmp instanceof Response) {

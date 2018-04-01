@@ -3,6 +3,7 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType as SrcAbstractType;
+use Psr\Container\ContainerInterface;
 
 abstract class AbstractType extends SrcAbstractType
 {
@@ -11,7 +12,7 @@ abstract class AbstractType extends SrcAbstractType
      */
     protected $container;
 
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }

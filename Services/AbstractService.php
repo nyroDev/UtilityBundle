@@ -2,16 +2,17 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Symfony\Component\Templating\Helper\Helper;
+use Symfony\Component\Templating\Helper\HelperInterface;
+use Psr\Container\ContainerInterface;
 
-abstract class AbstractService extends Helper
+abstract class AbstractService implements HelperInterface
 {
     /**
      * @var ContainerInterface
      */
     protected $container;
 
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -102,5 +103,14 @@ abstract class AbstractService extends Helper
         $tmp = explode('\\', get_class($this));
 
         return $tmp[count($tmp) - 1];
+    }
+
+    public function setCharset($charset)
+    {
+    }
+
+    public function getCharset()
+    {
+        return 'utf-8';
     }
 }

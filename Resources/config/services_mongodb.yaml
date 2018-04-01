@@ -4,8 +4,12 @@ parameters:
     
 services:
     nyrodev_db:
-        class: %nyrodev_utility.mongodbDbService.class%
+        class: "%nyrodev_utility.mongodbDbService.class%"
+        autowire: false
         arguments: ['@service_container', '@nyrodev.document_manager']
+        public: true
+    NyroDev\UtilityBundle\Services\Db\AbstractService: '@nyrodev_db'
     nyrodev.document_manager:
         class: Doctrine\ODM\MongoDB\DocumentManager
-        arguments: [%nyroDev_utility.model_manager_name%]
+        arguments: ["%nyroDev_utility.model_manager_name%"]
+        public: true

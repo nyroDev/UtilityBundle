@@ -57,7 +57,7 @@ class MemberService extends AbstractService
      */
     public function logUser(\Symfony\Component\Security\Core\User\UserInterface $user)
     {
-        // Here, "main" is the name of the firewall in your security.yml
+        // Here, "main" is the name of the firewall in your security.yaml
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->get('security.token_storage')->setToken($token);
 

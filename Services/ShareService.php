@@ -1,6 +1,6 @@
 <?php
 
-namespace NyroDev\UtilityBundle\Services;
+namespace NyroDev\UtilityBundle\Service;
 
 class ShareService extends AbstractService
 {

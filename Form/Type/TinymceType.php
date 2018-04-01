@@ -4,11 +4,23 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class TinymceType extends AbstractType
 {
+    /**
+     * @var AssetsHelper
+     */
+    protected $assetsHelper;
+
+    public function __construct($container, AssetsHelper $assetsHelper)
+    {
+        parent::__construct($container);
+        $this->assetsHelper = $assetsHelper;
+    }
+
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $attrs = $view->vars['attr'];
@@ -20,8 +32,8 @@ class TinymceType extends AbstractType
 
         $attrs = array_merge($attrs, array(
             'class' => 'tinymce'.(isset($attrs['class']) && $attrs['class'] ? ' '.$attrs['class'] : ''),
-            'data-tinymceurl' => $this->container->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
-            $prefixTinymce.'language' => $this->container->get('request')->getLocale(),
+            'data-tinymceurl' => $this->assetsHelper->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
+            $prefixTinymce.'language' => $this->container->get('nyrodev')->getRequest()->getLocale(),
             $prefixTinymce.'height' => 450,
             $prefixTinymce.'width' => 720,
             $prefixTinymce.'theme' => 'modern',

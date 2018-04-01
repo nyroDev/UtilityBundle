@@ -4,36 +4,48 @@ namespace NyroDev\UtilityBundle\Services;
 
 use Symfony\Component\Form\Form;
 use NyroDev\UtilityBundle\Form\Type\DummyCaptchaType;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 
 /**
  * Service used to handle forms to add more features.
  */
 class FormService extends AbstractService
 {
+    /**
+     * @var AssetsHelper
+     */
+    protected $assetsHelper;
+
+    public function __construct($container, AssetsHelper $assetsHelper)
+    {
+        parent::__construct($container);
+        $this->assetsHelper = $assetsHelper;
+    }
+
     public function addDummyCaptcha(Form $form)
     {
-        $form->add('dummytcha', DummyCaptchaType::class, array(
+        $form->add('dummytcha', DummyCaptchaType::class, [
             'mapped' => false,
             'required' => false,
             'position' => 'first',
-            'constraints' => array(
+            'constraints' => [
                 new \Symfony\Component\Validator\Constraints\Blank(),
-            ),
-        ));
+            ],
+        ]);
     }
 
     public function getPluploadAttrs($filters = 'images', $pluploadKey = 'plupload_')
     {
         if ($filters == 'images') {
-            $filters = array(
-                array(
+            $filters = [
+                [
                     'title' => $this->trans('nyrodev.plupload.images'),
                     'extensions' => 'jpg,jpeg,gif,png',
-                ),
-            );
+                ]
+            ];
         }
 
-        $ret = array(
+        $ret = [
             'class' => 'pluploadInit',
             'data-'.$pluploadKey.'browse' => $this->trans('nyrodev.plupload.browse'),
             'data-'.$pluploadKey.'waiting' => $this->trans('nyrodev.plupload.waiting'),
@@ -42,9 +54,9 @@ class FormService extends AbstractService
             'data-'.$pluploadKey.'complete' => $this->trans('nyrodev.plupload.complete'),
             'data-'.$pluploadKey.'cancelall' => $this->trans('nyrodev.plupload.cancelAll'),
             'data-'.$pluploadKey.'filters' => json_encode($filters),
-            'data-'.$pluploadKey.'swf' => $this->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.swf'),
-            'data-'.$pluploadKey.'xap' => $this->get('templating.helper.assets')->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.xap'),
-        );
+            'data-'.$pluploadKey.'swf' => $this->assetsHelper->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.swf'),
+            'data-'.$pluploadKey.'xap' => $this->assetsHelper->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.xap'),
+        ];
 
         $pluploadMaxFileSize = $this->getParameter('nyroDev_utility.pluploadMaxFileSize');
         if ($pluploadMaxFileSize) {

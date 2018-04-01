@@ -17,11 +17,11 @@ class FilterIntType extends FilterType
         $builder
             ->add('transformer', ChoiceType::class, array_merge(array(
                 'choices' => array(
-                    AbstractQueryBuilder::OPERATOR_EQUALS => '=',
-                    AbstractQueryBuilder::OPERATOR_GTE => '>=',
-                    AbstractQueryBuilder::OPERATOR_LTE => '<=',
-                    AbstractQueryBuilder::OPERATOR_GT => '>',
-                    AbstractQueryBuilder::OPERATOR_LT => '<',
+                    '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
+                    '>=' => AbstractQueryBuilder::OPERATOR_GTE,
+                    '<=' => AbstractQueryBuilder::OPERATOR_LTE,
+                    '>' => AbstractQueryBuilder::OPERATOR_GT,
+                    '<' => AbstractQueryBuilder::OPERATOR_LT,
                 ),
             ), $options['transformerOptions']))
             ->add('value', IntegerType::class, array_merge(array(

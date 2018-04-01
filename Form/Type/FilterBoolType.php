@@ -22,8 +22,8 @@ class FilterBoolType extends FilterType
             ->add('value', ChoiceType::class, array_merge(array(
                     'required' => false,
                     'choices' => array(
-                        '1' => 'Oui',
-                        'no' => 'Non',
+                        'Yes' => '1',
+                        'No' => 'no',
                     ),
                 ), $options['valueOptions']));
     }
