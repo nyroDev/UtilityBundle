@@ -60,7 +60,12 @@ if ( ! function_exists('trans'))
 		{
 			$path_parts = pathinfo($lang);
 			$lang = $path_parts['basename'];
-			$languages = include 'lang/languages.php';
+            // nyrodev update
+            if(file_exists('lang/languages.php')){
+                $languages = include 'lang/languages.php';
+            }else{
+                $languages = include '../lang/languages.php';
+            }
 		}
 
 		// add lang file to session for easy include
