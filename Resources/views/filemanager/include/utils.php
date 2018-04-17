@@ -60,12 +60,10 @@ if ( ! function_exists('trans'))
 		{
 			$path_parts = pathinfo($lang);
 			$lang = $path_parts['basename'];
+
             // nyrodev update
-            if(file_exists('lang/languages.php')){
-                $languages = include 'lang/languages.php';
-            }else{
-                $languages = include '../lang/languages.php';
-            }
+            $languages = include __DIR__.'/../lang/languages.php';
+			//$languages = include 'lang/languages.php';
 		}
 
 		// add lang file to session for easy include
@@ -73,11 +71,16 @@ if ( ! function_exists('trans'))
 	}
 	else
 	{
+
+        // nyrodev update
+        $languages = include __DIR__.'/../lang/languages.php';
+        /*
 		if(file_exists('lang/languages.php')){
 			$languages = include 'lang/languages.php';
 		}else{
 			$languages = include '../lang/languages.php';
 		}
+        */
 
 		if(array_key_exists($_SESSION['RF']['language'],$languages)){
 			$lang = $_SESSION['RF']['language'];
