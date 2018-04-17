@@ -552,7 +552,8 @@ if(isset($_GET['action']))
 				exit;
 			}
 
-			$languages = include 'lang/languages.php';
+            // nyro Update
+			//$languages = include 'lang/languages.php';
 			if ( ! isset($languages) || ! is_array($languages))
 			{
 				response(trans('Lang_Not_Found').AddErrorLocation())->send();
