@@ -1067,7 +1067,10 @@ $files=$sorted;
 				}
 
                 // nyro update
-                $src_thumb = str_replace($thumbs_base_path, $thumbs_base_path_url, $src_thumb);
+                $src_thumb = str_replace(
+					array($thumbs_base_path, $current_path),
+					array($thumbs_base_path_url, $current_path_url),
+					$src_thumb);
                 $mini_src = str_replace($thumbs_base_path, $thumbs_base_path_url, $mini_src);
 
 

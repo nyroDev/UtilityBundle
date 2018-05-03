@@ -123,7 +123,6 @@ $configNyro = array(
 	*/
 	//'current_path' => '../source/',
     'current_path' => $currentPath,
-    'thumbs_base_path' => $fs->makePathRelative($currentPath, $fileManagerDir),
     'current_path_url' => $baseUrl.'/uploads/'.$dirName.'/',
 
 	/*
