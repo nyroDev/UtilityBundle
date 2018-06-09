@@ -61,7 +61,7 @@ if ( ! function_exists('trans'))
 			$path_parts = pathinfo($lang);
 			$lang = $path_parts['basename'];
 
-            // nyrodev update
+            // nyro update
             $languages = include __DIR__.'/../lang/languages.php';
 			//$languages = include 'lang/languages.php';
 		}
@@ -72,7 +72,7 @@ if ( ! function_exists('trans'))
 	else
 	{
 
-        // nyrodev update
+        // nyro update
         $languages = include __DIR__.'/../lang/languages.php';
         /*
 		if(file_exists('lang/languages.php')){
@@ -91,7 +91,7 @@ if ( ! function_exists('trans'))
 
 	}
 
-    // nyrodev update
+    // nyro update
     $lang_vars = include __DIR__.'/../lang/'. $lang . '.php';
     /*
 	if(file_exists('lang/' . $lang . '.php')){
@@ -99,16 +99,73 @@ if ( ! function_exists('trans'))
 	}else{
 		$lang_vars = include '../lang/' . $lang . '.php';
 	}
-     */
+    */
 
 	if ( ! is_array($lang_vars))
 	{
 		$lang_vars = array();
 	}
 
-    // nyrodev Update
-    $GLOBALS['lang_vars'] = $lang_vars;
-    $GLOBALS['default_language'] = $default_language;
+	// nyro Update
+	$GLOBALS['lang_vars'] = $lang_vars;
+	$GLOBALS['default_language'] = $default_language;
+}
+
+/**
+* Delete file
+*
+* @param  string  $path
+* @param  string $path_thumb
+* @param  string $config
+*
+* @return  nothing
+*/
+function deleteFile($path,$path_thumb,$config){
+	if ($config['delete_files']){
+		$ftp = ftp_con($config);
+		if($ftp){
+			try{
+				$ftp->delete("/".$path);
+				@$ftp->delete("/".$path_thumb);
+			}catch(FtpClient\FtpException $e){
+				return;
+			}
+		}else{
+			if (file_exists($path)){
+				unlink($path);
+			}
+			if (file_exists($path_thumb)){
+				unlink($path_thumb);
+			}
+		}
+
+		$info=pathinfo($path);
+		if (!$ftp && $config['relative_image_creation']){
+			foreach($config['relative_path_from_current_pos'] as $k=>$path)
+			{
+				if ($path!="" && $path[strlen($path)-1]!="/") $path.="/";
+
+				if (file_exists($info['dirname']."/".$path.$config['relative_image_creation_name_to_prepend'][$k].$info['filename'].$config['relative_image_creation_name_to_append'][$k].".".$info['extension']))
+				{
+					unlink($info['dirname']."/".$path.$config['relative_image_creation_name_to_prepend'][$k].$info['filename'].$config['relative_image_creation_name_to_append'][$k].".".$info['extension']);
+				}
+			}
+		}
+
+		if (!$ftp && $config['fixed_image_creation'])
+		{
+			foreach($config['fixed_path_from_filemanager'] as $k=>$path)
+			{
+				if ($path!="" && $path[strlen($path)-1] != "/") $path.="/";
+
+				$base_dir=$path.substr_replace($info['dirname']."/", '', 0, strlen($current_path));
+				if (file_exists($base_dir.$config['fixed_image_creation_name_to_prepend'][$k].$info['filename'].$config['fixed_image_creation_to_append'][$k].".".$info['extension']))
+				{
+					unlink($base_dir.$config['fixed_image_creation_name_to_prepend'][$k].$info['filename'].$config['fixed_image_creation_to_append'][$k].".".$info['extension']);
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -748,7 +805,7 @@ function image_check_memory_usage($img, $max_breedte, $max_hoogte)
 *
 * @return  bool
 */
-function endsWith($haystack, $needle)
+function ends_with($haystack, $needle)
 {
 	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
 }
@@ -797,7 +854,7 @@ function new_thumbnails_creation($targetPath, $targetFile, $name, $current_path,
 			{
 				create_folder($targetPath . $path, false);
 			}
-			if ( ! endsWith($targetPath, $path))
+			if ( ! ends_with($targetPath, $path))
 			{
 				if ( ! create_img($targetFile, $targetPath . $path . $config['relative_image_creation_name_to_prepend'][ $k ] . $info['filename'] . $config['relative_image_creation_name_to_append'][ $k ] . "." . $info['extension'], $config['relative_image_creation_width'][ $k ], $config['relative_image_creation_height'][ $k ], $config['relative_image_creation_option'][ $k ]))
 				{
