@@ -196,6 +196,7 @@ abstract class AbstractUploadable
                     if ($file->isValid()) {
                         $file->move(dirname($fullPath), basename($fullPath));
                     } elseif (!is_uploaded_file($file->getPathname())) {
+                        $fs->mkdir(dirname($fullPath));
                         $fs->rename($file->getPathname(), $fullPath);
                     }
                 } else {
