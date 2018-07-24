@@ -1,5 +1,5 @@
 <?php
-$version = "9.12.2";
+$version = "9.13.0";
 // Comment for nyroDev/Utility-bundle
 //if (session_id() == '') session_start();
 

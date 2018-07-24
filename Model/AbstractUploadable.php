@@ -186,13 +186,19 @@ abstract class AbstractUploadable
             if (!is_null($file)) {
                 $rootDir = $this->getFileConfig($field, self::CONFIG_ROOTDIR);
                 $fullPath = $rootDir.'/'.$this->getFilePath($field);
+
+                $fs = new Filesystem();
+                if (!$fs->exists($rootDir)) {
+                    $fs->mkdir($rootDir);
+                }
+
                 if ($file instanceof UploadedFile) {
-                    $file->move(dirname($fullPath), basename($fullPath));
-                } else {
-                    $fs = new Filesystem();
-                    if (!$fs->exists($rootDir)) {
-                        $fs->mkdir($rootDir);
+                    if ($file->isValid()) {
+                        $file->move(dirname($fullPath), basename($fullPath));
+                    } elseif (!is_uploaded_file($file->getPathname())) {
+                        $fs->rename($file->getPathname(), $fullPath);
                     }
+                } else {
                     if ($file['sourceIsContent']) {
                         $fs->dumpFile($fullPath, $file['source']);
                     } else {
