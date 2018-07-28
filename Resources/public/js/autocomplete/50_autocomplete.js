@@ -54,13 +54,14 @@ jQuery(function ($, undefined) {
 							});
 						});
 						val = me.val();
+						cur = [];
 						if (val && val.length) {
 							$.each(val, function (k, v) {
 								cur.push(options.filter('[value="' + v + '"]').text());
 							});
 							cur.push('');
-							input.val(cur.join(sepJoin));
 						}
+						input.val(cur.join(sepJoin));
 					};
 
 				me.removeProp('required').removeAttr('required');
