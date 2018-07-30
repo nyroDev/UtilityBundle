@@ -33,8 +33,8 @@ abstract class AbstractUploadable
 
     abstract protected function getFileFields();
 
-    protected $temps = array();
-    protected $directs = array();
+    protected $temps = [];
+    protected $directs = [];
 
     public function getFilePath($field, $place = self::PATH_ORIGINAL)
     {
@@ -100,11 +100,11 @@ abstract class AbstractUploadable
 
     public function setDirectFile($field, $source, $filename = null, $sourceIsContent = false)
     {
-        $this->directs[$field] = array(
+        $this->directs[$field] = [
             'source' => $source,
             'sourceIsContent' => $sourceIsContent,
             'filename' => $filename ? $filename : basename($source),
-        );
+        ];
         $original = $this->getFilePath($field);
         if ($original) {
             $this->temps[$field] = $original;
@@ -197,7 +197,14 @@ abstract class AbstractUploadable
                         $file->move(dirname($fullPath), basename($fullPath));
                     } elseif (!is_uploaded_file($file->getPathname())) {
                         $fs->mkdir(dirname($fullPath));
-                        $fs->rename($file->getPathname(), $fullPath);
+                        try {
+                            $fs->rename($file->getPathname(), $fullPath);
+                        } catch (\Exception $e) {
+                            // IN NFS rename, it could fix some trouble doing a catch here
+                            if (!$fs->exists($fullPath)) {
+                                throw $e;
+                            }
+                        }
                     }
                 } else {
                     if ($file['sourceIsContent']) {
