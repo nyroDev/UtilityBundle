@@ -208,13 +208,13 @@ abstract class AbstractAdminController extends AbstractController
         );
     }
 
-    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = array(), string $formName = null)
+    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = array(), $formName = null)
     {
         if (is_null($groups)) {
             $groups = array('Default', $action);
         }
 
-        $form = $this->get('form.factory')->createNamedBuilder($formName ?? 'form', FormType::class, $row, array_merge($moreFormOptions, array(
+        $form = $this->get('form.factory')->createNamedBuilder($formName ? $formName : 'form', FormType::class, $row, array_merge($moreFormOptions, array(
             'validation_groups' => $groups
         )));
 
