@@ -4,13 +4,14 @@ namespace NyroDev\UtilityBundle\Controller;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
-use NyroDev\UtilityBundle\Utility\PhpExcelResponse;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use NyroDev\UtilityBundle\Utility\PhpExcelResponse;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 abstract class AbstractAdminController extends AbstractController
 {
@@ -207,12 +208,13 @@ abstract class AbstractAdminController extends AbstractController
         );
     }
 
-    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = array())
+    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = array(), string $formName = null)
     {
         if (is_null($groups)) {
             $groups = array('Default', $action);
         }
-        $form = $this->createFormBuilder($row, array_merge($moreFormOptions, array(
+
+        $form = $this->get('form.factory')->createNamedBuilder($formName ?? 'form', FormType::class, $row, array_merge($moreFormOptions, array(
             'validation_groups' => $groups
         )));
 
