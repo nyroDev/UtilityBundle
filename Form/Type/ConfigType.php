@@ -14,7 +14,7 @@ class ConfigType extends AbstractType
         $builder
             ->addModelTransformer(new CallbackTransformer(
                 function ($original) {
-                    return $original ? json_encode($original) : null;
+                    return $original && is_array($original) ? json_encode($original) : $original;
                 },
                 function ($submitted) {
                     $ret = null;
