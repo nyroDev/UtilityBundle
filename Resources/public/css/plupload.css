@@ -57,3 +57,7 @@
 .pluploadForm label, .pluploadForm .form_button {
 	display: none;
 }
+.pluploadError strong {
+	color: red;
+	display: block;
+}

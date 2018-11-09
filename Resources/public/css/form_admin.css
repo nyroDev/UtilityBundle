@@ -135,60 +135,6 @@ select {
     overflow: hidden;
     height: 2.2rem;
 }
-.myUploadBut {
-    color: #fff;
-    text-transform: uppercase;
-    font-family: 'Oswald', sans-serif;
-	font-weight: 700;
-    font-size: 1.4rem;
-	line-height: 2.5rem;
-    padding: 0.1rem 1rem 0.1rem 3.5rem;
-    background: #7a8087 url(images/upload.png) no-repeat 1rem 0.5rem;
-    border-radius: 0.5rem;
-    width: 12rem;
-    margin: 0.5rem auto;
-    text-align: center;
-    display: block;
-}
-.myUploadHandle label {
-	display: none;
-}
-.myUploadLine {
-    overflow: auto;
-    position: relative;
-}
-.myUploadLine .pluploadCancel {
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-.myUploadLine span {
-    font-style: italic;
-	font-weight: 600;
-}
-.myUploadLine .pluploadLoader {
-    width: 87%;
-    display: inline-block;
-    height: 1rem;
-    border: 3px solid #9fd0fd;
-    background: #9fd0fd;
-    border-radius: 1rem;
-    margin-top: 0.5rem;
-    margin-right: 0.5rem;
-    vertical-align: bottom;
-}
-.myUploadLine .pluploadLoading {
-    width: 100%;
-    background: #fff;
-    height: 1rem;
-    border-radius: 1rem;
-    float: right;
-}
-.pluploadError strong {
-	color: red;
-	display: block;
-}
-
 
 .form_row_filter label {
     width: 150px;
