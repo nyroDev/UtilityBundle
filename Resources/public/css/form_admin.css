@@ -1,121 +1,163 @@
 form {
     position: relative;
 }
+
 .form_row_dummy_captcha {
-	display: none;
+    display: none;
 }
-.form_row, .form_button {
+
+.form_row,
+.form_button {
     position: relative;
     margin-bottom: 1em;
     width: 720px;
 }
+
 label {
     width: 200px;
     display: inline-block;
     margin-right: 15px;
     text-align: right;
-	vertical-align: top;
+    vertical-align: top;
 }
-input[type=text], input[type=number], input[type=email], input[type=url], input[type=password], textarea {
+
+input[type=text],
+input[type=number],
+input[type=email],
+input[type=url],
+input[type=password],
+textarea {
     border: 1px solid #ccc;
     padding: 3px;
     width: 450px;
 }
-input[readonly], textarea[readonly] {
+
+input[readonly],
+textarea[readonly] {
     background: #eee;
 }
+
 textarea {
-	min-height: 5em;
+    min-height: 5em;
     width: 450px;
 }
+
 .selectCont {
-	display: inline-block;
+    display: inline-block;
 }
+
 select {
     width: 457px;
 }
+
 .formIndicator {
     font-weight: bold;
     font-size: 1.2em;
     display: none;
 }
-.form_required .formIndicator, .formRequiredFields .formIndicator {
+
+.form_required .formIndicator,
+.formRequiredFields .formIndicator {
     display: inline;
 }
-.form_error label,.form_error .formIndicator {
+
+.form_error label,
+.form_error .formIndicator {
     color: #f00;
 }
 
 .form_row_file {
-	position: relative;
+    position: relative;
 }
+
 .form_row_file .formIndicator {
-	position: absolute;
-	top: 0;
-	right: 30px;
+    position: absolute;
+    top: 0;
+    right: 30px;
 }
-.form_row_file .currentFile, .form_row_file .currentFileDelete {
-	display: block;
+
+.form_row_file .currentFile,
+.form_row_file .currentFileDelete {
+    display: block;
     margin: 3px 0 3px 220px;
 }
+
 .form_row_file .currentFileDelete {
-	color: red;
+    color: red;
 }
+
 .form_row_checkbox {
     text-align: right;
-	width: 688px;
+    width: 688px;
 }
+
 .form_row_checkbox label {
     width: auto;
     font-weight: normal;
-	margin-right: 15px;
+    margin-right: 15px;
 }
+
 .form_row_checkbox.form_required label {
-  margin-right: 0;
+    margin-right: 0;
 }
+
 .form_button {
     overflow: auto;
-	width: 678px;
+    width: 678px;
 }
-.form_button button, .button {
-	display: inline-block;
+
+.form_button button,
+.button {
+    display: inline-block;
     border: none;
     background: #000;
     color: #fff;
-	text-align: center;
-	text-decoration: none;
+    text-align: center;
+    text-decoration: none;
     text-transform: uppercase;
     float: right;
     padding: 5px 10px;
     border-radius: 5px;
 }
-.form_button button:hover, .button:hover {
-	text-decoration: none;
-	background: #333;
+
+.form_button button:hover,
+.button:hover {
+    text-decoration: none;
+    background: #333;
 }
-.form_button button[disabled], .form_button button.disabled, .button[disabled], .button.disabled {
-	opacity: 0.6;
+
+.form_button button[disabled],
+.form_button button.disabled,
+.button[disabled],
+.button.disabled {
+    opacity: 0.6;
     background: #000;
-	cursor: not-allowed;
+    cursor: not-allowed;
 }
-.form_errors, .form_row .form_errors {
+
+.form_errors,
+.form_row .form_errors {
     list-style-type: none;
     color: red;
     margin: 3px 0 3px 220px;
     padding: 0;
 }
+
 .formRequiredFields {
     font-weight: bold;
 }
+
 .formRequiredFields .formIndicator {
     right: auto;
     left: 0;
     top: 0.8rem;
 }
+
 #main .formCentered {
     width: 47rem;
     margin: 1em auto;
 }
+
 .form_row_choice ul {
     display: inline-block;
     vertical-align: top;
@@ -124,13 +166,16 @@ select {
     padding: 0;
     width: 27.5rem;
 }
+
 .form_row_choice li {
     margin-bottom: 0.5em;
 }
+
 .form_row_choice ul label {
     width: auto;
     display: inline;
 }
+
 .autocomplete {
     overflow: hidden;
     height: 2.2rem;
@@ -139,64 +184,90 @@ select {
 .form_row_filter label {
     width: 150px;
 }
+
 .form_row_filter .row_form_transformer select {
     width: 120px;
 }
+
 .form_row_filter input {
     width: 350px;
 }
+
 .form_row_filter select {
     width: 356px;
 }
+
 .form_row_filter .formIndicator {
     display: none;
 }
+
 .form_row_filter_date div {
     display: inline;
 }
+
 .form_row_filter_date div select {
     width: auto;
 }
+
 .filterForm .form_button {
     width: 650px;
 }
+
 .filterForm .formRequiredFields {
-	display: none;
+    display: none;
 }
+
 .clearFilter {
     position: relative;
     top: -50px;
     left: 170px;
 }
-.form_row_tinymce, .form_row_rawhtml {
+
+.form_row_tinymce,
+.form_row_rawhtml {
     width: 100%;
     overflow: hidden;
 }
-.form_row_tinymce label, .form_row_rawhtml label {
+
+.form_row_tinymce label,
+.form_row_rawhtml label {
     float: left;
-	margin-right: 19px;
+    margin-right: 19px;
 }
+
 .form_row_tinymce .formIndicator {
     margin-left: 10px;
 }
-.form_row_tinymce .mce-tinymce, .form_row_rawhtml .form_rawhtml {
+
+.form_row_tinymce .mce-tinymce,
+.form_row_rawhtml .form_rawhtml {
     float: left;
 }
-.form_row_date div, .form_row_datetime div, .form_row_time div {
+
+.form_row_date div,
+.form_row_datetime div,
+.form_row_time div {
     display: inline;
 }
-.form_row_date select, .form_row_datetime select, .form_row_time select {
+
+.form_row_date select,
+.form_row_datetime select,
+.form_row_time select {
     width: auto;
 }
+
 .form_row_filter_range_date div {
-	display: inline;
+    display: inline;
 }
+
 .form_row_filter_range_date div label {
-	width: 46px;
+    width: 46px;
 }
+
 .form_row_filter_range_date input {
-	width: 6em;
+    width: 6em;
 }
+
 .form_row_filter ul {
     list-style-type: none;
     margin: 0;
@@ -204,9 +275,11 @@ select {
     width: 358px;
     display: inline-block;
 }
+
 .form_row_filter ul input {
     width: auto;
 }
+
 .form_row_filter ul label {
     display: inline;
 }
