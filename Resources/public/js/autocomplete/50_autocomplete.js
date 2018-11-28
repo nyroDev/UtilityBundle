@@ -62,6 +62,20 @@ jQuery(function ($, undefined) {
 							cur.push('');
 						}
 						input.val(cur.join(sepJoin));
+						input.trigger('change');
+					},
+					append = function (text) {
+						var terms = split(input.val());
+						terms.pop();
+						// remove the current input
+						terms.push(text);
+						// add the selected item
+						terms.push('');
+						// add placeholder to get the comma-and-space at the end
+						var str = terms.join(sepJoin);
+						str = str.replace(/ +(?= )/g, ''); //remove useless multispacing
+						input.val(str);
+						input.trigger('change');
 					};
 
 				me.removeProp('required').removeAttr('required');
@@ -89,20 +103,15 @@ jQuery(function ($, undefined) {
 						}
 					},
 					select: function (event, ui) {
-						var terms = split(this.value);
-						// remove the current input
-						terms.pop();
-						// add the selected item
-						terms.push(ui.item.label);
-						// add placeholder to get the comma-and-space at the end
-						terms.push('');
-						this.value = terms.join(sepJoin);
-						$(this).trigger('change');
+						append(ui.item.label);
 						return false;
 					}
 				});
 
 				me
+					.on('autocompleteAppend', function (e, params) {
+						append(params.text);
+					})
 					.on('autocompleteWriteForm', writeForm)
 					.on('autocompleteReenable', reenable)
 					.on('autocompleteReinit', init)
