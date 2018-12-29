@@ -22,7 +22,7 @@ class MainService extends AbstractService
         if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
             $locale = $event->getRequest()->getLocale();
 
-            if (strpos($locale, 'change_') === 0) {
+            if (0 === strpos($locale, 'change_')) {
                 $tmp = explode('change_', $locale);
                 $locale = $tmp[1];
                 // Update already instanciated objects
@@ -35,9 +35,9 @@ class MainService extends AbstractService
                 $locale.'@euro',
                 $locale.'.utf8',
             ];
-            if (strlen($locale) == 2) {
+            if (2 == strlen($locale)) {
                 $locUp = strtoupper($locale);
-                $locale .= '_'.($locUp == 'ZH' ? 'CN' : $locUp);
+                $locale .= '_'.('ZH' == $locUp ? 'CN' : $locUp);
                 $locales[] = $locale;
                 $locales[] = $locale.'@euro';
                 $locales[] = $locale.'.utf8';
@@ -74,7 +74,7 @@ class MainService extends AbstractService
      */
     public function generateUrl($name, $parameters = array(), $absolute = false)
     {
-        if ($name == '#') {
+        if ('#' == $name) {
             return '#';
         }
 
@@ -90,15 +90,15 @@ class MainService extends AbstractService
      */
     public function getFullUrl($path)
     {
-        if (strpos($path, 'http') === 0 || strpos($path, 'mailto:') === 0 || strpos($path, '#') === 0) {
+        if (0 === strpos($path, 'http') || 0 === strpos($path, 'mailto:') || 0 === strpos($path, '#')) {
             return $path;
         }
         $router = $this->get('router');
-        if ($path[0] != '/') {
+        if ('/' != $path[0]) {
             $path = '/'.$path;
         }
         $baseUrl = $router->getContext()->getBaseUrl();
-        if ($baseUrl && $baseUrl[0] != '/') {
+        if ($baseUrl && '/' != $baseUrl[0]) {
             $baseUrl = '/'.$baseUrl;
         }
 
@@ -203,7 +203,7 @@ class MainService extends AbstractService
         $source = 'abcdefghikjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         if (!is_null($ignore)) {
             $tmp = array();
-            for ($i = 0;$i < strlen($ignore);++$i) {
+            for ($i = 0; $i < strlen($ignore); ++$i) {
                 $tmp[] = $ignore[$i];
             }
             $source = str_replace($tmp, '', $source);
@@ -212,7 +212,7 @@ class MainService extends AbstractService
         $n = strlen($source) - 1;
         $ret = '';
         for ($i = 0; $i < $len; ++$i) {
-            $ret .= $source{rand(0, $n)};
+            $ret .= $source[rand(0, $n)];
         }
 
         return $ret;
@@ -273,7 +273,7 @@ class MainService extends AbstractService
             $this->isExternalAgent = false;
             if (isset($_SERVER['HTTP_USER_AGENT'])) {
                 $ua = strtolower($_SERVER['HTTP_USER_AGENT']);
-                if (strpos($ua, 'facebookexternalhit') !== false || preg_match('~(bot|crawl|external|snippet)~i', $ua)) {
+                if (false !== strpos($ua, 'facebookexternalhit') || preg_match('~(bot|crawl|external|snippet)~i', $ua)) {
                     $this->isExternalAgent = true;
                 }
             }
@@ -386,17 +386,18 @@ class MainService extends AbstractService
     /**
      * Transform HTML content into text.
      *
-     * @param string $html HTML text
+     * @param string $html    HTML text
+     * @param array  $options Options for HtmL2Text class
      *
      * @return string Text
      */
-    public function html2text($html)
+    public function html2text($html, $options = array())
     {
         if (!$this->html2textLoaded) {
             require dirname(__FILE__).'/../Utility/Html2Text.php';
             $this->html2textLoaded = true;
         }
-        $html2text = new Html2Text($html);
+        $html2text = new Html2Text($html, false, $options);
 
         return $html2text->get_text();
     }
@@ -521,7 +522,7 @@ class MainService extends AbstractService
         $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
         $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
         $ret = base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $text, MCRYPT_MODE_CBC, $iv));
-        if ($excludeSlash && strpos($ret, '/') !== false) {
+        if ($excludeSlash && false !== strpos($ret, '/')) {
             $ret = $this->crypt($text, $excludeSlash);
         }
 
