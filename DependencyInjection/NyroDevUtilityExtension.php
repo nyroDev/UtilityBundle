@@ -32,7 +32,7 @@ class NyroDevUtilityExtension extends Extension
             $definition = new Definition('NyroDev\UtilityBundle\Loader\DbLoader');
             $definition->addArgument(new Reference('service_container'));
             $definition->addTag('translation.loader', ['alias' => 'db']);
-            $container->setDefinition('nyrodev_utility.dbLoader', $definition);
+            $container->setDefinition('nyroDev_utility.dbLoader', $definition);
         }
 
         $container->setParameter('nyroDev_utility.pluploadMaxFileSize', isset($config['pluploadMaxFileSize']) && $config['pluploadMaxFileSize'] ? $config['pluploadMaxFileSize'] : false);

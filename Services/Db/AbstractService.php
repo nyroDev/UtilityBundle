@@ -34,8 +34,8 @@ abstract class AbstractService extends AbstractServiceSrc
     }
 
     /**
-     * @param string $name class name
-     * @param bool $elastica True to get elastica query Builder
+     * @param string $name     class name
+     * @param bool   $elastica True to get elastica query Builder
      *
      * @return \NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder
      */
@@ -44,7 +44,7 @@ abstract class AbstractService extends AbstractServiceSrc
         if ($elastica) {
             $class = \NyroDev\UtilityBundle\QueryBuilder\ElasticaQueryBuilder::class;
         } else {
-            $class = $this->getParameter('nyrodev_utility.queryBuilder.class');
+            $class = $this->getParameter('nyroDev_utility.queryBuilder.class');
         }
 
         $queryBuilder = new $class(is_object($name) ? $name : $this->getRepository($name), $this->getObjectManager(), $this);

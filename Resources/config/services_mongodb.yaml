@@ -1,10 +1,10 @@
 parameters:
-    nyrodev_utility.mongodbDbService.class: NyroDev\UtilityBundle\Services\Db\MongodbService
-    nyrodev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\MongodbQueryBuilder
+    nyroDev_utility.mongodbDbService.class: NyroDev\UtilityBundle\Services\Db\MongodbService
+    nyroDev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\MongodbQueryBuilder
     
 services:
     nyrodev_db:
-        class: "%nyrodev_utility.mongodbDbService.class%"
+        class: "%nyroDev_utility.mongodbDbService.class%"
         autowire: false
         arguments: ['@service_container', '@nyrodev.document_manager']
         public: true

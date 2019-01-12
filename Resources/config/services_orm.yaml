@@ -1,10 +1,10 @@
 parameters:
-    nyrodev_utility.ormDbService.class: NyroDev\UtilityBundle\Services\Db\OrmService
-    nyrodev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\OrmQueryBuilder
+    nyroDev_utility.ormDbService.class: NyroDev\UtilityBundle\Services\Db\OrmService
+    nyroDev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\OrmQueryBuilder
     
 services:
     nyrodev_db:
-        class: "%nyrodev_utility.ormDbService.class%"
+        class: "%nyroDev_utility.ormDbService.class%"
         arguments: ['@service_container', '@nyrodev.entity_manager']
         public: true
     nyrodev.entity_manager:

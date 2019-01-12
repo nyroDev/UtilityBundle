@@ -23,7 +23,7 @@ abstract class AbstractAdminController extends AbstractController
         $nbPerPageParam = 'admin.nbPerPage.'.$route;
         $nbPerPage = $this->container->hasParameter($nbPerPageParam) ?
                     $this->container->getParameter($nbPerPageParam) :
-                    $this->container->getParameter('nyrodev_utility.admin.nbPerPage');
+                    $this->container->getParameter('nyroDev_utility.admin.nbPerPage');
 
         $tmpList = $this->getListElements($request, $repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder, $filterDefaults);
         $order = $tmpList['order'];
@@ -67,7 +67,7 @@ abstract class AbstractAdminController extends AbstractController
             }
             ++$row;
             if (isset($exportConfig['doubleFirstRows']) && $exportConfig['doubleFirstRows']) {
-                $row++;
+                ++$row;
             }
 
             $results = $queryBuilder->getResult();
@@ -102,11 +102,11 @@ abstract class AbstractAdminController extends AbstractController
             $sheet->calculateColumnWidths();
 
             $filename = isset($exportConfig['filename']) ? $exportConfig['filename'] : (isset($exportConfig['prefix']) ? $exportConfig['prefix'] : 'export');
-            
+
             $response = new PhpExcelResponse();
-			$response->setPhpExcel($filename.'.xlsx', $phpExcel);
-            
-			return $response;
+            $response->setPhpExcel($filename.'.xlsx', $phpExcel);
+
+            return $response;
         }
 
         $routePrm = array_merge($routePrm, array('sort' => $sort, 'order' => $order));
@@ -144,8 +144,8 @@ abstract class AbstractAdminController extends AbstractController
                 'csrf_protection' => false,
                 'allow_extra_fields' => true,
                 'attr' => [
-                    'class' => 'filterForm'
-                ]
+                    'class' => 'filterForm',
+                ],
             ]);
         }
 
@@ -215,10 +215,10 @@ abstract class AbstractAdminController extends AbstractController
         }
 
         $form = $this->get('form.factory')->createNamedBuilder($formName ? $formName : 'form', FormType::class, $row, array_merge($moreFormOptions, array(
-            'validation_groups' => $groups
+            'validation_groups' => $groups,
         )));
 
-        if ($action != self::ADD && $this->getParameter('nyroDev_utility.show_edit_id')) {
+        if (self::ADD != $action && $this->getParameter('nyroDev_utility.show_edit_id')) {
             $form->add('id', TextType::class, array('label' => $this->trans('admin.'.$name.'.id'), 'attr' => array('readonly' => 'readonly'), 'mapped' => false));
             $form->get('id')->setData($row->getId());
         }
@@ -287,7 +287,7 @@ abstract class AbstractAdminController extends AbstractController
                 $objectManager = $this->get('nyrodev_db')->getObjectManager();
             }
 
-            if ($action == self::ADD) {
+            if (self::ADD == $action) {
                 $objectManager->persist($row);
             }
 

@@ -1,5 +1,6 @@
 <?php
-$version = "9.13.0";
+
+$version = '9.13.4';
 // Comment for nyroDev/Utility-bundle
 //if (session_id() == '') session_start();
 
@@ -14,7 +15,8 @@ ob_start('mb_output_handler');
 //setlocale(LC_CTYPE, 'en_US'); //correct transliteration
 
 // Useful to put variable in global scope
-foreach($configNyro as $k=>$v) {
+$GLOBALS['config'] = $configNyro;
+foreach ($configNyro as $k => $v) {
     $GLOBALS[$k] = $v;
 }
 $default_language = $configNyro['default_language'];
