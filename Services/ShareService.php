@@ -1,6 +1,6 @@
 <?php
 
-namespace NyroDev\UtilityBundle\Service;
+namespace NyroDev\UtilityBundle\Services;
 
 class ShareService extends AbstractService
 {
@@ -33,7 +33,7 @@ class ShareService extends AbstractService
             case 'image':
                 $keysProp[] = 'og:image';
                 $keys[] = 'twitter:image:src';
-                if (strpos($value, '://') === false) {
+                if (false === strpos($value, '://')) {
                     $value = $this->container->get('nyrodev')->getFullUrl($value);
                 }
                 break;
@@ -48,12 +48,12 @@ class ShareService extends AbstractService
         foreach ($keys as $k) {
             if ($value) {
                 $this->metas[$k] = $value;
-                if ($k == 'twitter:image:src') {
+                if ('twitter:image:src' == $k) {
                     $this->metas['twitter:card'] = 'summary_large_image';
                 }
             } elseif (isset($this->metas[$k])) {
                 unset($this->metas[$k]);
-                if ($k == 'twitter:image:src' && isset($this->metas['twitter:card'])) {
+                if ('twitter:image:src' == $k && isset($this->metas['twitter:card'])) {
                     unset($this->metas['twitter:card']);
                 }
             }
@@ -77,7 +77,7 @@ class ShareService extends AbstractService
     public function get($type)
     {
         $ret = null;
-        if ($type == 'image') {
+        if ('image' == $type) {
             if (isset($this->metasProp['og:image'])) {
                 $ret = $this->metasProp['og:image'];
             } elseif ($this->getParameter('nyroDev_utility.share.image')) {
