@@ -22,7 +22,7 @@ class MainService extends AbstractService
         if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
             $locale = $event->getRequest()->getLocale();
 
-            if (strpos($locale, 'change_') === 0) {
+            if (0 === strpos($locale, 'change_')) {
                 $tmp = explode('change_', $locale);
                 $locale = $tmp[1];
                 // Update already instanciated objects
@@ -35,9 +35,9 @@ class MainService extends AbstractService
                 $locale.'@euro',
                 $locale.'.utf8',
             ];
-            if (strlen($locale) == 2) {
+            if (2 == strlen($locale)) {
                 $locUp = strtoupper($locale);
-                $locale .= '_'.($locUp == 'ZH' ? 'CN' : $locUp);
+                $locale .= '_'.('ZH' == $locUp ? 'CN' : $locUp);
                 $locales[] = $locale;
                 $locales[] = $locale.'@euro';
                 $locales[] = $locale.'.utf8';
@@ -74,7 +74,7 @@ class MainService extends AbstractService
      */
     public function generateUrl($name, $parameters = array(), $absolute = false)
     {
-        if ($name == '#') {
+        if ('#' == $name) {
             return '#';
         }
 
@@ -90,15 +90,15 @@ class MainService extends AbstractService
      */
     public function getFullUrl($path)
     {
-        if (strpos($path, 'http') === 0 || strpos($path, 'mailto:') === 0 || strpos($path, '#') === 0) {
+        if (0 === strpos($path, 'http') || 0 === strpos($path, 'mailto:') || 0 === strpos($path, '#')) {
             return $path;
         }
         $router = $this->get('router');
-        if ($path[0] != '/') {
+        if ('/' != $path[0]) {
             $path = '/'.$path;
         }
         $baseUrl = $router->getContext()->getBaseUrl();
-        if ($baseUrl && $baseUrl[0] != '/') {
+        if ($baseUrl && '/' != $baseUrl[0]) {
             $baseUrl = '/'.$baseUrl;
         }
 
@@ -203,7 +203,7 @@ class MainService extends AbstractService
         $source = 'abcdefghikjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         if (!is_null($ignore)) {
             $tmp = array();
-            for ($i = 0;$i < strlen($ignore);++$i) {
+            for ($i = 0; $i < strlen($ignore); ++$i) {
                 $tmp[] = $ignore[$i];
             }
             $source = str_replace($tmp, '', $source);
@@ -212,7 +212,7 @@ class MainService extends AbstractService
         $n = strlen($source) - 1;
         $ret = '';
         for ($i = 0; $i < $len; ++$i) {
-            $ret .= $source{rand(0, $n)};
+            $ret .= $source[rand(0, $n)];
         }
 
         return $ret;
@@ -273,7 +273,7 @@ class MainService extends AbstractService
             $this->isExternalAgent = false;
             if (isset($_SERVER['HTTP_USER_AGENT'])) {
                 $ua = strtolower($_SERVER['HTTP_USER_AGENT']);
-                if (strpos($ua, 'facebookexternalhit') !== false || preg_match('~(bot|crawl|external|snippet)~i', $ua)) {
+                if (false !== strpos($ua, 'facebookexternalhit') || preg_match('~(bot|crawl|external|snippet)~i', $ua)) {
                     $this->isExternalAgent = true;
                 }
             }
@@ -512,30 +512,43 @@ class MainService extends AbstractService
 
     protected function getCryptKey()
     {
-        return pack('H*', sha1($this->getParameter('secret')));
+        return sha1($this->getParameter('secret'));
+    }
+
+    protected function doCryptAction($action, $string, $excludeSlash = true)
+    {
+        $cryptKey = $this->getCryptKey();
+
+        $secret_key = substr($cryptKey, 0, 20);
+        $secret_iv = substr($cryptKey, 21);
+        $encrypt_method = 'AES-256-CBC';
+
+        // hash
+        $key = hash('sha256', $secret_key);
+
+        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+        $iv = substr(hash('sha256', $secret_iv), 0, 16);
+
+        if ('encrypt' === $action) {
+            $output = base64_encode(openssl_encrypt($string, $encrypt_method, $key, 0, $iv));
+
+            if ($excludeSlash && false !== strpos($output, '/')) {
+                $output = $this->doCryptAction('encrypt', $string, $excludeSlash);
+            }
+        } elseif ('decrypt' === $action) {
+            $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+        }
+
+        return $output;
     }
 
     public function crypt($text, $excludeSlash = true)
     {
-        $key = $this->getCryptKey();
-        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-        $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-        $ret = base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $text, MCRYPT_MODE_CBC, $iv));
-        if ($excludeSlash && strpos($ret, '/') !== false) {
-            $ret = $this->crypt($text, $excludeSlash);
-        }
-
-        return $ret;
+        return $this->doCryptAction('encrypt', $text, $excludeSlash);
     }
 
     public function decrypt($encoded)
     {
-        $key = $this->getCryptKey();
-        $ciphertext_dec = base64_decode($encoded);
-        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-        $iv_dec = substr($ciphertext_dec, 0, $iv_size);
-        $ciphertext_dec = substr($ciphertext_dec, $iv_size);
-
-        return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec), "\0\4");
+        return $this->doCryptAction('decrypt', $encoded);
     }
 }
