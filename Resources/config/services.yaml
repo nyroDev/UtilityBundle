@@ -21,7 +21,7 @@ services:
           - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
     nyrodev_tagRender:
         class: "%nyroDev_utility.tagRenderService.class%"
-        arguments: ['@service_container', '@webpack_encore.entrypoint_lookup', '@assets.packages']
+        arguments: ['@service_container', '@webpack_encore.entrypoint_lookup_collection', '@assets.packages']
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_tagRender }
