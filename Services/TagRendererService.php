@@ -20,6 +20,11 @@ class TagRendererService extends AbstractService
         $this->packages = $packages;
     }
 
+    public function reset(string $entrypointName = '_default')
+    {
+        $this->getEntrypointLookup($entrypointName)->reset();
+    }
+
     public function renderWebpackScriptTags(string $entryName, string $moreAttrs = null, string $packageName = null, string $entrypointName = '_default'): string
     {
         $scriptTags = [];
