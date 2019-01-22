@@ -322,7 +322,7 @@ class MainService extends AbstractService
      *
      * @param string $file The filename
      *
-     * @return null|string The extension
+     * @return string|null The extension
      */
     public function getExt($file)
     {
