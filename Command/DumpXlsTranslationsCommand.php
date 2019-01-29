@@ -2,12 +2,13 @@
 
 namespace NyroDev\UtilityBundle\Command;
 
+use NyroDev\UtilityBundle\Services\MainService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Dumper;
 
 /**
  * Symfony2 command to update confidentielles tags.
@@ -36,7 +37,7 @@ class DumpXlsTranslationsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('nyrodev')->increasePhpLimits();
+        $this->getContainer()->get(MainService::class)->increasePhpLimits();
         $file = $input->getArgument('file');
         $dir = $input->getArgument('dir');
 
@@ -92,7 +93,7 @@ class DumpXlsTranslationsCommand extends ContainerAwareCommand
 
     protected function addTransRec(array &$values, array $idents, $trans)
     {
-        if (count($idents) == 1) {
+        if (1 == count($idents)) {
             $values[$idents[0]] = $trans;
         } else {
             $key = array_shift($idents);

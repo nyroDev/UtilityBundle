@@ -2,8 +2,8 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ImageService extends AbstractService
 {
@@ -83,7 +83,7 @@ class ImageService extends AbstractService
 
     public function getCachePath($file, $autoCreate = true)
     {
-        if (strpos($file, '/public/cache/') !== false) {
+        if (false !== strpos($file, '/public/cache/')) {
             $dir = $file.'_cache/';
         } else {
             $tmp = explode('/public/', $file);
@@ -128,7 +128,7 @@ class ImageService extends AbstractService
             if (is_null($info)) {
                 $info = $this->getImageSize($file);
             }
-            if ($info[2] === IMAGETYPE_GIF && $this->isAnimatedGif($file)) {
+            if (IMAGETYPE_GIF === $info[2] && $this->isAnimatedGif($file)) {
                 // animated file, copy it directly to destination and/or ignore force
                 $force = false;
                 if (!file_exists($dest)) {
@@ -147,7 +147,7 @@ class ImageService extends AbstractService
 
     public function saveImageResource($dest, $img, $quality = 100)
     {
-        switch ($this->get('nyrodev')->getExt($dest)) {
+        switch ($this->get(MainService::class)->getExt($dest)) {
             case 'jpg':
                 imagejpeg($img, $dest, $quality);
                 break;
@@ -223,15 +223,15 @@ class ImageService extends AbstractService
             $srcW = $srcW / 3;
             $srcH = $srcH / 3;
 
-            if ($hCenter == 'C') {
+            if ('C' == $hCenter) {
                 $srcX = $srcW;
-            } elseif ($hCenter == 'R') {
+            } elseif ('R' == $hCenter) {
                 $srcX = $srcW * 2;
             }
 
-            if ($vCenter == 'C') {
+            if ('C' == $vCenter) {
                 $srcY = $srcH;
-            } elseif ($vCenter == 'B') {
+            } elseif ('B' == $vCenter) {
                 $srcY = $srcH * 2;
             }
 
@@ -249,20 +249,20 @@ class ImageService extends AbstractService
                 $vCenter = $center[1];
                 if ($scaleW > $scaleH) {
                     $srcH = round($config['h'] / $scaleW);
-                    if ($vCenter == 'C') {
+                    if ('C' == $vCenter) {
                         $srcY = round(($info['h'] - $srcH) / 2);
-                    } elseif ($vCenter == 'T') {
+                    } elseif ('T' == $vCenter) {
                         $srcY = 0;
-                    } elseif ($vCenter == 'B') {
+                    } elseif ('B' == $vCenter) {
                         $srcY = $info['h'] - $srcH;
                     }
                 } else {
                     $srcW = round($config['w'] / $scaleH);
-                    if ($hCenter == 'C') {
+                    if ('C' == $hCenter) {
                         $srcX = round(($info['w'] - $srcW) / 2);
-                    } elseif ($hCenter == 'L') {
+                    } elseif ('L' == $hCenter) {
                         $srcX = 0;
-                    } elseif ($hCenter == 'R') {
+                    } elseif ('R' == $hCenter) {
                         $srcX = $info['w'] - $srcW;
                     }
                 }
@@ -306,7 +306,7 @@ class ImageService extends AbstractService
                 $transparency = imagecolorallocate($imgDst, $transparentColor['red'], $transparentColor['green'], $transparentColor['blue']);
                 imagefill($imgDst, 0, 0, $transparency);
                 imagecolortransparent($imgDst, $transparency);
-            } elseif ($info['type'] == IMAGETYPE_PNG) {
+            } elseif (IMAGETYPE_PNG == $info['type']) {
                 imagealphablending($imgDst, false);
                 imagesavealpha($imgDst, true);
                 imagefill($imgDst, 0, 0, imagecolorallocatealpha($imgDst, 0, 0, 0, 127));
@@ -338,7 +338,7 @@ class ImageService extends AbstractService
                     $filterName = $filter;
                 }
 
-                if (defined($filterName) && strpos($filterName, 'IMG_FILTER_') === 0) {
+                if (defined($filterName) && 0 === strpos($filterName, 'IMG_FILTER_')) {
                     imagefilter($imgDst, constant($filterName), $arg1, $arg2, $arg3, $arg4);
                 }
             }
@@ -348,10 +348,11 @@ class ImageService extends AbstractService
     }
 
     /**
-     * Get image size array, possibily using a cache if configured
+     * Get image size array, possibily using a cache if configured.
      *
      * @param string $file
-     * @param bool $force
+     * @param bool   $force
+     *
      * @return array
      */
     public function getImageSize($file, $force = false)
@@ -361,7 +362,7 @@ class ImageService extends AbstractService
             $cache = $this->get('nyrodev_image_cache');
         }
 
-        $cacheKey = 'imageSize_'. sha1($file);
+        $cacheKey = 'imageSize_'.sha1($file);
         $imageSize = [];
 
         if ($force || !$cache || !$cache->contains($cacheKey)) {
@@ -495,7 +496,7 @@ class ImageService extends AbstractService
                     ];
 
                     $string = '';
-                    $y+= $h;
+                    $y += $h;
                     $curWidth = 0;
                 }
             }
@@ -525,7 +526,7 @@ class ImageService extends AbstractService
                     'h' => $h,
                 ];
 
-                $y+= $h;
+                $y += $h;
             }
         } else {
             $dim = imagettfbbox($fontSize, 0, $font, '-');
@@ -537,7 +538,7 @@ class ImageService extends AbstractService
                 'x' => 0,
                 'w' => 0,
             ];
-            $y+= $h;
+            $y += $h;
         }
 
         return $y;
@@ -546,7 +547,7 @@ class ImageService extends AbstractService
     // From http://php.net/manual/en/function.imagecreatefromgif.php#104473
     public function isAnimatedGif($file)
     {
-        if(!($fh = @fopen($file, 'rb'))) {
+        if (!($fh = @fopen($file, 'rb'))) {
             return false;
         }
 
@@ -559,12 +560,13 @@ class ImageService extends AbstractService
         // We read through the file til we reach the end of the file, or we've found
         // at least 2 frame headers
         $count = 0;
-        while(!feof($fh) && $count < 2) {
+        while (!feof($fh) && $count < 2) {
             $chunk = fread($fh, 1024 * 100); //read 100kb at a time
             $count += preg_match_all('#\x00\x21\xF9\x04.{4}\x00(\x2C|\x21)#s', $chunk, $matches);
         }
 
         fclose($fh);
+
         return $count > 1;
     }
 
@@ -577,7 +579,7 @@ class ImageService extends AbstractService
      */
     public function hexa2dec($col)
     {
-        if (substr($col, 0, 1) === '#') {
+        if ('#' === substr($col, 0, 1)) {
             $col = substr($col, 1);
         }
 
@@ -601,8 +603,8 @@ class ImageService extends AbstractService
         //    Load the image into a string
         $file = fopen($filename, 'rb');
         $read = fread($file, 10);
-        while (!feof($file) && ($read != '')) {
-            $read    .=    fread($file, 1024);
+        while (!feof($file) && ('' != $read)) {
+            $read .= fread($file, 1024);
         }
 
         $temp = unpack('H*', $read);
@@ -611,7 +613,7 @@ class ImageService extends AbstractService
 
         //    Process the header
         //    Structure: http://www.fastgraph.com/help/bmp_header_format.html
-        if (substr($header, 0, 4) == '424d') {
+        if ('424d' == substr($header, 0, 4)) {
             //    Cut it in parts of 2 bytes
             $header_parts = str_split($header, 2);
 
@@ -646,13 +648,13 @@ class ImageService extends AbstractService
 
         //    Using a for-loop with index-calculation instaid of str_split to avoid large memory consumption
         //    Calculate the next DWORD-position in the body
-        for ($i = 0;$i < $body_size;$i += 3) {
+        for ($i = 0; $i < $body_size; $i += 3) {
             //    Calculate line-ending and padding
             if ($x >= $width) {
                 //    If padding needed, ignore image-padding
                 //    Shift i to the ending of the current 32-bit-block
                 if ($usePadding) {
-                    $i    +=    $width % 4;
+                    $i += $width % 4;
                 }
 
                 //    Reset horizontal position
@@ -704,7 +706,7 @@ class ImageService extends AbstractService
             return $html;
         }
 
-        $this->get('nyrodev')->increasePhpLimits();
+        $this->get(MainService::class)->increasePhpLimits();
         $dom = new \DOMDocument();
         //$html = utf8_decode($html);
         if ($addBody) {
@@ -730,12 +732,12 @@ class ImageService extends AbstractService
     protected function resizeImagesInHtmlDom(\DOMElement $node, $absolutizeUrl = false)
     {
         if (
-                strtolower($node->tagName) == 'img' &&
+                'img' == strtolower($node->tagName) &&
                 (
-                    ($node->hasAttribute('width') && strpos($node->getAttribute('width'), '%') === false) ||
-                    ($node->hasAttribute('height') && strpos($node->getAttribute('height'), '%') === false)
+                    ($node->hasAttribute('width') && false === strpos($node->getAttribute('width'), '%')) ||
+                    ($node->hasAttribute('height') && false === strpos($node->getAttribute('height'), '%'))
                 ) &&
-                $node->hasAttribute('src') && strpos($node->getAttribute('src'), 'http') !== 0) {
+                $node->hasAttribute('src') && 0 !== strpos($node->getAttribute('src'), 'http')) {
             // We have everything to resize the imagen let's dot it
             $w = $node->hasAttribute('width') ? $node->getAttribute('width') : null;
             $h = $node->hasAttribute('height') ? $node->getAttribute('height') : null;
@@ -746,7 +748,7 @@ class ImageService extends AbstractService
             }
 
             $src = $node->getAttribute('src');
-            $webFile = trim($baseUrl && $baseUrl != '/' ? str_replace($baseUrl, '', $src) : $src, '/');
+            $webFile = trim($baseUrl && '/' != $baseUrl ? str_replace($baseUrl, '', $src) : $src, '/');
             $webDir = $this->get('kernel')->getRootDir().'/../public/';
             $file = $webDir.$webFile;
             if (file_exists($file)) {
@@ -758,13 +760,13 @@ class ImageService extends AbstractService
                 )));
             }
             if ($absolutizeUrl) {
-                $src = $this->get('nyrodev')->getFullUrl($src);
+                $src = $this->get(MainService::class)->getFullUrl($src);
             }
 
             $node->setAttribute('src', $src);
         }
-        if ($absolutizeUrl && strtolower($node->tagName) == 'a' && $node->hasAttribute('href')) {
-            $node->setAttribute('href', $this->get('nyrodev')->getFullUrl($node->getAttribute('href')));
+        if ($absolutizeUrl && 'a' == strtolower($node->tagName) && $node->hasAttribute('href')) {
+            $node->setAttribute('href', $this->get(MainService::class)->getFullUrl($node->getAttribute('href')));
         }
         foreach ($node->childNodes as $n) {
             if ($n instanceof \DOMElement) {
@@ -824,7 +826,8 @@ class ImageService extends AbstractService
      *
      * @param resource $image
      * @param int      $blurFactor optional This is the strength of the blur 0 = no blur, 3 = default, anything over 5 is extremely blurred
-     * @link http://php.net/manual/fr/function.imagefilter.php#114750
+     *
+     * @see http://php.net/manual/fr/function.imagefilter.php#114750
      *
      * @author Martijn Frazer, idea based on http://stackoverflow.com/a/20264482
      */
@@ -845,7 +848,7 @@ class ImageService extends AbstractService
         $prevHeight = $originalHeight;
 
         // scale way down and gradually scale back up, blurring all the way
-        for ($i = 0; $i < $blurFactor; $i += 1) {
+        for ($i = 0; $i < $blurFactor; ++$i) {
             // determine dimensions of next image
             $nextWidth = $smallestWidth * pow(2, $i);
             $nextHeight = $smallestHeight * pow(2, $i);

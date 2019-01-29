@@ -2,11 +2,12 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use NyroDev\UtilityBundle\Services\Db\AbstractService;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Filter Type for Integer fields.
@@ -15,7 +16,7 @@ class FilterDbRowType extends FilterType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $nyrodevDb = $this->get('nyrodev_db');
+        $nyrodevDb = $this->get(AbstractService::class);
         $myOptions = array(
             'required' => false,
             'class' => $options['class'],
@@ -58,7 +59,7 @@ class FilterDbRowType extends FilterType
                     '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
                 ),
             ), $options['transformerOptions']))
-            ->add('value', $this->get('nyrodev_db')->getFormType(), array_merge($myOptions, $options['valueOptions']));
+            ->add('value', $this->get(AbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
     }
 
     public function applyValue($value)

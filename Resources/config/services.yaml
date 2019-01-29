@@ -3,64 +3,82 @@ parameters:
 
 services:
     NyroDev\UtilityBundle\Services\MainService:
-        alias: nyrodev
         arguments: ['@service_container']
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev }
           - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: -10 }
           - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+    nyrodev:
+        alias: NyroDev\UtilityBundle\Services\MainService
+        public: true
 
     NyroDev\UtilityBundle\Services\TagRendererService:
-        alias: nyrodev_tagRender
         arguments: ['@service_container', '@webpack_encore.entrypoint_lookup_collection', '@assets.packages']
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_tagRender }
+    nyrodev_tagRender:
+        alias: NyroDev\UtilityBundle\Services\TagRendererService
+        public: true
 
     NyroDev\UtilityBundle\Services\ShareService:
-        alias: nyrodev_share:
         arguments: ['@service_container']
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_share }
+    nyrodev_share:
+        alias: NyroDev\UtilityBundle\Services\ShareService
+        public: true
 
     NyroDev\UtilityBundle\Services\MemberService:
-        alias: nyrodev_member:
         arguments: ['@service_container']
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_member }
+    nyrodev_member:
+        alias: NyroDev\UtilityBundle\Services\MemberService
+        public: true
 
     NyroDev\UtilityBundle\Services\ImageService:
-        alias: nyrodev_image:
         arguments: ['@service_container', '@templating.helper.assets']
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_image }
+    nyrodev_image:
+        alias: NyroDev\UtilityBundle\Services\ImageService
+        public: true
 
     NyroDev\UtilityBundle\Services\FormService:
-        alias: nyrodev_form:
         arguments: ['@service_container', '@templating.helper.assets']
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_form }
+    nyrodev_form:
+        alias: NyroDev\UtilityBundle\Services\FormService
+        public: true
 
     NyroDev\UtilityBundle\Services\FormFilterService:
-        alias: nyrodev_formFilter:
         arguments: ['@service_container']
+        public: true
+    nyrodev_formFilter:
+        alias: NyroDev\UtilityBundle\Services\FormFilterService
         public: true
 
     NyroDev\UtilityBundle\Services\EmbedService:
-        alias: nyrodev_embed:
         arguments: ['@service_container']
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_embed }
+    nyrodev_embed:
+        alias: NyroDev\UtilityBundle\Services\EmbedService
+        public: true
     
     NyroDev\UtilityBundle\Services\EmbedValidatorService:
-        alias: nyrodev_embed_validator:
         arguments: ['@service_container']
         public: true
         tags:
           - { name: validator.constraint_validator, alias: nyrodev_embed_validator }
+    nyrodev_embed_validator:
+        alias: NyroDev\UtilityBundle\Services\EmbedValidatorService
+        public: true

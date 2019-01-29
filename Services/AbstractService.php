@@ -2,8 +2,8 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Symfony\Component\Templating\Helper\HelperInterface;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Templating\Helper\HelperInterface;
 
 abstract class AbstractService implements HelperInterface
 {
@@ -90,7 +90,7 @@ abstract class AbstractService implements HelperInterface
      */
     public function generateUrl($route, $parameters = array(), $absolute = false)
     {
-        return $this->container->get('nyrodev')->generateUrl($route, $parameters, $absolute);
+        return $this->container->get(MainService::class)->generateUrl($route, $parameters, $absolute);
     }
 
     /**

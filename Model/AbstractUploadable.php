@@ -2,9 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Model;
 
+use NyroDev\UtilityBundle\Services\ImageService;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractUploadable
 {
@@ -240,7 +241,7 @@ abstract class AbstractUploadable
         if ($file && $fs->exists($file)) {
             $fs->remove($file);
             if ($this->service) {
-                $this->service->get('nyrodev_image')->removeCache($file);
+                $this->service->get(ImageService::class)->removeCache($file);
             }
         }
     }

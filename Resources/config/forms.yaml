@@ -1,89 +1,71 @@
 services:
-    nyrodev.filter.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterType
+    NyroDev\UtilityBundle\Form\Type\FilterType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_custom.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterCustomType
+    NyroDev\UtilityBundle\Form\Type\FilterCustomType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_date.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterDateType
+    NyroDev\UtilityBundle\Form\Type\FilterDateType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_range_date.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterRangeDateType
+    NyroDev\UtilityBundle\Form\Type\FilterRangeDateType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_range_number.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterRangeNumberType
+    NyroDev\UtilityBundle\Form\Type\FilterRangeNumberType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_range_sub.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterRangeSubType
+    NyroDev\UtilityBundle\Form\Type\FilterRangeSubType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_int.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterIntType
+    NyroDev\UtilityBundle\Form\Type\FilterIntType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_bool.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterBoolType
+    NyroDev\UtilityBundle\Form\Type\FilterBoolType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_choice.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterChoiceType
+    NyroDev\UtilityBundle\Form\Type\FilterChoiceType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_dbRow.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowType
+    NyroDev\UtilityBundle\Form\Type\FilterDbRowType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_dbRowExpanded.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowExpandedType
+    NyroDev\UtilityBundle\Form\Type\FilterDbRowExpandedType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_dbRowMultiple.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleType
+    NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.filter_dbRowMultipleSingleChoice.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleSingleChoiceType
+    NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleSingleChoiceType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.file_extension.form.type:
-        class: NyroDev\UtilityBundle\Form\Extension\FileTypeExtension
+    NyroDev\UtilityBundle\Form\Extension\FileTypeExtension:
         tags:
           - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }
-    nyrodev.tinymce.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\TinymceType
+    NyroDev\UtilityBundle\Form\Type\TinymceType:
         arguments: ['@service_container', '@templating.helper.assets']
         tags:
           - { name: form.type }
-    nyrodev.config.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\ConfigType
+    NyroDev\UtilityBundle\Form\Type\ConfigType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.rawhtml.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\RawHtmlType
+    NyroDev\UtilityBundle\Form\Type\RawHtmlType:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrodev.dummy_captcha.form.type:
-        class: NyroDev\UtilityBundle\Form\Type\DummyCaptchaType
+    NyroDev\UtilityBundle\Form\Type\DummyCaptchaType:
         tags:
           - { name: form.type }

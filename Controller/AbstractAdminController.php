@@ -5,6 +5,9 @@ namespace NyroDev\UtilityBundle\Controller;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use NyroDev\UtilityBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\FormFilterService;
+use NyroDev\UtilityBundle\Services\MainService;
 use NyroDev\UtilityBundle\Utility\PhpExcelResponse;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -38,7 +41,7 @@ abstract class AbstractAdminController extends AbstractController
         $canExport = $exportConfig && is_array($exportConfig) && isset($exportConfig['fields']);
         if ($canExport && $request->query->get('export')) {
             // Start XLS export
-            $this->get('nyrodev')->increasePhpLimits();
+            $this->get(MainService::class)->increasePhpLimits();
             $phpExcel = new \PHPExcel();
             $title = isset($exportConfig['title']) ? $exportConfig['title'] : 'Export';
             $creator = isset($exportConfig['creator']) ? $exportConfig['creator'] : 'Export';
@@ -81,7 +84,7 @@ abstract class AbstractAdminController extends AbstractController
                         if ($val instanceof \DateTime) {
                             $val = strftime($this->trans('date.short'), $val->getTimestamp());
                         } elseif ($val instanceof Collection) {
-                            $val = $this->get('nyrodev')->joinRows($val);
+                            $val = $this->get(MainService::class)->joinRows($val);
                         } else {
                             $val = $val.'';
                         }
@@ -111,9 +114,9 @@ abstract class AbstractAdminController extends AbstractController
 
         $routePrm = array_merge($routePrm, array('sort' => $sort, 'order' => $order));
         if (!is_null($filter)) {
-            $routePrm = array_merge($routePrm, $this->get('nyrodev_formFilter')->getPrmForUrl($filter));
+            $routePrm = array_merge($routePrm, $this->get(FormFilterService::class)->getPrmForUrl($filter));
         }
-        $pager = $this->get('nyrodev')->getPager($route, $routePrm, $total, $page, $nbPerPage);
+        $pager = $this->get(MainService::class)->getPager($route, $routePrm, $total, $page, $nbPerPage);
 
         $results = $queryBuilder
                         ->setFirstResult($pager->getStart())
@@ -164,32 +167,32 @@ abstract class AbstractAdminController extends AbstractController
             // bind values from the request
             if ($request->query->has('clearFilter')) {
                 $filter->submit(array('page' => 1));
-                $this->get('nyrodev_formFilter')->saveSession($filter, $route);
+                $this->get(FormFilterService::class)->saveSession($filter, $route);
             } elseif ($request->query->has($filter->getName())) {
                 $filter->handleRequest($request);
-                $this->get('nyrodev_formFilter')->saveSession($filter, $route);
+                $this->get(FormFilterService::class)->saveSession($filter, $route);
                 $tmp = $request->query->get($filter->getName());
                 if (isset($tmp['submit'])) {
                     $page = 1;
                 }
                 $filterFilled = true;
             } else {
-                $filterFilled = $this->get('nyrodev_formFilter')->fillFromSession($filter, $route);
+                $filterFilled = $this->get(FormFilterService::class)->fillFromSession($filter, $route);
             }
         }
 
         if (is_string($repository)) {
-            $repository = $this->get('nyrodev_db')->getRepository($repository);
+            $repository = $this->get(AbstractService::class)->getRepository($repository);
         }
 
         if (is_null($queryBuilder)) {
             // initialize a query builder
-            $queryBuilder = $this->get('nyrodev_db')->getQueryBuilder($repository);
+            $queryBuilder = $this->get(AbstractService::class)->getQueryBuilder($repository);
         }
 
         if (!is_null($filter)) {
             // build the query from the given form object
-            $this->get('nyrodev_formFilter')->buildQuery($filter, $queryBuilder);
+            $this->get(FormFilterService::class)->buildQuery($filter, $queryBuilder);
         }
 
         $queryBuilder->orderBy($sort, $order);
@@ -284,7 +287,7 @@ abstract class AbstractAdminController extends AbstractController
             }
 
             if (is_null($objectManager)) {
-                $objectManager = $this->get('nyrodev_db')->getObjectManager();
+                $objectManager = $this->get(AbstractService::class)->getObjectManager();
             }
 
             if (self::ADD == $action) {

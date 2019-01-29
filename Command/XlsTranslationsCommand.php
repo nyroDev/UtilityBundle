@@ -2,13 +2,14 @@
 
 namespace NyroDev\UtilityBundle\Command;
 
+use NyroDev\UtilityBundle\Services\MainService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Symfony2 command to update confidentielles tags.
@@ -41,7 +42,7 @@ class XlsTranslationsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('nyrodev')->increasePhpLimits();
+        $this->getContainer()->get(MainService::class)->increasePhpLimits();
         $dest = $input->getArgument('dest');
         $dir = $input->getArgument('dir');
         $suffix = $input->getArgument('suffix');
@@ -49,7 +50,7 @@ class XlsTranslationsCommand extends ContainerAwareCommand
 
         $locale = $this->getContainer()->getParameter('locale');
         $locales = $this->getContainer()->hasParameter('locales') ? explode('|', $this->getContainer()->getParameter('locales')) : array();
-        if (count($locales) == 0) {
+        if (0 == count($locales)) {
             $output->writeln('locales is not configured or empty, exiting');
 
             return;

@@ -1,12 +1,18 @@
 parameters:
-    nyroDev_utility.ormDbService.class: NyroDev\UtilityBundle\Services\Db\OrmService
     nyroDev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\OrmQueryBuilder
     
 services:
-    nyrodev_db:
-        class: "%nyroDev_utility.ormDbService.class%"
+    NyroDev\UtilityBundle\Services\Db\AbstractService:
+        alias: NyroDev\UtilityBundle\Services\Db\OrmService
+        public: true
+
+    NyroDev\UtilityBundle\Services\Db\OrmService:
         arguments: ['@service_container', '@nyrodev.entity_manager']
         public: true
+    nyrodev_db:
+        alias: NyroDev\UtilityBundle\Services\Db\OrmService
+        public: true
+
     nyrodev.entity_manager:
         class: Doctrine\ORM\EntityManager
         arguments: ["%nyroDev_utility.model_manager_name%"]
