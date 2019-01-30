@@ -11,7 +11,7 @@ services:
         arguments: ['@service_container', '@nyrodev.document_manager']
         public: true
     nyrodev_db:
-        alias: NNyroDev\UtilityBundle\Services\Db\MongodbService
+        alias: NyroDev\UtilityBundle\Services\Db\MongodbService
         public: true
 
     nyrodev.document_manager:
