@@ -336,10 +336,34 @@ class NyrodevService extends AbstractService
      *
      * @param string $dir  Destination directory
      * @param string $name Original filename
+     * @param string $sep  Spearator used in case file already exists
      *
      * @return string
      */
-    public function getUniqFileName($dir, $name)
+    public function getUniqFileName($dir, $name, $sep = '-')
+    {
+        list($name, $ext) = $this->standardizeFileName($name, true);
+
+        $nameF = $name.'.'.$ext;
+        $i = 2;
+        while (isset($this->uniqFileNames[$dir.'/'.$nameF]) || file_exists($dir.'/'.$nameF)) {
+            $nameF = $name.$sep.$i.'.'.$ext;
+            ++$i;
+        }
+        $this->uniqFileNames[$dir.'/'.$nameF] = true;
+
+        return $nameF;
+    }
+
+    /**
+     * Standardize filename using urlify function and keeping the extension.
+     *
+     * @param string $name    Original filename
+     * @param bool   $asArray Indicates if the return should be an array or a string
+     *
+     * @return string
+     */
+    public function standardizeFileName($name, $asArray = false)
     {
         $name = mb_strtolower($name);
         $ext = $this->getExt($name);
@@ -351,15 +375,10 @@ class NyrodevService extends AbstractService
         }
         $name = $this->urlify($name);
 
-        $nameF = $name.'.'.$ext;
-        $i = 2;
-        while (isset($this->uniqFileNames[$dir.'/'.$nameF]) || file_exists($dir.'/'.$nameF)) {
-            $nameF = $name.'-'.$i.'.'.$ext;
-            ++$i;
-        }
-        $this->uniqFileNames[$dir.'/'.$nameF] = true;
-
-        return $nameF;
+        return $asArray ? [
+            $name,
+            $ext,
+        ] : $name.'.'.$ext;
     }
 
     /**
