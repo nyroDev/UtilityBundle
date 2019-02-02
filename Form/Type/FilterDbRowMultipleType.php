@@ -2,11 +2,12 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use NyroDev\UtilityBundle\Services\Db\AbstractService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Filter Type for Integer fields.
@@ -15,7 +16,7 @@ class FilterDbRowMultipleType extends FilterDbRowType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $nyrodevDb = $this->get('nyrodev_db');
+        $nyrodevDb = $this->get(AbstractService::class);
         $myOptions = array(
             'required' => false,
             'multiple' => true,
@@ -62,14 +63,14 @@ class FilterDbRowMultipleType extends FilterDbRowType
                     'IN' => AbstractQueryBuilder::OPERATOR_IN,
                 ),
             ), $options['transformerOptions']))
-            ->add('value', $this->get('nyrodev_db')->getFormType(), array_merge($myOptions, $options['valueOptions']));
+            ->add('value', $this->get(AbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         if (
                 isset($data['transformer']) && $data['transformer']
-            &&  isset($data['value']) && $data['value']
+            && isset($data['value']) && $data['value']
             ) {
             $value = $this->applyValue($data['value']);
 

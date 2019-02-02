@@ -2,11 +2,12 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TinymceType extends AbstractType
 {
@@ -33,7 +34,7 @@ class TinymceType extends AbstractType
         $attrs = array_merge($attrs, array(
             'class' => 'tinymce'.(isset($attrs['class']) && $attrs['class'] ? ' '.$attrs['class'] : ''),
             'data-tinymceurl' => $this->assetsHelper->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
-            $prefixTinymce.'language' => $this->container->get('nyrodev')->getRequest()->getLocale(),
+            $prefixTinymce.'language' => $this->container->get(NyrodevService::class)->getRequest()->getLocale(),
             $prefixTinymce.'height' => 450,
             $prefixTinymce.'width' => 720,
             $prefixTinymce.'theme' => 'modern',
@@ -50,12 +51,12 @@ class TinymceType extends AbstractType
             if ($canBrowse) {
                 $attrs[$prefixTinymce.'plugins'] .= ',responsivefilemanager';
 
-                $attrs[$prefixTinymce.'external_filemanager_path'] = (isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get('nyrodev')->generateUrl($this->container->getParameter('nyroDev_utility.browser.defaultRoute'))).'/';
+                $attrs[$prefixTinymce.'external_filemanager_path'] = (isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get(NyrodevService::class)->generateUrl($this->container->getParameter('nyroDev_utility.browser.defaultRoute'))).'/';
                 $attrs[$prefixTinymce.'filemanager_title'] = isset($options['tinymceBrowser']['title']) ? $options['tinymceBrowser']['title'] : $this->container->get('translator')->trans('nyrodev.browser.title');
                 $attrs[$prefixTinymce.'external_plugins'] = json_encode(array('filemanager' => $attrs[$prefixTinymce.'external_filemanager_path'].'plugin.min.js'));
 
                 /*
-                $attrs['data-browser_url'] = isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get('nyrodev')->generateUrl($this->container->getParameter('nyroDev_utility.tinymce.browserRoute'));
+                $attrs['data-browser_url'] = isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get(NyrodevService::class)->generateUrl($this->container->getParameter('nyroDev_utility.tinymce.browserRoute'));
                 $attrs['data-browser_width'] = isset($options['tinymceBrowser']['width']) ? $options['tinymceBrowser']['width'] : 800;
                 $attrs['data-browser_height'] = isset($options['tinymceBrowser']['height']) ? $options['tinymceBrowser']['height'] : 600;
                 $attrs['data-browser_title'] = isset($options['tinymceBrowser']['title']) ? $options['tinymceBrowser']['title'] : $this->container->get('translator')->trans('nyrodev.browser.title');

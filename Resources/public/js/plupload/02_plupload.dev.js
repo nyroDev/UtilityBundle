@@ -2492,6 +2492,8 @@ plupload.File = (function() {
 
 exports.plupload = plupload;
 
+global.plupload = plupload;
+
 }(this, moxie));
 
 }));

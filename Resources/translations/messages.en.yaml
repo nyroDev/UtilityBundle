@@ -7,6 +7,7 @@ date:
   hour: "%I:%M %P"
 login:
   errors:
+    unknown: "An unknown error has occured."
     "Bad credentials": "Sorry, your email address does not match an existing account."
     "Bad credentials.": "Sorry, your email address does not match an existing account."
     "The presented key does not match.": "The automatic connection did not work. Please log in regularly."

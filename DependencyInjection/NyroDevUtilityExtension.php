@@ -79,5 +79,15 @@ class NyroDevUtilityExtension extends Extension
         }
         $definition = $container->getDefinition($managerService);
         $definition->setFactory([new Reference($doctrineService), 'getManager']);
+
+        // Load commands
+        $definition = new Definition();
+        $definition
+            ->setAutowired(true)
+            ->setAutoconfigured(true)
+            ->setPublic(false)
+        ;
+        $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Command'));
+        $dirLoader->registerClasses($definition, 'NyroDev\\UtilityBundle\\Command\\', './*');
     }
 }

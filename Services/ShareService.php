@@ -34,7 +34,7 @@ class ShareService extends AbstractService
                 $keysProp[] = 'og:image';
                 $keys[] = 'twitter:image:src';
                 if (false === strpos($value, '://')) {
-                    $value = $this->container->get('nyrodev')->getFullUrl($value);
+                    $value = $this->container->get(NyrodevService::class)->getFullUrl($value);
                 }
                 break;
             default:
@@ -179,7 +179,7 @@ class ShareService extends AbstractService
     {
         $this->set('image', $image);
         if ($getAndSetDimensions) {
-            $imageSize = $this->container->get('nyrodev_image')->getImageSize($image);
+            $imageSize = $this->container->get(ImageService::class)->getImageSize($image);
             if (is_array($imageSize) && count($imageSize)) {
                 $this->set('og:image:width', $imageSize[0], true);
                 $this->set('og:image:height', $imageSize[1], true);

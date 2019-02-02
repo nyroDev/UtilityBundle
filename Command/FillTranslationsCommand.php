@@ -2,14 +2,16 @@
 
 namespace NyroDev\UtilityBundle\Command;
 
+use NyroDev\UtilityBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Symfony2 command to update confidentielles tags.
@@ -41,7 +43,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('nyrodev')->increasePhpLimits();
+        $this->getContainer()->get(NyrodevService::class)->increasePhpLimits();
         $dir = $input->getArgument('dir');
         $suffix = $input->getArgument('suffix');
         $extension = $input->getArgument('extension');
@@ -55,7 +57,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
 
         $locale = $this->getContainer()->getParameter('locale');
         $locales = $this->getContainer()->hasParameter('locales') ? explode('|', $this->getContainer()->getParameter('locales')) : array();
-        if (count($locales) == 0) {
+        if (0 == count($locales)) {
             $output->writeln('locales is not configured or empty, exiting');
 
             return;
@@ -79,7 +81,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
 
         $nbO = count($originals);
         if ($nbO) {
-            $em = $this->getContainer()->get('nyrodev_db');
+            $em = $this->getContainer()->get(AbstractService::class);
             $repo = $em->getRepository($translationDb);
             $this->className = $repo->getClassName();
             $this->accessor = PropertyAccess::createPropertyAccessor();
@@ -159,7 +161,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
                 $row->setLocale($locale);
                 $row->setIdent($curPrefix);
                 $row->setTranslation(trim($v).'');
-                $this->getContainer()->get('nyrodev_db')->persist($row);
+                $this->getContainer()->get(AbstractService::class)->persist($row);
                 ++$nb;
             }
         }

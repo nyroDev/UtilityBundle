@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Utility;
 
-use NyroDev\UtilityBundle\Services\MainService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 
 /**
  * Pager utility object.
@@ -12,7 +12,7 @@ class Pager
     /**
      * nyroDev service object used to generate the URL.
      *
-     * @var MainService
+     * @var NyrodevService
      */
     protected $service;
 
@@ -26,7 +26,7 @@ class Pager
     /**
      * Route parameter used to generate the URL.
      * Page parameter will be added.
-     * 
+     *
      * @var array
      */
     protected $routePrm;
@@ -40,7 +40,7 @@ class Pager
 
     /**
      * Current page number.
-     * 
+     *
      * @var int
      */
     protected $curPage;
@@ -62,14 +62,14 @@ class Pager
     /**
      * Constructor of Pager utility.
      *
-     * @param MainService $service
-     * @param type        $route
-     * @param array       $routePrm
-     * @param int         $nbResults
-     * @param int         $curPage
-     * @param int         $nbPerPage
+     * @param NyrodevService $service
+     * @param type           $route
+     * @param array          $routePrm
+     * @param int            $nbResults
+     * @param int            $curPage
+     * @param int            $nbPerPage
      */
-    public function __construct(MainService $service, $route, array $routePrm, $nbResults, $curPage = 1, $nbPerPage = 10)
+    public function __construct(NyrodevService $service, $route, array $routePrm, $nbResults, $curPage = 1, $nbPerPage = 10)
     {
         $this->setService($service);
         $this->setRoute($route);
@@ -142,7 +142,7 @@ class Pager
 
     /**
      * Indicates if there is a previous page.
-     * 
+     *
      * @return bool
      */
     public function hasPrevious()
@@ -152,7 +152,7 @@ class Pager
 
     /**
      * Get the previous page number, null if not.
-     * 
+     *
      * @return int|null
      */
     public function getPrevious()
@@ -174,7 +174,7 @@ class Pager
 
     /**
      * Indicates if there is a next page.
-     * 
+     *
      * @return bool
      */
     public function hasNext()
@@ -184,7 +184,7 @@ class Pager
 
     /**
      * Get the next page number, null if not.
-     * 
+     *
      * @return int|null
      */
     public function getNext()
@@ -280,7 +280,7 @@ class Pager
 
     /**
      * Get the start element to use when fetchings objects.
-     * 
+     *
      * @return int
      */
     public function getStart()
@@ -290,7 +290,7 @@ class Pager
 
     /**
      * Get the number of pages.
-     * 
+     *
      * @return int
      */
     public function getNbPages()
@@ -321,7 +321,7 @@ class Pager
     /**
      * Get the service.
      *
-     * @return NyroDev\UtilityBundle\Services\MainService
+     * @return NyroDev\UtilityBundle\Services\NyrodevService
      */
     public function getService()
     {
@@ -331,16 +331,16 @@ class Pager
     /**
      * Set the router.
      *
-     * @param NyroDev\UtilityBundle\Services\MainService $service
+     * @param NyroDev\UtilityBundle\Services\NyrodevService $service
      */
-    public function setService(MainService $service)
+    public function setService(NyrodevService $service)
     {
         $this->service = $service;
     }
 
     /**
      * Get the route name.
-     * 
+     *
      * @return string
      */
     public function getRoute()
@@ -360,7 +360,7 @@ class Pager
 
     /**
      * Get the current page.
-     * 
+     *
      * @return int
      */
     public function getCurPage()
@@ -370,7 +370,7 @@ class Pager
 
     /**
      * Set the current page.
-     * 
+     *
      * @param int $curPage
      */
     public function setCurPage($curPage)
@@ -380,7 +380,7 @@ class Pager
 
     /**
      * Get the number of elements per page.
-     * 
+     *
      * @return int
      */
     public function getNbPerPage()
@@ -390,7 +390,7 @@ class Pager
 
     /**
      * Set the number of elements per page.
-     * 
+     *
      * @param int $nbPerPage
      */
     public function setNbPerPage($nbPerPage)
@@ -401,7 +401,7 @@ class Pager
 
     /**
      * Get the number of results.
-     * 
+     *
      * @return int
      */
     public function getNbResults()
@@ -411,7 +411,7 @@ class Pager
 
     /**
      * Set the number of results.
-     * 
+     *
      * @param int $totPages
      */
     public function setNbResults($nbResults)

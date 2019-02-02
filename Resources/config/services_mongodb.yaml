@@ -1,14 +1,19 @@
 parameters:
-    nyroDev_utility.mongodbDbService.class: NyroDev\UtilityBundle\Services\Db\MongodbService
     nyroDev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\MongodbQueryBuilder
     
 services:
-    nyrodev_db:
-        class: "%nyroDev_utility.mongodbDbService.class%"
+    NyroDev\UtilityBundle\Services\Db\AbstractService:
+        alias: NyroDev\UtilityBundle\Services\Db\MongodbService
+        public: true
+
+    NyroDev\UtilityBundle\Services\Db\MongodbService:
         autowire: false
         arguments: ['@service_container', '@nyrodev.document_manager']
         public: true
-    NyroDev\UtilityBundle\Services\Db\AbstractService: '@nyrodev_db'
+    nyrodev_db:
+        alias: NyroDev\UtilityBundle\Services\Db\MongodbService
+        public: true
+
     nyrodev.document_manager:
         class: Doctrine\ODM\MongoDB\DocumentManager
         arguments: ["%nyroDev_utility.model_manager_name%"]

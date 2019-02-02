@@ -2,8 +2,9 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType as SrcAbstractType;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Form\AbstractType as SrcAbstractType;
 
 abstract class AbstractType extends SrcAbstractType
 {
@@ -67,6 +68,6 @@ abstract class AbstractType extends SrcAbstractType
      */
     public function generateUrl($route, $parameters = array(), $absolute = false)
     {
-        return $this->container->get('nyrodev')->generateUrl($route, $parameters, $absolute);
+        return $this->container->get(NyrodevService::class)->generateUrl($route, $parameters, $absolute);
     }
 }

@@ -7,6 +7,7 @@ date:
   hour: "%H:%M"
 login:
   errors:
+    unknown: "Une erreur inconnue est survenue."
     "Bad credentials": "Désolé, votre adresse email ne correspond à aucun compte existant."
     "Bad credentials.": "Désolé, votre adresse email ne correspond à aucun compte existant."
     "The presented key does not match.": "La connexion automatique a échouée. Veuillez vous connecter noramlement."

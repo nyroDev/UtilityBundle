@@ -23,11 +23,11 @@ class EmbedValidatorService extends AbstractService implements Validator\Constra
             $urlValidator = new Validator\Constraints\UrlValidator();
             $urlValidator->initialize($this->context);
             $urlValidator->validate($value, new Validator\Constraints\Url());
-            if (count($this->context->getViolations()) === 0) {
-                $dataUrl = $this->get('nyrodev_embed')->data($value);
+            if (0 === count($this->context->getViolations())) {
+                $dataUrl = $this->get(EmbedService::class)->data($value);
                 $error = null;
                 $prms = array();
-                if (!is_array($dataUrl) || count($dataUrl) === 0) {
+                if (!is_array($dataUrl) || 0 === count($dataUrl)) {
                     if (!$constraint->allowNotFetched) {
                         $error = 'NotFetched';
                     }
