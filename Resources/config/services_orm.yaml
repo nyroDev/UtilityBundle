@@ -2,7 +2,7 @@ parameters:
     nyroDev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\OrmQueryBuilder
     
 services:
-    NyroDev\UtilityBundle\Services\Db\AbstractService:
+    NyroDev\UtilityBundle\Services\Db\DbAbstractService:
         alias: NyroDev\UtilityBundle\Services\Db\OrmService
         public: true
 

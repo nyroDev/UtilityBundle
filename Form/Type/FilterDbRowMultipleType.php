@@ -4,7 +4,7 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use NyroDev\UtilityBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +16,7 @@ class FilterDbRowMultipleType extends FilterDbRowType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $nyrodevDb = $this->get(AbstractService::class);
+        $nyrodevDb = $this->get(DbAbstractService::class);
         $myOptions = array(
             'required' => false,
             'multiple' => true,
@@ -63,7 +63,7 @@ class FilterDbRowMultipleType extends FilterDbRowType
                     'IN' => AbstractQueryBuilder::OPERATOR_IN,
                 ),
             ), $options['transformerOptions']))
-            ->add('value', $this->get(AbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
+            ->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)

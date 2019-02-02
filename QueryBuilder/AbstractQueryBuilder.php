@@ -4,7 +4,7 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use NyroDev\UtilityBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 
 /**
@@ -31,7 +31,7 @@ abstract class AbstractQueryBuilder
     const OPERATOR_IS_NOT_NULL = 'IS NOT NULL';
 
     /**
-     * @var AbstractService
+     * @var DbAbstractService
      */
     protected $service;
 
@@ -45,13 +45,13 @@ abstract class AbstractQueryBuilder
      */
     protected $om;
 
-    public function __construct(ObjectRepository $or, ObjectManager $om, AbstractService $service)
+    public function __construct(ObjectRepository $or, ObjectManager $om, DbAbstractService $service)
     {
         $this->or = $or;
         $this->om = $om;
         $this->service = $service;
     }
-    
+
     public function __clone()
     {
         $this->built = null;
@@ -117,6 +117,7 @@ abstract class AbstractQueryBuilder
     protected $built;
     protected $queryBuilder;
     protected $count;
+
     protected function buildRealQueryBuilder()
     {
         if ($this->built) {

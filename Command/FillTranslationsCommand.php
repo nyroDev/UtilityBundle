@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Command;
 
-use NyroDev\UtilityBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -81,7 +81,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
 
         $nbO = count($originals);
         if ($nbO) {
-            $em = $this->getContainer()->get(AbstractService::class);
+            $em = $this->getContainer()->get(DbAbstractService::class);
             $repo = $em->getRepository($translationDb);
             $this->className = $repo->getClassName();
             $this->accessor = PropertyAccess::createPropertyAccessor();
@@ -161,7 +161,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
                 $row->setLocale($locale);
                 $row->setIdent($curPrefix);
                 $row->setTranslation(trim($v).'');
-                $this->getContainer()->get(AbstractService::class)->persist($row);
+                $this->getContainer()->get(DbAbstractService::class)->persist($row);
                 ++$nb;
             }
         }

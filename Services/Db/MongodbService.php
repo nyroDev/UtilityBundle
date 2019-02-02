@@ -4,7 +4,7 @@ namespace NyroDev\UtilityBundle\Services\Db;
 
 use Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType;
 
-class MongodbService extends AbstractService
+class MongodbService extends DbAbstractService
 {
     public function getFormType()
     {

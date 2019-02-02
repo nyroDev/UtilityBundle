@@ -2,7 +2,7 @@ parameters:
     nyroDev_utility.queryBuilder.class: NyroDev\UtilityBundle\QueryBuilder\MongodbQueryBuilder
     
 services:
-    NyroDev\UtilityBundle\Services\Db\AbstractService:
+    NyroDev\UtilityBundle\Services\Db\DbAbstractService:
         alias: NyroDev\UtilityBundle\Services\Db\MongodbService
         public: true
 

@@ -5,7 +5,7 @@ namespace NyroDev\UtilityBundle\Controller;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use NyroDev\UtilityBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\FormFilterService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Utility\PhpExcelResponse;
@@ -182,12 +182,12 @@ abstract class AbstractAdminController extends AbstractController
         }
 
         if (is_string($repository)) {
-            $repository = $this->get(AbstractService::class)->getRepository($repository);
+            $repository = $this->get(DbAbstractService::class)->getRepository($repository);
         }
 
         if (is_null($queryBuilder)) {
             // initialize a query builder
-            $queryBuilder = $this->get(AbstractService::class)->getQueryBuilder($repository);
+            $queryBuilder = $this->get(DbAbstractService::class)->getQueryBuilder($repository);
         }
 
         if (!is_null($filter)) {
@@ -287,7 +287,7 @@ abstract class AbstractAdminController extends AbstractController
             }
 
             if (is_null($objectManager)) {
-                $objectManager = $this->get(AbstractService::class)->getObjectManager();
+                $objectManager = $this->get(DbAbstractService::class)->getObjectManager();
             }
 
             if (self::ADD == $action) {

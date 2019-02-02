@@ -4,7 +4,7 @@ namespace NyroDev\UtilityBundle\Services\Db;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class OrmService extends AbstractService
+class OrmService extends DbAbstractService
 {
     public function getFormType()
     {

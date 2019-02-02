@@ -2,10 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Services\Db;
 
-use NyroDev\UtilityBundle\Services\AbstractService as AbstractServiceSrc;
+use NyroDev\UtilityBundle\Services\AbstractService;
 use Doctrine\Common\Persistence\ObjectManager;
 
-abstract class AbstractService extends AbstractServiceSrc
+abstract class DbAbstractService extends AbstractService
 {
     protected $objectManager;
 
