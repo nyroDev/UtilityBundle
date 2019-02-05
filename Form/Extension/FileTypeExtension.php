@@ -11,14 +11,11 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class FileTypeExtension extends AbstractTypeExtension
 {
-    /**
-     * Returns the name of the type being extended.
-     *
-     * @return string The name of the type being extended
-     */
-    public function getExtendedType()
+    public static function getExtendedTypes(): iterable
     {
-        return FileType::class;
+        return [
+            FileType::class,
+        ];
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * Symfony2 command to convert CSS file from rem to px.
  */
-class Rem2pxCommand extends ContainerAwareCommand
+class Rem2pxCommand extends Command
 {
     /**
      * Configure the command.
@@ -70,7 +70,7 @@ class Rem2pxCommand extends ContainerAwareCommand
                             switch (get_class($value)) {
                                 case 'Sabberworm\CSS\Value\Size':
                                     /* @var $value \Sabberworm\CSS\Value\Size */
-                                    if ($value->getUnit() == 'rem') {
+                                    if ('rem' == $value->getUnit()) {
                                         $value->setSize($value->getSize() * 10);
                                         $value->setUnit('px');
                                         $keepValue = true;
@@ -80,7 +80,7 @@ class Rem2pxCommand extends ContainerAwareCommand
                                     /* @var $value \Sabberworm\CSS\Value\RuleValueList */
                                     foreach ($value->getListComponents() as $c) {
                                         if ($c instanceof \Sabberworm\CSS\Value\Size) {
-                                            if ($c->getUnit() == 'rem') {
+                                            if ('rem' == $c->getUnit()) {
                                                 $c->setSize($c->getSize() * 10);
                                                 $c->setUnit('px');
                                                 $keepValue = true;

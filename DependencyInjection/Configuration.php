@@ -14,8 +14,8 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('nyro_dev_utility');
+        $builder = new TreeBuilder('nyro_dev_utility');
+        $rootNode = $builder->getRootNode($builder, 'nyro_dev_utility');
 
         $supportedDrivers = array('orm', 'mongodb');
 
@@ -88,6 +88,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
 
-        return $treeBuilder;
+        return $builder;
     }
 }

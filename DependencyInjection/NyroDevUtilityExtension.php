@@ -2,12 +2,13 @@
 
 namespace NyroDev\UtilityBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class NyroDevUtilityExtension extends Extension
 {
@@ -89,5 +90,16 @@ class NyroDevUtilityExtension extends Extension
         ;
         $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Command'));
         $dirLoader->registerClasses($definition, 'NyroDev\\UtilityBundle\\Command\\', './*');
+
+        // Load controllers
+        $definition = new Definition();
+        $definition
+            ->setAutowired(true)
+            ->setAutoconfigured(true)
+            ->addMethodCall('setContainer', [new Reference(ContainerInterface::class)])
+            ->addTag('controller.service_arguments')
+        ;
+        $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Controller'));
+        $dirLoader->registerClasses($definition, 'NyroDev\\UtilityBundle\\Controller\\', './*');
     }
 }

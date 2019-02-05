@@ -3,7 +3,7 @@
 namespace NyroDev\UtilityBundle\Command;
 
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,8 +13,17 @@ use Symfony\Component\Yaml\Dumper;
 /**
  * Symfony2 command to update confidentielles tags.
  */
-class DumpXlsTranslationsCommand extends ContainerAwareCommand
+class DumpXlsTranslationsCommand extends Command
 {
+    protected $nyrodev;
+
+    public function __construct(NyrodevService $nyrodev)
+    {
+        $this->nyrodev = $nyrodev;
+
+        parent::__construct();
+    }
+
     /**
      * Configure the command.
      */
@@ -37,7 +46,7 @@ class DumpXlsTranslationsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get(NyrodevService::class)->increasePhpLimits();
+        $this->nyrodev->increasePhpLimits();
         $file = $input->getArgument('file');
         $dir = $input->getArgument('dir');
 

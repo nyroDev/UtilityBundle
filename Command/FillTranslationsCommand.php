@@ -4,7 +4,7 @@ namespace NyroDev\UtilityBundle\Command;
 
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,8 +16,19 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Symfony2 command to update confidentielles tags.
  */
-class FillTranslationsCommand extends ContainerAwareCommand
+class FillTranslationsCommand extends Command
 {
+    protected $nyrodev;
+    protected $db;
+
+    public function __construct(NyrodevService $nyrodev, DbAbstractService $db)
+    {
+        $this->nyrodev = $nyrodev;
+        $this->db = $db;
+
+        parent::__construct();
+    }
+
     /**
      * Configure the command.
      */
@@ -43,20 +54,20 @@ class FillTranslationsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get(NyrodevService::class)->increasePhpLimits();
+        $this->nyrodev->increasePhpLimits();
         $dir = $input->getArgument('dir');
         $suffix = $input->getArgument('suffix');
         $extension = $input->getArgument('extension');
 
-        $translationDb = $this->getContainer()->hasParameter('nyroDev_utility.translationDb') ? $this->getContainer()->getParameter('nyroDev_utility.translationDb') : false;
+        $translationDb = $this->nyrodev->getParameter('nyroDev_utility.translationDb');
         if (!$translationDb) {
             $output->writeln('translationDB is not configured, exiting');
 
             return;
         }
 
-        $locale = $this->getContainer()->getParameter('locale');
-        $locales = $this->getContainer()->hasParameter('locales') ? explode('|', $this->getContainer()->getParameter('locales')) : array();
+        $locale = $this->nyrodev->getParameter('locale');
+        $locales = explode('|', $this->nyrodev->getParameter('locales'));
         if (0 == count($locales)) {
             $output->writeln('locales is not configured or empty, exiting');
 
@@ -81,8 +92,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
 
         $nbO = count($originals);
         if ($nbO) {
-            $em = $this->getContainer()->get(DbAbstractService::class);
-            $repo = $em->getRepository($translationDb);
+            $repo = $this->db->getRepository($translationDb);
             $this->className = $repo->getClassName();
             $this->accessor = PropertyAccess::createPropertyAccessor();
 
@@ -119,7 +129,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
 
             $output->writeln('Added translations: '.$nb);
             $output->writeln('Flushing...');
-            $em->flush();
+            $this->db->flush();
         } else {
             $output->writeln('No original translation files found.');
         }
@@ -161,7 +171,7 @@ class FillTranslationsCommand extends ContainerAwareCommand
                 $row->setLocale($locale);
                 $row->setIdent($curPrefix);
                 $row->setTranslation(trim($v).'');
-                $this->getContainer()->get(DbAbstractService::class)->persist($row);
+                $this->db->persist($row);
                 ++$nb;
             }
         }
