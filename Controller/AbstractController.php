@@ -2,34 +2,11 @@
 
 namespace NyroDev\UtilityBundle\Controller;
 
-use NyroDev\UtilityBundle\Services\NyrodevService;
-use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SrcAbstractController;
 
-abstract class AbstractController
+abstract class AbstractController extends SrcAbstractController
 {
-    use ControllerTrait;
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @required
-     */
-    public function setContainer(ContainerInterface $container)
-    {
-        $previous = $this->container;
-        $this->container = $container;
-
-        return $previous;
-    }
-
-    protected function getParameter($name, $default = null)
-    {
-        return $this->container->get(NyrodevService::class)->getParameter($name, $default);
-    }
+    use Traits\SubscribedServiceTrait;
 
     /**
      * Get the translation for a given keyword.

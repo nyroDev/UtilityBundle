@@ -24,9 +24,7 @@ abstract class AbstractAdminController extends AbstractController
     protected function createList(Request $request, $repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false, array $filterDefaults = array())
     {
         $nbPerPageParam = 'admin.nbPerPage.'.$route;
-        $nbPerPage = $this->container->hasParameter($nbPerPageParam) ?
-                    $this->container->getParameter($nbPerPageParam) :
-                    $this->container->getParameter('nyroDev_utility.admin.nbPerPage');
+        $nbPerPage = $this->getParameter($nbPerPageParam, $this->getParameter('nyroDev_utility.admin.nbPerPage'));
 
         $tmpList = $this->getListElements($request, $repository, $route, $defaultSort, $defaultOrder, $filterType, $queryBuilder, $filterDefaults);
         $order = $tmpList['order'];
