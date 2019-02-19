@@ -27,9 +27,21 @@ abstract class AbstractService implements HelperInterface
      */
     public function getParameter($parameter, $default = null)
     {
-        $value = $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
+        $value = $this->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
 
         return !is_null($value) ? $value : $default;
+    }
+
+    /**
+     * Check if an application parameter is set
+     *
+     * @param string $parameter
+     *
+     * @return bool
+     */
+    public function hasParameter($parameter)
+    {
+        return $this->container->hasParameter($parameter);
     }
 
     /**
