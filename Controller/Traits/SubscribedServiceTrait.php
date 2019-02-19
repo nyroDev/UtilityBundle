@@ -14,6 +14,7 @@ use NyroDev\UtilityBundle\Services\TagRendererService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 trait SubscribedServiceTrait
 {
@@ -22,6 +23,8 @@ trait SubscribedServiceTrait
         return array_merge(parent::getSubscribedServices(), [
             'translator' => '?'.TranslatorInterface::class,
             TranslatorInterface::class => '?'.TranslatorInterface::class,
+            'validator' => '?'.ValidatorInterface::class,
+            ValidatorInterface::class => '?'.ValidatorInterface::class,
             'kernel' => '?'.KernelInterface::class,
             KernelInterface::class => '?'.KernelInterface::class,
             'event_dispatcher' => '?'.EventDispatcherInterface::class,
