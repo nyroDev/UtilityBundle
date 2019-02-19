@@ -12,6 +12,7 @@ use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\ShareService;
 use NyroDev\UtilityBundle\Services\TagRendererService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 trait SubscribedServiceTrait
@@ -21,6 +22,8 @@ trait SubscribedServiceTrait
         return array_merge(parent::getSubscribedServices(), [
             'translator' => '?'.TranslatorInterface::class,
             TranslatorInterface::class => '?'.TranslatorInterface::class,
+            'kernel' => '?'.KernelInterface::class,
+            KernelInterface::class => '?'.KernelInterface::class,
             'event_dispatcher' => '?'.EventDispatcherInterface::class,
             EventDispatcherInterface::class => '?'.EventDispatcherInterface::class,
             'nyrodev' => '?'.NyrodevService::class,

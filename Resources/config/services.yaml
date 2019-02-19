@@ -41,7 +41,10 @@ services:
         public: true
 
     NyroDev\UtilityBundle\Services\ImageService:
-        arguments: ['@service_container', '@templating.helper.assets']
+        arguments:
+            - '@service_container'
+            - '@templating.helper.assets'
+            - '@Symfony\Component\HttpKernel\KernelInterface'
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_image }

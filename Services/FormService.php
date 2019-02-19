@@ -2,9 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Symfony\Component\Form\Form;
 use NyroDev\UtilityBundle\Form\Type\DummyCaptchaType;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
+use Symfony\Component\Form\Form;
 
 /**
  * Service used to handle forms to add more features.
@@ -16,7 +17,7 @@ class FormService extends AbstractService
      */
     protected $assetsHelper;
 
-    public function __construct($container, AssetsHelper $assetsHelper)
+    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper)
     {
         parent::__construct($container);
         $this->assetsHelper = $assetsHelper;
@@ -36,12 +37,12 @@ class FormService extends AbstractService
 
     public function getPluploadAttrs($filters = 'images', $pluploadKey = 'plupload_')
     {
-        if ($filters == 'images') {
+        if ('images' == $filters) {
             $filters = [
                 [
                     'title' => $this->trans('nyrodev.plupload.images'),
                     'extensions' => 'jpg,jpeg,gif,png',
-                ]
+                ],
             ];
         }
 

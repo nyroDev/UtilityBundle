@@ -2,8 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class ImageService extends AbstractService
 {
@@ -12,10 +14,16 @@ class ImageService extends AbstractService
      */
     protected $assetsHelper;
 
-    public function __construct($container, AssetsHelper $assetsHelper)
+    /**
+     * @var KernelInterface
+     */
+    protected $kernel;
+
+    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper, KernelInterface $kernel)
     {
         parent::__construct($container);
         $this->assetsHelper = $assetsHelper;
+        $this->kernel = $kernel;
     }
 
     public function resize($file, $configKey = 'default', $force = false)
@@ -749,7 +757,7 @@ class ImageService extends AbstractService
 
             $src = $node->getAttribute('src');
             $webFile = trim($baseUrl && '/' != $baseUrl ? str_replace($baseUrl, '', $src) : $src, '/');
-            $webDir = $this->get('kernel')->getRootDir().'/../public/';
+            $webDir = $this->kernel->getProjectDir().'/public/';
             $file = $webDir.$webFile;
             if (file_exists($file)) {
                 $src = str_replace($webDir, '/', $this->_resize($file, array(
