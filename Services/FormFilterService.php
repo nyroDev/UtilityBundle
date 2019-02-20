@@ -64,7 +64,7 @@ class FormFilterService extends AbstractService
         $this->get('session')->set('filter_'.$route, $data);
     }
 
-    protected function prepareValueForSession($value, Form $form)
+    public function prepareValueForSession($value, Form $form)
     {
         if (is_object($value)) {
             $class = get_class($value);
@@ -78,9 +78,15 @@ class FormFilterService extends AbstractService
             } else {
                 $value = $value->getId();
             }
-        } elseif ($value && is_array($value) && (isset($value['start']) || isset($value['end']))) {
-            $value['start'] = $this->prepareValueForSession($value['start'], $form->get('start'));
-            $value['end'] = $this->prepareValueForSession($value['end'], $form->get('end'));
+        } elseif ($value && is_array($value)) {
+            if (isset($value['start']) || isset($value['end'])) {
+                $value['start'] = $this->prepareValueForSession($value['start'], $form->get('start'));
+                $value['end'] = $this->prepareValueForSession($value['end'], $form->get('end'));
+            } else {
+                foreach ($value as $k => $v) {
+                    $value[$k] = $this->prepareValueForSession($v, $form);
+                }
+            }
         }
 
         return $value;
