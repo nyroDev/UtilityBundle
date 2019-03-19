@@ -322,7 +322,7 @@ class MainService extends AbstractService
      *
      * @param string $file The filename
      *
-     * @return null|string The extension
+     * @return string|null The extension
      */
     public function getExt($file)
     {
@@ -341,15 +341,7 @@ class MainService extends AbstractService
      */
     public function getUniqFileName($dir, $name)
     {
-        $name = mb_strtolower($name);
-        $ext = $this->getExt($name);
-        if ($ext) {
-            $pos = strpos($name, $ext);
-            if ($pos > 0) {
-                $name = substr($name, 0, $pos);
-            }
-        }
-        $name = $this->urlify($name);
+        list($name, $ext) = $this->standardizeFileName($name, true);
 
         $nameF = $name.'.'.$ext;
         $i = 2;
@@ -360,6 +352,32 @@ class MainService extends AbstractService
         $this->uniqFileNames[$dir.'/'.$nameF] = true;
 
         return $nameF;
+    }
+
+    /**
+     * Standardize filename using urlify function and keeping the extension.
+     *
+     * @param string $name    Original filename
+     * @param bool   $asArray Indicates if the return should be an array or a string
+     *
+     * @return string
+     */
+    public function standardizeFileName($name, $asArray = false)
+    {
+        $name = mb_strtolower($name);
+        $ext = $this->getExt($name);
+        if ($ext) {
+            $pos = strpos($name, $ext);
+            if ($pos > 0) {
+                $name = substr($name, 0, $pos);
+            }
+        }
+        $name = $this->urlify($name);
+
+        return $asArray ? [
+            $name,
+            $ext,
+        ] : $name.'.'.$ext;
     }
 
     /**
