@@ -336,17 +336,18 @@ class MainService extends AbstractService
      *
      * @param string $dir  Destination directory
      * @param string $name Original filename
+     * @param string $sep  Spearator used in case file already exists
      *
      * @return string
      */
-    public function getUniqFileName($dir, $name)
+    public function getUniqFileName($dir, $name, $sep = '-')
     {
         list($name, $ext) = $this->standardizeFileName($name, true);
 
         $nameF = $name.'.'.$ext;
         $i = 2;
         while (isset($this->uniqFileNames[$dir.'/'.$nameF]) || file_exists($dir.'/'.$nameF)) {
-            $nameF = $name.'-'.$i.'.'.$ext;
+            $nameF = $name.$sep.$i.'.'.$ext;
             ++$i;
         }
         $this->uniqFileNames[$dir.'/'.$nameF] = true;
