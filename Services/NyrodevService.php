@@ -30,6 +30,10 @@ class NyrodevService extends AbstractService
                 $this->get('translator')->setLocale($locale);
             }
 
+            if (!defined('NYRO_LOCALE')) {
+                define(NYRO_LOCALE, $locale);
+            }
+
             $locales = [
                 $locale,
                 $locale.'@euro',
