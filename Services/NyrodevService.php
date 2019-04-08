@@ -31,7 +31,7 @@ class NyrodevService extends AbstractService
             }
 
             if (!defined('NYRO_LOCALE')) {
-                define(NYRO_LOCALE, $locale);
+                define('NYRO_LOCALE', $locale);
             }
 
             $locales = [
