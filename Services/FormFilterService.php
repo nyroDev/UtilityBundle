@@ -71,10 +71,11 @@ class FormFilterService extends AbstractService
             if ($class == 'DateTime') {
                 $value = $form->getViewData();
             } elseif ($class == 'Doctrine\Common\Collections\ArrayCollection') {
-                $value = array();
+                $values = array();
                 foreach ($value as $vv) {
-                    $value[] = $vv->getId();
-                }
+                    $values[] = $vv->getId();
+		}
+		$value = $values;
             } else {
                 $value = $value->getId();
             }
