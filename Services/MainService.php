@@ -451,13 +451,13 @@ class MainService extends AbstractService
     {
         if ($url != $this->getRequest()->getRequestUri()) {
             $redirect = true;
+            $newArgs = array();
             try {
                 $tmp = parse_url($this->getRequest()->getRequestUri());
                 if (isset($tmp['path']) && $tmp['path'] == $url) {
                     $redirect = false;
                 }
                 if (isset($tmp['query'])) {
-                    $newArgs = array();
                     parse_str($tmp['query'], $args);
                     $alloweds = array_merge($allowParams, $this->getParameter('nyroDev_utility.redirectIfNotUrl_params', array()));
                     foreach ($alloweds as $k) {
