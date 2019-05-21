@@ -3,6 +3,7 @@
 namespace NyroDev\UtilityBundle\Controller;
 
 use NyroDev\UtilityBundle\Event\TinymceEvent;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,9 @@ class TinymceController extends AbstractController
             }
             set_include_path(get_include_path().PATH_SEPARATOR.$fileManagerDir);
 
-            session_start();
+            if (!session_id()) {
+                session_start();
+            }
 
             $baseUrl = $request->getScheme().'://'.$request->getHost().$request->getBasePath();
 
@@ -214,7 +217,7 @@ class TinymceController extends AbstractController
     |
     */
 
-    'access_keys' => array('nyrodev/utility-bundle', $container->getParameter('kernel.secret')),
+    'access_keys' => array('nyrodev/utility-bundle', $container->get(NyrodevService::class)->getParameter('kernel.secret')),
 
     //--------------------------------------------------------------------------------------------------------
     // YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS
@@ -360,7 +363,7 @@ class TinymceController extends AbstractController
     //Permissions configuration
     //******************
     'delete_files' => true,
-    'create_folders' => $container->getParameter('nyroDev_utility.browser.allowAddDir'),
+    'create_folders' => $container->get(NyrodevService::class)->getParameter('nyroDev_utility.browser.allowAddDir'),
     'delete_folders' => true,
     'upload_files' => true,
     'rename_files' => true,
