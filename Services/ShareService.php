@@ -2,8 +2,19 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use NyroDev\UtilityBundle\Model\Sharable;
+
 class ShareService extends AbstractService
 {
+    const IMAGE_CONFIG_NAME = 'shareImage';
+    const IMAGE_CONFIG_DEFAULT = [
+        'name' => 'shareImage',
+        'w' => 1000,
+        'h' => null,
+        'fit' => true,
+        'quality' => 80,
+    ];
+
     protected $metas = array();
     protected $metasProp = array();
 
@@ -107,6 +118,57 @@ class ShareService extends AbstractService
         $this->setDescription($description);
         if (!is_null($image)) {
             $this->setImage($image);
+        }
+    }
+
+    /**
+     * Set Sharable values from object.
+     *
+     * @param Sharable $sharable
+     */
+    public function setSharable(Sharable $sharable)
+    {
+        $nyrodev = $this->container->get(NyrodevService::class);
+
+        $this->setTitle($nyrodev->inlineText($sharable.''));
+
+        if ($sharable->getMetaTitle()) {
+            $this->setTitle($nyrodev->inlineText($sharable->getMetaTitle()));
+        }
+        if ($sharable->getOgTitle()) {
+            $this->set('og:title', $nyrodev->inlineText($sharable->getOgTitle()), true);
+            $this->set('twitter:title', $nyrodev->inlineText($sharable->getOgTitle()));
+        }
+
+        if ($sharable->getMetaDescription()) {
+            $this->setDescription($nyrodev->inlineText($sharable->getMetaDescription()));
+        }
+        if ($sharable->getOgDescription()) {
+            $this->set('og:description', $nyrodev->inlineText($sharable->getOgDescription()), true);
+            $this->set('twitter:description', $nyrodev->inlineText($sharable->getOgDescription()));
+        }
+
+        if ($sharable->getMetaKeywords()) {
+            $this->setKeywords($nyrodev->inlineText($sharable->getMetaKeywords()));
+        }
+
+        if ($sharable->getOgImageFile()) {
+            $image = $sharable->getOgImageFile();
+            if (false !== strpos($image, '/public/') && \file_exists($image)) {
+                // This is a full path name, resize it
+                $image = $this->container->get(ImageService::class)->resize($image, self::IMAGE_CONFIG_NAME);
+            }
+            $this->setImage($image);
+        }
+
+        if ($sharable->getShareOthers() && count($sharable->getShareOthers())) {
+            foreach ($sharable->getShareOthers() as $k => $v) {
+                if (is_array($v)) {
+                    $this->set($k, $nyrodev->inlineText($v[0]), $v[1]);
+                } else {
+                    $this->set($k, $nyrodev->inlineText($v));
+                }
+            }
         }
     }
 

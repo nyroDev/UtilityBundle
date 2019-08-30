@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\DependencyInjection;
 
+use NyroDev\UtilityBundle\Services\ShareService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -51,9 +52,15 @@ class NyroDevUtilityExtension extends Extension
         }
 
         if (isset($config['image']) && is_array($config['image'])) {
+            $shareImageConfig = ShareService::IMAGE_CONFIG_DEFAULT;
             foreach ($config['image'] as $k => $v) {
-                $container->setParameter('nyroDev_utility.imageService.configs.'.$k, $v);
+                if ($k === ShareService::IMAGE_CONFIG_NAME) {
+                    $shareImageConfig = array_merge($shareImageConfig, $v);
+                } else {
+                    $container->setParameter('nyroDev_utility.imageService.configs.'.$k, $v);
+                }
             }
+            $container->setParameter('nyroDev_utility.imageService.configs.'.ShareService::IMAGE_CONFIG_NAME, $shareImageConfig);
         }
 
         if (isset($config['embed']) && is_array($config['embed'])) {

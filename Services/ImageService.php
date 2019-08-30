@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\Filesystem\Filesystem;
@@ -33,7 +34,7 @@ class ImageService extends AbstractService
             $tmp = explode('/public/', $resizedPath);
             $ret = $this->assetsHelper->getUrl($tmp[1]);
         } catch (\Exception $e) {
-            $ret = 'data:'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::CONTENT_TYPE.';base64,'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::IMAGE_CONTENT;
+            $ret = 'data:'.TransparentPixelResponse::CONTENT_TYPE.';base64,'.TransparentPixelResponse::IMAGE_CONTENT;
         }
 
         return $ret;

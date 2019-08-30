@@ -98,10 +98,13 @@ class NyrodevService extends AbstractService
             return $path;
         }
         $router = $this->get('router');
+        $baseUrl = null;
+
         if ('/' != $path[0]) {
             $path = '/'.$path;
+            $baseUrl = $router->getContext()->getBaseUrl();
         }
-        $baseUrl = $router->getContext()->getBaseUrl();
+
         if ($baseUrl && '/' != $baseUrl[0]) {
             $baseUrl = '/'.$baseUrl;
         }
@@ -170,6 +173,18 @@ class NyrodevService extends AbstractService
         }
 
         return $url;
+    }
+
+    /**
+     * Inline a texte to remove all new line and various characters.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public function inlineText($text)
+    {
+        return preg_replace('/\s\s+/', ' ', preg_replace('/\s/', ' ', trim($text, " \t\n\r\0\x0B:·-")));
     }
 
     /**
