@@ -14,7 +14,7 @@ interface Sharable
 
     public function getMetaKeywords();
 
-    public function getOgImageFile();
+    public function getShareOgImage();
 
     public function getShareOthers();
 

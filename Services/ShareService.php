@@ -152,8 +152,8 @@ class ShareService extends AbstractService
             $this->setKeywords($nyrodev->inlineText($sharable->getMetaKeywords()));
         }
 
-        if ($sharable->getOgImageFile()) {
-            $image = $sharable->getOgImageFile();
+        if ($sharable->getShareOgImage()) {
+            $image = $sharable->getShareOgImage();
             if (false !== strpos($image, '/public/') && \file_exists($image)) {
                 // This is a full path name, resize it
                 $image = $this->container->get(ImageService::class)->resize($image, self::IMAGE_CONFIG_NAME);
