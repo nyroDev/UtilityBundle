@@ -3,7 +3,9 @@ parameters:
 
 services:
     NyroDev\UtilityBundle\Services\NyrodevService:
-        arguments: ['@service_container']
+        arguments:
+            - '@service_container'
+            - '@Symfony\Component\HttpKernel\KernelInterface'
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev }

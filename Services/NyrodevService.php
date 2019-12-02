@@ -8,10 +8,30 @@ use NyroDev\UtilityBundle\Utility\Pager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class NyrodevService extends AbstractService
 {
+    /**
+     * @var KernelInterface
+     */
+    protected $kernel;
+
+    public function __construct($container, KernelInterface $kernel)
+    {
+        parent::__construct($container);
+        $this->kernel = $kernel;
+    }
+
+    /**
+     * @return KernelInterface
+     */
+    public function getKernel()
+    {
+        return $this->kernel;
+    }
+
     /**
      * Kernel request listener to setLocale if configured.
      *
@@ -76,7 +96,7 @@ class NyrodevService extends AbstractService
      *
      * @return string The generated URL
      */
-    public function generateUrl($name, $parameters = array(), $absolute = false)
+    public function generateUrl($name, $parameters = [], $absolute = false)
     {
         if ('#' == $name) {
             return '#';
@@ -197,14 +217,14 @@ class NyrodevService extends AbstractService
     public function urlify($text)
     {
         $text = str_replace(
-            array('ß', 'æ',  'Æ',  'Œ', 'œ', '¼',   '½',   '¾',   '‰',   '™', '&', '	'),
-            array('ss', 'ae', 'AE', 'OE', 'oe', '1/4', '1/2', '3/4', '0/00', 'TM', '_', ' '),
+            ['ß', 'æ',  'Æ',  'Œ', 'œ', '¼',   '½',   '¾',   '‰',   '™', '&', '	'],
+            ['ss', 'ae', 'AE', 'OE', 'oe', '1/4', '1/2', '3/4', '0/00', 'TM', '_', ' '],
             $text);
         $from = "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøðÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüŠšÝŸÿÑñÐÞþ()[]~¤$&%*@ç§¶!¡†‡?¿;,.#:/\\^¨€¢£¥{}|¦+÷×±<>«»“”„\"‘’' ˜–—…©®¹²³°";
         $to = 'AAAAAAaaaaaaOOOOOOoooooooEEEEeeeeCcIIIIiiiiUUUUuuuuSsYYyNnDPp           cS        ---     EcPY        __________------CR123-';
 
         return strtolower(trim(str_replace(
-            array(' ', '-----', '----', '---', '--'),
+            [' ', '-----', '----', '---', '--'],
             '-',
             strtr(utf8_decode($text), utf8_decode($from), utf8_decode($to))), '-'));
     }
@@ -221,7 +241,7 @@ class NyrodevService extends AbstractService
     {
         $source = 'abcdefghikjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         if (!is_null($ignore)) {
-            $tmp = array();
+            $tmp = [];
             for ($i = 0; $i < strlen($ignore); ++$i) {
                 $tmp[] = $ignore[$i];
             }
@@ -261,7 +281,7 @@ class NyrodevService extends AbstractService
         $entity = true;
         while ($entity) {
             $random = $this->randomStr($length);
-            $entity = $repository->findOneBy(array($field => $random));
+            $entity = $repository->findOneBy([$field => $random]);
         }
 
         return $random;
@@ -348,7 +368,7 @@ class NyrodevService extends AbstractService
         return pathinfo($file, PATHINFO_EXTENSION);
     }
 
-    protected $uniqFileNames = array();
+    protected $uniqFileNames = [];
 
     /**
      * Get a new uniq filename in a directory.
@@ -449,7 +469,7 @@ class NyrodevService extends AbstractService
      */
     public function joinRows($rows, $separator = ', ')
     {
-        $ret = array();
+        $ret = [];
         foreach ($rows as $r) {
             $ret[] = $r.'';
         }
@@ -465,11 +485,11 @@ class NyrodevService extends AbstractService
      *
      * @return RedirectResponse|bool
      */
-    public function redirectIfNotUrl($url, array $allowParams = array())
+    public function redirectIfNotUrl($url, array $allowParams = [])
     {
         if ($url != $this->getRequest()->getRequestUri()) {
             $redirect = true;
-            $newArgs = array();
+            $newArgs = [];
             try {
                 $tmp = parse_url($this->getRequest()->getRequestUri());
                 if (isset($tmp['path']) && $tmp['path'] == $url) {
@@ -477,7 +497,7 @@ class NyrodevService extends AbstractService
                 }
                 if (isset($tmp['query'])) {
                     parse_str($tmp['query'], $args);
-                    $alloweds = array_merge($allowParams, $this->getParameter('nyroDev_utility.redirectIfNotUrl_params', array()));
+                    $alloweds = array_merge($allowParams, $this->getParameter('nyroDev_utility.redirectIfNotUrl_params', []));
                     foreach ($alloweds as $k) {
                         if (isset($args[$k])) {
                             $newArgs[$k] = $args[$k];
@@ -499,9 +519,8 @@ class NyrodevService extends AbstractService
     /**
      * Format a date using strftime.
      *
-     * @param \DateTime $datetime
-     * @param string    $format    Format translation ident
-     * @param bool      $useOffset Use offset of datetime
+     * @param string $format    Format translation ident
+     * @param bool   $useOffset Use offset of datetime
      *
      * @return string
      */
