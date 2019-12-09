@@ -63,11 +63,11 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
     {
         if (
                 isset($data['transformer']) && $data['transformer']
-            &&  isset($data['value']) && $data['value']
+            && isset($data['value']) && $data['value']
             ) {
             $value = $this->applyValue($data['value']);
 
-            if (count($value) > 0) {
+            if ($value) {
                 $queryBuilder->addJoinWhere($name, array($value));
             }
         }
