@@ -72,7 +72,7 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
             ) {
             $value = $this->applyValue($data['value']);
 
-            if (count($value) > 0) {
+            if ($value) {
                 $queryBuilder->addJoinWhere($name, array($value));
             }
         }
