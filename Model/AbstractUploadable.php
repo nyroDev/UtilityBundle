@@ -223,6 +223,9 @@ abstract class AbstractUploadable
                     unset($this->temps[$field]);
                 }
             }
+            if (isset($this->directs[$field])) {
+                unset($this->directs[$field]);
+            }
             $this->$field = null;
         }
         $this->service = null;
