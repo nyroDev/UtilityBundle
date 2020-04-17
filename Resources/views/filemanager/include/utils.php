@@ -778,6 +778,10 @@ function fix_filename($str, $config, $is_folder = false)
 		$str = 'file' . $str;
 	}
 
+	if (isset($GLOBALS['nyroDevService'])) {
+        $str = $GLOBALS['nyroDevService']->urlify($str);
+	}
+
 	return trim($str);
 }
 

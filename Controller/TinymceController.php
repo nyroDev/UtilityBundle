@@ -13,6 +13,8 @@ class TinymceController extends AbstractController
 {
     public static function handleBrowserAction($container, Request $request, $file = null, $dirName = 'tinymce')
     {
+        $GLOBALS['nyroDevService'] = $container->get(NyrodevService::class);
+        
         $fileManagerDir = dirname(dirname(__FILE__)).'/Resources/views/filemanager/';
 
         $path = $fileManagerDir.$file;
