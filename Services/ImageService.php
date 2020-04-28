@@ -421,6 +421,51 @@ class ImageService extends AbstractService
             imagesavealpha($src, true);
         }
 
+
+        if (\function_exists('exif_read_data')) {
+            $exif = @exif_read_data($file);
+            if ($exif && is_array($exif) && isset($exif['Orientation'])) {
+                // The media is potentialy rotated, do the change
+                $flipDims = false;
+                switch ($exif['Orientation']) {
+                    case 2:
+                        imageflip($src, \IMG_FLIP_HORIZONTAL);
+                        break;
+                    case 3:
+                        imageflip($src, \IMG_FLIP_HORIZONTAL);
+                        imageflip($src, \IMG_FLIP_VERTICAL);
+                        break;
+                    case 4:
+                        imageflip($src, \IMG_FLIP_HORIZONTAL);
+                        $src = imagerotate($src, 180, 0);
+                        break;
+                    case 5:
+                        imageflip($src, \IMG_FLIP_VERTICAL);
+                        $src = imagerotate($src, -90, 0);
+                        $flipDims = true;
+                        break;
+                    case 6:
+                        $src = imagerotate($src, -90, 0);
+                        $flipDims = true;
+                        break;
+                    case 7:
+                        imageflip($src, \IMG_FLIP_VERTICAL);
+                        $src = imagerotate($src, 90, 0);
+                        $flipDims = true;
+                        break;
+                    case 8:
+                        $src = imagerotate($src, 90, 0);
+                        $flipDims = true;
+                        break;
+                }
+                if ($flipDims) {
+                    $origW = $info[0];
+                    $info[0] = $info[1];
+                    $info[1] = $origW;
+                }
+            }
+        }
+
         return array(
             'src' => $src,
             'info' => array(
