@@ -13,8 +13,8 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "^4",
-        "symfony/templating": "^4"
+        "symfony/framework-bundle": "^5",
+        "symfony/templating": "^5"
     },
     "suggest": {
         "becklyn/ordered-form-bundle": "Used for form positionning",
