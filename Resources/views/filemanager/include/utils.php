@@ -779,7 +779,7 @@ function fix_filename($str, $config, $is_folder = false)
 	}
 
 	if (isset($GLOBALS['nyroDevService'])) {
-        $str = $GLOBALS['nyroDevService']->urlify($str);
+        $str = $GLOBALS['nyroDevService']->standardizeFileName($str);
 	}
 
 	return trim($str);
