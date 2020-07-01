@@ -3,8 +3,7 @@
 namespace NyroDev\UtilityBundle\Services;
 
 use NyroDev\UtilityBundle\Form\Type\DummyCaptchaType;
-use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
+use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use Symfony\Component\Form\Form;
 
 /**
@@ -12,16 +11,7 @@ use Symfony\Component\Form\Form;
  */
 class FormService extends AbstractService
 {
-    /**
-     * @var AssetsHelper
-     */
-    protected $assetsHelper;
-
-    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper)
-    {
-        parent::__construct($container);
-        $this->assetsHelper = $assetsHelper;
-    }
+    use AssetsPackagesServiceableTrait;
 
     public function addDummyCaptcha(Form $form)
     {
@@ -55,8 +45,8 @@ class FormService extends AbstractService
             'data-'.$pluploadKey.'complete' => $this->trans('nyrodev.plupload.complete'),
             'data-'.$pluploadKey.'cancelall' => $this->trans('nyrodev.plupload.cancelAll'),
             'data-'.$pluploadKey.'filters' => json_encode($filters),
-            'data-'.$pluploadKey.'swf' => $this->assetsHelper->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.swf'),
-            'data-'.$pluploadKey.'xap' => $this->assetsHelper->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.xap'),
+            'data-'.$pluploadKey.'swf' => $this->getAssetsPackages()->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.swf'),
+            'data-'.$pluploadKey.'xap' => $this->getAssetsPackages()->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.xap'),
         ];
 
         $pluploadMaxFileSize = $this->getParameter('nyroDev_utility.pluploadMaxFileSize');

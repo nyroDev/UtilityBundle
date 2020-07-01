@@ -4,40 +4,32 @@ namespace NyroDev\UtilityBundle\Services;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Html2Text\Html2Text;
+use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Utility\Pager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class NyrodevService extends AbstractService
 {
-    /**
-     * @var KernelInterface
-     */
-    protected $kernel;
-
-    public function __construct($container, KernelInterface $kernel)
-    {
-        parent::__construct($container);
-        $this->kernel = $kernel;
-    }
+    use KernelInterfaceServiceableTrait;
 
     /**
      * @return KernelInterface
      */
     public function getKernel()
     {
-        return $this->kernel;
+        return $this->getKernelInterface();
     }
 
     /**
      * Kernel request listener to setLocale if configured.
      *
-     * @param GetResponseEvent $event Kernel request event
+     * @param RequestEvent $event Kernel request event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
             $locale = $event->getRequest()->getLocale();
@@ -78,9 +70,9 @@ class NyrodevService extends AbstractService
     /**
      * Kernel response listener to add content-language if configured.
      *
-     * @param FilterResponseEvent $event Kernel response event
+     * @param ResponseEvent $event Kernel response event
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         if ($this->getParameter('nyroDev_utility.setContentLanguageResponse') && $event->getResponse() && $event->getResponse()->headers && $event->getRequest()->getLocale()) {
             $event->getResponse()->headers->set('Content-Language', $event->getRequest()->getLocale());
@@ -140,7 +132,7 @@ class NyrodevService extends AbstractService
      */
     public function setSlot($name, $value)
     {
-        $this->get('templating.helper.slots')->set($name, $value);
+        $this->get('nyrodev.templating.helper.slots')->set($name, $value);
     }
 
     /**

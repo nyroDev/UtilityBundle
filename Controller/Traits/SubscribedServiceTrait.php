@@ -13,8 +13,8 @@ use NyroDev\UtilityBundle\Services\ShareService;
 use NyroDev\UtilityBundle\Services\TagRendererService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait SubscribedServiceTrait
 {

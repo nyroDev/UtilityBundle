@@ -55,7 +55,9 @@ services:
         tags:
           - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }
     NyroDev\UtilityBundle\Form\Type\TinymceType:
-        arguments: ['@service_container', '@templating.helper.assets']
+        arguments: ['@service_container']
+        calls:
+            - [setAssetsPackages, ['@assets.packages']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\ConfigType:

@@ -1,0 +1,137 @@
+{% use "form_div_layout.html.twig" %}
+
+{%- block button_row -%}
+    <div class="form_button">
+        <span class="formRequiredFields">
+            {{ 'nyrodev.required'|trans }}
+        </span>
+        {% set cancelUrl = '' %}
+
+        {% if attr['data-cancelurl'] -%}
+            {% set cancelUrl = attr['data-cancelurl'] %}
+        {% endif %}
+
+        {{- form_widget(form) -}}
+
+        {% if cancelUrl -%}
+            <a href="{{ cancelUrl }}" class="button cancel">{{ 'admin.misc.cancel'|trans }}</a>
+        {% endif %}
+    </div>
+{%- endblock button_row -%}
+
+{%- block choice_widget -%}
+    {% if expanded %}
+        {{- block('choice_widget_expanded') -}}
+    {% else %}
+        <div class="selectCont">{{- block('choice_widget_collapsed') -}}</div>
+    {% endif %}
+{%- endblock choice_widget -%}
+
+{%- block choice_widget_expanded -%}
+    <ul {{ block('widget_container_attributes') }}>
+    {%- for child in form %}
+        <li>
+            {{- form_widget(child) -}}
+            {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+        </li>
+    {% endfor -%}
+    </ul>
+{%- endblock choice_widget_expanded -%}
+
+{%- block file_widget -%}
+    {{- form_widget(form) -}}
+
+    {% if currentFile %}
+        <a href="{{ asset(currentFileUrl) }} " target="_blank" class="currentFile">
+            {{ 'admin.misc.currentFile'|trans({'%currentFile%': currentFileName}) }}
+        </a>
+        {% if showDelete %}
+            <a href="#" class="currentFileDelete" data-name="{{ showDelete }}" data-confirm="{{ 'admin.misc.currentFileDeleteConfirm'|trans }}">
+                {{ 'admin.misc.currentFileDelete'|trans }}
+            </a>
+        {% endif %}
+    {% endif %}
+{%- endblock file_widget -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+    <ul class="form_errors">
+        {%- for error in errors -%}
+            <li>{{ error.message }}</li>
+        {%- endfor -%}
+    </ul>
+    {%- endif -%}
+{%- endblock form_errors -%}
+
+{%- block form_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+
+    {%- set isCheckbox = false -%}
+    {%- set classes = ['form_row'] -%}
+    {% for prefix in block_prefixes %}
+        {% set classes = classes|merge(['form_row_' ~ prefix]) %}
+        {% if prefix == 'checkbox' %}
+            {%- set isCheckbox = true -%}
+        {% endif %}
+    {% endfor %}
+    {% if required -%}
+        {% set classes = classes|merge(['required']) %}
+    {%- endif -%}
+    {%- if errors|length > 0 -%}
+        {% set classes = classes|merge(['form_error']) %}
+    {%- endif -%}
+    
+    {% set row_attr = row_attr|merge({'class': classes|join(' ')|trim}) %}
+
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+    
+        {%- if isCheckbox -%}
+            {{- form_widget(form, widget_attr) -}}
+        {%- endif -%}
+
+        {{- form_label(form) -}}
+
+        {%- if not isCheckbox -%}
+            {{- form_widget(form, widget_attr) -}}
+        {%- endif -%}
+        
+        <span class="formIndicator">*</span>
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{%- block form_widget_compound -%}
+    <div {{ block('widget_container_attributes') }}>
+        {%- if form is rootform -%}
+            <div class="errors">
+                {{ form_errors(form) }}
+            </div>
+        {%- endif -%}
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
+    </div>
+{%- endblock form_widget_compound -%}
+
+{%- block filter_widget -%}
+    {{ form_errors(form) }}
+
+    {% if form.transformer %}
+        <span class="row_form_transformer">
+            {{ form_errors(form.transformer) }}
+            {{- form_widget(form.transformer) -}}
+        </span>
+    {% endif %}
+
+    {{ form_errors(form.value) }}
+    {{- form_widget(form.value) -}}
+
+    {{- form_rest(form) -}}
+{%- endblock filter_widget -%}
+
+{%- block rawhtml_widget -%}
+    <div {{ block('widget_attributes') }} class="form_rawhtml">{{ value|raw }} </div>
+{%- endblock rawhtml_widget -%}

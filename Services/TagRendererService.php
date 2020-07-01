@@ -2,22 +2,21 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Asset\Packages;
-use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 
 class TagRendererService extends AbstractService
 {
+    use AssetsPackagesServiceableTrait;
+
     private $entrypointLookupCollection;
 
-    private $packages;
-
-    public function __construct(ContainerInterface $container, EntrypointLookupCollection $entrypointLookupCollection, Packages $packages)
+    public function __construct(ContainerInterface $container, EntrypointLookupCollection $entrypointLookupCollection)
     {
         parent::__construct($container);
         $this->entrypointLookupCollection = $entrypointLookupCollection;
-        $this->packages = $packages;
     }
 
     public function reset(string $entrypointName = '_default')
@@ -73,11 +72,11 @@ class TagRendererService extends AbstractService
 
     private function getAssetPath(string $assetPath, string $packageName = null): string
     {
-        if (null === $this->packages) {
+        if (null === $this->getAssetsPackages()) {
             throw new \Exception('To render the script or link tags, run "composer require symfony/asset".');
         }
 
-        return $this->packages->getUrl(
+        return $this->getAssetsPackages()->getUrl(
             $assetPath,
             $packageName
         );

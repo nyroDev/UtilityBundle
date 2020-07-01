@@ -3,9 +3,9 @@ parameters:
 
 services:
     NyroDev\UtilityBundle\Services\NyrodevService:
-        arguments:
-            - '@service_container'
-            - '@Symfony\Component\HttpKernel\KernelInterface'
+        arguments: ['@service_container']
+        calls:
+            - [setKernelInterface, ['@kernel']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev }
@@ -16,7 +16,9 @@ services:
         public: true
 
     NyroDev\UtilityBundle\Services\TagRendererService:
-        arguments: ['@service_container', '@webpack_encore.entrypoint_lookup_collection', '@assets.packages']
+        arguments: ['@service_container', '@webpack_encore.entrypoint_lookup_collection']
+        calls:
+            - [setAssetsPackages, ['@assets.packages']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_tagRender }
@@ -43,10 +45,10 @@ services:
         public: true
 
     NyroDev\UtilityBundle\Services\ImageService:
-        arguments:
-            - '@service_container'
-            - '@templating.helper.assets'
-            - '@Symfony\Component\HttpKernel\KernelInterface'
+        arguments: ['@service_container']
+        calls:
+            - [setKernelInterface, ['@kernel']]
+            - [setAssetsPackages, ['@assets.packages']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_image }
@@ -55,7 +57,9 @@ services:
         public: true
 
     NyroDev\UtilityBundle\Services\FormService:
-        arguments: ['@service_container', '@templating.helper.assets']
+        arguments: ['@service_container']
+        calls:
+            - [setAssetsPackages, ['@assets.packages']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_form }

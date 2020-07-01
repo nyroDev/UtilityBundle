@@ -2,12 +2,12 @@
 
 namespace NyroDev\UtilityBundle\Form\Extension;
 
-use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileTypeExtension extends AbstractTypeExtension
 {
@@ -20,20 +20,17 @@ class FileTypeExtension extends AbstractTypeExtension
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'currentFile' => false,
+            'currentFileName' => false,
             'currentFileUrl' => false,
             'showCurrent' => true,
             'showDelete' => false,
-        ));
+        ]);
     }
 
     /**
      * Pass the image URL to the view.
-     *
-     * @param FormView      $view
-     * @param FormInterface $form
-     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -48,8 +45,9 @@ class FileTypeExtension extends AbstractTypeExtension
 
             if ($currentFile) {
                 $view->vars['currentFile'] = $currentFile;
-                $view->vars['currentFileUrl'] = isset($options['currentFileUrl']) && $options['currentFileUrl'] ? $options['currentFileUrl'] : false;
-                $view->vars['showDelete'] = $options['showDelete'] && is_string($options['showDelete']) ? $options['showDelete'] : false;
+                $view->vars['currentFileName'] = basename($currentFile);
+                $view->vars['currentFileUrl'] = isset($options['currentFileUrl']) && $options['currentFileUrl'] ? $options['currentFileUrl'] : $currentFile;
+                $view->vars['showDelete'] = $options['showDelete'] && is_string($options['showDelete']) ? $options['showDelete'] : true;
             }
         }
     }

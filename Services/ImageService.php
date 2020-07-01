@@ -2,37 +2,22 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
+use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
-use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ImageService extends AbstractService
 {
-    /**
-     * @var AssetsHelper
-     */
-    protected $assetsHelper;
-
-    /**
-     * @var KernelInterface
-     */
-    protected $kernel;
-
-    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper, KernelInterface $kernel)
-    {
-        parent::__construct($container);
-        $this->assetsHelper = $assetsHelper;
-        $this->kernel = $kernel;
-    }
+    use KernelInterfaceServiceableTrait;
+    use AssetsPackagesServiceableTrait;
 
     public function resize($file, $configKey = 'default', $force = false)
     {
         try {
             $resizedPath = $this->_resize($file, $this->getConfig($configKey), $force);
             $tmp = explode('/public/', $resizedPath);
-            $ret = $this->assetsHelper->getUrl($tmp[1]);
+            $ret = $this->getAssetsPackages()->getUrl($tmp[1]);
         } catch (\Exception $e) {
             $ret = 'data:'.TransparentPixelResponse::CONTENT_TYPE.';base64,'.TransparentPixelResponse::IMAGE_CONTENT;
         }
@@ -48,11 +33,11 @@ class ImageService extends AbstractService
             $original = $this->createImgSrc($originalFile);
             $mask = $this->createImgSrc($maskFile);
 
-            $config = array(
+            $config = [
                 'w' => $useMaskSize ? $mask['info']['w'] : $original['info']['w'],
                 'h' => $useMaskSize ? $mask['info']['h'] : $original['info']['h'],
                 'fit' => true,
-            );
+            ];
             $originalResource = $this->resizeResource($original, $config);
             $maskResource = $this->resizeResource($mask, $config);
 
@@ -76,7 +61,7 @@ class ImageService extends AbstractService
         }
         $tmp = explode('/public/', $destFile);
 
-        return $this->assetsHelper->getUrl($tmp[1]);
+        return $this->getAssetsPackages()->getUrl($tmp[1]);
     }
 
     public function getConfig($configKey = 'default')
@@ -421,7 +406,6 @@ class ImageService extends AbstractService
             imagesavealpha($src, true);
         }
 
-
         if (\function_exists('exif_read_data')) {
             $exif = @exif_read_data($file);
             if ($exif && is_array($exif) && isset($exif['Orientation'])) {
@@ -466,18 +450,18 @@ class ImageService extends AbstractService
             }
         }
 
-        return array(
+        return [
             'src' => $src,
-            'info' => array(
+            'info' => [
                 'w' => $info[0],
                 'h' => $info[1],
                 'type' => $info[2],
-            ),
+            ],
             'isTransparent' => $isTransparent,
-        );
+        ];
     }
 
-    public function writeMultilineTextWithLines($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5, array &$lines = array())
+    public function writeMultilineTextWithLines($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5, array &$lines = [])
     {
         $texts = explode("\n", $text);
         foreach ($texts as $t) {
@@ -487,7 +471,7 @@ class ImageService extends AbstractService
         return $y;
     }
 
-    public function writeMultilineText($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5, array &$lines = array())
+    public function writeMultilineText($img, $font, $fontSize, $color, $text, $x, $y, $maxWidth, $alignement = 'L', $falseBold = false, $lineHeight = 1.5, array &$lines = [])
     {
         if ($text) {
             $rawWords = preg_split('/[\s]+/', $text);
@@ -497,7 +481,7 @@ class ImageService extends AbstractService
             $dimLineHeight = imagettfbbox($fontSize, 0, $font, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
             // Start by detecting and splitting word larger than maxwidth
-            $words = array();
+            $words = [];
             foreach ($rawWords as $word) {
                 $dim = imagettfbbox($fontSize, 0, $font, trim($word));
                 if ($dim[4] > $maxWidth) {
@@ -637,11 +621,11 @@ class ImageService extends AbstractService
             $col = substr($col, 1);
         }
 
-        return array(
+        return [
             base_convert(substr($col, 0, 2), 16, 10),
             base_convert(substr($col, 2, 2), 16, 10),
             base_convert(substr($col, 4, 2), 16, 10),
-        );
+        ];
     }
 
     /**
@@ -772,16 +756,15 @@ class ImageService extends AbstractService
         $this->resizeImagesInHtmlDom($body, $absolutizeUrl);
 
         return $addBody ? (str_replace(
-                array('<!DOCTYPE html>', '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">', '<head><meta charset="UTF-8"></head>', '<html><body>', '</body></html>'),
-                array('', '', '', '', ''),
+                ['<!DOCTYPE html>', '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">', '<head><meta charset="UTF-8"></head>', '<html><body>', '</body></html>'],
+                ['', '', '', '', ''],
                 $dom->saveHTML())) : $dom->saveHtml();
     }
 
     /**
      * Resize images in HTML regarding thei width and/or height attributes, internal use.
      *
-     * @param \DOMElement $node
-     * @param bool        $absolutizeUrl Indicates if the src should be absolutized
+     * @param bool $absolutizeUrl Indicates if the src should be absolutized
      */
     protected function resizeImagesInHtmlDom(\DOMElement $node, $absolutizeUrl = false)
     {
@@ -803,15 +786,15 @@ class ImageService extends AbstractService
 
             $src = $node->getAttribute('src');
             $webFile = trim($baseUrl && '/' != $baseUrl ? str_replace($baseUrl, '', $src) : $src, '/');
-            $webDir = $this->kernel->getProjectDir().'/public/';
+            $webDir = $this->getKernelInterface()->getProjectDir().'/public/';
             $file = $webDir.$webFile;
             if (file_exists($file)) {
-                $src = str_replace($webDir, '/', $this->_resize($file, array(
+                $src = str_replace($webDir, '/', $this->_resize($file, [
                     'name' => $w.'_'.$h,
                     'w' => $w,
                     'h' => $h,
                     'useGivenDimensions' => true,
-                )));
+                ]));
             }
             if ($absolutizeUrl) {
                 $src = $this->get(NyrodevService::class)->getFullUrl($src);

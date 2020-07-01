@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class TinymceEvent extends Event
 {
@@ -14,7 +14,7 @@ class TinymceEvent extends Event
     {
         return $this->config;
     }
-    
+
     public function setConfig(array $config)
     {
         $this->config = $config;
