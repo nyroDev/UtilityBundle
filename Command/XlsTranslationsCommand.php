@@ -45,9 +45,6 @@ class XlsTranslationsCommand extends Command
 
     /**
      * Executes the command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -67,7 +64,7 @@ class XlsTranslationsCommand extends Command
         unset($locales[array_search($locale, $locales)]);
 
         $output->writeln('Search for original translations files');
-        $originals = array();
+        $originals = [];
         $finder = new Finder();
         $translations = $finder
                     ->directories()
@@ -84,11 +81,11 @@ class XlsTranslationsCommand extends Command
 
         $nbO = count($originals);
         if ($nbO) {
-            $cols = array_merge(array(
+            $cols = array_merge([
                 'domain',
                 'ident',
                 'translation',
-            ), $locales);
+            ], $locales);
 
             if (!file_exists($dest)) {
                 $phpExcel = new \PHPExcel();
@@ -123,10 +120,10 @@ class XlsTranslationsCommand extends Command
             $nbTrunc = -2 - strlen($extension) - strlen($locale) - strlen($suffix);
             $fs = new Filesystem();
 
-            $foundTr = array();
-            $defLangs = array(
+            $foundTr = [];
+            $defLangs = [
                 $locale => null,
-            );
+            ];
             foreach ($locales as $loc) {
                 $defLangs[$loc] = null;
             }
@@ -138,7 +135,7 @@ class XlsTranslationsCommand extends Command
 
                 $trans = $this->flattenTrans(Yaml::parse(file_get_contents($original)));
                 foreach ($trans as $k => $v) {
-                    $foundTr[$k] = array_merge($defLangs, array($locale => $v));
+                    $foundTr[$k] = array_merge($defLangs, [$locale => $v]);
                 }
 
                 foreach ($locales as $loc) {
@@ -149,7 +146,7 @@ class XlsTranslationsCommand extends Command
                             if (isset($foundTr[$k])) {
                                 $foundTr[$k][$loc] = $v;
                             } else {
-                                $foundTr[$k] = array_merge($defLangs, array($loc => $v));
+                                $foundTr[$k] = array_merge($defLangs, [$loc => $v]);
                             }
                         }
                     }
@@ -184,7 +181,7 @@ class XlsTranslationsCommand extends Command
 
     protected function flattenTrans(array $trans, $prefix = null)
     {
-        $ret = array();
+        $ret = [];
         if (!is_null($prefix)) {
             $prefix .= '.';
         }

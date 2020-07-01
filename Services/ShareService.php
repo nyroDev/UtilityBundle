@@ -15,8 +15,8 @@ class ShareService extends AbstractService
         'quality' => 80,
     ];
 
-    protected $metas = array();
-    protected $metasProp = array();
+    protected $metas = [];
+    protected $metasProp = [];
 
     /**
      * Set a share meta value.
@@ -28,8 +28,8 @@ class ShareService extends AbstractService
     public function set($type, $value, $useProperty = false)
     {
         $value = preg_replace('/\s\s+/', ' ', $this->trans($value));
-        $keys = array();
-        $keysProp = array();
+        $keys = [];
+        $keysProp = [];
         switch ($type) {
             case 'title':
                 $keysProp[] = 'og:title';
@@ -123,8 +123,6 @@ class ShareService extends AbstractService
 
     /**
      * Set Sharable values from object.
-     *
-     * @param Sharable $sharable
      */
     public function setSharable(Sharable $sharable)
     {
@@ -266,7 +264,7 @@ class ShareService extends AbstractService
      */
     public function getMetas()
     {
-        $ret = array();
+        $ret = [];
 
         if (!isset($this->metas['title']) && $this->getParameter('nyroDev_utility.share.title')) {
             $this->setTitle($this->getParameter('nyroDev_utility.share.title'));
@@ -307,7 +305,7 @@ class ShareService extends AbstractService
     public function getNumberOfShares($url)
     {
         $urlEncoded = urlencode($url);
-        $data = array(
+        $data = [
             'facebook' => 0,
             'facebookShare' => 0,
             'facebookLike' => 0,
@@ -316,7 +314,7 @@ class ShareService extends AbstractService
             'twitter' => 0,
             'google' => 0,
             'pinterest' => 0,
-        );
+        ];
 
         // Facebook shares
         try {
@@ -395,7 +393,7 @@ class ShareService extends AbstractService
      *
      * @return string The translation
      */
-    public function trans($key, array $parameters = array(), $domain = 'messages', $locale = null)
+    public function trans($key, array $parameters = [], $domain = 'messages', $locale = null)
     {
         return $this->container->get('translator')->trans($key, $parameters, $domain, $locale);
     }

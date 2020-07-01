@@ -33,7 +33,7 @@ abstract class AbstractService implements HelperInterface
     }
 
     /**
-     * Check if an application parameter is set
+     * Check if an application parameter is set.
      *
      * @param string $parameter
      *
@@ -86,7 +86,7 @@ abstract class AbstractService implements HelperInterface
      *
      * @return string The translation
      */
-    public function trans($key, array $parameters = array(), $domain = 'messages', $locale = null)
+    public function trans($key, array $parameters = [], $domain = 'messages', $locale = null)
     {
         return $this->get('translator')->trans($key, $parameters, $domain, $locale);
     }
@@ -100,7 +100,7 @@ abstract class AbstractService implements HelperInterface
      *
      * @return string The generated URL
      */
-    public function generateUrl($route, $parameters = array(), $absolute = false)
+    public function generateUrl($route, $parameters = [], $absolute = false)
     {
         return $this->container->get(NyrodevService::class)->generateUrl($route, $parameters, $absolute);
     }

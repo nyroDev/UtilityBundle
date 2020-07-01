@@ -36,13 +36,10 @@ class DumpXlsTranslationsCommand extends Command
             ->addArgument('dir', InputArgument::OPTIONAL, 'Directory to save in', '.');
     }
 
-    protected $locales = array();
+    protected $locales = [];
 
     /**
      * Executes the command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -59,11 +56,11 @@ class DumpXlsTranslationsCommand extends Command
         $maxCol = \PhpExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn(1));
         $maxRow = $sheet->getHighestDataRow();
 
-        $localesCols = array();
+        $localesCols = [];
         for ($i = 3; $i < $maxCol; ++$i) {
             $locale = $sheet->getCellByColumnAndRow($i, 1)->getValue();
             $localesCols[$i] = $locale;
-            $this->locales[$locale] = array();
+            $this->locales[$locale] = [];
         }
 
         $output->writeln('Parse XLS file');
@@ -91,10 +88,10 @@ class DumpXlsTranslationsCommand extends Command
     protected function addTrans($locale, $domain, array $idents, $trans)
     {
         if (!isset($this->locales[$locale])) {
-            $this->locales[$locale] = array();
+            $this->locales[$locale] = [];
         }
         if (!isset($this->locales[$locale][$domain])) {
-            $this->locales[$locale][$domain] = array();
+            $this->locales[$locale][$domain] = [];
         }
 
         $this->addTransRec($this->locales[$locale][$domain], $idents, $trans);
@@ -108,7 +105,7 @@ class DumpXlsTranslationsCommand extends Command
             $key = array_shift($idents);
             $idents = array_filter($idents);
             if (!isset($values[$key])) {
-                $values[$key] = array();
+                $values[$key] = [];
             }
 
             $this->addTransRec($values[$key], $idents, $trans);

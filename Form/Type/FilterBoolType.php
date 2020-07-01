@@ -2,9 +2,9 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Filter Type for Boolean fields.
@@ -14,34 +14,34 @@ class FilterBoolType extends FilterType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('transformer', ChoiceType::class, array_merge(array(
-                'choices' => array(
+            ->add('transformer', ChoiceType::class, array_merge([
+                'choices' => [
                     AbstractQueryBuilder::OPERATOR_EQUALS => '=',
-                ),
-            ), $options['transformerOptions']))
-            ->add('value', ChoiceType::class, array_merge(array(
+                ],
+            ], $options['transformerOptions']))
+            ->add('value', ChoiceType::class, array_merge([
                     'required' => false,
-                    'choices' => array(
+                    'choices' => [
                         'Yes' => '1',
                         'No' => 'no',
-                    ),
-                ), $options['valueOptions']));
+                    ],
+                ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         if (
                 isset($data['transformer']) && $data['transformer']
-            &&  isset($data['value']) && $data['value']
+            && isset($data['value']) && $data['value']
             ) {
             $value = $this->applyValue($data['value']);
             $transformer = $data['transformer'];
 
-            if ($value === false) {
-                $queryBuilder->addWhere(AbstractQueryBuilder::WHERE_OR, array(
-                    array($name, AbstractQueryBuilder::OPERATOR_EQUALS, false),
-                    array($name, AbstractQueryBuilder::OPERATOR_IS_NULL),
-                ));
+            if (false === $value) {
+                $queryBuilder->addWhere(AbstractQueryBuilder::WHERE_OR, [
+                    [$name, AbstractQueryBuilder::OPERATOR_EQUALS, false],
+                    [$name, AbstractQueryBuilder::OPERATOR_IS_NULL],
+                ]);
             } else {
                 $queryBuilder->addWhere($name, $transformer, $value);
             }
@@ -52,7 +52,7 @@ class FilterBoolType extends FilterType
 
     public function applyValue($value)
     {
-        return $value == 'no' ? false : true;
+        return 'no' == $value ? false : true;
     }
 
     public function getBlockPrefix()

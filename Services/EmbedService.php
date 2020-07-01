@@ -4,9 +4,8 @@ namespace NyroDev\UtilityBundle\Services;
 
 class EmbedService extends AbstractService
 {
-    
     const CACHE_KEY_URLPARSER = 'urlParser_';
-    
+
     public function getChacheKey($url, $prefix = self::CACHE_KEY_URLPARSER)
     {
         return $prefix.sha1($url);
@@ -17,11 +16,12 @@ class EmbedService extends AbstractService
         if (!$this->container->has('nyrodev_embed_cache')) {
             return true;
         }
-        
+
         $cache = $this->get('nyrodev_embed_cache');
+
         return $cache->delete($this->getChacheKey($url, self::CACHE_KEY_URLPARSER));
     }
-    
+
     public function data($url, $force = false)
     {
         $cache = false;
@@ -29,7 +29,7 @@ class EmbedService extends AbstractService
             $cache = $this->get('nyrodev_embed_cache');
         }
 
-        $data = array();
+        $data = [];
         $cacheKey = $this->getChacheKey($url, self::CACHE_KEY_URLPARSER);
         if ($force || !$cache || !$cache->contains($cacheKey)) {
             try {
@@ -37,8 +37,8 @@ class EmbedService extends AbstractService
                 /* @var $service \Embed\Adapters\AdapterInterface */
 
                 if ($service) {
-                    $data = array();
-                    $fields = array(
+                    $data = [];
+                    $fields = [
                         'title',
                         'description',
                         'url',
@@ -61,33 +61,35 @@ class EmbedService extends AbstractService
                         'providerUrl',
                         'publishedTime',
                         'license',
-                    );
-                    foreach($fields as $field) {
+                    ];
+                    foreach ($fields as $field) {
                         try {
                             $data[$field] = $service->$field;
-                        } catch (\Exception $e) {}
+                        } catch (\Exception $e) {
+                        }
                     }
                     $data['urlEmbed'] = null;
-                    
-                    if ($data['code'] && strpos($data['code'], '<iframe') === 0) {
-                        if (strpos($data['url'], 'soundcloud.com') !== false) {
+
+                    if ($data['code'] && 0 === strpos($data['code'], '<iframe')) {
+                        if (false !== strpos($data['url'], 'soundcloud.com')) {
                             $data['code'] = str_replace('&', '&amp;', $data['code']);
                         }
                         $dom = new \DOMDocument();
                         $dom->loadHTML($data['code']);
                         $data['urlEmbed'] = $dom->getElementsByTagName('iframe')->item(0)->getAttribute('src');
-                        if (strpos($data['urlEmbed'], 'youtube') !== false) {
+                        if (false !== strpos($data['urlEmbed'], 'youtube')) {
                             $data['urlEmbed'] .= '&wmode=opaque';
                         }
                     }
                 } else {
-                    $data = array();
+                    $data = [];
                 }
 
                 if ($cache) {
                     $cache->save($cacheKey, $data, 24 * 60 * 60);
                 }
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         } else {
             $data = $cache->fetch($cacheKey);
         }
@@ -97,21 +99,21 @@ class EmbedService extends AbstractService
 
     protected function getCreateOptions($url)
     {
-        $ret = array();
+        $ret = [];
         $ipv4For = $this->getParameter('nyroDev_utility.embed.useIPv4For');
         if ($ipv4For) {
             $useIPv4 = false;
             foreach (explode('|', $ipv4For) as $tmp) {
-                $useIPv4 = $useIPv4 || strpos($url, $tmp) !== false;
+                $useIPv4 = $useIPv4 || false !== strpos($url, $tmp);
             }
             if ($useIPv4) {
-                $ret = array(
-                    'resolver' => array(
-                        'options' => array(
+                $ret = [
+                    'resolver' => [
+                        'options' => [
                             CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-                        ),
-                    ),
-                );
+                        ],
+                    ],
+                ];
             }
         }
 

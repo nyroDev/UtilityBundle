@@ -62,12 +62,10 @@ class Pager
     /**
      * Constructor of Pager utility.
      *
-     * @param NyrodevService $service
-     * @param type           $route
-     * @param array          $routePrm
-     * @param int            $nbResults
-     * @param int            $curPage
-     * @param int            $nbPerPage
+     * @param type $route
+     * @param int  $nbResults
+     * @param int  $curPage
+     * @param int  $nbPerPage
      */
     public function __construct(NyrodevService $service, $route, array $routePrm, $nbResults, $curPage = 1, $nbPerPage = 10)
     {
@@ -257,12 +255,12 @@ class Pager
             $end = $this->getNbPages();
         }
 
-        $ret = array();
+        $ret = [];
         for ($i = $start; $i <= $end; ++$i) {
-            $ret[$i] = array(
+            $ret[$i] = [
                 $this->getUrl($i, $absolute),
                 $i == $this->getCurPage(),
-            );
+            ];
         }
 
         return $ret;
@@ -310,8 +308,6 @@ class Pager
 
     /**
      * Set the route parameters.
-     *
-     * @param array $routePrm
      */
     public function setRoutePrm(array $routePrm)
     {

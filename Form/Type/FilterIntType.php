@@ -2,10 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Filter Type for Integer fields.
@@ -15,18 +15,18 @@ class FilterIntType extends FilterType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('transformer', ChoiceType::class, array_merge(array(
-                'choices' => array(
+            ->add('transformer', ChoiceType::class, array_merge([
+                'choices' => [
                     '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
                     '>=' => AbstractQueryBuilder::OPERATOR_GTE,
                     '<=' => AbstractQueryBuilder::OPERATOR_LTE,
                     '>' => AbstractQueryBuilder::OPERATOR_GT,
                     '<' => AbstractQueryBuilder::OPERATOR_LT,
-                ),
-            ), $options['transformerOptions']))
-            ->add('value', IntegerType::class, array_merge(array(
+                ],
+            ], $options['transformerOptions']))
+            ->add('value', IntegerType::class, array_merge([
                     'required' => false,
-                ), $options['valueOptions']));
+                ], $options['valueOptions']));
     }
 
     public function getBlockPrefix()

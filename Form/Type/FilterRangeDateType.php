@@ -2,9 +2,9 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Filter Type for Date range fields.
@@ -17,11 +17,11 @@ class FilterRangeDateType extends FilterType
             $builder->remove('transformer');
         }
         $builder
-            ->add('value', FilterRangeSubType::class, array_merge(array(
+            ->add('value', FilterRangeSubType::class, array_merge([
                     'type' => DateType::class,
                     'isDate' => true,
                     'required' => false,
-                ), $options['valueOptions']));
+                ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
@@ -30,7 +30,7 @@ class FilterRangeDateType extends FilterType
             $value = array_filter($this->applyValue($data['value']));
 
             foreach ($value as $k => $val) {
-                $queryBuilder->addWhere($name, $k == 'start' ? AbstractQueryBuilder::OPERATOR_GTE : AbstractQueryBuilder::OPERATOR_LTE, $val);
+                $queryBuilder->addWhere($name, 'start' == $k ? AbstractQueryBuilder::OPERATOR_GTE : AbstractQueryBuilder::OPERATOR_LTE, $val);
             }
         }
 

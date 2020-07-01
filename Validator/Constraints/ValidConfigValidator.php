@@ -12,7 +12,7 @@ class ValidConfigValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
-        if ($value === false) {
+        if (false === $value) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
         }

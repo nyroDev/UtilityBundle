@@ -4,7 +4,6 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 class MongodbQueryBuilder extends AbstractQueryBuilder
 {
-
     /**
      * @param bool $complete
      *
@@ -21,10 +20,10 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
         if (isset($this->config['joinWhere'])) {
             foreach ($this->config['joinWhere'] as $where) {
                 list($name, $values, $subSelectField) = $where;
-                if ($subSelectField === 'id') {
+                if ('id' === $subSelectField) {
                     $queryBuilder->field($name)->in($values);
                 } else {
-                    $founds = array();
+                    $founds = [];
                     $className = explode('\\', $this->or->getClassName());
                     unset($className[count($className) - 1]);
                     $tmp = $this->service->getRepository(implode('\\', $className).'\\'.ucfirst($name))
@@ -69,13 +68,13 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
         foreach ($whereArr as $where) {
             list($field, $transformer, $value, $forceType) = array_merge($where, array_fill(0, 4, false));
 
-            if ($field === self::WHERE_OR) {
+            if (self::WHERE_OR === $field) {
                 $exprOr = $queryBuilder->expr();
                 $nbOr = 0;
                 foreach ($transformer as $whereOr) {
                     $fieldOr = $whereOr[0];
                     $transformerOr = $whereOr[1];
-                    if ($fieldOr === self::WHERE_SUB) {
+                    if (self::WHERE_SUB === $fieldOr) {
                         $expr = $queryBuilder->expr();
                         if ($this->applyFilterArr($expr, $transformerOr, $queryBuilder)) {
                             $exprOr->addOr($expr);
@@ -98,7 +97,7 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
                 }
             } else {
                 if ($this->applyFilter($object, $field, $transformer, $value, $queryBuilder)) {
-                    $nbWhere++;
+                    ++$nbWhere;
                 }
             }
         }

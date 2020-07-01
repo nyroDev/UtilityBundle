@@ -52,8 +52,6 @@ class MemberService extends AbstractService
 
     /**
      * Log user correctly.
-     *
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user
      */
     public function logUser(\Symfony\Component\Security\Core\User\UserInterface $user)
     {

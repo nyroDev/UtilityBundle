@@ -12,9 +12,8 @@ interface FilterTypeInterface
     /**
      * Apply the filter to the given QueryBuilder.
      *
-     * @param AbstractQueryBuilder $queryBuilder
-     * @param string               $name         Field name
-     * @param array                $data         Data for the field
+     * @param string $name Field name
+     * @param array  $data Data for the field
      *
      * @return AbstractQueryBuilder
      */

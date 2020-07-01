@@ -4,8 +4,8 @@ namespace NyroDev\UtilityBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
@@ -30,9 +30,6 @@ class Rem2pxCommand extends Command
 
     /**
      * Executes the command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -60,7 +57,7 @@ class Rem2pxCommand extends Command
                 if ($block instanceof \Sabberworm\CSS\RuleSet\DeclarationBlock) {
                     /* @var $ruleset \Sabberworm\CSS\RuleSet\DeclarationBlock */
                     // Keep only the root CSS (ignore media queries)
-                    $keepRules = array();
+                    $keepRules = [];
                     foreach ($block->getRules() as $rule) {
                         /* @var $rule \Sabberworm\CSS\Rule\Rule */
                         $value = $rule->getValue();

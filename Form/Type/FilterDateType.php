@@ -2,10 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Filter Type for Date fields.
@@ -15,25 +15,25 @@ class FilterDateType extends FilterType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('transformer', ChoiceType::class, array_merge(array(
-                'choices' => array(
+            ->add('transformer', ChoiceType::class, array_merge([
+                'choices' => [
                     '=' => AbstractQueryBuilder::OPERATOR_LIKEDATE,
                     '>=' => AbstractQueryBuilder::OPERATOR_GTE,
                     '<=' => AbstractQueryBuilder::OPERATOR_LTE,
                     '>' => AbstractQueryBuilder::OPERATOR_GT,
                     '<' => AbstractQueryBuilder::OPERATOR_LT,
-                ),
-            ), $options['transformerOptions']))
-            ->add('value', DateType::class, array_merge(array(
+                ],
+            ], $options['transformerOptions']))
+            ->add('value', DateType::class, array_merge([
                     'required' => false,
-                ), $options['valueOptions']));
+                ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         if (
                 isset($data['transformer']) && $data['transformer']
-            &&  isset($data['value']) && $data['value']
+            && isset($data['value']) && $data['value']
             ) {
             $value = $this->applyValue($data['value']);
             $transformer = $data['transformer'];

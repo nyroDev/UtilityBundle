@@ -54,7 +54,7 @@ class NyroDevUtilityExtension extends Extension
         if (isset($config['image']) && is_array($config['image'])) {
             $shareImageConfig = ShareService::IMAGE_CONFIG_DEFAULT;
             foreach ($config['image'] as $k => $v) {
-                if ($k === ShareService::IMAGE_CONFIG_NAME) {
+                if (ShareService::IMAGE_CONFIG_NAME === $k) {
                     $shareImageConfig = array_merge($shareImageConfig, $v);
                 } else {
                     $container->setParameter('nyroDev_utility.imageService.configs.'.$k, $v);

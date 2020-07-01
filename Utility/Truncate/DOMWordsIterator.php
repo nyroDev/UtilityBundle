@@ -20,8 +20,11 @@ namespace NyroDev\UtilityBundle\Utility\Truncate;
  */
 final class DOMWordsIterator implements \Iterator
 {
-    private $start, $current;
-    private $offset, $key, $words;
+    private $start;
+    private $current;
+    private $offset;
+    private $key;
+    private $words;
 
     /**
      * expects DOMElement or DOMDocument (see DOMDocument::load and DOMDocument::loadHTML).
@@ -46,7 +49,7 @@ final class DOMWordsIterator implements \Iterator
      */
     public function currentWordPosition()
     {
-        return array($this->current, $this->offset, $this->words);
+        return [$this->current, $this->offset, $this->words];
     }
 
     /**
@@ -71,8 +74,8 @@ final class DOMWordsIterator implements \Iterator
             return;
         }
 
-        if ($this->current->nodeType == XML_TEXT_NODE || $this->current->nodeType == XML_CDATA_SECTION_NODE) {
-            if ($this->offset == -1) {
+        if (XML_TEXT_NODE == $this->current->nodeType || XML_CDATA_SECTION_NODE == $this->current->nodeType) {
+            if (-1 == $this->offset) {
                 $this->words = preg_split("/[\n\r\t ]+/", $this->current->textContent, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_OFFSET_CAPTURE);
             }
             ++$this->offset;
@@ -85,9 +88,9 @@ final class DOMWordsIterator implements \Iterator
             $this->offset = -1;
         }
 
-        while ($this->current->nodeType == XML_ELEMENT_NODE && $this->current->firstChild) {
+        while (XML_ELEMENT_NODE == $this->current->nodeType && $this->current->firstChild) {
             $this->current = $this->current->firstChild;
-            if ($this->current->nodeType == XML_TEXT_NODE || $this->current->nodeType == XML_CDATA_SECTION_NODE) {
+            if (XML_TEXT_NODE == $this->current->nodeType || XML_CDATA_SECTION_NODE == $this->current->nodeType) {
                 return $this->next();
             }
         }
@@ -123,7 +126,7 @@ final class DOMWordsIterator implements \Iterator
     public function rewind()
     {
         $this->offset = -1;
-        $this->words = array();
+        $this->words = [];
         $this->current = $this->start;
         $this->next();
     }

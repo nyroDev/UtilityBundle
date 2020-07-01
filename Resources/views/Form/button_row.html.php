@@ -1,6 +1,6 @@
 <div class="form_button">
 	<span class="formRequiredFields">
-		<?php echo $view['translator']->trans('nyrodev.required') ?>
+		<?php echo $view['translator']->trans('nyrodev.required'); ?>
 	</span>
     <?php
     $more = null;

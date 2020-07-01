@@ -2,8 +2,8 @@
 
 namespace NyroDev\UtilityBundle\EventListener;
 
-use Gedmo\Translatable\TranslatableListener as SrcTranslatableListener;
 use Doctrine\Common\EventArgs;
+use Gedmo\Translatable\TranslatableListener as SrcTranslatableListener;
 
 class TranslatableListener extends SrcTranslatableListener
 {

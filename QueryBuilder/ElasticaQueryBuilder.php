@@ -13,7 +13,6 @@ use Elastica\ResultSet;
 
 class ElasticaQueryBuilder extends AbstractQueryBuilder
 {
-
     protected $indexName;
     protected $indexType;
     protected $scoreSortAdded = false;
@@ -87,7 +86,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
         if (isset($this->config['joinWhere']) && count($this->config['joinWhere'])) {
             foreach ($this->config['joinWhere'] as $where) {
                 list($name, $values, $subSelectField) = $where;
-                if ($subSelectField === 'id') {
+                if ('id' === $subSelectField) {
                     $boolQuery->addFilter(new Terms($name, $values));
                 } else {
                     throw new \Exception('joinWhere for ElasticaQueryBuilder supports only linearized id fields .');
@@ -126,13 +125,13 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
         foreach ($whereArr as $where) {
             list($field, $transformer, $value, $forceType) = array_merge($where, array_fill(0, 4, false));
 
-            if ($field === self::WHERE_OR) {
+            if (self::WHERE_OR === $field) {
                 $subQuery = new BoolQuery();
                 $nbOr = 0;
                 foreach ($transformer as $whereOr) {
                     $fieldOr = $whereOr[0];
                     $transformerOr = $whereOr[1];
-                    if ($fieldOr === self::WHERE_SUB) {
+                    if (self::WHERE_SUB === $fieldOr) {
                         $subQuery2 = new BoolQuery();
                         if ($this->applyFilterArr($subQuery2, $transformerOr)) {
                             $subQuery->addShould($subQuery2);
@@ -155,7 +154,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
                 }
             } else {
                 if ($this->applyFilter($query, $field, $transformer, $value)) {
-                    $nbWhere++;
+                    ++$nbWhere;
                 }
             }
         }
@@ -198,7 +197,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
                 $dateEnd->setTime(23, 59, 59);
                 $query->addFilter(new Range($field, [
                     'gte' => $dateStart->getTimestamp(),
-                    'lte' => $dateEnd->getTimestamp()
+                    'lte' => $dateEnd->getTimestamp(),
                 ]));
                 break;
             case self::OPERATOR_IN:
@@ -219,5 +218,4 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
 
         return true;
     }
-
 }

@@ -2,10 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType as SrcAbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Filter Type for Date rang sub fields.
@@ -15,24 +15,24 @@ class FilterRangeSubType extends SrcAbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('start', $options['type'], array_merge(array(
+            ->add('start', $options['type'], array_merge([
                 'label' => 'admin.misc.'.($options['isDate'] ? 'start' : 'from'),
                 'required' => false,
-            ), $options['options']))
-            ->add('end', $options['type'], array_merge(array(
+            ], $options['options']))
+            ->add('end', $options['type'], array_merge([
                 'label' => 'admin.misc.'.($options['isDate'] ? 'end' : 'to'),
                 'required' => false,
-            ), $options['options']));
+            ], $options['options']));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setRequired(array('type'))
-            ->setDefaults(array(
+            ->setRequired(['type'])
+            ->setDefaults([
                 'isDate' => false,
-                'options' => array()
-            ));
+                'options' => [],
+            ]);
     }
 
     public function getBlockPrefix()

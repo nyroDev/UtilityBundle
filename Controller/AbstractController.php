@@ -18,7 +18,7 @@ abstract class AbstractController extends SrcAbstractController
      *
      * @return string The translation
      */
-    protected function trans($key, array $parameters = array(), $domain = 'messages', $locale = null)
+    protected function trans($key, array $parameters = [], $domain = 'messages', $locale = null)
     {
         return $this->get('translator')->trans($key, $parameters, $domain, $locale);
     }

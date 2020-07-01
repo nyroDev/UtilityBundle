@@ -48,9 +48,6 @@ class FillTranslationsCommand extends Command
 
     /**
      * Executes the command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -75,7 +72,7 @@ class FillTranslationsCommand extends Command
         }
 
         $output->writeln('Search for original translations files');
-        $originals = array();
+        $originals = [];
         $finder = new Finder();
         $translations = $finder
                     ->directories()
@@ -97,7 +94,7 @@ class FillTranslationsCommand extends Command
             $this->accessor = PropertyAccess::createPropertyAccessor();
 
             $output->writeln('Retrieving existing translations');
-            $this->existing = array();
+            $this->existing = [];
             foreach ($repo->findAll() as $row) {
                 $this->existing[$row->getDomain().'-'.$row->getLocale().'-'.$row->getIdent()] = true;
             }

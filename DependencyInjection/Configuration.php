@@ -17,7 +17,7 @@ class Configuration implements ConfigurationInterface
         $builder = new TreeBuilder('nyro_dev_utility');
         $rootNode = $builder->getRootNode($builder, 'nyro_dev_utility');
 
-        $supportedDrivers = array('orm', 'mongodb');
+        $supportedDrivers = ['orm', 'mongodb'];
 
         $rootNode
             ->children()
@@ -70,7 +70,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('bgColor')->defaultValue('ffffff')->end()
                             ->booleanNode('ignoreAnimatedGif')->defaultFalse()->end()
                             ->arrayNode('filters')
-                                ->defaultValue(array())
+                                ->defaultValue([])
                                 ->prototype('variable')->end()
                             ->end()
                         ->end()
@@ -83,7 +83,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('redirectIfNotUrl_params')
-                    ->defaultValue(array('utm_medium', 'utm_source', 'utm_campaign', 'utm_content', 'utm_term'))
+                    ->defaultValue(['utm_medium', 'utm_source', 'utm_campaign', 'utm_content', 'utm_term'])
                     ->prototype('scalar')->end()
                 ->end()
             ->end();

@@ -2,12 +2,12 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Default Filter Type field for text fields.
@@ -24,33 +24,33 @@ class FilterType extends AbstractType implements FilterTypeInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $choices = array(
+        $choices = [
             'LIKE %...%' => AbstractQueryBuilder::OPERATOR_CONTAINS,
             '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
-        );
+        ];
         if ($options['addNullTransformer']) {
             $choices['IS NULL'] = AbstractQueryBuilder::OPERATOR_IS_NULL;
             $choices['IS NOT NULL'] = AbstractQueryBuilder::OPERATOR_IS_NOT_NULL;
         }
         $builder
-            ->add('transformer', ChoiceType::class, array_merge(array(
+            ->add('transformer', ChoiceType::class, array_merge([
                 'choices' => $choices,
-            ), $options['transformerOptions']))
-            ->add('value', TextType::class, array_merge(array(
+            ], $options['transformerOptions']))
+            ->add('value', TextType::class, array_merge([
                 'required' => false,
-            ), $options['valueOptions']));
+            ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         if (
                 isset($data['transformer']) && $data['transformer']
-            &&  isset($data['value']) && $data['value']
+            && isset($data['value']) && $data['value']
             ) {
             $value = $this->applyValue($data['value']);
             $transformer = $data['transformer'];
 
-            if ($transformer == AbstractQueryBuilder::OPERATOR_IS_NULL || $transformer == AbstractQueryBuilder::OPERATOR_IS_NOT_NULL) {
+            if (AbstractQueryBuilder::OPERATOR_IS_NULL == $transformer || AbstractQueryBuilder::OPERATOR_IS_NOT_NULL == $transformer) {
                 $queryBuilder->addWhere($name, $transformer);
             } else {
                 $queryBuilder->addWhere($name, $transformer, $value, \PDO::PARAM_STR);
@@ -70,11 +70,11 @@ class FilterType extends AbstractType implements FilterTypeInterface
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'addNullTransformer' => false,
-            'transformerOptions' => array(),
-            'valueOptions' => array(),
-        ));
+            'transformerOptions' => [],
+            'valueOptions' => [],
+        ]);
     }
 
     /**

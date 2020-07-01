@@ -2,8 +2,8 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 abstract class AbstractFilterType extends AbstractType
 {
@@ -11,6 +11,6 @@ abstract class AbstractFilterType extends AbstractType
     {
         $builder
             ->setMethod('get')
-            ->add('submit', SubmitType::class, array('label' => $this->trans('admin.misc.filter')));
+            ->add('submit', SubmitType::class, ['label' => $this->trans('admin.misc.filter')]);
     }
 }

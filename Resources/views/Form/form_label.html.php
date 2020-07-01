@@ -10,5 +10,5 @@
 } ?>
 <label <?php foreach ($label_attr as $k => $v) {
     printf('%s="%s" ', $view->escape($k), $view->escape($v));
-} ?>><?php echo $view['translator']->trans($label, array(), $translation_domain) ?></label>
-<?php endif ?>
+} ?>><?php echo $view['translator']->trans($label, [], $translation_domain); ?></label>
+<?php endif; ?>

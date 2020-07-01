@@ -22,8 +22,11 @@ namespace NyroDev\UtilityBundle\Utility\Truncate;
  */
 final class DOMLettersIterator implements \Iterator
 {
-    private $start, $current;
-    private $offset, $key, $letters;
+    private $start;
+    private $current;
+    private $offset;
+    private $key;
+    private $letters;
 
     /**
      * expects DOMElement or DOMDocument (see DOMDocument::load and DOMDocument::loadHTML).
@@ -48,7 +51,7 @@ final class DOMLettersIterator implements \Iterator
      */
     public function currentTextPosition()
     {
-        return array($this->current, $this->offset);
+        return [$this->current, $this->offset];
     }
 
     /**
@@ -73,8 +76,8 @@ final class DOMLettersIterator implements \Iterator
             return;
         }
 
-        if ($this->current->nodeType == XML_TEXT_NODE || $this->current->nodeType == XML_CDATA_SECTION_NODE) {
-            if ($this->offset == -1) {
+        if (XML_TEXT_NODE == $this->current->nodeType || XML_CDATA_SECTION_NODE == $this->current->nodeType) {
+            if (-1 == $this->offset) {
                 // fastest way to get individual Unicode chars and does not require mb_* functions
                 preg_match_all('/./us', $this->current->textContent, $m);
                 $this->letters = $m[0];
@@ -87,9 +90,9 @@ final class DOMLettersIterator implements \Iterator
             $this->offset = -1;
         }
 
-        while ($this->current->nodeType == XML_ELEMENT_NODE && $this->current->firstChild) {
+        while (XML_ELEMENT_NODE == $this->current->nodeType && $this->current->firstChild) {
             $this->current = $this->current->firstChild;
-            if ($this->current->nodeType == XML_TEXT_NODE || $this->current->nodeType == XML_CDATA_SECTION_NODE) {
+            if (XML_TEXT_NODE == $this->current->nodeType || XML_CDATA_SECTION_NODE == $this->current->nodeType) {
                 return $this->next();
             }
         }
@@ -125,7 +128,7 @@ final class DOMLettersIterator implements \Iterator
     public function rewind()
     {
         $this->offset = -1;
-        $this->letters = array();
+        $this->letters = [];
         $this->current = $this->start;
         $this->next();
     }

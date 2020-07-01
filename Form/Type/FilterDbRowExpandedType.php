@@ -17,7 +17,7 @@ class FilterDbRowExpandedType extends FilterType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $nyrodevDb = $this->get(DbAbstractService::class);
-        $myOptions = array(
+        $myOptions = [
             'required' => false,
             'class' => $options['class'],
             'expanded' => true,
@@ -50,17 +50,18 @@ class FilterDbRowExpandedType extends FilterType
                 }
 
                 return $ret->getQueryBuilder();
-            } : null,
-        );
+            }
+        : null,
+        ];
         if (isset($options['property'])) {
             $myOptions['choice_label'] = $options['property'];
         }
         $builder
-            ->add('transformer', ChoiceType::class, array_merge(array(
-                'choices' => array(
+            ->add('transformer', ChoiceType::class, array_merge([
+                'choices' => [
                     'IN' => AbstractQueryBuilder::OPERATOR_IN,
-                ),
-            ), $options['transformerOptions']))
+                ],
+            ], $options['transformerOptions']))
             ->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
     }
 
@@ -82,7 +83,7 @@ class FilterDbRowExpandedType extends FilterType
 
     public function applyValue($value)
     {
-        $ret = array();
+        $ret = [];
         foreach ($value as $val) {
             $ret[] = $val->getId();
         }
@@ -95,13 +96,13 @@ class FilterDbRowExpandedType extends FilterType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'class' => null,
             'property' => null,
             'query_builder' => null,
             'where' => null,
             'order' => null,
-        ));
+        ]);
     }
 
     public function getBlockPrefix()

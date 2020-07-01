@@ -2,10 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConfigType extends AbstractType
 {
@@ -34,9 +34,9 @@ class ConfigType extends AbstractType
     {
         parent::configureOptions($resolver);
         $resolver
-            ->setDefault('constraints', array(
+            ->setDefault('constraints', [
                 new \NyroDev\UtilityBundle\Validator\Constraints\ValidConfig(),
-            ));
+            ]);
     }
 
     public function getParent()

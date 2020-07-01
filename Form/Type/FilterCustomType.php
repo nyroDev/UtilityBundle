@@ -2,54 +2,54 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Default Filter Type field for text fields.
  */
 class FilterCustomType extends FilterType
 {
-    
     protected $applyFilters = [];
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->applyFilters[$builder->getName()] = $options['applyFilter'];
         if (isset($options['transformerChoices']) && $options['transformerChoices'] && count($options['transformerChoices'])) {
             $builder
-                ->add('transformer', ChoiceType::class, array_merge(array(
+                ->add('transformer', ChoiceType::class, array_merge([
                     'choices' => $options['transformerChoices'],
-                ), $options['transformerOptions']));
-        } else if ($builder->has('transformer')) {
+                ], $options['transformerOptions']));
+        } elseif ($builder->has('transformer')) {
             $builder->remove('transformer');
         }
         $builder
-            ->add('value', $options['valueType'], array_merge(array(
+            ->add('value', $options['valueType'], array_merge([
                 'required' => false,
-            ), $options['valueOptions']));
+            ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         $applyFilter = $this->applyFilters[$name];
+
         return $applyFilter ? $applyFilter($queryBuilder, $name, $data) : $queryBuilder;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'applyFilter' => null,
-            'transformerChoices' => array(
+            'transformerChoices' => [
                 '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
-            ),
-            'transformerOptions' => array(),
+            ],
+            'transformerOptions' => [],
             'valueType' => TextType::class,
-            'valueOptions' => array(),
-        ));
+            'valueOptions' => [],
+        ]);
     }
 
     public function getBlockPrefix()

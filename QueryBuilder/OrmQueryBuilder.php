@@ -4,7 +4,6 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 class OrmQueryBuilder extends AbstractQueryBuilder
 {
-
     public function getNewQueryBuilder($complete = false)
     {
         $alias = 'l';
@@ -70,17 +69,17 @@ class OrmQueryBuilder extends AbstractQueryBuilder
 
     protected function applyFilterArr($alias, array $whereArr, $queryBuilder)
     {
-        $filters = array();
+        $filters = [];
         foreach ($whereArr as $where) {
             list($field, $transformer, $value, $forceType) = array_merge($where, array_fill(0, 4, false));
 
-            if ($field === self::WHERE_OR) {
-                $tmpOr = array();
+            if (self::WHERE_OR === $field) {
+                $tmpOr = [];
 
                 foreach ($transformer as $whereOr) {
                     $fieldOr = $whereOr[0];
                     $transformerOr = $whereOr[1];
-                    if ($fieldOr === self::WHERE_SUB) {
+                    if (self::WHERE_SUB === $fieldOr) {
                         $tmpSub = $this->applyFilterArr($alias, $transformerOr, $queryBuilder);
                         if (count($tmpSub)) {
                             $tmpOr[] = implode(' AND ', $tmpSub);
@@ -126,8 +125,8 @@ class OrmQueryBuilder extends AbstractQueryBuilder
                 break;
             default:
                 $prm = 'param_'.$this->prmNb;
-                $needParenthesis = $transformer === self::OPERATOR_IN || $transformer === self::OPERATOR_NOT_IN;
-                if ($transformer === self::OPERATOR_CONTAINS) {
+                $needParenthesis = self::OPERATOR_IN === $transformer || self::OPERATOR_NOT_IN === $transformer;
+                if (self::OPERATOR_CONTAINS === $transformer) {
                     $transformer = 'LIKE';
                     $value = '%'.$value.'%';
                 }

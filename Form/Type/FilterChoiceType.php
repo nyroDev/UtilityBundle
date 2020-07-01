@@ -2,10 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 
 /**
  * Filter Type for Integer fields.
@@ -15,14 +15,14 @@ class FilterChoiceType extends FilterType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('transformer', ChoiceType::class, array_merge(array(
-                'choices' => array(
+            ->add('transformer', ChoiceType::class, array_merge([
+                'choices' => [
                     AbstractQueryBuilder::OPERATOR_EQUALS => '=',
-                ),
-            ), $options['transformerOptions']))
-            ->add('value', ChoiceType::class, array_merge($options['choiceOptions'], array(
+                ],
+            ], $options['transformerOptions']))
+            ->add('value', ChoiceType::class, array_merge($options['choiceOptions'], [
                     'required' => false,
-                ), $options['valueOptions']));
+                ], $options['valueOptions']));
     }
 
     /**
@@ -30,7 +30,7 @@ class FilterChoiceType extends FilterType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(array('choiceOptions'));
+        $resolver->setRequired(['choiceOptions']);
     }
 
     public function getBlockPrefix()

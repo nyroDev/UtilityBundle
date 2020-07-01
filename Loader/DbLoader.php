@@ -13,7 +13,7 @@ class DbLoader extends AbstractService implements LoaderInterface
         $catalogue = new MessageCatalogue($locale);
 
         $repo = $this->get(DbAbstractService::class)->getRepository($this->getParameter('nyroDev_utility.translationDb'));
-        foreach ($repo->findBy(array('locale' => $locale, 'domain' => $domain)) as $row) {
+        foreach ($repo->findBy(['locale' => $locale, 'domain' => $domain]) as $row) {
             $catalogue->set($row->getIdent(), $row->getTranslation(), $domain);
         }
 

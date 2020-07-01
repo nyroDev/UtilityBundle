@@ -26,7 +26,7 @@ class EmbedValidatorService extends AbstractService implements Validator\Constra
             if (0 === count($this->context->getViolations())) {
                 $dataUrl = $this->get(EmbedService::class)->data($value);
                 $error = null;
-                $prms = array();
+                $prms = [];
                 if (!is_array($dataUrl) || 0 === count($dataUrl)) {
                     if (!$constraint->allowNotFetched) {
                         $error = 'NotFetched';
@@ -39,7 +39,7 @@ class EmbedValidatorService extends AbstractService implements Validator\Constra
                         )
                     ) {
                     $error = 'NoType';
-                    $prms = array('%type%' => is_array($constraint->type) ? implode(', ', $constraint->type) : $constraint->type);
+                    $prms = ['%type%' => is_array($constraint->type) ? implode(', ', $constraint->type) : $constraint->type];
                 } elseif (!$constraint->allowNoUrlEmbed && (!isset($dataUrl['urlEmbed']) || !$dataUrl['urlEmbed'])) {
                     $error = 'NoEmbed';
                 }

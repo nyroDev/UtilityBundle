@@ -52,7 +52,7 @@ abstract class AbstractType extends SrcAbstractType
      *
      * @return string The translation
      */
-    public function trans($key, array $parameters = array(), $domain = 'messages', $locale = null)
+    public function trans($key, array $parameters = [], $domain = 'messages', $locale = null)
     {
         return $this->container->get('translator')->trans($key, $parameters, $domain, $locale);
     }
@@ -66,7 +66,7 @@ abstract class AbstractType extends SrcAbstractType
      *
      * @return string The generated URL
      */
-    public function generateUrl($route, $parameters = array(), $absolute = false)
+    public function generateUrl($route, $parameters = [], $absolute = false)
     {
         return $this->container->get(NyrodevService::class)->generateUrl($route, $parameters, $absolute);
     }

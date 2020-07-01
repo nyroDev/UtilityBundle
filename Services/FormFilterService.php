@@ -2,9 +2,9 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Symfony\Component\Form\Form;
 use NyroDev\UtilityBundle\Form\Type\FilterTypeInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use Symfony\Component\Form\Form;
 
 /**
  * Service used to update AbstractQueryBuilder object regarding a form containing some FilterTypeInterface.
@@ -13,9 +13,6 @@ class FormFilterService extends AbstractService
 {
     /**
      * Build the QueryBuilder object.
-     *
-     * @param Form                 $form
-     * @param AbstractQueryBuilder $queryBuilder
      */
     public function buildQuery(Form $form, AbstractQueryBuilder $queryBuilder)
     {
@@ -24,7 +21,7 @@ class FormFilterService extends AbstractService
         foreach ($data as $name => $val) {
             if (isset($val['value']) && $val['value']) {
                 $type = $form->get($name)->getConfig()->getType();
-                if (is_callable(array($type, 'getInnerType'))) {
+                if (is_callable([$type, 'getInnerType'])) {
                     $type = $type->getInnerType();
                 }
                 if ($type instanceof FilterTypeInterface) {
@@ -42,22 +39,22 @@ class FormFilterService extends AbstractService
             $form->submit($data);
             $filled = true;
         }
-        
+
         return $filled;
     }
 
     public function saveSession(Form $form, $route)
     {
         $tmp = $form->getData();
-        $data = array();
+        $data = [];
         foreach ($tmp as $k => $v) {
             if (isset($v['value'])) {
                 $value = $this->prepareValueForSession($v['value'], $form->get($k)->get('value'));
                 if ($value) {
-                    $data[$k] = array_filter(array(
+                    $data[$k] = array_filter([
                         'transformer' => isset($v['transformer']) ? $v['transformer'] : null,
                         'value' => $value,
-                    ));
+                    ]);
                 }
             }
         }
@@ -68,14 +65,14 @@ class FormFilterService extends AbstractService
     {
         if (is_object($value)) {
             $class = get_class($value);
-            if ($class == 'DateTime') {
+            if ('DateTime' == $class) {
                 $value = $form->getViewData();
-            } elseif ($class == 'Doctrine\Common\Collections\ArrayCollection') {
-                $values = array();
+            } elseif ('Doctrine\Common\Collections\ArrayCollection' == $class) {
+                $values = [];
                 foreach ($value as $vv) {
                     $values[] = $vv->getId();
-		}
-		$value = $values;
+                }
+                $value = $values;
             } else {
                 $value = $value->getId();
             }
@@ -97,30 +94,30 @@ class FormFilterService extends AbstractService
     {
         return $this->get('session')->get('filter_'.$route.'_page', 1);
     }
+
     public function saveSessionPage($route, $page)
     {
         $this->get('session')->set('filter_'.$route.'_page', $page);
     }
 
-    public function getSessionSortOrder($route, $defaults = array())
+    public function getSessionSortOrder($route, $defaults = [])
     {
         return $this->get('session')->get('filter_'.$route.'_sortOrder', $defaults);
     }
+
     public function saveSessionSortOrder($route, $sort, $order)
     {
-        $this->get('session')->set('filter_'.$route.'_sortOrder', array($sort, $order));
+        $this->get('session')->set('filter_'.$route.'_sortOrder', [$sort, $order]);
     }
 
     /**
      * Get parameter from a form for creating a pager URL.
      *
-     * @param Form $form
-     *
      * @return array
      */
     public function getPrmForUrl(Form $form)
     {
-        $ret = array();
+        $ret = [];
         foreach ($form->getData() as $k => $data) {
             if (isset($data['value'])) {
                 $data['value'] = $this->prepareDataForUrl($data['value'], $form->get($k)->get('value'));
@@ -128,7 +125,7 @@ class FormFilterService extends AbstractService
             }
         }
 
-        return count($ret) ? array($form->getName() => $ret) : array();
+        return count($ret) ? [$form->getName() => $ret] : [];
     }
 
     protected function prepareDataForUrl($value, Form $form)
@@ -137,8 +134,8 @@ class FormFilterService extends AbstractService
             if ($value instanceof \DateTime) {
                 $value = $form->getViewData();
             } elseif (is_object($value)) {
-                if (get_class($value) == 'Doctrine\Common\Collections\ArrayCollection') {
-                    $tmp = array();
+                if ('Doctrine\Common\Collections\ArrayCollection' == get_class($value)) {
+                    $tmp = [];
                     foreach ($value as $vv) {
                         $tmp[] = $vv->getId();
                     }
