@@ -60,6 +60,6 @@ class MemberService extends AbstractService
         $this->get('security.token_storage')->setToken($token);
 
         // Fire the login event
-        $this->get('event_dispatcher')->dispatch(AuthenticationEvents::AUTHENTICATION_SUCCESS, new AuthenticationEvent($token));
+        $this->get('event_dispatcher')->dispatch(new AuthenticationEvent($token), AuthenticationEvents::AUTHENTICATION_SUCCESS);
     }
 }

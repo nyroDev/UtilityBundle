@@ -538,7 +538,7 @@ class TinymceController extends AbstractController
 
             $tinymceBrowserConfigEvent = new TinymceEvent();
             $tinymceBrowserConfigEvent->setConfig($configNyro);
-            $container->get('event_dispatcher')->dispatch(TinymceEvent::BROWSER_CONFIG, $tinymceBrowserConfigEvent);
+            $container->get('event_dispatcher')->dispatch($tinymceBrowserConfigEvent, TinymceEvent::BROWSER_CONFIG);
 
             $configNyro = $tinymceBrowserConfigEvent->getConfig();
 
