@@ -2,6 +2,8 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use Embed\Embed;
+
 class EmbedService extends AbstractService
 {
     const CACHE_KEY_URLPARSER = 'urlParser_';
@@ -33,11 +35,14 @@ class EmbedService extends AbstractService
         $cacheKey = $this->getChacheKey($url, self::CACHE_KEY_URLPARSER);
         if ($force || !$cache || !$cache->contains($cacheKey)) {
             try {
-                $service = \Embed\Embed::create($url, $this->getCreateOptions($url));
-                /* @var $service \Embed\Adapters\AdapterInterface */
+                $embed = new Embed();
+                $info = $embed->get($url);
+                $oEmbedData = $info->getOEmbed()->all();
 
-                if ($service) {
-                    $data = [];
+                if ($info) {
+                    $data = [
+                        'type' => null,
+                    ];
                     $fields = [
                         'title',
                         'description',
@@ -64,8 +69,11 @@ class EmbedService extends AbstractService
                     ];
                     foreach ($fields as $field) {
                         try {
-                            $data[$field] = $service->$field;
+                            $data[$field] = $info->$field;
                         } catch (\Exception $e) {
+                            if (isset($oEmbedData[$field])) {
+                                $data[$field] = $oEmbedData[$field];
+                            }
                         }
                     }
                     $data['urlEmbed'] = null;
@@ -95,28 +103,5 @@ class EmbedService extends AbstractService
         }
 
         return $data;
-    }
-
-    protected function getCreateOptions($url)
-    {
-        $ret = [];
-        $ipv4For = $this->getParameter('nyroDev_utility.embed.useIPv4For');
-        if ($ipv4For) {
-            $useIPv4 = false;
-            foreach (explode('|', $ipv4For) as $tmp) {
-                $useIPv4 = $useIPv4 || false !== strpos($url, $tmp);
-            }
-            if ($useIPv4) {
-                $ret = [
-                    'resolver' => [
-                        'options' => [
-                            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-                        ],
-                    ],
-                ];
-            }
-        }
-
-        return $ret;
     }
 }

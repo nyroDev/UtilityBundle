@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
+use NyroDev\UtilityBundle\Validator\Constraints\ValidConfig;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,7 +36,7 @@ class ConfigType extends AbstractType
         parent::configureOptions($resolver);
         $resolver
             ->setDefault('constraints', [
-                new \NyroDev\UtilityBundle\Validator\Constraints\ValidConfig(),
+                new ValidConfig(),
             ]);
     }
 

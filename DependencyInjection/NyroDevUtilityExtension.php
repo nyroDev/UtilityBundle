@@ -63,12 +63,6 @@ class NyroDevUtilityExtension extends Extension
             $container->setParameter('nyroDev_utility.imageService.configs.'.ShareService::IMAGE_CONFIG_NAME, $shareImageConfig);
         }
 
-        if (isset($config['embed']) && is_array($config['embed'])) {
-            foreach ($config['embed'] as $k => $v) {
-                $container->setParameter('nyroDev_utility.embed.'.$k, $v);
-            }
-        }
-
         if (isset($config['redirectIfNotUrl_params']) && is_array($config['redirectIfNotUrl_params'])) {
             $container->setParameter('nyroDev_utility.redirectIfNotUrl_params', $config['redirectIfNotUrl_params']);
         }

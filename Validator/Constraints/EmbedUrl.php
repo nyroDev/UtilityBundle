@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Validator\Constraints;
 
+use NyroDev\UtilityBundle\Services\EmbedValidatorService;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -18,6 +19,6 @@ class EmbedUrl extends Constraint
 
     public function validatedBy()
     {
-        return 'nyrodev_embed_validator';
+        return EmbedValidatorService::class;
     }
 }
