@@ -2,10 +2,6 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\AuthenticationEvents;
-use Symfony\Component\Security\Core\Event\AuthenticationEvent;
-
 class MemberService extends AbstractService
 {
     /**
@@ -48,18 +44,5 @@ class MemberService extends AbstractService
     public function isImpersonated()
     {
         return $this->isGranted('ROLE_PREVIOUS_ADMIN');
-    }
-
-    /**
-     * Log user correctly.
-     */
-    public function logUser(\Symfony\Component\Security\Core\User\UserInterface $user)
-    {
-        // Here, "main" is the name of the firewall in your security.yaml
-        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-        $this->get('security.token_storage')->setToken($token);
-
-        // Fire the login event
-        $this->get('event_dispatcher')->dispatch(new AuthenticationEvent($token), AuthenticationEvents::AUTHENTICATION_SUCCESS);
     }
 }
