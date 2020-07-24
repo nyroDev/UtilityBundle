@@ -256,16 +256,28 @@ select {
     width: auto;
 }
 
-.form_row_filter_range_date div {
-    display: inline;
+.filterForm .filterFormRange {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 280px;
 }
 
-.form_row_filter_range_date div label {
-    width: 46px;
+.filterForm .filterFormRange .form_row {
+    display: inline-flex;
+    align-items: center;
 }
 
-.form_row_filter_range_date input {
-    width: 6em;
+.filterForm .filterFormRange .form_row label {
+    display: inline-block;
+    width: 45px;
+}
+
+.filterForm .filterFormRange .form_row input[type="number"],
+.filterForm .filterFormRange .form_row input[type="text"] {
+    font-size: 12pxx;
+    width: 80px;
+    box-sizing: border-box;
 }
 
 .form_row_filter ul {

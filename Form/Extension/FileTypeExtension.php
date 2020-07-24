@@ -47,7 +47,7 @@ class FileTypeExtension extends AbstractTypeExtension
                 $view->vars['currentFile'] = $currentFile;
                 $view->vars['currentFileName'] = basename($currentFile);
                 $view->vars['currentFileUrl'] = isset($options['currentFileUrl']) && $options['currentFileUrl'] ? $options['currentFileUrl'] : $currentFile;
-                $view->vars['showDelete'] = $options['showDelete'] && is_string($options['showDelete']) ? $options['showDelete'] : true;
+                $view->vars['showDelete'] = $options['showDelete'] && is_string($options['showDelete']) ? $options['showDelete'] : false;
             }
         }
     }

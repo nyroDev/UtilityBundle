@@ -21,6 +21,9 @@ class FilterRangeDateType extends FilterType
                     'type' => DateType::class,
                     'isDate' => true,
                     'required' => false,
+                    'attr' => [
+                        'class' => 'filterFormRange',
+                    ],
                 ], $options['valueOptions']));
     }
 

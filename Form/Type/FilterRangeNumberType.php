@@ -20,6 +20,9 @@ class FilterRangeNumberType extends FilterType
             ->add('value', FilterRangeSubType::class, array_merge([
                     'type' => NumberType::class,
                     'required' => false,
+                    'attr' => [
+                        'class' => 'filterFormRange',
+                    ],
                 ], $options['valueOptions']));
     }
 
