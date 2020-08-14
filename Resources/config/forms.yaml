@@ -1,67 +1,67 @@
 services:
     NyroDev\UtilityBundle\Form\Type\FilterType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterCustomType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterDateType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterRangeDateType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterRangeNumberType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterRangeSubType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterIntType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterBoolType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterChoiceType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterDbRowType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterDbRowExpandedType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\FilterDbRowMultipleSingleChoiceType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Extension\FileTypeExtension:
@@ -69,18 +69,18 @@ services:
           - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }
     NyroDev\UtilityBundle\Form\Type\TinymceType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
           - [setAssetsPackages, ['@assets.packages']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\ConfigType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\RawHtmlType:
         calls:
-          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+          - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
     NyroDev\UtilityBundle\Form\Type\DummyCaptchaType:

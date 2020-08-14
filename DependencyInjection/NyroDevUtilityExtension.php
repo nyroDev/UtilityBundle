@@ -3,7 +3,6 @@
 namespace NyroDev\UtilityBundle\DependencyInjection;
 
 use NyroDev\UtilityBundle\Services\ShareService;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -32,7 +31,7 @@ class NyroDevUtilityExtension extends Extension
 
         if (isset($config['translationDb']) && $config['translationDb']) {
             $definition = new Definition('NyroDev\UtilityBundle\Loader\DbLoader');
-            $definition->addArgument(new Reference('Psr\Container\ContainerInterface'));
+            $definition->addArgument(new Reference('service_container'));
             $definition->addTag('translation.loader', ['alias' => 'db']);
             $container->setDefinition('nyroDev_utility.dbLoader', $definition);
         }
@@ -97,7 +96,7 @@ class NyroDevUtilityExtension extends Extension
         $definition
             ->setAutowired(true)
             ->setAutoconfigured(true)
-            ->addMethodCall('setContainer', [new Reference(ContainerInterface::class)])
+            ->addMethodCall('setContainer', [new Reference('service_container')])
             ->addTag('controller.service_arguments')
         ;
         $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Controller'));

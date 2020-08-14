@@ -4,7 +4,7 @@ parameters:
 services:
     NyroDev\UtilityBundle\Services\NyrodevService:
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
             - [setKernelInterface, ['@kernel']]
         public: true
         tags:
@@ -18,7 +18,7 @@ services:
     NyroDev\UtilityBundle\Services\TagRendererService:
         arguments: ['@webpack_encore.entrypoint_lookup_collection']
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
             - [setAssetsPackages, ['@assets.packages']]
         public: true
         tags:
@@ -29,7 +29,7 @@ services:
 
     NyroDev\UtilityBundle\Services\ShareService:
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_share }
@@ -39,7 +39,7 @@ services:
 
     NyroDev\UtilityBundle\Services\MemberService:
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_member }
@@ -49,7 +49,7 @@ services:
 
     NyroDev\UtilityBundle\Services\ImageService:
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
             - [setKernelInterface, ['@kernel']]
             - [setAssetsPackages, ['@assets.packages']]
         public: true
@@ -61,7 +61,7 @@ services:
 
     NyroDev\UtilityBundle\Services\FormService:
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
             - [setAssetsPackages, ['@assets.packages']]
         public: true
         tags:
@@ -72,7 +72,7 @@ services:
 
     NyroDev\UtilityBundle\Services\FormFilterService:
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
         public: true
     nyrodev_formFilter:
         alias: NyroDev\UtilityBundle\Services\FormFilterService
@@ -80,7 +80,7 @@ services:
 
     NyroDev\UtilityBundle\Services\EmbedService:
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev_embed }
@@ -90,7 +90,7 @@ services:
     
     NyroDev\UtilityBundle\Services\EmbedValidatorService:
         calls:
-            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
+            - [setContainerInterface, ['@service_container']]
         public: true
         tags:
           - { name: validator.constraint_validator, alias: nyrodev_embed_validator }
