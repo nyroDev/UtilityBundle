@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Services\Traits;
 
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Psr\Container\ContainerInterface;
 
 trait ContainerInterfaceServiceableTrait
