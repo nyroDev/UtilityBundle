@@ -78,7 +78,7 @@
         {% endif %}
     {% endfor %}
     {% if required -%}
-        {% set classes = classes|merge(['required']) %}
+        {% set classes = classes|merge(['form_required']) %}
     {%- endif -%}
     {%- if errors|length > 0 -%}
         {% set classes = classes|merge(['form_error']) %}
@@ -98,7 +98,7 @@
             {{- form_widget(form, widget_attr) -}}
         {%- endif -%}
         
-        <span class="formIndicator">*</span>
+         <span class="formIndicator"> *</span>
         {{- form_help(form) -}}
         {{- form_errors(form) -}}
     </div>
