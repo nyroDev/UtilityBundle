@@ -107,5 +107,7 @@ class Rem2pxCommand extends Command
 
         $output->writeln('Write '.$dst);
         file_put_contents($dst, $dstCssDoc->render(\Sabberworm\CSS\OutputFormat::createPretty()));
+
+        return 0;
     }
 }

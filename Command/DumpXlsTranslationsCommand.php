@@ -83,6 +83,8 @@ class DumpXlsTranslationsCommand extends Command
                 $fs->dumpFile($dir.'/'.$domain.'.'.$locale.'.yaml', $dumper->dump($trans, 99));
             }
         }
+
+        return 0;
     }
 
     protected function addTrans($locale, $domain, array $idents, $trans)

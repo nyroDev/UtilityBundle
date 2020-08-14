@@ -174,8 +174,12 @@ class XlsTranslationsCommand extends Command
             $objWriter->save($dest);
 
             $output->writeln('XLS file saved: '.$dest);
+
+            return 0;
         } else {
             $output->writeln('No original translation files found.');
+
+            return 1;
         }
     }
 

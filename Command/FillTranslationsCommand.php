@@ -127,8 +127,12 @@ class FillTranslationsCommand extends Command
             $output->writeln('Added translations: '.$nb);
             $output->writeln('Flushing...');
             $this->db->flush();
+
+            return 0;
         } else {
             $output->writeln('No original translation files found.');
+
+            return 1;
         }
     }
 
