@@ -3,7 +3,6 @@
 namespace NyroDev\UtilityBundle\Services;
 
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
-use Psr\Container\ContainerInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 
@@ -13,9 +12,8 @@ class TagRendererService extends AbstractService
 
     private $entrypointLookupCollection;
 
-    public function __construct(ContainerInterface $container, EntrypointLookupCollection $entrypointLookupCollection)
+    public function __construct(EntrypointLookupCollection $entrypointLookupCollection)
     {
-        parent::__construct($container);
         $this->entrypointLookupCollection = $entrypointLookupCollection;
     }
 

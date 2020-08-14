@@ -7,7 +7,9 @@ services:
         public: true
 
     NyroDev\UtilityBundle\Services\Db\OrmService:
-        arguments: ['@service_container', '@nyrodev.entity_manager']
+        arguments: ['@nyrodev.entity_manager']
+        calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         public: true
     nyrodev_db:
         alias: NyroDev\UtilityBundle\Services\Db\OrmService

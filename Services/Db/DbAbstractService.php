@@ -4,15 +4,13 @@ namespace NyroDev\UtilityBundle\Services\Db;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\Services\AbstractService;
-use Psr\Container\ContainerInterface;
 
 abstract class DbAbstractService extends AbstractService
 {
     protected $objectManager;
 
-    public function __construct(ContainerInterface $container, ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager)
     {
-        parent::__construct($container);
         $this->objectManager = $objectManager;
     }
 

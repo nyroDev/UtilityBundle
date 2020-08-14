@@ -32,7 +32,7 @@ class NyroDevUtilityExtension extends Extension
 
         if (isset($config['translationDb']) && $config['translationDb']) {
             $definition = new Definition('NyroDev\UtilityBundle\Loader\DbLoader');
-            $definition->addArgument(new Reference('service_container'));
+            $definition->addArgument(new Reference('Psr\Container\ContainerInterface'));
             $definition->addTag('translation.loader', ['alias' => 'db']);
             $container->setDefinition('nyroDev_utility.dbLoader', $definition);
         }

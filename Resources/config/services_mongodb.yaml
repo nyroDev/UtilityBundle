@@ -8,7 +8,9 @@ services:
 
     NyroDev\UtilityBundle\Services\Db\MongodbService:
         autowire: false
-        arguments: ['@service_container', '@nyrodev.document_manager']
+        arguments: ['@nyrodev.document_manager']
+        calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         public: true
     nyrodev_db:
         alias: NyroDev\UtilityBundle\Services\Db\MongodbService
