@@ -30,7 +30,7 @@ class TinymceType extends AbstractType
             $prefixTinymce.'width' => 720,
             $prefixTinymce.'theme' => 'modern',
             $prefixTinymce.'plugins' => 'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount'.(isset($options['tinymcePlugins']) && $options['tinymcePlugins'] ? ','.$options['tinymcePlugins'] : null),
-            $prefixTinymce.'toolbar' => 'responsivefilemanager, undo redo | styleselect | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
+            $prefixTinymce.'toolbar' => 'responsivefilemanager, undo redo | styleselect | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | image media fullpage',
             $prefixTinymce.'menubar' => 'insert edit view table tools',
             $prefixTinymce.'relative_urls' => 'false',
             $prefixTinymce.'branding' => 'false',
