@@ -32,40 +32,42 @@ class TagRendererService extends AbstractService
             );
         }
 
-        return implode('', $scriptTags);
+        return
+            $this->renderWebpackLinkTags($entryName, null, $packageName, $entrypointName)
+            .implode('', $scriptTags);
     }
 
     public function getScriptFiles(string $entryName, string $packageName = null, string $entrypointName = '_default'): array
     {
-        $scriptTags = [];
+        $scriptFiles = [];
         foreach ($this->getEntrypointLookup($entrypointName)->getJavaScriptFiles($entryName) as $filename) {
-            $scriptTags[] = htmlentities($this->getAssetPath($filename, $packageName));
+            $scriptFiles[] = htmlentities($this->getAssetPath($filename, $packageName));
         }
 
-        return $scriptTags;
+        return $scriptFiles;
     }
 
     public function renderWebpackLinkTags(string $entryName, string $moreAttrs = null, string $packageName = null, string $entrypointName = '_default'): string
     {
-        $scriptTags = [];
+        $linkTags = [];
         foreach ($this->getLinkFiles($entryName, $packageName, $entrypointName) as $filename) {
-            $scriptTags[] = sprintf(
+            $linkTags[] = sprintf(
                 '<link rel="stylesheet" href="%s"'.($moreAttrs ? ' '.$moreAttrs : null).' />',
                 $filename
             );
         }
 
-        return implode('', $scriptTags);
+        return implode('', $linkTags);
     }
 
     public function getLinkFiles(string $entryName, string $packageName = null, string $entrypointName = '_default'): array
     {
-        $scriptTags = [];
+        $linkFiles = [];
         foreach ($this->getEntrypointLookup($entrypointName)->getCssFiles($entryName) as $filename) {
-            $scriptTags[] = htmlentities($this->getAssetPath($filename, $packageName));
+            $linkFiles[] = htmlentities($this->getAssetPath($filename, $packageName));
         }
 
-        return $scriptTags;
+        return $linkFiles;
     }
 
     private function getAssetPath(string $assetPath, string $packageName = null): string
