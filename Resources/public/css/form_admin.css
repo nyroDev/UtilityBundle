@@ -137,6 +137,7 @@ select {
 
 .form_errors,
 .form_row .form_errors {
+    display: block;
     list-style-type: none;
     color: red;
     margin: 3px 0 3px 220px;
