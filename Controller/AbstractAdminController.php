@@ -3,7 +3,7 @@
 namespace NyroDev\UtilityBundle\Controller;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\FormFilterService;

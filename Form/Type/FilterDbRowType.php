@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

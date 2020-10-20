@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Services\Db;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\Services\AbstractService;
 
 abstract class DbAbstractService extends AbstractService
@@ -25,7 +25,7 @@ abstract class DbAbstractService extends AbstractService
     /**
      * @param string $name class name
      *
-     * @return \Doctrine\Common\Persistence\ObjectRepository
+     * @return \Doctrine\Persistence\ObjectRepository
      */
     public function getRepository($name)
     {

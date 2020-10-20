@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Html2Text\Html2Text;
 use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Utility\Pager;

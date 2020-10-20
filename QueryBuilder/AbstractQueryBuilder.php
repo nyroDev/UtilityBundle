@@ -2,8 +2,8 @@
 
 namespace NyroDev\UtilityBundle\QueryBuilder;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 
