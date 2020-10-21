@@ -77,13 +77,8 @@ class FormFilterService extends AbstractService
                 $value = $value->getId();
             }
         } elseif ($value && is_array($value)) {
-            if (isset($value['start']) || isset($value['end'])) {
-                $value['start'] = $this->prepareValueForSession($value['start'], $form->get('start'));
-                $value['end'] = $this->prepareValueForSession($value['end'], $form->get('end'));
-            } else {
-                foreach ($value as $k => $v) {
-                    $value[$k] = $this->prepareValueForSession($v, $form);
-                }
+            foreach ($value as $k => $v) {
+                $value[$k] = $this->prepareValueForSession($v, $form->get($k));
             }
         }
 
