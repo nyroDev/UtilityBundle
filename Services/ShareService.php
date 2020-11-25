@@ -124,11 +124,13 @@ class ShareService extends AbstractService
     /**
      * Set Sharable values from object.
      */
-    public function setSharable(Sharable $sharable)
+    public function setSharable(Sharable $sharable, $useToStringTitle = true)
     {
         $nyrodev = $this->container->get(NyrodevService::class);
 
-        $this->setTitle($nyrodev->inlineText($sharable.''));
+        if ($useToStringTitle) {
+            $this->setTitle($nyrodev->inlineText($sharable.''));
+        }
 
         if ($sharable->getMetaTitle()) {
             $this->setTitle($nyrodev->inlineText($sharable->getMetaTitle()));
