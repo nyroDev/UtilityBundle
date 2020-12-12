@@ -1,11 +1,11 @@
-jQuery(function($) {
+jQuery(function ($) {
 	var tinymceLoaded = false,
 		tinymceLoading = false,
 		tinymceLoadingQueue = [],
-		searchFuncOrRegexp = function(data) {
+		searchFuncOrRegexp = function (data) {
 			if (typeof data == 'string') {
 				if (data.indexOf('function(') === 0) {
-					eval('window.tinyval = '+data+';');
+					eval('window.tinyval = ' + data + ';');
 					data = window.tinyval;
 					delete(window.tinyval);
 				} else if (data.indexOf('reg/') === 0 && data.lastIndexOf('/') === data.length - 1) {
@@ -13,7 +13,7 @@ jQuery(function($) {
 				}
 			} else if (typeof data == 'object') {
 				var tmp = Object.prototype.toString.call(data) == '[object Array]' ? [] : {};
-				$.each(data, function(k, v) {
+				$.each(data, function (k, v) {
 					tmp[k] = searchFuncOrRegexp(v);
 				});
 				data = tmp;
@@ -22,8 +22,8 @@ jQuery(function($) {
 		},
 		tinymceKey = 'tinymce_';
 
-    $.extend({
-		tinymceLoad: function(url, clb) {
+	$.extend({
+		tinymceLoad: function (url, clb) {
 			if (tinymceLoading) {
 				tinymceLoadingQueue.push(clb);
 			} else if (!tinymceLoaded) {
@@ -36,12 +36,12 @@ jQuery(function($) {
 					url: url,
 					cache: true,
 					dataType: 'script'
-				}).done(function() {
+				}).done(function () {
 					tinymceLoading = false;
 					tinymceLoaded = true;
 					clb();
 					if (tinymceLoadingQueue.length) {
-						$.each(tinymceLoadingQueue, function(k, v) {
+						$.each(tinymceLoadingQueue, function (k, v) {
 							v();
 						});
 					}
@@ -50,61 +50,47 @@ jQuery(function($) {
 				clb();
 			}
 		},
-        tinymceLoaded: function(clb) {
+		tinymceLoaded: function (clb) {
 			if (!tinymceLoaded) {
 				tinymceLoadingQueue.push(clb);
-            } else {
-                clb();
-            }
-        }
-    });
-    
+			} else {
+				clb();
+			}
+		}
+	});
+
 	$.fn.extend({
-		myTinymceDataSearch: function(tKey) {
+		myTinymceDataSearch: function (tKey) {
 			tKey = tKey || tinymceKey;
 			var opts = {},
 				tKeyLn = tKey.length;
-			$.each($(this).first().data(), function(i, e) {
+			$.each($(this).first().data(), function (i, e) {
 				if (i.indexOf(tKey) == 0) {
 					opts[i.substring(tKeyLn)] = searchFuncOrRegexp(e);
 				}
 			});
 			return opts;
 		},
-		myTinymce: function(options, tinymceurl) {
-			return this.each(function() {
+		myTinymce: function (options, tinymceurl) {
+			return this.each(function () {
 				var me = $(this),
 					opts = $.extend({
-						oninit: function(ed) {
+						oninit: function (ed) {
 							me.trigger('tinmceInit', [ed]);
 						}
 					}, options);
 				if (!tinymceurl) {
 					$.extend(opts, me.myTinymceDataSearch());
-                }
-				$.tinymceLoad(tinymceurl ? tinymceurl : me.data('tinymceurl'), function() {
-					if (me.data('browser_url')) {
-						opts['file_browser_callback'] = function(field_name, url, type, win) {
-							parent.nyroBrowserField = field_name;
-							parent.nyroBrowserWinBrowse = tinyMCE.activeEditor.windowManager.open({
-								url: me.data('browser_url')+'?type='+type+'&',
-								title: me.data('browser_title'),
-								width: me.data('browser_width'),
-								height: me.data('browser_height'),
-								resizable: true,
-								maximizable: true,
-								scrollbars: true
-							});
-							return false;
-						};
-					}
-					if (me.is('[required]'))
+				}
+				$.tinymceLoad(tinymceurl ? tinymceurl : me.data('tinymceurl'), function () {
+					if (me.is('[required]')) {
 						me.removeProp('required').removeAttr('required');
+					}
 					me.tinymce(opts);
 				});
 			});
 		}
 	});
-	
+
 	$('textarea.tinymce').myTinymce();
 });

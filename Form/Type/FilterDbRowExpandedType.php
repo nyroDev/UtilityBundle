@@ -22,7 +22,7 @@ class FilterDbRowExpandedType extends FilterType
             'class' => $options['class'],
             'expanded' => true,
             'multiple' => true,
-            'query_builder' => isset($options['query_builder']) || isset($options['where']) || isset($options['order']) ? function (ObjectRepository $or) use ($options,$nyrodevDb) {
+            'query_builder' => isset($options['query_builder']) || isset($options['where']) || isset($options['order']) ? function (ObjectRepository $or) use ($options, $nyrodevDb) {
                 if (isset($options['query_builder'])) {
                     return $options['query_builder']($or);
                 }

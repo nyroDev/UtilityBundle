@@ -409,7 +409,7 @@ class NyrodevService extends AbstractService
         return $asArray ? [
             $name,
             $ext,
-        ] : $name.'.'.$ext;
+        ] : $name.($ext ? '.'.$ext : '');
     }
 
     /**

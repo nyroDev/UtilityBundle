@@ -20,7 +20,7 @@ class FilterDbRowType extends FilterType
         $myOptions = [
             'required' => false,
             'class' => $options['class'],
-            'query_builder' => isset($options['query_builder']) || isset($options['where']) || isset($options['order']) ? function (ObjectRepository $or) use ($options,$nyrodevDb) {
+            'query_builder' => isset($options['query_builder']) || isset($options['where']) || isset($options['order']) ? function (ObjectRepository $or) use ($options, $nyrodevDb) {
                 if (isset($options['query_builder'])) {
                     return $options['query_builder']($or);
                 }
