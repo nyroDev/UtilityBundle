@@ -3,7 +3,7 @@
 namespace NyroDev\UtilityBundle\Controller;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\FormFilterService;
@@ -21,7 +21,7 @@ abstract class AbstractAdminController extends AbstractController
     const ADD = 'add';
     const EDIT = 'edit';
 
-    protected function createList(Request $request, $repository, $route, array $routePrm = array(), $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false, array $filterDefaults = array())
+    protected function createList(Request $request, $repository, $route, array $routePrm = [], $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false, array $filterDefaults = [])
     {
         $nbPerPageParam = 'admin.nbPerPage.'.$route;
         $nbPerPage = $this->getParameter($nbPerPageParam, $this->getParameter('nyroDev_utility.admin.nbPerPage'));
@@ -110,7 +110,7 @@ abstract class AbstractAdminController extends AbstractController
             return $response;
         }
 
-        $routePrm = array_merge($routePrm, array('sort' => $sort, 'order' => $order));
+        $routePrm = array_merge($routePrm, ['sort' => $sort, 'order' => $order]);
         if (!is_null($filter)) {
             $routePrm = array_merge($routePrm, $this->get(FormFilterService::class)->getPrmForUrl($filter));
         }
@@ -121,7 +121,7 @@ abstract class AbstractAdminController extends AbstractController
                         ->setMaxResults($nbPerPage)
                         ->getResult();
 
-        return array(
+        return [
             'filter' => !is_null($filter) ? $filter->createView() : null,
             'filterFilled' => $filterFilled,
             'pager' => $pager,
@@ -134,10 +134,10 @@ abstract class AbstractAdminController extends AbstractController
             'results' => $results,
             'queryBuilder' => $rawQueryBuilder,
             'canExport' => $canExport,
-        );
+        ];
     }
 
-    protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, array $filterDefaults = array())
+    protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, array $filterDefaults = [])
     {
         $filter = null;
         if (!is_null($filterType)) {
@@ -164,7 +164,7 @@ abstract class AbstractAdminController extends AbstractController
         if (!is_null($filter)) {
             // bind values from the request
             if ($request->query->has('clearFilter')) {
-                $filter->submit(array('page' => 1));
+                $filter->submit(['page' => 1]);
                 $this->get(FormFilterService::class)->saveSession($filter, $route);
             } elseif ($request->query->has($filter->getName())) {
                 $filter->handleRequest($request);
@@ -198,7 +198,7 @@ abstract class AbstractAdminController extends AbstractController
         // Retrieve the number of total results
         $total = $queryBuilder->count();
 
-        return array(
+        return [
             'order' => $order,
             'sort' => $sort,
             'filter' => $filter,
@@ -206,21 +206,21 @@ abstract class AbstractAdminController extends AbstractController
             'page' => $page,
             'queryBuilder' => $queryBuilder,
             'total' => $total,
-        );
+        ];
     }
 
-    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = array(), $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = array(), $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = array(), $formName = null)
+    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = [], $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = [], $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = [], $formName = null)
     {
         if (is_null($groups)) {
-            $groups = array('Default', $action);
+            $groups = ['Default', $action];
         }
 
-        $form = $this->get('form.factory')->createNamedBuilder($formName ? $formName : 'form', FormType::class, $row, array_merge($moreFormOptions, array(
+        $form = $this->get('form.factory')->createNamedBuilder($formName ? $formName : 'form', FormType::class, $row, array_merge($moreFormOptions, [
             'validation_groups' => $groups,
-        )));
+        ]));
 
         if (self::ADD != $action && $this->getParameter('nyroDev_utility.show_edit_id')) {
-            $form->add('id', TextType::class, array('label' => $this->trans('admin.'.$name.'.id'), 'attr' => array('readonly' => 'readonly'), 'mapped' => false));
+            $form->add('id', TextType::class, ['label' => $this->trans('admin.'.$name.'.id'), 'attr' => ['readonly' => 'readonly'], 'mapped' => false]);
             $form->get('id')->setData($row->getId());
         }
 
@@ -228,10 +228,10 @@ abstract class AbstractAdminController extends AbstractController
 
         foreach ($fields as $f) {
             $type = null;
-            $options = array(
+            $options = [
                 'label' => $this->trans('admin.'.$name.'.'.$f),
                 'required' => false,
-            );
+            ];
 
             if (isset($moreOptions[$f])) {
                 if (isset($moreOptions[$f]['type'])) {
@@ -260,7 +260,7 @@ abstract class AbstractAdminController extends AbstractController
             $form->add($f, $type, $options);
         }
 
-        $submitOptions = array('label' => $this->trans('admin.misc.send'));
+        $submitOptions = ['label' => $this->trans('admin.misc.send')];
         if (isset($moreOptions['submit']) && is_array($moreOptions['submit'])) {
             $submitOptions = array_merge($submitOptions, $moreOptions['submit']);
         }
@@ -306,11 +306,11 @@ abstract class AbstractAdminController extends AbstractController
             return $response;
         }
 
-        return array(
+        return [
             'name' => $name,
             'action' => $action,
             'row' => $row,
             'form' => $form->createView(),
-        );
+        ];
     }
 }

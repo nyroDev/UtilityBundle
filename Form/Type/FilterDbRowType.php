@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,10 +17,10 @@ class FilterDbRowType extends FilterType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $nyrodevDb = $this->get(DbAbstractService::class);
-        $myOptions = array(
+        $myOptions = [
             'required' => false,
             'class' => $options['class'],
-            'query_builder' => isset($options['query_builder']) || isset($options['where']) || isset($options['order']) ? function (ObjectRepository $or) use ($options,$nyrodevDb) {
+            'query_builder' => isset($options['query_builder']) || isset($options['where']) || isset($options['order']) ? function (ObjectRepository $or) use ($options, $nyrodevDb) {
                 if (isset($options['query_builder'])) {
                     return $options['query_builder']($or);
                 }
@@ -48,17 +48,18 @@ class FilterDbRowType extends FilterType
                 }
 
                 return $ret->getQueryBuilder();
-            } : null,
-        );
+            }
+        : null,
+        ];
         if (isset($options['property'])) {
             $myOptions['choice_label'] = $options['property'];
         }
         $builder
-            ->add('transformer', ChoiceType::class, array_merge(array(
-                'choices' => array(
+            ->add('transformer', ChoiceType::class, array_merge([
+                'choices' => [
                     '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
-                ),
-            ), $options['transformerOptions']))
+                ],
+            ], $options['transformerOptions']))
             ->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
     }
 
@@ -72,13 +73,13 @@ class FilterDbRowType extends FilterType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'class' => null,
             'property' => null,
             'query_builder' => null,
             'where' => null,
             'order' => null,
-        ));
+        ]);
     }
 
     public function getBlockPrefix()

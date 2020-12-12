@@ -2,8 +2,8 @@
 
 namespace NyroDev\UtilityBundle\QueryBuilder;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 
@@ -59,12 +59,12 @@ abstract class AbstractQueryBuilder
         $this->count = null;
     }
 
-    protected $config = array();
+    protected $config = [];
 
     public function add($type, $value, $append = false)
     {
         if (!$append || !isset($this->config[$type])) {
-            $this->config[$type] = array();
+            $this->config[$type] = [];
         }
         $this->config[$type][] = $value;
 
@@ -79,25 +79,25 @@ abstract class AbstractQueryBuilder
     public function addJoinWhere($table, $whereId, $subSelectField = 'id')
     {
         if (!is_array($whereId)) {
-            $whereId = array($whereId);
+            $whereId = [$whereId];
         }
 
-        return $this->add('joinWhere', array($table, $whereId, $subSelectField), true);
+        return $this->add('joinWhere', [$table, $whereId, $subSelectField], true);
     }
 
     public function addWhere($field, $transformer, $value = null, $forceType = null)
     {
-        return $this->add('where', array($field, $transformer, $value, $forceType), true);
+        return $this->add('where', [$field, $transformer, $value, $forceType], true);
     }
 
     public function orderBy($sort, $order = null)
     {
-        return $this->add('orderBy', array($sort, $order));
+        return $this->add('orderBy', [$sort, $order]);
     }
 
     public function addOrderBy($sort, $order = null)
     {
-        return $this->add('orderBy', array($sort, $order), true);
+        return $this->add('orderBy', [$sort, $order], true);
     }
 
     public function setFirstResult($firstResult)
