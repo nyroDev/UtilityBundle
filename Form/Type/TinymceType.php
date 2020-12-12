@@ -26,25 +26,25 @@ class TinymceType extends AbstractType
     {
         $attrs = $view->vars['attr'];
         if (!is_array($attrs)) {
-            $attrs = array();
+            $attrs = [];
         }
 
         $prefixTinymce = 'data-tinymce_';
 
-        $attrs = array_merge($attrs, array(
+        $attrs = array_merge($attrs, [
             'class' => 'tinymce'.(isset($attrs['class']) && $attrs['class'] ? ' '.$attrs['class'] : ''),
             'data-tinymceurl' => $this->assetsHelper->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
             $prefixTinymce.'language' => $this->container->get(NyrodevService::class)->getRequest()->getLocale(),
             $prefixTinymce.'height' => 450,
-            $prefixTinymce.'width' => 720,
-            $prefixTinymce.'theme' => 'modern',
+            $prefixTinymce.'width' => 771,
+            $prefixTinymce.'theme' => 'silver',
             $prefixTinymce.'plugins' => 'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount'.(isset($options['tinymcePlugins']) && $options['tinymcePlugins'] ? ','.$options['tinymcePlugins'] : null),
             $prefixTinymce.'toolbar' => 'responsivefilemanager, undo redo | styleselect | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
             $prefixTinymce.'menubar' => 'insert edit view table tools',
             $prefixTinymce.'relative_urls' => 'false',
             $prefixTinymce.'branding' => 'false',
             $prefixTinymce.'browser_spellcheck' => 'true',
-        ));
+        ]);
 
         if ((isset($options['tinymceBrowser']) && $options['tinymceBrowser']) || ($this->container->hasParameter('nyroDev_utility.browser.defaultEnable') && $this->container->getParameter('nyroDev_utility.browser.defaultEnable'))) {
             $canBrowse = isset($options['tinymceBrowser']['url']) || ($this->container->hasParameter('nyroDev_utility.browser.defaultRoute') && $this->container->getParameter('nyroDev_utility.browser.defaultRoute'));
@@ -53,7 +53,7 @@ class TinymceType extends AbstractType
 
                 $attrs[$prefixTinymce.'external_filemanager_path'] = (isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get(NyrodevService::class)->generateUrl($this->container->getParameter('nyroDev_utility.browser.defaultRoute'))).'/';
                 $attrs[$prefixTinymce.'filemanager_title'] = isset($options['tinymceBrowser']['title']) ? $options['tinymceBrowser']['title'] : $this->container->get('translator')->trans('nyrodev.browser.title');
-                $attrs[$prefixTinymce.'external_plugins'] = json_encode(array('filemanager' => $attrs[$prefixTinymce.'external_filemanager_path'].'plugin.min.js'));
+                $attrs[$prefixTinymce.'external_plugins'] = json_encode(['filemanager' => $attrs[$prefixTinymce.'external_filemanager_path'].'plugin.min.js']);
 
                 /*
                 $attrs['data-browser_url'] = isset($options['tinymceBrowser']['url']) ? $options['tinymceBrowser']['url'] : $this->container->get(NyrodevService::class)->generateUrl($this->container->getParameter('nyroDev_utility.tinymce.browserRoute'));
@@ -78,11 +78,11 @@ class TinymceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'tinymceBrowser' => array(),
-            'tinymce' => array(),
+        $resolver->setDefaults([
+            'tinymceBrowser' => [],
+            'tinymce' => [],
             'tinymcePlugins' => null,
-        ));
+        ]);
     }
 
     public function getParent()

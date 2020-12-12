@@ -7,8 +7,8 @@ try {
 
     include 'include/utils.php';
 
-    if ($_SESSION['RF']["verify"] != "RESPONSIVEfilemanager") {
-        response(trans('forbiden upload') . AddErrorLocation(), 403)->send();
+    if ('RESPONSIVEfilemanager' != $_SESSION['RF']['verify']) {
+        response(trans('forbidden').AddErrorLocation(), 403)->send();
         exit;
     }
 
@@ -17,22 +17,22 @@ try {
     $ftp = ftp_con($config);
 
     if ($ftp) {
-        $source_base = $config['ftp_base_folder'] . $config['upload_dir'];
-        $thumb_base = $config['ftp_base_folder'] . $config['ftp_thumbs_dir'];
+        $source_base = $config['ftp_base_folder'].$config['upload_dir'];
+        $thumb_base = $config['ftp_base_folder'].$config['ftp_thumbs_dir'];
     } else {
         $source_base = $config['current_path'];
         $thumb_base = $config['thumbs_base_path'];
     }
 
-    if (isset($_POST["fldr"])) {
+    if (isset($_POST['fldr'])) {
         $_POST['fldr'] = str_replace('undefined', '', $_POST['fldr']);
-        $storeFolder = $source_base . $_POST["fldr"];
-        $storeFolderThumb = $thumb_base . $_POST["fldr"];
+        $storeFolder = $source_base.$_POST['fldr'];
+        $storeFolderThumb = $thumb_base.$_POST['fldr'];
     } else {
         return;
     }
 
-    $fldr = rawurldecode(trim(strip_tags($_POST['fldr']), "/") . "/");
+    $fldr = rawurldecode(trim(strip_tags($_POST['fldr']), '/').'/');
 
     if (!checkRelativePath($fldr)) {
         response(trans('wrong path').AddErrorLocation())->send();
@@ -45,23 +45,23 @@ try {
     $i = 0;
     //GET config
     while ($cycle && $i < $max_cycles) {
-        $i++;
+        ++$i;
         if ($path == $config['current_path']) {
             $cycle = false;
         }
-        if (file_exists($path . "config.php")) {
-            $configTemp = include $path . 'config.php';
+        if (file_exists($path.'config.php')) {
+            $configTemp = include $path.'config.php';
             $config = array_merge($config, $configTemp);
             //TODO switch to array
             $cycle = false;
         }
-        $path = fix_dirname($path) . '/';
+        $path = fix_dirname($path).'/';
     }
 
-    require('UploadHandler.php');
+    require 'UploadHandler.php';
     $messages = null;
-    if (trans("Upload_error_messages") !== "Upload_error_messages") {
-        $messages = trans("Upload_error_messages");
+    if ('Upload_error_messages' !== trans('Upload_error_messages')) {
+        $messages = trans('Upload_error_messages');
     }
 
     // make sure the length is limited to avoid DOS attacks
@@ -84,17 +84,16 @@ try {
             curl_close($ch);
             fclose($fp);
 
-            $_FILES['files'] = array(
-                'name' => array(basename($_POST['url'])),
-                'tmp_name' => array($temp),
-                'size' => array(filesize($temp)),
-                'type' => null
-            );
+            $_FILES['files'] = [
+                'name' => [basename($_POST['url'])],
+                'tmp_name' => [$temp],
+                'size' => [filesize($temp)],
+                'type' => null,
+            ];
         } else {
             throw new Exception('Is not a valid URL.');
         }
     }
-
 
     if ($config['mime_extension_rename']) {
         $info = pathinfo($_FILES['files']['name'][0]);
@@ -109,55 +108,58 @@ try {
         }
         $extension = get_extension_from_mime($mime_type);
 
-        if ($extension == 'so' || $extension == '' || $mime_type == "text/troff") {
+        if ('so' == $extension || '' == $extension || 'text/troff' == $mime_type) {
             $extension = $info['extension'];
         }
-        $filename = $info['filename'] . "." . $extension;
+        $filename = $info['filename'].'.'.$extension;
     } else {
         $filename = $_FILES['files']['name'][0];
     }
     $_FILES['files']['name'][0] = fix_filename($filename, $config);
 
-
-
+    if (!$_FILES['files']['type'][0]) {
+        $_FILES['files']['type'][0] = $mime_type;
+    }
     // LowerCase
     if ($config['lower_case']) {
         $_FILES['files']['name'][0] = fix_strtolower($_FILES['files']['name'][0]);
     }
     if (!checkresultingsize($_FILES['files']['size'][0])) {
-    	if ( !isset($upload_handler->response['files'][0]) ) {
+        if (!isset($upload_handler->response['files'][0])) {
             // Avoid " Warning: Creating default object from empty value ... "
             $upload_handler->response['files'][0] = new stdClass();
         }
-        $upload_handler->response['files'][0]->error = sprintf(trans('max_size_reached'), $config['MaxSizeTotal']) . AddErrorLocation();
+        $upload_handler->response['files'][0]->error = sprintf(trans('max_size_reached'), $config['MaxSizeTotal']).AddErrorLocation();
         echo json_encode($upload_handler->response);
         exit();
     }
 
-    $uploadConfig = array(
+    $uploadConfig = [
         'config' => $config,
         'storeFolder' => $storeFolder,
         'storeFolderThumb' => $storeFolderThumb,
         'ftp' => $ftp,
-		// nyro update
+        // nyro update
         //'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']) . '/' . $storeFolder,
-        'upload_dir'=> $storeFolder,
-        
-        'upload_url' => $config['base_url'] . $config['upload_dir'] . $_POST['fldr'],
+        'upload_dir' => $storeFolder,
+        'upload_url' => $config['base_url'].$config['upload_dir'].$_POST['fldr'],
         'mkdir_mode' => $config['folderPermission'],
         'max_file_size' => $config['MaxSizeUpload'] * 1024 * 1024,
         'correct_image_extensions' => true,
-        'print_response' => false
-    );
+        'print_response' => false,
+    ];
+
     if (!$config['ext_blacklist']) {
-        $uploadConfig['accept_file_types'] = '/\.(' . implode('|', $config['ext']) . ')$/i';
-        if($config['files_without_extension']){
-        	$uploadConfig['accept_file_types'] = '/((\.(' . implode('|', $config['ext']) . ')$)|(^[^.]+$))$/i';
+        $uploadConfig['accept_file_types'] = '/\.('.implode('|', $config['ext']).')$/i';
+
+        if ($config['files_without_extension']) {
+            $uploadConfig['accept_file_types'] = '/((\.('.implode('|', $config['ext']).')$)|(^[^.]+$))$/i';
         }
     } else {
-        $uploadConfig['accept_file_types'] = '/\.(?!' . implode('|', $config['ext_blacklist']) . '$)/i';
-        if($config['files_without_extension']){
-        	$uploadConfig['accept_file_types'] = '/((\.(?!' . implode('|', $config['ext_blacklist']) . '$))|(^[^.]+$))/i';
+        $uploadConfig['accept_file_types'] = '/\.(?!'.implode('|', $config['ext_blacklist']).'$)/i';
+
+        if ($config['files_without_extension']) {
+            $uploadConfig['accept_file_types'] = '/((\.(?!'.implode('|', $config['ext_blacklist']).'$))|(^[^.]+$))/i';
         }
     }
 
@@ -165,28 +167,33 @@ try {
         if (!is_dir($config['ftp_temp_folder'])) {
             mkdir($config['ftp_temp_folder'], $config['folderPermission'], true);
         }
-        if (!is_dir($config['ftp_temp_folder'] . "thumbs")) {
-            mkdir($config['ftp_temp_folder'] . "thumbs", $config['folderPermission'], true);
+
+        if (!is_dir($config['ftp_temp_folder'].'thumbs')) {
+            mkdir($config['ftp_temp_folder'].'thumbs', $config['folderPermission'], true);
         }
+
         $uploadConfig['upload_dir'] = $config['ftp_temp_folder'];
     }
 
+    //print_r($_FILES);die();
     $upload_handler = new UploadHandler($uploadConfig, true, $messages);
 } catch (Exception $e) {
-    $return = array();
+    $return = [];
+
     if ($_FILES['files']) {
         foreach ($_FILES['files']['name'] as $i => $name) {
-            $return[] = array(
+            $return[] = [
                 'name' => $name,
                 'error' => $e->getMessage(),
                 'size' => $_FILES['files']['size'][$i],
-                'type' => $_FILES['files']['type'][$i]
-            );
+                'type' => $_FILES['files']['type'][$i],
+            ];
         }
 
-        echo json_encode(array("files" => $return));
+        echo json_encode(['files' => $return]);
+
         return;
     }
 
-    echo json_encode(array("error" =>$e->getMessage()));
+    echo json_encode(['error' => $e->getMessage()]);
 }
