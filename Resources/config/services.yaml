@@ -38,6 +38,9 @@ services:
         public: true
 
     NyroDev\UtilityBundle\Services\MemberService:
+        arguments:
+            - '@security.token_storage'
+            - '@security.authorization_checker'
         calls:
             - [setContainerInterface, ['@service_container']]
         public: true
@@ -60,6 +63,9 @@ services:
         public: true
 
     NyroDev\UtilityBundle\Services\FormService:
+        arguments:
+            - '@form.factory'
+            - '@validator'
         calls:
             - [setContainerInterface, ['@service_container']]
             - [setAssetsPackages, ['@assets.packages']]

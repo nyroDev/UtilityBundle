@@ -18,8 +18,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 abstract class AbstractAdminController extends AbstractController
 {
-    const ADD = 'add';
-    const EDIT = 'edit';
+    public const ADD = 'add';
+    public const EDIT = 'edit';
 
     protected function createList(Request $request, $repository, $route, array $routePrm = [], $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false, array $filterDefaults = [])
     {
@@ -37,7 +37,7 @@ abstract class AbstractAdminController extends AbstractController
         $total = $tmpList['total'];
 
         $canExport = $exportConfig && is_array($exportConfig) && isset($exportConfig['fields']);
-        if ($canExport && $request->query->get('export')) {
+        if ($canExport && $request->query->all('export')) {
             // Start XLS export
             $this->get(NyrodevService::class)->increasePhpLimits();
             $phpExcel = new \PHPExcel();
@@ -150,14 +150,14 @@ abstract class AbstractAdminController extends AbstractController
             ]);
         }
 
-        $page = $request->query->get('page', $request->getSession()->get('admin_list_'.$route.'_page', 1));
+        $page = $request->query->all('page', $request->getSession()->get('admin_list_'.$route.'_page', 1));
         if (!$page) {
             $page = 1;
         }
         $request->getSession()->set('admin_list_'.$route.'_page', $page);
-        $sort = $request->query->get('sort', $request->getSession()->get('admin_list_'.$route.'_sort', $defaultSort));
+        $sort = $request->query->all('sort', $request->getSession()->get('admin_list_'.$route.'_sort', $defaultSort));
         $request->getSession()->set('admin_list_'.$route.'_sort', $sort);
-        $order = $request->query->get('order', $request->getSession()->get('admin_list_'.$route.'_order', $defaultOrder));
+        $order = $request->query->all('order', $request->getSession()->get('admin_list_'.$route.'_order', $defaultOrder));
         $request->getSession()->set('admin_list_'.$route.'_order', $order);
 
         $filterFilled = false;
@@ -169,7 +169,7 @@ abstract class AbstractAdminController extends AbstractController
             } elseif ($request->query->has($filter->getName())) {
                 $filter->handleRequest($request);
                 $this->get(FormFilterService::class)->saveSession($filter, $route);
-                $tmp = $request->query->get($filter->getName());
+                $tmp = $request->query->all($filter->getName());
                 if (isset($tmp['submit'])) {
                     $page = 1;
                 }
@@ -215,7 +215,7 @@ abstract class AbstractAdminController extends AbstractController
             $groups = ['Default', $action];
         }
 
-        $form = $this->get('form.factory')->createNamedBuilder($formName ? $formName : 'form', FormType::class, $row, array_merge($moreFormOptions, [
+        $form = $this->get('nyrodev_form')->getFormFactory()->createNamedBuilder($formName ? $formName : 'form', FormType::class, $row, array_merge($moreFormOptions, [
             'validation_groups' => $groups,
         ]));
 
@@ -224,7 +224,7 @@ abstract class AbstractAdminController extends AbstractController
             $form->get('id')->setData($row->getId());
         }
 
-        $classMetadata = $this->get('validator')->getMetadataFor(get_class($row));
+        $classMetadata = $this->get('nyrodev_form')->getValidator()->getMetadataFor(get_class($row));
 
         foreach ($fields as $f) {
             $type = null;

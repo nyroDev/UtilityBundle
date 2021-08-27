@@ -31,7 +31,7 @@ class NyrodevService extends AbstractService
      */
     public function onKernelRequest(RequestEvent $event)
     {
-        if ($event->isMasterRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
+        if ($event->isMainRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
             $locale = $event->getRequest()->getLocale();
 
             if (0 === strpos($locale, 'change_')) {
