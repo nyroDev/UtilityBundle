@@ -37,7 +37,7 @@ abstract class AbstractAdminController extends AbstractController
         $total = $tmpList['total'];
 
         $canExport = $exportConfig && is_array($exportConfig) && isset($exportConfig['fields']);
-        if ($canExport && $request->query->all('export')) {
+        if ($canExport && $request->query->get('export')) {
             // Start XLS export
             $this->get(NyrodevService::class)->increasePhpLimits();
             $phpExcel = new \PHPExcel();
@@ -150,14 +150,14 @@ abstract class AbstractAdminController extends AbstractController
             ]);
         }
 
-        $page = $request->query->all('page', $request->getSession()->get('admin_list_'.$route.'_page', 1));
+        $page = $request->query->get('page', $request->getSession()->get('admin_list_'.$route.'_page', 1));
         if (!$page) {
             $page = 1;
         }
         $request->getSession()->set('admin_list_'.$route.'_page', $page);
-        $sort = $request->query->all('sort', $request->getSession()->get('admin_list_'.$route.'_sort', $defaultSort));
+        $sort = $request->query->get('sort', $request->getSession()->get('admin_list_'.$route.'_sort', $defaultSort));
         $request->getSession()->set('admin_list_'.$route.'_sort', $sort);
-        $order = $request->query->all('order', $request->getSession()->get('admin_list_'.$route.'_order', $defaultOrder));
+        $order = $request->query->get('order', $request->getSession()->get('admin_list_'.$route.'_order', $defaultOrder));
         $request->getSession()->set('admin_list_'.$route.'_order', $order);
 
         $filterFilled = false;
