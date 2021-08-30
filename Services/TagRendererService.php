@@ -70,7 +70,7 @@ class TagRendererService extends AbstractService
         return $linkFiles;
     }
 
-    private function getAssetPath(string $assetPath, string $packageName = null): string
+    public function getAssetPath(string $assetPath, string $packageName = null): string
     {
         if (null === $this->getAssetsPackages()) {
             throw new \Exception('To render the script or link tags, run "composer require symfony/asset".');

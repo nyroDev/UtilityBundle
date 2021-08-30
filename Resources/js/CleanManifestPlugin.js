@@ -18,10 +18,9 @@ class CleanManifestPlugin {
             previousManifest = false;
         }
 
-        compiler.plugin('afterEmit', compilation => {
-            if (compiler.outputFileSystem.constructor.name === 'NodeOutputFileSystem' && compilation.assets['manifest.json']) {
-
-                const newManifest = JSON.parse(compilation.assets['manifest.json'].source());
+        compiler.hooks.afterEmit.tap('CleanManifestPlugin', (compilation) => {
+            if (compilation.assets['manifest.json']) {
+                const newManifest = JSON.parse(fs.readFileSync(outputPath + 'manifest.json', 'utf8'));
 
                 if (previousManifest) {
                     Object.keys(previousManifest).forEach((key) => {
@@ -45,11 +44,9 @@ class CleanManifestPlugin {
                 previousManifest = newManifest;
                 isFirst = false;
             }
-
             return true;
         });
     }
-
 }
 
 module.exports = CleanManifestPlugin;
