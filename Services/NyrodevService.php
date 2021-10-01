@@ -121,7 +121,24 @@ class NyrodevService extends AbstractService
             $baseUrl = '/'.$baseUrl;
         }
 
-        return $router->getContext()->getScheme().'://'.$router->getContext()->getHost().$baseUrl.$path;
+        $host = $router->getContext()->getHost();
+        $port = null;
+        if ($router->getContext()->isSecure()) {
+            $port = $router->getContext()->getHttpsPort();
+            if ('443' == $port) {
+                $port = null;
+            }
+        } else {
+            $port = $router->getContext()->getHttpPort();
+            if ('80' == $port) {
+                $port = null;
+            }
+        }
+        if ($port) {
+            $host .= ':'.$port;
+        }
+
+        return $router->getContext()->getScheme().'://'.$host.$baseUrl.$path;
     }
 
     /**
