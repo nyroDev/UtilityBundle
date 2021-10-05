@@ -131,7 +131,7 @@ class NyrodevService extends AbstractService
 
         $host = $router->getContext()->getHost();
         $port = null;
-        if ($router->getContext()->isSecure()) {
+        if ($router->getContext()->getScheme() === 'https') {
             $port = $router->getContext()->getHttpsPort();
             if ('443' == $port) {
                 $port = null;
