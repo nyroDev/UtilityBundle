@@ -34,7 +34,7 @@ jQuery(function($) {
 					var cancelAll = $('<a href="#" id="pluploadCancelAll'+myPluploadNb+'" class="pluploadCancelAll">'+curOpts.texts.cancelAll+'</a>').appendTo(cont).hide();
                 }
 
-				var list = $('<div id="pluploadList'+myPluploadNb+'" class="pluploadList" />').appendTo(cont);
+				var list = $('<div id="pluploadList'+myPluploadNb+'" class="pluploadList" />').appendTo(opts.listContainer ? $(opts.listContainer) : cont);
 
 				if (!curOpts.file_data_name) {
 					curOpts.file_data_name = me.attr('name');
