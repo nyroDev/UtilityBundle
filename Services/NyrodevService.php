@@ -374,7 +374,9 @@ class NyrodevService extends AbstractService
      */
     public function getExt($file)
     {
-        return pathinfo($file, PATHINFO_EXTENSION);
+        $tmp = explode('?', pathinfo($file, PATHINFO_EXTENSION));
+
+        return $tmp[0];
     }
 
     protected $uniqFileNames = [];
