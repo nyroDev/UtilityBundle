@@ -131,7 +131,7 @@ class NyrodevService extends AbstractService
 
         $host = $router->getContext()->getHost();
         $port = null;
-        if ($router->getContext()->getScheme() === 'https') {
+        if ('https' === $router->getContext()->getScheme()) {
             $port = $router->getContext()->getHttpsPort();
             if ('443' == $port) {
                 $port = null;
@@ -382,7 +382,9 @@ class NyrodevService extends AbstractService
      */
     public function getExt($file)
     {
-        return pathinfo($file, PATHINFO_EXTENSION);
+        $tmp = explode('?', pathinfo($file, PATHINFO_EXTENSION));
+
+        return $tmp[0];
     }
 
     protected $uniqFileNames = [];
