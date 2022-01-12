@@ -15,18 +15,6 @@ services:
         alias: NyroDev\UtilityBundle\Services\NyrodevService
         public: true
 
-    NyroDev\UtilityBundle\Services\TagRendererService:
-        arguments: ['@webpack_encore.entrypoint_lookup_collection']
-        calls:
-            - [setContainerInterface, ['@service_container']]
-            - [setAssetsPackages, ['@assets.packages']]
-        public: true
-        tags:
-          - { name: templating.helper, alias: nyrodev_tagRender }
-    nyrodev_tagRender:
-        alias: NyroDev\UtilityBundle\Services\TagRendererService
-        public: true
-
     NyroDev\UtilityBundle\Services\ShareService:
         calls:
             - [setContainerInterface, ['@service_container']]

@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Controller\Traits;
 
+use NyroDev\PhpTemplateBundle\Helper\TagRendererHelper;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\EmbedService;
 use NyroDev\UtilityBundle\Services\FormFilterService;
@@ -10,7 +11,6 @@ use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\ShareService;
-use NyroDev\UtilityBundle\Services\TagRendererService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -41,8 +41,8 @@ trait SubscribedServiceTrait
             FormService::class => '?'.FormService::class,
             'nyrodev_formFilter' => '?'.FormFilterService::class,
             FormFilterService::class => '?'.FormFilterService::class,
-            'nyrodev_tagRender' => '?'.TagRendererService::class,
-            TagRendererService::class => '?'.TagRendererService::class,
+            'nyrodev_tagRenderer' => '?'.TagRendererHelper::class,
+            TagRendererHelper::class => '?'.TagRendererHelper::class,
             'nyrodev_share' => '?'.ShareService::class,
             ShareService::class => '?'.ShareService::class,
             'nyrodev_db' => '?'.DbAbstractService::class,
