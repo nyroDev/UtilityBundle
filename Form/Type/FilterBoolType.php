@@ -22,8 +22,8 @@ class FilterBoolType extends FilterType
             ->add('value', ChoiceType::class, array_merge([
                     'required' => false,
                     'choices' => [
-                        'Yes' => '1',
-                        'No' => 'no',
+                        $this->trans('admin.misc.yes') => '1',
+                        $this->trans('admin.misc.no') => 'no',
                     ],
                 ], $options['valueOptions']));
     }
