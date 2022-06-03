@@ -7,14 +7,15 @@
     "authors": [
         {
             "name": "Cédric Nirousset",
-            "email": "cedric@nyrodev.com",
-            "homepage": "http://nyrodev.com",
+            "email": "cedric@nyro.dev",
+            "homepage": "https://www.nyro.dev",
             "role": "Developer"
         }
     ],
     "require": {
-        "symfony/framework-bundle": "^5",
-        "symfony/templating": "^5"
+        "nyrodev/php-template-bundle": "dev-master",
+        "symfony/framework-bundle": "^6",
+        "symfony/templating": "^6"
     },
     "suggest": {
         "becklyn/ordered-form-bundle": "Used for form positionning",
