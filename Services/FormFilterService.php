@@ -34,7 +34,7 @@ class FormFilterService extends AbstractService
     public function fillFromSession(Form $form, $route)
     {
         $filled = false;
-        $data = $this->get('session')->get('filter_'.$route);
+        $data = $this->get('request_stack')->getSession()->get('filter_'.$route);
         if (is_array($data) && count($data)) {
             $form->submit($data);
             $filled = true;
@@ -58,7 +58,7 @@ class FormFilterService extends AbstractService
                 }
             }
         }
-        $this->get('session')->set('filter_'.$route, $data);
+        $this->get('request_stack')->getSession()->set('filter_'.$route, $data);
     }
 
     public function prepareValueForSession($value, Form $form)
@@ -87,22 +87,22 @@ class FormFilterService extends AbstractService
 
     public function getSessionPage($route)
     {
-        return $this->get('session')->get('filter_'.$route.'_page', 1);
+        return $this->get('request_stack')->getSession()->get('filter_'.$route.'_page', 1);
     }
 
     public function saveSessionPage($route, $page)
     {
-        $this->get('session')->set('filter_'.$route.'_page', $page);
+        $this->get('request_stack')->getSession()->set('filter_'.$route.'_page', $page);
     }
 
     public function getSessionSortOrder($route, $defaults = [])
     {
-        return $this->get('session')->get('filter_'.$route.'_sortOrder', $defaults);
+        return $this->get('request_stack')->getSession()->get('filter_'.$route.'_sortOrder', $defaults);
     }
 
     public function saveSessionSortOrder($route, $sort, $order)
     {
-        $this->get('session')->set('filter_'.$route.'_sortOrder', [$sort, $order]);
+        $this->get('request_stack')->getSession()->set('filter_'.$route.'_sortOrder', [$sort, $order]);
     }
 
     /**

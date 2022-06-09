@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait SubscribedServiceTrait
 {
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
             'translator' => '?'.TranslatorInterface::class,
@@ -50,7 +50,7 @@ trait SubscribedServiceTrait
         ]);
     }
 
-    protected function getParameter(string $name, $default = null)
+    protected function getParameter(string $name, $default = null): array|bool|string|int|float|\UnitEnum|null
     {
         if (!$this->has(NyrodevService::class)) {
             throw new ServiceNotFoundException(NyrodevService::class, null, null, [], sprintf('The "%s::getParameter()" method is missing a parameter bag to work properly. Did you forget to register your controller as a service subscriber? This can be fixed either by using autoconfiguration or by manually wiring a "parameter_bag" in the service locator passed to the controller.', \get_class($this)));

@@ -3,7 +3,8 @@
 namespace NyroDev\UtilityBundle\Services\Traits;
 
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 trait ContainerInterfaceServiceableTrait
 {
@@ -15,8 +16,10 @@ trait ContainerInterfaceServiceableTrait
     /**
      * @Required
      */
-    public function setContainerInterface(ContainerInterface $container)
-    {
+    public function setContainerInterface(
+        #[Autowire('@service_container')]
+        ContainerInterface $container
+    ) {
         $this->container = $container;
     }
 

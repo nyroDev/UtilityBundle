@@ -3,18 +3,14 @@
 namespace NyroDev\UtilityBundle\Services;
 
 use NyroDev\UtilityBundle\Services\Traits\ContainerInterfaceServiceableTrait;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Templating\Helper\HelperInterface;
 
 abstract class AbstractService implements HelperInterface
 {
     use ContainerInterfaceServiceableTrait;
 
-    /**
-     * Shortcut to return the request service.
-     *
-     * @return \Symfony\Component\HttpFoundation\Request
-     */
-    public function getRequest()
+    public function getRequest(): Request
     {
         return $this->container->get('request_stack')->getCurrentRequest();
     }
@@ -45,7 +41,7 @@ abstract class AbstractService implements HelperInterface
     {
     }
 
-    public function getCharset()
+    public function getCharset(): string
     {
         return 'utf-8';
     }

@@ -2,11 +2,22 @@
 
 namespace NyroDev\UtilityBundle\Controller;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SrcAbstractController;
 
-abstract class AbstractController extends SrcAbstractController
+abstract class AbstractController extends SrcAbstractController implements ContainerInterface
 {
     use Traits\SubscribedServiceTrait;
+
+    public function get(string $id)
+    {
+        return $this->container->get($id);
+    }
+
+    public function has(string $id): bool
+    {
+        return $this->container->has($id);
+    }
 
     /**
      * Get the translation for a given keyword.
