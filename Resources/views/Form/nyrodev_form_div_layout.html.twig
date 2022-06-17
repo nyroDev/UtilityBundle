@@ -19,6 +19,19 @@
     </div>
 {%- endblock button_row -%}
 
+{%- block collection_widget -%}
+    {% if prototype is defined and not prototype.rendered %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
+    {% endif %}
+    {% if allow_add is defined and allow_add %}
+        {%- set attr = attr|merge({'data-allow-add': 'admin.misc.collectionAdd'|trans }) -%}
+    {% endif %}
+    {% if allow_delete is defined and allow_delete %}
+        {%- set attr = attr|merge({'data-allow-delete': 'admin.misc.collectionDelete'|trans }) -%}
+    {% endif %}
+    {{- block('form_widget') -}}
+{%- endblock collection_widget -%}
+
 {%- block choice_widget -%}
     {% if expanded %}
         {{- block('choice_widget_expanded') -}}

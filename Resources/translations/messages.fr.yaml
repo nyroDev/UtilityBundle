@@ -39,6 +39,8 @@ admin:
     to: et
     yes: Oui
     no: Non
+    collectionAdd: Ajouter
+    collectionDelete: Supprimer
   pager:
     next: Suivant
     prev: Précédent

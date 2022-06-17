@@ -39,6 +39,8 @@ admin:
     to: To
     yes: Yes
     no: No
+    collectionAdd: Add
+    collectionDelete: Delete
   pager:
     next: Next
     prev: Previous
