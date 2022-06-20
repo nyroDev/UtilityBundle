@@ -3,6 +3,7 @@
 namespace NyroDev\UtilityBundle\Model;
 
 use NyroDev\UtilityBundle\Services\ImageService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -23,11 +24,11 @@ abstract class AbstractUploadable
     const FILEPATH_PREUPLOAD = 'preupload';
 
     /**
-     * @var \NyroDev\UtilityBundle\Services\NyrodevService
+     * @var NyrodevService
      */
     protected $service;
 
-    public function setService(\NyroDev\UtilityBundle\Services\NyrodevService $service)
+    public function setService(NyrodevService $service = null)
     {
         $this->service = $service;
     }
