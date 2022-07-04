@@ -24,10 +24,10 @@
         {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
     {% endif %}
     {% if allow_add is defined and allow_add %}
-        {%- set attr = attr|merge({'data-allow-add': 'admin.misc.collectionAdd'|trans }) -%}
+        {%- set attr = attr|merge({'data-allow-add': (allow_add is same as(true) ? 'admin.misc.collectionAdd'|trans : allow_add) }) -%}
     {% endif %}
     {% if allow_delete is defined and allow_delete %}
-        {%- set attr = attr|merge({'data-allow-delete': 'admin.misc.collectionDelete'|trans }) -%}
+        {%- set attr = attr|merge({'data-allow-delete': (allow_delete is same as(true) ? 'admin.misc.collectionDelete'|trans : allow_delete) }) -%}
     {% endif %}
     {{- block('form_widget') -}}
 {%- endblock collection_widget -%}

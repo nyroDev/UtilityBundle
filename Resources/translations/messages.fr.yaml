@@ -41,6 +41,7 @@ admin:
     no: Non
     collectionAdd: Ajouter
     collectionDelete: Supprimer
+    collectionDeleteConfirm: "Êtes-vous sûr de vouloir supprimer cet élément ?"
   pager:
     next: Suivant
     prev: Précédent
