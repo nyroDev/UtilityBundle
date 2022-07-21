@@ -1,7 +1,14 @@
 (function () {
-    const dataPrototypeds = document.querySelectorAll('[data-prototype][data-allow-add]');
-    if (dataPrototypeds.length) {
-        const divTpl = document.createElement('div'),
+    let divTpl,
+        addToCollection,
+        addDeleteLink;
+
+    const dataPrototypeds = document.querySelectorAll('[data-prototype][data-allow-add]'),
+        initDataPrototypeds = () => {
+            if (addToCollection) {
+                return;
+            }
+            divTpl = document.createElement('div');
             addDeleteLink = (dataPrototyped, collectionEntry) => {
                 if (!dataPrototyped.dataset.allowDelete) {
                     return;
@@ -16,7 +23,7 @@
                 }
 
                 collectionEntry.appendChild(spanDel);
-            },
+            };
             addToCollection = (dataPrototyped, divAdd) => {
                 divTpl.innerHTML = dataPrototyped.dataset.prototype
                     .replace(/__name__/g, dataPrototyped.dataset.index);
@@ -30,7 +37,9 @@
 
                 dataPrototyped.dataset.index++;
             };
-        dataPrototypeds.forEach(dataPrototyped => {
+        },
+        initDataPrototyped = (dataPrototyped) => {
+            initDataPrototypeds();
             const divAdd = document.createElement('div'),
                 entries = dataPrototyped.querySelectorAll('.form_row_collection_entry'),
                 allowDelete = dataPrototyped.dataset.allowDelete;
@@ -70,6 +79,26 @@
             }
 
             dataPrototyped.appendChild(divAdd);
+        };
+
+    if (dataPrototypeds.length) {
+        dataPrototypeds.forEach(dataPrototyped => {
+            initDataPrototyped(dataPrototyped);
         });
     }
+
+    document.body.addEventListener('initDataPrototyped', (e) => {
+        initDataPrototyped(e.target);
+    });
+
+    document.body.addEventListener('searchDataPrototyped', (e) => {
+        console.log(e);
+        const dataPrototypeds = e.target.querySelectorAll('[data-prototype][data-allow-add]');
+
+        if (dataPrototypeds.length) {
+            dataPrototypeds.forEach(dataPrototyped => {
+                initDataPrototyped(dataPrototyped);
+            });
+        }
+    });
 })();
