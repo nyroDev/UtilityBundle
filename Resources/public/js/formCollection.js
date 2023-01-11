@@ -9,6 +9,23 @@
                 return;
             }
             divTpl = document.createElement('div');
+            addToCollection = (dataPrototyped, divAdd) => {
+                divTpl.innerHTML = dataPrototyped.dataset.prototype
+                    .replace(/__name__/g, dataPrototyped.dataset.index);
+
+                while (divTpl.lastElementChild) {
+                    if (divTpl.lastElementChild.matches('.form_row_collection_entry')) {
+                        addDeleteLink(dataPrototyped, divTpl.lastElementChild);
+                    }
+                    divAdd.insertAdjacentElement('beforebegin', divTpl.lastElementChild);
+                }
+
+                dataPrototyped.dataset.index++;
+                dataPrototyped.dispatchEvent(new Event('formCollectionAdd', {
+                    bubbles: true,
+                    cancelable: true
+                }));
+            };
             addDeleteLink = (dataPrototyped, collectionEntry) => {
                 if (!dataPrototyped.dataset.allowDelete) {
                     return;
@@ -23,19 +40,6 @@
                 }
 
                 collectionEntry.appendChild(spanDel);
-            };
-            addToCollection = (dataPrototyped, divAdd) => {
-                divTpl.innerHTML = dataPrototyped.dataset.prototype
-                    .replace(/__name__/g, dataPrototyped.dataset.index);
-
-                while (divTpl.lastElementChild) {
-                    if (divTpl.lastElementChild.matches('.form_row_collection_entry')) {
-                        addDeleteLink(dataPrototyped, divTpl.lastElementChild);
-                    }
-                    divAdd.insertAdjacentElement('beforebegin', divTpl.lastElementChild);
-                }
-
-                dataPrototyped.dataset.index++;
             };
         },
         initDataPrototyped = (dataPrototyped) => {
@@ -67,6 +71,10 @@
                         return;
                     }
                     delBtn.closest('.form_row_collection_entry').remove();
+                    dataPrototyped.dispatchEvent(new Event('formCollectionDelete', {
+                        bubbles: true,
+                        cancelable: true
+                    }));
                     return;
                 }
             });
@@ -87,12 +95,11 @@
         });
     }
 
-    document.body.addEventListener('initDataPrototyped', (e) => {
+    document.body.addEventListener('formCollectionInitDataPrototyped', (e) => {
         initDataPrototyped(e.target);
     });
 
-    document.body.addEventListener('searchDataPrototyped', (e) => {
-        console.log(e);
+    document.body.addEventListener('formCollectionSearchDataPrototyped', (e) => {
         const dataPrototypeds = e.target.querySelectorAll('[data-prototype][data-allow-add]');
 
         if (dataPrototypeds.length) {
