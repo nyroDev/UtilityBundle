@@ -44,6 +44,13 @@
         },
         initDataPrototyped = (dataPrototyped) => {
             initDataPrototypeds();
+
+            if (dataPrototyped.dataset.formCollectionInited) {
+                return;
+            }
+
+            dataPrototyped.dataset.formCollectionInited = true;
+
             const divAdd = document.createElement('div'),
                 entries = dataPrototyped.querySelectorAll('.form_row_collection_entry'),
                 allowDelete = dataPrototyped.dataset.allowDelete;
