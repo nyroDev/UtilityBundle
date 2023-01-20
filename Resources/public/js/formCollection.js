@@ -21,9 +21,9 @@
                 }
 
                 dataPrototyped.dataset.index++;
-                dataPrototyped.dispatchEvent(new Event('formCollectionAdd', {
+                dataPrototyped.dispatchEvent(new CustomEvent('formCollectionAdd', {
                     bubbles: true,
-                    cancelable: true
+                    cancelable: true,
                 }));
             };
             addDeleteLink = (dataPrototyped, collectionEntry) => {
@@ -78,9 +78,9 @@
                         return;
                     }
                     delBtn.closest('.form_row_collection_entry').remove();
-                    dataPrototyped.dispatchEvent(new Event('formCollectionDelete', {
+                    dataPrototyped.dispatchEvent(new CustomEvent('formCollectionDelete', {
                         bubbles: true,
-                        cancelable: true
+                        cancelable: true,
                     }));
                     return;
                 }
