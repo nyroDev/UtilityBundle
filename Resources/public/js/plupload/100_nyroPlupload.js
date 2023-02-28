@@ -70,7 +70,9 @@ jQuery(function($) {
 					if (opts.showCancelAll) {
 						cancelAll.show();
                     }
-					setTimeout(function() {uploader.start();}, 1);
+					if (!curOpts.noautostart) {
+						setTimeout(function() {uploader.start();}, 1);
+					}
 				});
 				if (opts.showCancelAll) {
 					cancelAll.on('click', function(e) {
