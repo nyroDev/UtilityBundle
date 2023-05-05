@@ -58,10 +58,15 @@ class OrmQueryBuilder extends AbstractQueryBuilder
     {
         $queryBuilder = $this->getNewQueryBuilder(true);
 
+        $fieldIdentifier = 'id';
+        if (method_exists($this->or, 'getFieldIdentifier')) {
+            $fieldIdentifier = $this->or->getFieldIdentifier();
+        }
+
         return $this->or
             ->createQueryBuilder('cpt')
-                ->select('COUNT(cpt.id)')
-                ->andWhere('cpt.id = ANY('.$queryBuilder->getDQL().')')
+                ->select('COUNT(cpt.'.$fieldIdentifier.')')
+                ->andWhere('cpt.'.$fieldIdentifier.' = ANY('.$queryBuilder->getDQL().')')
                 ->setParameters($queryBuilder->getParameters())
                 ->getQuery()
                 ->getSingleScalarResult();
