@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Model;
 
+use Exception;
 use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\Filesystem\Filesystem;
@@ -10,18 +11,18 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 abstract class AbstractUploadable
 {
-    const CONFIG_FIELD = 'field';
-    const CONFIG_DIR = 'dir';
-    const CONFIG_ROOTDIR = 'rootDir';
+    public const CONFIG_FIELD = 'field';
+    public const CONFIG_DIR = 'dir';
+    public const CONFIG_ROOTDIR = 'rootDir';
 
-    const PATH_ORIGINAL = 'original';
-    const PATH_ABSOLUTE = 'absolute';
-    const PATH_WEB = 'web';
+    public const PATH_ORIGINAL = 'original';
+    public const PATH_ABSOLUTE = 'absolute';
+    public const PATH_WEB = 'web';
 
-    const FILEPATH_REMOVE = 'remove';
-    const FILEPATH_DIRECT = 'direct';
-    const FILEPATH_UPLOAD = 'upload';
-    const FILEPATH_PREUPLOAD = 'preupload';
+    public const FILEPATH_REMOVE = 'remove';
+    public const FILEPATH_DIRECT = 'direct';
+    public const FILEPATH_UPLOAD = 'upload';
+    public const FILEPATH_PREUPLOAD = 'preupload';
 
     protected ?NyrodevService $service;
 
@@ -198,7 +199,7 @@ abstract class AbstractUploadable
                         $fs->mkdir(dirname($fullPath));
                         try {
                             $fs->rename($file->getPathname(), $fullPath);
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             // IN NFS rename, it could fix some trouble doing a catch here
                             if (!$fs->exists($fullPath)) {
                                 throw $e;

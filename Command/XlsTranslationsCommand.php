@@ -3,6 +3,8 @@
 namespace NyroDev\UtilityBundle\Command;
 
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use PHPExcel;
+use PHPExcel_IOFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -88,7 +90,7 @@ class XlsTranslationsCommand extends Command
             ], $locales);
 
             if (!file_exists($dest)) {
-                $phpExcel = new \PHPExcel();
+                $phpExcel = new PHPExcel();
                 $title = $creator = 'Translations';
                 $phpExcel->getProperties()->setCreator($creator)
                                 ->setLastModifiedBy($creator)
@@ -107,8 +109,8 @@ class XlsTranslationsCommand extends Command
                 }
                 ++$row;
             } else {
-                $fileType = \PHPExcel_IOFactory::identify($dest);
-                $objReader = \PHPExcel_IOFactory::createReader($fileType);
+                $fileType = PHPExcel_IOFactory::identify($dest);
+                $objReader = PHPExcel_IOFactory::createReader($fileType);
 
                 $phpExcel = $objReader->load($dest);
                 $sheet = $phpExcel->getActiveSheet();
@@ -170,7 +172,7 @@ class XlsTranslationsCommand extends Command
 
             $sheet->calculateColumnWidths();
 
-            $objWriter = \PHPExcel_IOFactory::createWriter($phpExcel, 'Excel5');
+            $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel5');
             $objWriter->save($dest);
 
             $output->writeln('XLS file saved: '.$dest);

@@ -3,6 +3,8 @@
 namespace NyroDev\UtilityBundle\Command;
 
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use PhpExcel_Cell;
+use PHPExcel_IOFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,12 +50,12 @@ class DumpXlsTranslationsCommand extends Command
         $dir = $input->getArgument('dir');
 
         $output->writeln('Open XLS file');
-        $fileType = \PHPExcel_IOFactory::identify($file);
-        $objReader = \PHPExcel_IOFactory::createReader($fileType);
+        $fileType = PHPExcel_IOFactory::identify($file);
+        $objReader = PHPExcel_IOFactory::createReader($fileType);
 
         $phpExcel = $objReader->load($file);
         $sheet = $phpExcel->getActiveSheet();
-        $maxCol = \PhpExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn(1));
+        $maxCol = PhpExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn(1));
         $maxRow = $sheet->getHighestDataRow();
 
         $localesCols = [];

@@ -2,6 +2,9 @@
 
 namespace NyroDev\UtilityBundle\QueryBuilder;
 
+use DateTime;
+use MongoRegex;
+
 class MongodbQueryBuilder extends AbstractQueryBuilder
 {
     /**
@@ -127,15 +130,15 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
                 $object->field($field)->lte($value);
                 break;
             case self::OPERATOR_LIKE:
-                $object->field($field)->equals(new \MongoRegex('/'.preg_quote($value, '/').'/i'));
+                $object->field($field)->equals(new MongoRegex('/'.preg_quote($value, '/').'/i'));
                 break;
             case self::OPERATOR_CONTAINS:
-                $object->field($field)->equals(new \MongoRegex('/.*'.preg_quote($value, '/').'.*/i'));
+                $object->field($field)->equals(new MongoRegex('/.*'.preg_quote($value, '/').'.*/i'));
                 break;
             case self::OPERATOR_LIKEDATE:
-                $dateStart = new \DateTime($value);
+                $dateStart = new DateTime($value);
                 $dateStart->setTime(0, 0, 0);
-                $dateEnd = new \DateTime($value);
+                $dateEnd = new DateTime($value);
                 $dateEnd->setTime(23, 59, 59);
                 $object
                     ->field($field)->gte($dateStart)

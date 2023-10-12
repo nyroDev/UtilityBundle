@@ -6,7 +6,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class TinymceEvent extends Event
 {
-    const BROWSER_CONFIG = 'nyrodev.events.tinymce.browser.config';
+    public const BROWSER_CONFIG = 'nyrodev.events.tinymce.browser.config';
 
     protected $config;
 

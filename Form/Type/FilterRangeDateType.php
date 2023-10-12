@@ -18,13 +18,13 @@ class FilterRangeDateType extends FilterType
         }
         $builder
             ->add('value', FilterRangeSubType::class, array_merge([
-                    'type' => DateType::class,
-                    'isDate' => true,
-                    'required' => false,
-                    'attr' => [
-                        'class' => 'filterFormRange',
-                    ],
-                ], $options['valueOptions']));
+                'type' => DateType::class,
+                'isDate' => true,
+                'required' => false,
+                'attr' => [
+                    'class' => 'filterFormRange',
+                ],
+            ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)

@@ -25,8 +25,8 @@ class FilterIntType extends FilterType
                 ],
             ], $options['transformerOptions']))
             ->add('value', IntegerType::class, array_merge([
-                    'required' => false,
-                ], $options['valueOptions']));
+                'required' => false,
+            ], $options['valueOptions']));
     }
 
     public function getBlockPrefix()

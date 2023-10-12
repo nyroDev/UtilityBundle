@@ -2,6 +2,11 @@
 
 namespace NyroDev\UtilityBundle\Utility\Truncate;
 
+use DOMDocument;
+use DOMNode;
+use InvalidArgumentException;
+use Iterator;
+
 // From http://www.pjgalbraith.com/truncating-text-html-with-php/
 
 /**
@@ -20,7 +25,7 @@ namespace NyroDev\UtilityBundle\Utility\Truncate;
  * @author porneL http://pornel.net
  * @license Public Domain
  */
-final class DOMLettersIterator implements \Iterator
+final class DOMLettersIterator implements Iterator
 {
     private $start;
     private $current;
@@ -31,14 +36,14 @@ final class DOMLettersIterator implements \Iterator
     /**
      * expects DOMElement or DOMDocument (see DOMDocument::load and DOMDocument::loadHTML).
      */
-    public function __construct(\DOMNode $el)
+    public function __construct(DOMNode $el)
     {
-        if ($el instanceof \DOMDocument) {
+        if ($el instanceof DOMDocument) {
             $this->start = $el->documentElement;
         } elseif ($el instanceof \DOMElement) {
             $this->start = $el;
         } else {
-            throw new \InvalidArgumentException('Invalid arguments, expected DOMElement or DOMDocument');
+            throw new InvalidArgumentException('Invalid arguments, expected DOMElement or DOMDocument');
         }
     }
 

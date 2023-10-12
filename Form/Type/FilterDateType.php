@@ -3,6 +3,7 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use PDO;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,20 +26,20 @@ class FilterDateType extends FilterType
                 ],
             ], $options['transformerOptions']))
             ->add('value', DateType::class, array_merge([
-                    'required' => false,
-                ], $options['valueOptions']));
+                'required' => false,
+            ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         if (
-                isset($data['transformer']) && $data['transformer']
+            isset($data['transformer']) && $data['transformer']
             && isset($data['value']) && $data['value']
-            ) {
+        ) {
             $value = $this->applyValue($data['value']);
             $transformer = $data['transformer'];
 
-            $queryBuilder->addWhere($name, $transformer, $value, \PDO::PARAM_STR);
+            $queryBuilder->addWhere($name, $transformer, $value, PDO::PARAM_STR);
         }
 
         return $queryBuilder;

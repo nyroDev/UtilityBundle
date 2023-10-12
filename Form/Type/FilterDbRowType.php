@@ -5,6 +5,7 @@ namespace NyroDev\UtilityBundle\Form\Type;
 use Doctrine\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
+use RuntimeException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,7 +35,7 @@ class FilterDbRowType extends FilterType
                             if (is_array($v)) {
                                 $ret->addWhere($v[0], $v[1], isset($v[2]) ? $v[2] : null);
                             } else {
-                                throw new \RuntimeException('Direct where setting is not supported anymore.');
+                                throw new RuntimeException('Direct where setting is not supported anymore.');
                             }
                         } elseif (is_array($v)) {
                             $ret->addWhere($k, AbstractQueryBuilder::OPERATOR_IN, $v);

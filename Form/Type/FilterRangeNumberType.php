@@ -18,12 +18,12 @@ class FilterRangeNumberType extends FilterType
         }
         $builder
             ->add('value', FilterRangeSubType::class, array_merge([
-                    'type' => NumberType::class,
-                    'required' => false,
-                    'attr' => [
-                        'class' => 'filterFormRange',
-                    ],
-                ], $options['valueOptions']));
+                'type' => NumberType::class,
+                'required' => false,
+                'attr' => [
+                    'class' => 'filterFormRange',
+                ],
+            ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)

@@ -2,10 +2,18 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use DOMDocument;
+use DOMElement;
+use Exception;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
 use Symfony\Component\Filesystem\Filesystem;
+
+use function function_exists;
+
+use const IMG_FLIP_HORIZONTAL;
+use const IMG_FLIP_VERTICAL;
 
 class ImageService extends AbstractService
 {
@@ -18,7 +26,7 @@ class ImageService extends AbstractService
             $resizedPath = $this->_resize($file, $this->getConfig($configKey), $force);
             $tmp = explode('/public/', $resizedPath);
             $ret = $this->getAssetsPackages()->getUrl($tmp[1]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $ret = 'data:'.TransparentPixelResponse::CONTENT_TYPE.';base64,'.TransparentPixelResponse::IMAGE_CONTENT;
         }
 
@@ -103,7 +111,7 @@ class ImageService extends AbstractService
     public function _resize($file, array $config, $force = false, $dest = null)
     {
         if (!file_exists($file)) {
-            throw new \Exception('File '.$file.' not found');
+            throw new Exception('File '.$file.' not found');
         }
 
         $info = null;
@@ -111,8 +119,10 @@ class ImageService extends AbstractService
             $info = $this->getImageSize($file);
             $ext = 'jpg';
             switch ($info[2]) {
-                case IMAGETYPE_GIF:    $ext = 'gif'; break;
-                case IMAGETYPE_PNG:    $ext = 'png'; break;
+                case IMAGETYPE_GIF:    $ext = 'gif';
+                break;
+                case IMAGETYPE_PNG:    $ext = 'png';
+                break;
             }
             $cachePath = $this->getCachePath($file);
             $dest = $cachePath.$config['name'].'.'.$ext;
@@ -368,7 +378,7 @@ class ImageService extends AbstractService
                         $cache->save($cacheKey, $imageSize, 24 * 60 * 60); // cache for 24 hours
                     }
                 }
-            } catch (\Exception $ex) {
+            } catch (Exception $ex) {
             }
         } else {
             $imageSize = $cache->fetch($cacheKey);
@@ -398,7 +408,7 @@ class ImageService extends AbstractService
                 break;
         }
         if (!$src) {
-            throw new \Exception('Error while reading source image: '.$file, 500);
+            throw new Exception('Error while reading source image: '.$file, 500);
         }
 
         if ($isTransparent && $allowTransparent) {
@@ -406,25 +416,25 @@ class ImageService extends AbstractService
             imagesavealpha($src, true);
         }
 
-        if (\function_exists('exif_read_data')) {
+        if (function_exists('exif_read_data')) {
             $exif = @exif_read_data($file);
             if ($exif && is_array($exif) && isset($exif['Orientation'])) {
                 // The media is potentialy rotated, do the change
                 $flipDims = false;
                 switch ($exif['Orientation']) {
                     case 2:
-                        imageflip($src, \IMG_FLIP_HORIZONTAL);
+                        imageflip($src, IMG_FLIP_HORIZONTAL);
                         break;
                     case 3:
-                        imageflip($src, \IMG_FLIP_HORIZONTAL);
-                        imageflip($src, \IMG_FLIP_VERTICAL);
+                        imageflip($src, IMG_FLIP_HORIZONTAL);
+                        imageflip($src, IMG_FLIP_VERTICAL);
                         break;
                     case 4:
-                        imageflip($src, \IMG_FLIP_HORIZONTAL);
+                        imageflip($src, IMG_FLIP_HORIZONTAL);
                         $src = imagerotate($src, 180, 0);
                         break;
                     case 5:
-                        imageflip($src, \IMG_FLIP_VERTICAL);
+                        imageflip($src, IMG_FLIP_VERTICAL);
                         $src = imagerotate($src, -90, 0);
                         $flipDims = true;
                         break;
@@ -433,7 +443,7 @@ class ImageService extends AbstractService
                         $flipDims = true;
                         break;
                     case 7:
-                        imageflip($src, \IMG_FLIP_VERTICAL);
+                        imageflip($src, IMG_FLIP_VERTICAL);
                         $src = imagerotate($src, 90, 0);
                         $flipDims = true;
                         break;
@@ -498,7 +508,7 @@ class ImageService extends AbstractService
             for ($i = 0; $i < $nbWords; ++$i) {
                 $tmpString .= $words[$i].' ';
 
-                //check size of string
+                // check size of string
                 $dim = imagettfbbox($fontSize, 0, $font, trim($tmpString));
 
                 if ($dim[4] <= $maxWidth) {
@@ -589,8 +599,8 @@ class ImageService extends AbstractService
             return false;
         }
 
-        //an animated gif contains multiple "frames", with each frame having a
-        //header made up of:
+        // an animated gif contains multiple "frames", with each frame having a
+        // header made up of:
         // * a static 4-byte sequence (\x00\x21\xF9\x04)
         // * 4 variable bytes
         // * a static 2-byte sequence (\x00\x2C) (some variants may use \x00\x21 ?)
@@ -599,7 +609,7 @@ class ImageService extends AbstractService
         // at least 2 frame headers
         $count = 0;
         while (!feof($fh) && $count < 2) {
-            $chunk = fread($fh, 1024 * 100); //read 100kb at a time
+            $chunk = fread($fh, 1024 * 100); // read 100kb at a time
             $count += preg_match_all('#\x00\x21\xF9\x04.{4}\x00(\x2C|\x21)#s', $chunk, $matches);
         }
 
@@ -745,8 +755,8 @@ class ImageService extends AbstractService
         }
 
         $this->get(NyrodevService::class)->increasePhpLimits();
-        $dom = new \DOMDocument();
-        //$html = utf8_decode($html);
+        $dom = new DOMDocument();
+        // $html = utf8_decode($html);
         if ($addBody) {
             $html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>'.$html.'</body></html>';
         }
@@ -756,9 +766,9 @@ class ImageService extends AbstractService
         $this->resizeImagesInHtmlDom($body, $absolutizeUrl);
 
         return $addBody ? (str_replace(
-                ['<!DOCTYPE html>', '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">', '<head><meta charset="UTF-8"></head>', '<html><body>', '</body></html>'],
-                ['', '', '', '', ''],
-                $dom->saveHTML())) : $dom->saveHtml();
+            ['<!DOCTYPE html>', '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">', '<head><meta charset="UTF-8"></head>', '<html><body>', '</body></html>'],
+            ['', '', '', '', ''],
+            $dom->saveHTML())) : $dom->saveHtml();
     }
 
     /**
@@ -766,15 +776,15 @@ class ImageService extends AbstractService
      *
      * @param bool $absolutizeUrl Indicates if the src should be absolutized
      */
-    protected function resizeImagesInHtmlDom(\DOMElement $node, $absolutizeUrl = false)
+    protected function resizeImagesInHtmlDom(DOMElement $node, $absolutizeUrl = false)
     {
         if (
-                'img' == strtolower($node->tagName) &&
-                (
-                    ($node->hasAttribute('width') && false === strpos($node->getAttribute('width'), '%')) ||
-                    ($node->hasAttribute('height') && false === strpos($node->getAttribute('height'), '%'))
-                ) &&
-                $node->hasAttribute('src') && 0 !== strpos($node->getAttribute('src'), 'http')) {
+            'img' == strtolower($node->tagName) &&
+            (
+                ($node->hasAttribute('width') && false === strpos($node->getAttribute('width'), '%')) ||
+                ($node->hasAttribute('height') && false === strpos($node->getAttribute('height'), '%'))
+            ) &&
+            $node->hasAttribute('src') && 0 !== strpos($node->getAttribute('src'), 'http')) {
             // We have everything to resize the imagen let's dot it
             $w = $node->hasAttribute('width') ? $node->getAttribute('width') : null;
             $h = $node->hasAttribute('height') ? $node->getAttribute('height') : null;
@@ -806,7 +816,7 @@ class ImageService extends AbstractService
             $node->setAttribute('href', $this->get(NyrodevService::class)->getFullUrl($node->getAttribute('href')));
         }
         foreach ($node->childNodes as $n) {
-            if ($n instanceof \DOMElement) {
+            if ($n instanceof DOMElement) {
                 $this->resizeImagesInHtmlDom($n, $absolutizeUrl);
             }
         }

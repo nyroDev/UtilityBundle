@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Form\Extension;
 
+use Exception;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -38,7 +39,7 @@ class FileTypeExtension extends AbstractTypeExtension
         if ($options['currentFile'] || $data instanceof AbstractUploadable) {
             try {
                 $currentFile = isset($options['currentFile']) && $options['currentFile'] ? $options['currentFile'] : $data->getWebPath($form->getName());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // In some cases, getWebPath might throw an exception
                 $currentFile = null;
             }

@@ -2,7 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use DateTime;
+use DateTimeZone;
 use Doctrine\Persistence\ObjectRepository;
+use Exception;
 use Html2Text\Html2Text;
 use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Utility\Pager;
@@ -516,7 +519,7 @@ class NyrodevService extends AbstractService
                     }
                     $redirect = count($newArgs) != count($args);
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $redirect = false;
             }
             if ($redirect) {
@@ -535,7 +538,7 @@ class NyrodevService extends AbstractService
      *
      * @return string
      */
-    public function formatDate(\DateTime $datetime, $format, $useOffset = null)
+    public function formatDate(DateTime $datetime, $format, $useOffset = null)
     {
         if (is_null($useOffset)) {
             $useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');
@@ -543,7 +546,7 @@ class NyrodevService extends AbstractService
 
         $offset = 0;
         if ($useOffset) {
-            $tz = new \DateTimeZone(date_default_timezone_get());
+            $tz = new DateTimeZone(date_default_timezone_get());
             $offset = -1 * $tz->getOffset($datetime) + $datetime->getOffset();
         }
 
@@ -556,6 +559,7 @@ class NyrodevService extends AbstractService
      * @param string $text   Text to truncate
      * @param int    $limit  Limit
      * @param bool   $isFile Indicate if it should be treated as file to keep the extension
+     *
      * @parame string $encoding Encoding to use
      *
      * @return string Trucnated text

@@ -5,7 +5,6 @@ namespace NyroDev\UtilityBundle\Services;
 use NyroDev\UtilityBundle\Form\Type\DummyCaptchaType;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

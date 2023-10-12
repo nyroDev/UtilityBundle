@@ -20,20 +20,20 @@ class FilterBoolType extends FilterType
                 ],
             ], $options['transformerOptions']))
             ->add('value', ChoiceType::class, array_merge([
-                    'required' => false,
-                    'choices' => [
-                        $this->trans('admin.misc.yes') => '1',
-                        $this->trans('admin.misc.no') => 'no',
-                    ],
-                ], $options['valueOptions']));
+                'required' => false,
+                'choices' => [
+                    $this->trans('admin.misc.yes') => '1',
+                    $this->trans('admin.misc.no') => 'no',
+                ],
+            ], $options['valueOptions']));
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         if (
-                isset($data['transformer']) && $data['transformer']
+            isset($data['transformer']) && $data['transformer']
             && isset($data['value']) && $data['value']
-            ) {
+        ) {
             $value = $this->applyValue($data['value']);
             $transformer = $data['transformer'];
 

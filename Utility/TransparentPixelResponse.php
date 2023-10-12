@@ -17,14 +17,14 @@ class TransparentPixelResponse extends Response
      *
      * @var string
      */
-    const IMAGE_CONTENT = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    public const IMAGE_CONTENT = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
     /**
      * The response content type.
      *
      * @var string
      */
-    const CONTENT_TYPE = 'image/gif';
+    public const CONTENT_TYPE = 'image/gif';
 
     /**
      * Constructor.

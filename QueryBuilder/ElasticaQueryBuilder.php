@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\QueryBuilder;
 
+use DateTime;
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Exists;
@@ -10,6 +11,7 @@ use Elastica\Query\SimpleQueryString;
 use Elastica\Query\Term;
 use Elastica\Query\Terms;
 use Elastica\ResultSet;
+use Exception;
 
 class ElasticaQueryBuilder extends AbstractQueryBuilder
 {
@@ -30,7 +32,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
     protected function checkIndexName()
     {
         if (!$this->indexName) {
-            throw new \Exception('No index name provided for ElasticaQueryBuilder.');
+            throw new Exception('No index name provided for ElasticaQueryBuilder.');
         }
     }
 
@@ -89,7 +91,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
                 if ('id' === $subSelectField) {
                     $boolQuery->addFilter(new Terms($name, $values));
                 } else {
-                    throw new \Exception('joinWhere for ElasticaQueryBuilder supports only linearized id fields .');
+                    throw new Exception('joinWhere for ElasticaQueryBuilder supports only linearized id fields .');
                 }
             }
         }
@@ -191,9 +193,9 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
                 $query->addMust($qs);
                 break;
             case self::OPERATOR_LIKEDATE:
-                $dateStart = new \DateTime($value);
+                $dateStart = new DateTime($value);
                 $dateStart->setTime(0, 0, 0);
-                $dateEnd = new \DateTime($value);
+                $dateEnd = new DateTime($value);
                 $dateEnd->setTime(23, 59, 59);
                 $query->addFilter(new Range($field, [
                     'gte' => $dateStart->getTimestamp(),

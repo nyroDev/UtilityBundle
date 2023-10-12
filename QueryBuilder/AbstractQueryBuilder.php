@@ -12,23 +12,23 @@ use Symfony\Component\Serializer\Exception\RuntimeException;
  */
 abstract class AbstractQueryBuilder
 {
-    const WHERE_OR = '__OR__';
-    const WHERE_SUB = '__SUB__';
+    public const WHERE_OR = '__OR__';
+    public const WHERE_SUB = '__SUB__';
 
-    const OPERATOR_EQUALS = '=';
-    const OPERATOR_NOT_EQUALS = '<>';
-    const OPERATOR_GT = '>';
-    const OPERATOR_GTE = '>=';
-    const OPERATOR_LT = '<';
-    const OPERATOR_LTE = '<=';
-    const OPERATOR_LIKE = 'LIKE';
-    const OPERATOR_LIKEDATE = 'LIKE%';
-    const OPERATOR_CONTAINS = 'LIKE %...%';
-    const OPERATOR_IN = 'IN';
-    const OPERATOR_NOT_IN = 'NOT IN';
+    public const OPERATOR_EQUALS = '=';
+    public const OPERATOR_NOT_EQUALS = '<>';
+    public const OPERATOR_GT = '>';
+    public const OPERATOR_GTE = '>=';
+    public const OPERATOR_LT = '<';
+    public const OPERATOR_LTE = '<=';
+    public const OPERATOR_LIKE = 'LIKE';
+    public const OPERATOR_LIKEDATE = 'LIKE%';
+    public const OPERATOR_CONTAINS = 'LIKE %...%';
+    public const OPERATOR_IN = 'IN';
+    public const OPERATOR_NOT_IN = 'NOT IN';
 
-    const OPERATOR_IS_NULL = 'IS NULL';
-    const OPERATOR_IS_NOT_NULL = 'IS NOT NULL';
+    public const OPERATOR_IS_NULL = 'IS NULL';
+    public const OPERATOR_IS_NOT_NULL = 'IS NOT NULL';
 
     /**
      * @var DbAbstractService

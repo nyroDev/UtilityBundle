@@ -2,9 +2,9 @@
 
 namespace NyroDev\UtilityBundle\Utility;
 
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Class PhpSpreadsheetResponse.

@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use DateTime;
 use NyroDev\UtilityBundle\Form\Type\FilterTypeInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\Form\Form;
@@ -126,7 +127,7 @@ class FormFilterService extends AbstractService
     protected function prepareDataForUrl($value, Form $form)
     {
         if ($value) {
-            if ($value instanceof \DateTime) {
+            if ($value instanceof DateTime) {
                 $value = $form->getViewData();
             } elseif (is_object($value)) {
                 if ('Doctrine\Common\Collections\ArrayCollection' == get_class($value)) {

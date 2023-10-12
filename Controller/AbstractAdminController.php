@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Controller;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
@@ -9,6 +10,8 @@ use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\FormFilterService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Utility\PhpExcelResponse;
+use PHPExcel;
+use PHPExcel_Cell_DataType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -40,7 +43,7 @@ abstract class AbstractAdminController extends AbstractController
         if ($canExport && $request->query->get('export')) {
             // Start XLS export
             $this->get(NyrodevService::class)->increasePhpLimits();
-            $phpExcel = new \PHPExcel();
+            $phpExcel = new PHPExcel();
             $title = isset($exportConfig['title']) ? $exportConfig['title'] : 'Export';
             $creator = isset($exportConfig['creator']) ? $exportConfig['creator'] : 'Export';
             $phpExcel->getProperties()->setCreator($creator)
@@ -79,7 +82,7 @@ abstract class AbstractAdminController extends AbstractController
                 foreach ($exportConfig['fields'] as $field) {
                     $val = $accessor->getValue($r, $field);
                     if (is_object($val)) {
-                        if ($val instanceof \DateTime) {
+                        if ($val instanceof DateTime) {
                             $val = strftime($this->trans('date.short'), $val->getTimestamp());
                         } elseif ($val instanceof Collection) {
                             $val = $this->get(NyrodevService::class)->joinRows($val);
@@ -89,8 +92,8 @@ abstract class AbstractAdminController extends AbstractController
                     } elseif (isset($exportConfig['boolFields']) && isset($exportConfig['boolFields'][$field]) && $exportConfig['boolFields'][$field]) {
                         $val = $this->trans('admin.misc.'.($val ? 'yes' : 'no'));
                     }
-                    $sheet->setCellValueExplicitByColumnAndRow($col, $row, $val, \PHPExcel_Cell_DataType::TYPE_STRING);
-                    //$sheet->setCellValueByColumnAndRow($col, $row, $val);
+                    $sheet->setCellValueExplicitByColumnAndRow($col, $row, $val, PHPExcel_Cell_DataType::TYPE_STRING);
+                    // $sheet->setCellValueByColumnAndRow($col, $row, $val);
                     ++$col;
                 }
                 if (isset($exportConfig['callbackLine']) && $exportConfig['callbackLine']) {

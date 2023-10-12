@@ -3,6 +3,7 @@
 namespace NyroDev\UtilityBundle\Form\Type;
 
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use PDO;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -44,16 +45,16 @@ class FilterType extends AbstractType implements FilterTypeInterface
     public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
     {
         if (
-                isset($data['transformer']) && $data['transformer']
+            isset($data['transformer']) && $data['transformer']
             && isset($data['value']) && $data['value']
-            ) {
+        ) {
             $value = $this->applyValue($data['value']);
             $transformer = $data['transformer'];
 
             if (AbstractQueryBuilder::OPERATOR_IS_NULL == $transformer || AbstractQueryBuilder::OPERATOR_IS_NOT_NULL == $transformer) {
                 $queryBuilder->addWhere($name, $transformer);
             } else {
-                $queryBuilder->addWhere($name, $transformer, $value, \PDO::PARAM_STR);
+                $queryBuilder->addWhere($name, $transformer, $value, PDO::PARAM_STR);
             }
         }
 

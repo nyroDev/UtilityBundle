@@ -2,12 +2,15 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use Exception;
 use NyroDev\UtilityBundle\Model\Sharable;
+
+use function file_exists;
 
 class ShareService extends AbstractService
 {
-    const IMAGE_CONFIG_NAME = 'shareImage';
-    const IMAGE_CONFIG_DEFAULT = [
+    public const IMAGE_CONFIG_NAME = 'shareImage';
+    public const IMAGE_CONFIG_DEFAULT = [
         'name' => 'shareImage',
         'w' => 1000,
         'h' => null,
@@ -154,7 +157,7 @@ class ShareService extends AbstractService
 
         if ($sharable->getShareOgImage()) {
             $image = $sharable->getShareOgImage();
-            if (false !== strpos($image, '/public/') && \file_exists($image)) {
+            if (false !== strpos($image, '/public/') && file_exists($image)) {
                 // This is a full path name, resize it
                 $image = $this->container->get(ImageService::class)->resize($image, self::IMAGE_CONFIG_NAME);
             }
@@ -341,7 +344,7 @@ class ShareService extends AbstractService
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         // Twitter shares
@@ -353,7 +356,7 @@ class ShareService extends AbstractService
                     $data['twitter'] = $tmpJson['count'];
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         // Google+ shares
@@ -366,7 +369,7 @@ class ShareService extends AbstractService
                     $data['google'] = str_replace('.0', '', $ret);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         // Pinterest shares
@@ -379,7 +382,7 @@ class ShareService extends AbstractService
                     $data['pinterest'] = $tmpJson['count'];
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return $data;

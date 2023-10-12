@@ -2,6 +2,10 @@
 
 namespace NyroDev\UtilityBundle\Utility\Truncate;
 
+use DOMDocument;
+use DOMNode;
+use DOMText;
+
 // From http://www.pjgalbraith.com/truncating-text-html-with-php/
 
 class TruncateHTML
@@ -12,7 +16,7 @@ class TruncateHTML
             return $html;
         }
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $dom->loadHTML($html);
 
         $body = $dom->getElementsByTagName('body')->item(0);
@@ -38,7 +42,7 @@ class TruncateHTML
             return $html;
         }
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $dom->loadHTML($html);
 
         $body = $dom->getElementsByTagName('body')->item(0);
@@ -63,7 +67,7 @@ class TruncateHTML
         return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', $dom->saveHTML());
     }
 
-    private static function removeProceedingNodes(\DOMNode $domNode, \DOMNode $topNode)
+    private static function removeProceedingNodes(DOMNode $domNode, DOMNode $topNode)
     {
         $nextNode = $domNode->nextSibling;
 
@@ -71,7 +75,7 @@ class TruncateHTML
             self::removeProceedingNodes($nextNode, $topNode);
             $domNode->parentNode->removeChild($nextNode);
         } else {
-            //scan upwards till we find a sibling
+            // scan upwards till we find a sibling
             $curNode = $domNode->parentNode;
             while ($curNode !== $topNode) {
                 if (null !== $curNode->nextSibling) {
@@ -85,13 +89,13 @@ class TruncateHTML
         }
     }
 
-    private static function insertEllipsis(\DOMNode $domNode, $ellipsis)
+    private static function insertEllipsis(DOMNode $domNode, $ellipsis)
     {
-        $avoid = ['a', 'strong', 'em', 'h1', 'h2', 'h3', 'h4', 'h5']; //html tags to avoid appending the ellipsis to
+        $avoid = ['a', 'strong', 'em', 'h1', 'h2', 'h3', 'h4', 'h5']; // html tags to avoid appending the ellipsis to
 
         if (in_array($domNode->parentNode->nodeName, $avoid) && null !== $domNode->parentNode->parentNode) {
             // Append as text node to parent instead
-            $textNode = new \DOMText($ellipsis);
+            $textNode = new DOMText($ellipsis);
 
             if ($domNode->parentNode->parentNode->nextSibling) {
                 $domNode->parentNode->parentNode->insertBefore($textNode, $domNode->parentNode->parentNode->nextSibling);

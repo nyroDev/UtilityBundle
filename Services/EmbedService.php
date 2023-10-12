@@ -2,11 +2,13 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use DOMDocument;
 use Embed\Embed;
+use Exception;
 
 class EmbedService extends AbstractService
 {
-    const CACHE_KEY_URLPARSER = 'urlParser_';
+    public const CACHE_KEY_URLPARSER = 'urlParser_';
 
     public function getChacheKey($url, $prefix = self::CACHE_KEY_URLPARSER)
     {
@@ -70,7 +72,7 @@ class EmbedService extends AbstractService
                     foreach ($fields as $field) {
                         try {
                             $data[$field] = $info->$field;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             if (isset($oEmbedData[$field])) {
                                 $data[$field] = $oEmbedData[$field];
                             }
@@ -82,7 +84,7 @@ class EmbedService extends AbstractService
                         if (false !== strpos($data['url'], 'soundcloud.com')) {
                             $data['code'] = str_replace('&', '&amp;', $data['code']);
                         }
-                        $dom = new \DOMDocument();
+                        $dom = new DOMDocument();
                         $dom->loadHTML($data['code']);
                         $data['urlEmbed'] = $dom->getElementsByTagName('iframe')->item(0)->getAttribute('src');
                         if (false !== strpos($data['urlEmbed'], 'youtube')) {
@@ -96,7 +98,7 @@ class EmbedService extends AbstractService
                 if ($cache) {
                     $cache->save($cacheKey, $data, 24 * 60 * 60);
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         } else {
             $data = $cache->fetch($cacheKey);

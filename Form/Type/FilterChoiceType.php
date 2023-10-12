@@ -21,8 +21,8 @@ class FilterChoiceType extends FilterType
                 ],
             ], $options['transformerOptions']))
             ->add('value', ChoiceType::class, array_merge($options['choiceOptions'], [
-                    'required' => false,
-                ], $options['valueOptions']));
+                'required' => false,
+            ], $options['valueOptions']));
     }
 
     /**

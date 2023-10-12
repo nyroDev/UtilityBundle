@@ -407,8 +407,6 @@ class Pager
 
     /**
      * Set the number of results.
-     *
-     * @param int $totPages
      */
     public function setNbResults($nbResults)
     {
