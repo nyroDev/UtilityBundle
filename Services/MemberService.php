@@ -37,7 +37,7 @@ class MemberService extends AbstractService
      */
     public function isLogged()
     {
-        return $this->tokenStorage->getToken() && $this->tokenStorage->getToken()->isAuthenticated() && is_object($this->getUser());
+        return is_object($this->getUser());
     }
 
     /**

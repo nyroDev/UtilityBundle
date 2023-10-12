@@ -23,10 +23,7 @@ abstract class AbstractUploadable
     const FILEPATH_UPLOAD = 'upload';
     const FILEPATH_PREUPLOAD = 'preupload';
 
-    /**
-     * @var NyrodevService
-     */
-    protected $service;
+    protected ?NyrodevService $service;
 
     public function setService(NyrodevService $service = null)
     {

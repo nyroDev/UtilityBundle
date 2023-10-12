@@ -141,7 +141,7 @@ abstract class AbstractAdminController extends AbstractController
     {
         $filter = null;
         if (!is_null($filterType)) {
-            $filter = $this->createForm($filterType, $filterDefaults, [
+            $filter = $this->get('nyrodev_form')->getFormFactory()->create($filterType, $filterDefaults, [
                 'csrf_protection' => false,
                 'allow_extra_fields' => true,
                 'attr' => [

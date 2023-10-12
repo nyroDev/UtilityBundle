@@ -6,6 +6,7 @@ use NyroDev\UtilityBundle\Form\Type\DummyCaptchaType;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -15,27 +16,28 @@ class FormService extends AbstractService
 {
     use AssetsPackagesServiceableTrait;
 
-    protected $formFactory;
+    protected FormFactoryInterface $formFactory;
+    protected ValidatorInterface $validator;
 
     public function __construct(
-        FormFactory $formFactory,
+        FormFactoryInterface $formFactory,
         ValidatorInterface $validator
     ) {
         $this->formFactory = $formFactory;
         $this->validator = $validator;
     }
 
-    public function getFormFactory()
+    public function getFormFactory(): FormFactoryInterface
     {
         return $this->formFactory;
     }
 
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         return $this->validator;
     }
 
-    public function addDummyCaptcha(Form $form)
+    public function addDummyCaptcha(Form $form): void
     {
         $form->add('dummytcha', DummyCaptchaType::class, [
             'mapped' => false,
@@ -47,7 +49,7 @@ class FormService extends AbstractService
         ]);
     }
 
-    public function getPluploadAttrs($filters = 'images', $pluploadKey = 'plupload_')
+    public function getPluploadAttrs($filters = 'images', $pluploadKey = 'plupload_'): array
     {
         if ('images' == $filters) {
             $filters = [

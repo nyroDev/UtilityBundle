@@ -11,6 +11,7 @@ use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\ShareService;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
