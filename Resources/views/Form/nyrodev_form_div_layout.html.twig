@@ -5,8 +5,8 @@
         <span class="formRequiredFields">
             {{ 'nyrodev.required'|trans }}
         </span>
+        
         {% set cancelUrl = '' %}
-
         {% if attr['data-cancelurl'] -%}
             {% set cancelUrl = attr['data-cancelurl'] %}
         {% endif %}
@@ -14,7 +14,11 @@
         {{- form_widget(form) -}}
 
         {% if cancelUrl -%}
-            <a href="{{ cancelUrl }}" class="button cancel">{{ 'admin.misc.cancel'|trans }}</a>
+            {% set cancelText = 'admin.misc.cancel' %}
+            {% if attr['data-canceltext'] -%}
+                {% set cancelText = attr['data-canceltext'] %}
+            {% endif %}
+            <a href="{{ cancelUrl }}" class="button cancel">{{ cancelText|trans }}</a>
         {% endif %}
     </div>
 {%- endblock button_row -%}
