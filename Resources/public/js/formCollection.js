@@ -94,6 +94,10 @@
             }
 
             dataPrototyped.appendChild(divAdd);
+
+            if (entries.length === 0 && dataPrototyped.dataset.addOnInit) {
+                addToCollection(dataPrototyped, divAdd);
+            }
         };
 
     if (dataPrototypeds.length) {
