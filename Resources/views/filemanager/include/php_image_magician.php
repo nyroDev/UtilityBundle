@@ -2788,7 +2788,9 @@ class imageLib {
 	{
 
 		// *** Perform a check or two.
-		if ( ! is_resource($this->imageResized))
+		// nyro Update comment
+		//if ( ! is_resource($this->imageResized))
+		if ( ! $this->imageResized)
 		{
 			if ($this->debug)
 			{
