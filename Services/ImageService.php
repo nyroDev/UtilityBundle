@@ -119,10 +119,12 @@ class ImageService extends AbstractService
             $info = $this->getImageSize($file);
             $ext = 'jpg';
             switch ($info[2]) {
-                case IMAGETYPE_GIF:    $ext = 'gif';
-                break;
-                case IMAGETYPE_PNG:    $ext = 'png';
-                break;
+                case IMAGETYPE_GIF:
+                    $ext = 'gif';
+                    break;
+                case IMAGETYPE_PNG:
+                    $ext = 'png';
+                    break;
             }
             $cachePath = $this->getCachePath($file);
             $dest = $cachePath.$config['name'].'.'.$ext;
@@ -295,6 +297,15 @@ class ImageService extends AbstractService
             $config['h'] = $info['h'];
             $dstW = $config['w'];
             $dstH = $config['h'];
+        }
+
+        if (isset($config['dontResizeSmaller']) && $config['dontResizeSmaller']) {
+            if ($dstW > $info['w'] || $dstH > $info['H']) {
+                $config['w'] = $info['w'];
+                $config['h'] = $info['h'];
+                $dstW = $config['w'];
+                $dstH = $config['h'];
+            }
         }
 
         $imgDst = imagecreatetruecolor($config['w'], $config['h']);
@@ -779,12 +790,12 @@ class ImageService extends AbstractService
     protected function resizeImagesInHtmlDom(DOMElement $node, $absolutizeUrl = false)
     {
         if (
-            'img' == strtolower($node->tagName) &&
-            (
-                ($node->hasAttribute('width') && false === strpos($node->getAttribute('width'), '%')) ||
-                ($node->hasAttribute('height') && false === strpos($node->getAttribute('height'), '%'))
-            ) &&
-            $node->hasAttribute('src') && 0 !== strpos($node->getAttribute('src'), 'http')) {
+            'img' == strtolower($node->tagName)
+            && (
+                ($node->hasAttribute('width') && false === strpos($node->getAttribute('width'), '%'))
+                || ($node->hasAttribute('height') && false === strpos($node->getAttribute('height'), '%'))
+            )
+            && $node->hasAttribute('src') && 0 !== strpos($node->getAttribute('src'), 'http')) {
             // We have everything to resize the imagen let's dot it
             $w = $node->hasAttribute('width') ? $node->getAttribute('width') : null;
             $h = $node->hasAttribute('height') ? $node->getAttribute('height') : null;

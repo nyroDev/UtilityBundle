@@ -67,6 +67,7 @@ class Configuration implements ConfigurationInterface
                             ->booleanNode('tile')->defaultFalse()->end() // Used with center to create 9 tiles from original image
                             ->booleanNode('useMaxResize')->defaultFalse()->end()
                             ->booleanNode('useGivenDimensions')->defaultFalse()->end()
+                            ->booleanNode('dontResizeSmaller')->defaultFalse()->end()
                             ->scalarNode('bgColor')->defaultValue('ffffff')->end()
                             ->booleanNode('ignoreAnimatedGif')->defaultFalse()->end()
                             ->arrayNode('filters')
