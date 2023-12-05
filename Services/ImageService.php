@@ -300,7 +300,7 @@ class ImageService extends AbstractService
         }
 
         if (isset($config['dontResizeSmaller']) && $config['dontResizeSmaller']) {
-            if ($dstW > $info['w'] || $dstH > $info['H']) {
+            if ($dstW > $info['w'] || $dstH > $info['h']) {
                 $config['w'] = $info['w'];
                 $config['h'] = $info['h'];
                 $dstW = $config['w'];
