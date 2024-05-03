@@ -9,12 +9,15 @@
                 return;
             }
             divTpl = document.createElement('div');
-            addToCollection = (dataPrototyped, divAdd) => {
+            addToCollection = (dataPrototyped, divAdd, value) => {
                 divTpl.innerHTML = dataPrototyped.dataset.prototype
                     .replace(/__name__/g, dataPrototyped.dataset.index);
 
                 while (divTpl.lastElementChild) {
                     if (divTpl.lastElementChild.matches('.form_row_collection_entry')) {
+                        if (value) {
+                            divTpl.lastElementChild.querySelector('input, textarea').value = value;
+                        }
                         addDeleteLink(dataPrototyped, divTpl.lastElementChild);
                     }
                     divAdd.insertAdjacentElement('beforebegin', divTpl.lastElementChild);
@@ -98,6 +101,21 @@
             if (entries.length === 0 && dataPrototyped.dataset.addOnInit) {
                 addToCollection(dataPrototyped, divAdd);
             }
+
+            dataPrototyped.addEventListener('formCollectionSetValue', (e) => {
+                dataPrototyped.querySelectorAll('.form_row_collection_entry').forEach(entry => {
+                    entry.remove();
+                });
+                dataPrototyped.dispatchEvent(new CustomEvent('formCollectionDelete', {
+                    bubbles: true,
+                    cancelable: true,
+                }));
+                if (e.detail && Array.isArray(e.detail)) {
+                    e.detail.forEach(detail => {
+                        addToCollection(dataPrototyped, divAdd, detail);
+                    });
+                }
+            });
         };
 
     if (dataPrototypeds.length) {
