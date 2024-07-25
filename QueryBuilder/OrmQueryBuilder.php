@@ -4,6 +4,9 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 class OrmQueryBuilder extends AbstractQueryBuilder
 {
+
+    private $prmNb = 0;
+
     public function getNewQueryBuilder($complete = false)
     {
         $alias = 'l';
@@ -14,6 +17,13 @@ class OrmQueryBuilder extends AbstractQueryBuilder
             $filters = $this->applyFilterArr($alias, $this->config['where'], $queryBuilder);
             foreach ($filters as $f) {
                 $queryBuilder->andWhere($f);
+            }
+        }
+
+        if (isset($this->config['join'])) {
+            foreach ($this->config['join'] as $join) {
+                list($table, $aliasJoin) = $join;
+                $queryBuilder->join($this->useAlias($alias, $table).$table, $aliasJoin);
             }
         }
 
@@ -32,7 +42,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder
         if (isset($this->config['orderBy'])) {
             foreach ($this->config['orderBy'] as $orderBy) {
                 list($sort, $dir) = $orderBy;
-                $queryBuilder->addOrderBy($alias.'.'.$sort, $dir);
+                $queryBuilder->addOrderBy($this->useAlias($alias, $sort), $dir);
             }
         }
 
@@ -111,20 +121,21 @@ class OrmQueryBuilder extends AbstractQueryBuilder
     protected function applyFilter($alias, $field, $transformer, $value, $forceType, $queryBuilder)
     {
         $ret = null;
+        $useAlias = $this->useAlias($alias, $field);
         switch ($transformer) {
             case self::OPERATOR_IS_NULL:
             case self::OPERATOR_IS_NOT_NULL:
-                $ret = $alias.'.'.$field.' '.$transformer;
+                $ret = $useAlias.$field.' '.$transformer;
                 break;
             case self::OPERATOR_CONTAINS:
                 $prm = 'param_'.$this->prmNb;
-                $ret = $alias.'.'.$field.' LIKE :'.$prm;
+                $ret = $useAlias.$field.' LIKE :'.$prm;
                 $queryBuilder->setParameter($prm, '%'.$value.'%', $forceType);
                 ++$this->prmNb;
                 break;
             case self::OPERATOR_LIKEDATE:
                 $prm = 'param_'.$this->prmNb;
-                $ret = $alias.'.'.$field.' LIKE :'.$prm;
+                $ret = $useAlias.$field.' LIKE :'.$prm;
                 $queryBuilder->setParameter($prm, $value.'%', $forceType);
                 ++$this->prmNb;
                 break;
@@ -136,12 +147,16 @@ class OrmQueryBuilder extends AbstractQueryBuilder
                     $value = '%'.$value.'%';
                 }
                 /* @var $object \Doctrine\ORM\Query\Expr */
-                $ret = $alias.'.'.$field.' '.$transformer.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : '');
+                $ret = $useAlias.$field.' '.$transformer.' '.($needParenthesis ? '(' : '').':'.$prm.($needParenthesis ? ')' : '');
                 $queryBuilder->setParameter($prm, $value, $forceType);
                 ++$this->prmNb;
                 break;
         }
 
         return $ret;
+    }
+
+    protected function useAlias($alias, $field) {
+        return strpos($field, '.') === false ? $alias.'.' : null;
     }
 }

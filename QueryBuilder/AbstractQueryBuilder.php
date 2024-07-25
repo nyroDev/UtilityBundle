@@ -76,6 +76,11 @@ abstract class AbstractQueryBuilder
         return isset($this->config[$type]) ? $this->config[$type] : null;
     }
 
+    public function addJoin($table, $alias)
+    {
+        return $this->add('join', [$table, $alias], true);
+    }
+
     public function addJoinWhere($table, $whereId, $subSelectField = 'id')
     {
         if (!is_array($whereId)) {
