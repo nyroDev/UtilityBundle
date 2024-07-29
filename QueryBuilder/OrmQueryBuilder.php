@@ -42,7 +42,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder
         if (isset($this->config['orderBy'])) {
             foreach ($this->config['orderBy'] as $orderBy) {
                 list($sort, $dir) = $orderBy;
-                $queryBuilder->addOrderBy($this->useAlias($alias, $sort), $dir);
+                $queryBuilder->addOrderBy($this->useAlias($alias, $sort).$sort, $dir);
             }
         }
 
