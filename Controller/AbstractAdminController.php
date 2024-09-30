@@ -234,7 +234,10 @@ abstract class AbstractAdminController extends AbstractController
             ];
 
             if (isset($moreOptions[$f])) {
-                if (isset($moreOptions[$f]['type'])) {
+                if (isset($moreOptions[$f]['userType'])) {
+                    $type = $moreOptions[$f]['userType'];
+                    unset($moreOptions[$f]['userType']);
+                } else if (isset($moreOptions[$f]['type'])) {
                     $type = $moreOptions[$f]['type'];
                     unset($moreOptions[$f]['type']);
                 }
