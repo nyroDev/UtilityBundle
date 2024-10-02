@@ -30,38 +30,27 @@ abstract class AbstractQueryBuilder
     public const OPERATOR_IS_NULL = 'IS NULL';
     public const OPERATOR_IS_NOT_NULL = 'IS NOT NULL';
 
-    /**
-     * @var DbAbstractService
-     */
-    protected $service;
+    protected array $config = [];
 
-    /**
-     * @var ObjectRepository
-     */
-    protected $or;
+    protected bool $built = false;
+    protected mixed $queryBuilder = null;
+    protected ?int $count = null;
 
-    /**
-     * @var ObjectManager
-     */
-    protected $om;
-
-    public function __construct(ObjectRepository $or, ObjectManager $om, DbAbstractService $service)
-    {
-        $this->or = $or;
-        $this->om = $om;
-        $this->service = $service;
+    public function __construct(
+        protected readonly ObjectRepository $or,
+        protected readonly ObjectManager $om,
+        protected readonly DbAbstractService $service,
+    ) {
     }
 
     public function __clone()
     {
-        $this->built = null;
+        $this->built = false;
         $this->queryBuilder = null;
         $this->count = null;
     }
 
-    protected $config = [];
-
-    public function add($type, $value, $append = false)
+    public function add(string $type, mixed $value, bool $append = false): self
     {
         if (!$append || !isset($this->config[$type])) {
             $this->config[$type] = [];
@@ -71,17 +60,17 @@ abstract class AbstractQueryBuilder
         return $this;
     }
 
-    public function get($type)
+    public function get(string $type): mixed
     {
         return isset($this->config[$type]) ? $this->config[$type] : null;
     }
 
-    public function addJoin($table, $alias)
+    public function addJoin(string $table, string $alias): self
     {
         return $this->add('join', [$table, $alias], true);
     }
 
-    public function addJoinWhere($table, $whereId, $subSelectField = 'id')
+    public function addJoinWhere(string $table, string|array $whereId, string $subSelectField = 'id'): self
     {
         if (!is_array($whereId)) {
             $whereId = [$whereId];
@@ -90,38 +79,34 @@ abstract class AbstractQueryBuilder
         return $this->add('joinWhere', [$table, $whereId, $subSelectField], true);
     }
 
-    public function addWhere($field, $transformer, $value = null, $forceType = null)
+    public function addWhere(string $field, string $transformer, mixed $value = null, mixed $forceType = null): self
     {
         return $this->add('where', [$field, $transformer, $value, $forceType], true);
     }
 
-    public function orderBy($sort, $order = null)
+    public function orderBy(string $sort, string $order = null): self
     {
         return $this->add('orderBy', [$sort, $order]);
     }
 
-    public function addOrderBy($sort, $order = null)
+    public function addOrderBy(string $sort, string $order = null): self
     {
         return $this->add('orderBy', [$sort, $order], true);
     }
 
-    public function setFirstResult($firstResult)
+    public function setFirstResult(int $firstResult): self
     {
         $this->config['firstResult'] = $firstResult;
 
         return $this;
     }
 
-    public function setMaxResults($maxResults)
+    public function setMaxResults(int $maxResults): self
     {
         $this->config['maxResults'] = $maxResults;
 
         return $this;
     }
-
-    protected $built;
-    protected $queryBuilder;
-    protected $count;
 
     protected function buildRealQueryBuilder()
     {
@@ -148,7 +133,7 @@ abstract class AbstractQueryBuilder
      *
      * @return Specific query builder
      */
-    abstract public function getNewQueryBuilder($complete = false);
+    abstract public function getNewQueryBuilder(bool $complete = false);
 
     public function getQueryBuilder()
     {
@@ -166,7 +151,7 @@ abstract class AbstractQueryBuilder
 
     abstract public function getResult();
 
-    public function count()
+    public function count(): int
     {
         if (is_null($this->count)) {
             $this->count = $this->_count();
@@ -175,5 +160,5 @@ abstract class AbstractQueryBuilder
         return $this->count;
     }
 
-    abstract protected function _count();
+    abstract protected function _count(): int;
 }

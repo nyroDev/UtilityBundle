@@ -43,7 +43,7 @@ class DumpXlsTranslationsCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->nyrodev->increasePhpLimits();
         $file = $input->getArgument('file');
@@ -86,7 +86,7 @@ class DumpXlsTranslationsCommand extends Command
             }
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     protected function addTrans($locale, $domain, array $idents, $trans)

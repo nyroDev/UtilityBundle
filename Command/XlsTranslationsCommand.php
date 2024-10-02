@@ -48,7 +48,7 @@ class XlsTranslationsCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->nyrodev->increasePhpLimits();
         $dest = $input->getArgument('dest');
@@ -61,7 +61,7 @@ class XlsTranslationsCommand extends Command
         if (0 == count($locales)) {
             $output->writeln('locales is not configured or empty, exiting');
 
-            return;
+            return Command::INVALID;
         }
         unset($locales[array_search($locale, $locales)]);
 
@@ -177,11 +177,11 @@ class XlsTranslationsCommand extends Command
 
             $output->writeln('XLS file saved: '.$dest);
 
-            return 0;
+            return Command::SUCCESS;
         } else {
             $output->writeln('No original translation files found.');
 
-            return 1;
+            return Command::INVALID;
         }
     }
 

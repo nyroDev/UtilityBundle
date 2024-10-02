@@ -14,8 +14,8 @@
     ],
     "require": {
         "nyrodev/php-template-bundle": "dev-master",
-        "symfony/framework-bundle": "^6",
-        "symfony/templating": "^6"
+        "symfony/framework-bundle": "^7",
+        "symfony/templating": "^7"
     },
     "suggest": {
         "becklyn/ordered-form-bundle": "Used for form positionning",

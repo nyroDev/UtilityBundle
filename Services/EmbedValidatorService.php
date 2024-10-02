@@ -7,17 +7,14 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class EmbedValidatorService extends AbstractService implements Validator\ConstraintValidatorInterface
 {
-    /**
-     * @var ExecutionContextInterface
-     */
-    protected $context;
+    protected ?ExecutionContextInterface $context = null;
 
     public function initialize(ExecutionContextInterface $context)
     {
         $this->context = $context;
     }
 
-    public function validate($value, Validator\Constraint $constraint)
+    public function validate(mixed $value, Validator\Constraint $constraint): void
     {
         if ($value) {
             $urlValidator = new Validator\Constraints\UrlValidator();
@@ -34,8 +31,7 @@ class EmbedValidatorService extends AbstractService implements Validator\Constra
                 } elseif (
                     $constraint->type && (
                         (is_array($constraint->type) && !in_array($dataUrl['type'], $constraint->type))
-                        ||
-                        (!is_array($constraint->type) && $dataUrl['type'] != $constraint->type)
+                        || (!is_array($constraint->type) && $dataUrl['type'] != $constraint->type)
                     )
                 ) {
                     $error = 'NoType';

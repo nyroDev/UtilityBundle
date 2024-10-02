@@ -6,12 +6,9 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/**
- * Class PhpExcelResponse.
- */
 class PhpExcelResponse extends StreamedResponse
 {
-    public function setPhpExcel($filename, PHPExcel $phpExcel, $phpExcelFormat = 'Excel2007')
+    public function setPhpExcel(string $filename, PHPExcel $phpExcel, string $phpExcelFormat = 'Excel2007'): void
     {
         $this->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $this->headers->set('Content-Disposition', 'attachment;filename="'.$filename.'"');

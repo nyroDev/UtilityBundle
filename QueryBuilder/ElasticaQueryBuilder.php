@@ -15,33 +15,33 @@ use Exception;
 
 class ElasticaQueryBuilder extends AbstractQueryBuilder
 {
-    protected $indexName;
-    protected $indexType;
-    protected $scoreSortAdded = false;
+    protected string $indexName;
+    protected string $indexType;
+    protected bool $scoreSortAdded = false;
 
-    public function setIndexName($indexName)
+    public function setIndexName(string $indexName): void
     {
         $this->indexName = $indexName;
     }
 
-    public function getIndexName()
+    public function getIndexName(): string
     {
         return $this->indexName;
     }
 
-    protected function checkIndexName()
+    protected function checkIndexName(): void
     {
         if (!$this->indexName) {
             throw new Exception('No index name provided for ElasticaQueryBuilder.');
         }
     }
 
-    public function setIndexType($indexType)
+    public function setIndexType(string $indexType): void
     {
         $this->indexType = $indexType;
     }
 
-    public function getIndexType()
+    public function getIndexType(): string
     {
         if (!$this->indexType) {
             $tmp = explode('\\', $this->or->getClassName());
@@ -51,12 +51,12 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
         return $this->indexType;
     }
 
-    public function useScoreSort()
+    public function useScoreSort(): void
     {
         $this->scoreSortAdded = true;
     }
 
-    protected function _count()
+    protected function _count(): int
     {
         $this->checkIndexName();
 
@@ -78,7 +78,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
         return $this->service->get('fos_elastica.finder.'.$this->getIndexName().'.'.$this->getIndexType())->find($query);
     }
 
-    public function getNewQueryBuilder($complete = false)
+    public function getNewQueryBuilder(bool $complete = false)
     {
         $boolQuery = new BoolQuery();
         if (isset($this->config['where'])) {
@@ -121,7 +121,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
         return $queryBuilder;
     }
 
-    protected function applyFilterArr(BoolQuery $query, array $whereArr)
+    protected function applyFilterArr(BoolQuery $query, array $whereArr): int
     {
         $nbWhere = 0;
         foreach ($whereArr as $where) {
@@ -164,7 +164,7 @@ class ElasticaQueryBuilder extends AbstractQueryBuilder
         return $nbWhere;
     }
 
-    protected function applyFilter(BoolQuery $query, $field, $transformer, $value)
+    protected function applyFilter(BoolQuery $query, string $field, string $transformer, mixed $value): bool
     {
         switch ($transformer) {
             case self::OPERATOR_EQUALS:

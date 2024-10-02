@@ -49,7 +49,7 @@ class FillTranslationsCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->nyrodev->increasePhpLimits();
         $dir = $input->getArgument('dir');
@@ -60,7 +60,7 @@ class FillTranslationsCommand extends Command
         if (!$translationDb) {
             $output->writeln('translationDB is not configured, exiting');
 
-            return;
+            return Command::INVALID;
         }
 
         $locale = $this->nyrodev->getParameter('locale');
@@ -68,7 +68,7 @@ class FillTranslationsCommand extends Command
         if (0 == count($locales)) {
             $output->writeln('locales is not configured or empty, exiting');
 
-            return;
+            return Command::INVALID;
         }
 
         $output->writeln('Search for original translations files');
@@ -128,11 +128,11 @@ class FillTranslationsCommand extends Command
             $output->writeln('Flushing...');
             $this->db->flush();
 
-            return 0;
+            return Command::SUCCESS;
         } else {
             $output->writeln('No original translation files found.');
 
-            return 1;
+            return Command::INVALID;
         }
     }
 

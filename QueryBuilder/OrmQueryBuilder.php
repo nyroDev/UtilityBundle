@@ -4,10 +4,9 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 class OrmQueryBuilder extends AbstractQueryBuilder
 {
+    private int $prmNb = 0;
 
-    private $prmNb = 0;
-
-    public function getNewQueryBuilder($complete = false)
+    public function getNewQueryBuilder(bool $complete = false)
     {
         $alias = 'l';
         $queryBuilder = $this->or->createQueryBuilder($alias);
@@ -64,7 +63,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder
                 ->getResult();
     }
 
-    protected function _count()
+    protected function _count(): int
     {
         $queryBuilder = $this->getNewQueryBuilder(true);
 
@@ -82,7 +81,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder
                 ->getSingleScalarResult();
     }
 
-    protected function applyFilterArr($alias, array $whereArr, $queryBuilder)
+    protected function applyFilterArr(string $alias, array $whereArr, $queryBuilder): array
     {
         $filters = [];
         foreach ($whereArr as $where) {
@@ -118,7 +117,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder
         return array_filter($filters);
     }
 
-    protected function applyFilter($alias, $field, $transformer, $value, $forceType, $queryBuilder)
+    protected function applyFilter(string $alias, string $field, string $transformer, mixed $value, mixed $forceType, $queryBuilder)
     {
         $ret = null;
         $useAlias = $this->useAlias($alias, $field);
@@ -156,7 +155,8 @@ class OrmQueryBuilder extends AbstractQueryBuilder
         return $ret;
     }
 
-    protected function useAlias($alias, $field) {
-        return strpos($field, '.') === false ? $alias.'.' : null;
+    protected function useAlias(string $alias, string $field): string|null
+    {
+        return false === strpos($field, '.') ? $alias.'.' : null;
     }
 }

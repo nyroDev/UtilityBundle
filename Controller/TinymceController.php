@@ -4,6 +4,7 @@ namespace NyroDev\UtilityBundle\Controller;
 
 use NyroDev\UtilityBundle\Event\TinymceEvent;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TinymceController extends AbstractController
 {
-    public static function handleBrowserAction($container, Request $request, $file = null, $dirName = 'tinymce')
+    public static function handleBrowserAction(ContainerInterface $container, Request $request, ?string $file = null, string $dirName = 'tinymce'): Response
     {
         $GLOBALS['nyroDevService'] = $container->get(NyrodevService::class);
 
@@ -25,11 +26,11 @@ class TinymceController extends AbstractController
             if (isset($_GET['lang'])) {
                 switch ($_GET['lang']) {
                     case 'fr': $_GET['lang'] = 'fr_FR';
-                    break;
+                        break;
                     case 'en': $_GET['lang'] = 'en_EN';
-                    break;
+                        break;
                     case 'br': $_GET['lang'] = 'pt_BR';
-                    break;
+                        break;
                 }
             }
             set_include_path(get_include_path().PATH_SEPARATOR.$fileManagerDir);
@@ -669,9 +670,9 @@ class TinymceController extends AbstractController
 
             switch ($response->getFile()->getExtension()) {
                 case 'js': $response->headers->set('Content-Type', 'application/javascript');
-                break;
+                    break;
                 case 'css': $response->headers->set('Content-Type', 'text/css');
-                break;
+                    break;
             }
 
             $response->setPublic();
@@ -682,7 +683,7 @@ class TinymceController extends AbstractController
         return $response;
     }
 
-    public function browserAction(Request $request, $file = null, $dirName = 'tinymce')
+    public function browserAction(Request $request, ?string $file = null, string $dirName = 'tinymce'): Response
     {
         return self::handleBrowserAction($this->container, $request, $file, $dirName);
     }

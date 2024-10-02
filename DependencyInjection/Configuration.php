@@ -12,7 +12,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('nyro_dev_utility');
         $rootNode = $builder->getRootNode($builder, 'nyro_dev_utility');

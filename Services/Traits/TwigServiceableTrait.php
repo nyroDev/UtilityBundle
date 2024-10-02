@@ -2,16 +2,15 @@
 
 namespace NyroDev\UtilityBundle\Services\Traits;
 
+use Symfony\Contracts\Service\Attribute\Required;
 use Twig\Environment;
 
 trait TwigServiceableTrait
 {
-    protected $twig;
+    protected ?Environment $twig = null;
 
-    /**
-     * @Required
-     */
-    public function setTwig(Environment $twig)
+    #[Required]
+    public function setTwig(Environment $twig): void
     {
         $this->twig = $twig;
     }

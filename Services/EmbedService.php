@@ -10,12 +10,12 @@ class EmbedService extends AbstractService
 {
     public const CACHE_KEY_URLPARSER = 'urlParser_';
 
-    public function getChacheKey($url, $prefix = self::CACHE_KEY_URLPARSER)
+    public function getChacheKey(string $url, $prefix = self::CACHE_KEY_URLPARSER): string
     {
         return $prefix.sha1($url);
     }
 
-    public function clearCache($url)
+    public function clearCache(string $url)
     {
         if (!$this->container->has('nyrodev_embed_cache')) {
             return true;
@@ -26,7 +26,7 @@ class EmbedService extends AbstractService
         return $cache->delete($this->getChacheKey($url, self::CACHE_KEY_URLPARSER));
     }
 
-    public function data($url, $force = false)
+    public function data(string $url, bool $force = false): array
     {
         $cache = false;
         if ($this->container->has('nyrodev_embed_cache')) {

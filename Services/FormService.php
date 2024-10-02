@@ -15,15 +15,10 @@ class FormService extends AbstractService
 {
     use AssetsPackagesServiceableTrait;
 
-    protected FormFactoryInterface $formFactory;
-    protected ValidatorInterface $validator;
-
     public function __construct(
-        FormFactoryInterface $formFactory,
-        ValidatorInterface $validator
+        private readonly FormFactoryInterface $formFactory,
+        private readonly ValidatorInterface $validator,
     ) {
-        $this->formFactory = $formFactory;
-        $this->validator = $validator;
     }
 
     public function getFormFactory(): FormFactoryInterface
@@ -48,7 +43,7 @@ class FormService extends AbstractService
         ]);
     }
 
-    public function getPluploadAttrs($filters = 'images', $pluploadKey = 'plupload_'): array
+    public function getPluploadAttrs(string $filters = 'images', string $pluploadKey = 'plupload_'): array
     {
         if ('images' == $filters) {
             $filters = [

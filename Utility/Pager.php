@@ -4,85 +4,25 @@ namespace NyroDev\UtilityBundle\Utility;
 
 use NyroDev\UtilityBundle\Services\NyrodevService;
 
-/**
- * Pager utility object.
- */
 class Pager
 {
-    /**
-     * nyroDev service object used to generate the URL.
-     *
-     * @var NyrodevService
-     */
-    protected $service;
 
-    /**
-     * Route string name.
-     *
-     * @var string
-     */
-    protected $route;
+    private int $nbPages = 1;
 
-    /**
-     * Route parameter used to generate the URL.
-     * Page parameter will be added.
-     *
-     * @var array
-     */
-    protected $routePrm;
-
-    /**
-     * Number of results.
-     *
-     * @var int
-     */
-    protected $nbResults;
-
-    /**
-     * Current page number.
-     *
-     * @var int
-     */
-    protected $curPage;
-
-    /**
-     * Number of elements by page.
-     *
-     * @var int
-     */
-    protected $nbPerPage;
-
-    /**
-     * Number of pages.
-     *
-     * @var int
-     */
-    protected $nbPages;
-
-    /**
-     * Constructor of Pager utility.
-     *
-     * @param type $route
-     * @param int  $nbResults
-     * @param int  $curPage
-     * @param int  $nbPerPage
-     */
-    public function __construct(NyrodevService $service, $route, array $routePrm, $nbResults, $curPage = 1, $nbPerPage = 10)
-    {
-        $this->setService($service);
-        $this->setRoute($route);
-        $this->setRoutePrm($routePrm);
-        $this->setNbResults($nbResults);
-        $this->setCurPage($curPage);
-        $this->setNbPerPage($nbPerPage);
+    public function __construct(
+        private readonly NyrodevService $service,
+        private string $route,
+        private array $routePrm,
+        private int $nbResults,
+        private int $curPage = 1,
+        private int $nbPerPage = 10,
+    ) {
     }
 
     /**
      * Inidicates if the Pager has to paginate.
-     *
-     * @return bool
      */
-    public function hasToPaginate()
+    public function hasToPaginate(): bool
     {
         return $this->nbResults > $this->nbPerPage;
     }
@@ -93,10 +33,8 @@ class Pager
      * @param int   $page     Page number
      * @param bool  $absolute Indicate if the URI should be absolute
      * @param array $routePrm Route parameter array to use instead of the configured one
-     *
-     * @return string The URL
      */
-    public function getUrl($page, $absolute = false, $routePrm = null)
+    public function getUrl(int $page, bool $absolute = false, array $routePrm = null): string
     {
         $prm = !is_null($routePrm) ? $routePrm : $this->routePrm;
         $prm['page'] = $page;
@@ -106,10 +44,8 @@ class Pager
 
     /**
      * Get the first page number.
-     *
-     * @return int
      */
-    public function getFirst()
+    public function getFirst(): int
     {
         return 1;
     }
@@ -118,10 +54,8 @@ class Pager
      * Get the current page URL.
      *
      * @param bool $absolute Indicate if the URI should be absolute
-     *
-     * @return string
      */
-    public function getCurrentUrl($absolute = false)
+    public function getCurrentUrl(bool $absolute = false): string
     {
         return $this->getUrl($this->getCurPage(), $absolute);
     }
@@ -130,30 +64,24 @@ class Pager
      * Get the first page URL.
      *
      * @param bool $absolute Indicate if the URI should be absolute
-     *
-     * @return string
      */
-    public function getFirstUrl($absolute = false)
+    public function getFirstUrl(bool $absolute = false): string
     {
         return $this->getUrl($this->getFirst(), $absolute);
     }
 
     /**
      * Indicates if there is a previous page.
-     *
-     * @return bool
      */
-    public function hasPrevious()
+    public function hasPrevious(): bool
     {
         return $this->curPage > 1;
     }
 
     /**
      * Get the previous page number, null if not.
-     *
-     * @return int|null
      */
-    public function getPrevious()
+    public function getPrevious(): int|null
     {
         return $this->hasPrevious() ? $this->curPage - 1 : null;
     }
@@ -162,30 +90,24 @@ class Pager
      * Get the preivous page url, null if not.
      *
      * @param bool $absolute Indicate if the URI should be absolute
-     *
-     * @return string|not
      */
-    public function getPreviousUrl($absolute = false)
+    public function getPreviousUrl(bool $absolute = false): string|null
     {
         return $this->hasPrevious() ? $this->getUrl($this->getPrevious(), $absolute) : null;
     }
 
     /**
      * Indicates if there is a next page.
-     *
-     * @return bool
      */
-    public function hasNext()
+    public function hasNext(): bool
     {
         return $this->curPage < $this->nbPages;
     }
 
     /**
      * Get the next page number, null if not.
-     *
-     * @return int|null
      */
-    public function getNext()
+    public function getNext(): int|null
     {
         return $this->hasNext() ? $this->curPage + 1 : null;
     }
@@ -194,20 +116,16 @@ class Pager
      * Get the next page url, null if not.
      *
      * @param bool $absolute Indicate if the URI should be absolute
-     *
-     * @return string|not
      */
-    public function getNextUrl($absolute = false)
+    public function getNextUrl(bool $absolute = false): string|null
     {
         return $this->hasNext() ? $this->getUrl($this->getNext(), $absolute) : null;
     }
 
     /**
      * Get the last page number.
-     *
-     * @return int
      */
-    public function getLast()
+    public function getLast(): int
     {
         return $this->getNbPages();
     }
@@ -216,10 +134,8 @@ class Pager
      * Get the last page URL.
      *
      * @param bool $absolute Indicate if the URI should be absolute
-     *
-     * @return string
      */
-    public function getLastUrl($absolute = false)
+    public function getLastUrl(bool $absolute = false): string
     {
         return $this->getUrl($this->getLast(), $absolute);
     }
@@ -229,10 +145,8 @@ class Pager
      *
      * @param int  $nb       Number of pages to be shown in the index
      * @param bool $absolute Indicate if the URI should be absolute
-     *
-     * @return array
      */
-    public function getPagesIndex($nb = 11, $absolute = false)
+    public function getPagesIndex(int $nb = 11, bool $absolute = false): array
     {
         $space = ($nb - 1) / 2;
         $start = $this->getCurPage() - $space;
@@ -269,7 +183,7 @@ class Pager
     /**
      * Calculates the number of pages.
      */
-    protected function calcNbPages()
+    protected function calcNbPages(): void
     {
         if (!is_null($this->nbPerPage) && !is_null($this->nbResults)) {
             $this->nbPages = ceil($this->nbResults / $this->nbPerPage);
@@ -278,30 +192,24 @@ class Pager
 
     /**
      * Get the start element to use when fetchings objects.
-     *
-     * @return int
      */
-    public function getStart()
+    public function getStart(): int
     {
         return ($this->curPage - 1) * $this->nbPerPage;
     }
 
     /**
      * Get the number of pages.
-     *
-     * @return int
      */
-    public function getNbPages()
+    public function getNbPages(): int
     {
         return $this->nbPages;
     }
 
     /**
      * Get the route parameters.
-     *
-     * @return array
      */
-    public function getRoutePrm()
+    public function getRoutePrm(): array
     {
         return $this->routePrm;
     }
@@ -309,87 +217,63 @@ class Pager
     /**
      * Set the route parameters.
      */
-    public function setRoutePrm(array $routePrm)
+    public function setRoutePrm(array $routePrm): void
     {
         $this->routePrm = $routePrm;
     }
 
     /**
      * Get the service.
-     *
-     * @return NyroDev\UtilityBundle\Services\NyrodevService
      */
-    public function getService()
+    public function getService(): NyrodevService
     {
         return $this->service;
     }
 
     /**
-     * Set the router.
-     *
-     * @param NyroDev\UtilityBundle\Services\NyrodevService $service
-     */
-    public function setService(NyrodevService $service)
-    {
-        $this->service = $service;
-    }
-
-    /**
      * Get the route name.
-     *
-     * @return string
      */
-    public function getRoute()
+    public function getRoute(): string
     {
         return $this->route;
     }
 
     /**
      * Set the route name.
-     *
-     * @param string $route
      */
-    public function setRoute($route)
+    public function setRoute(string $route): void
     {
         $this->route = $route;
     }
 
     /**
      * Get the current page.
-     *
-     * @return int
      */
-    public function getCurPage()
+    public function getCurPage(): int
     {
         return $this->curPage;
     }
 
     /**
      * Set the current page.
-     *
-     * @param int $curPage
      */
-    public function setCurPage($curPage)
+    public function setCurPage(int $curPage): void
     {
         $this->curPage = $curPage;
     }
 
     /**
      * Get the number of elements per page.
-     *
-     * @return int
      */
-    public function getNbPerPage()
+    public function getNbPerPage(): int
     {
         return $this->nbPerPage;
     }
 
     /**
      * Set the number of elements per page.
-     *
-     * @param int $nbPerPage
      */
-    public function setNbPerPage($nbPerPage)
+    public function setNbPerPage(int $nbPerPage): void
     {
         $this->nbPerPage = $nbPerPage;
         $this->calcNbPages();
@@ -397,10 +281,8 @@ class Pager
 
     /**
      * Get the number of results.
-     *
-     * @return int
      */
-    public function getNbResults()
+    public function getNbResults(): int
     {
         return $this->nbResults;
     }
@@ -408,7 +290,7 @@ class Pager
     /**
      * Set the number of results.
      */
-    public function setNbResults($nbResults)
+    public function setNbResults(int $nbResults): void
     {
         $this->nbResults = $nbResults;
         $this->calcNbPages();

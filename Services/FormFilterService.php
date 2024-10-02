@@ -15,7 +15,7 @@ class FormFilterService extends AbstractService
     /**
      * Build the QueryBuilder object.
      */
-    public function buildQuery(Form $form, AbstractQueryBuilder $queryBuilder)
+    public function buildQuery(Form $form, AbstractQueryBuilder $queryBuilder): void
     {
         $data = $form->getData();
 
@@ -32,7 +32,7 @@ class FormFilterService extends AbstractService
         }
     }
 
-    public function fillFromSession(Form $form, $route)
+    public function fillFromSession(Form $form, string $route): bool
     {
         $filled = false;
         $data = $this->get('request_stack')->getSession()->get('filter_'.$route);
@@ -44,7 +44,7 @@ class FormFilterService extends AbstractService
         return $filled;
     }
 
-    public function saveSession(Form $form, $route)
+    public function saveSession(Form $form, string $route): void
     {
         $tmp = $form->getData();
         $data = [];
@@ -62,7 +62,7 @@ class FormFilterService extends AbstractService
         $this->get('request_stack')->getSession()->set('filter_'.$route, $data);
     }
 
-    public function prepareValueForSession($value, Form $form)
+    public function prepareValueForSession(mixed $value, Form $form): mixed
     {
         if (is_object($value)) {
             $class = get_class($value);
@@ -86,32 +86,30 @@ class FormFilterService extends AbstractService
         return $value;
     }
 
-    public function getSessionPage($route)
+    public function getSessionPage(string $route): int
     {
-        return $this->get('request_stack')->getSession()->get('filter_'.$route.'_page', 1);
+        return $this->get('request_stack')->getSession()->getInt('filter_'.$route.'_page', 1);
     }
 
-    public function saveSessionPage($route, $page)
+    public function saveSessionPage(string $route, int $page): void
     {
         $this->get('request_stack')->getSession()->set('filter_'.$route.'_page', $page);
     }
 
-    public function getSessionSortOrder($route, $defaults = [])
+    public function getSessionSortOrder(string $route, array $defaults = []): mixed
     {
         return $this->get('request_stack')->getSession()->get('filter_'.$route.'_sortOrder', $defaults);
     }
 
-    public function saveSessionSortOrder($route, $sort, $order)
+    public function saveSessionSortOrder(string $route, mixed $sort, mixed $order): void
     {
         $this->get('request_stack')->getSession()->set('filter_'.$route.'_sortOrder', [$sort, $order]);
     }
 
     /**
      * Get parameter from a form for creating a pager URL.
-     *
-     * @return array
      */
-    public function getPrmForUrl(Form $form)
+    public function getPrmForUrl(Form $form): array
     {
         $ret = [];
         foreach ($form->getData() as $k => $data) {
@@ -124,7 +122,7 @@ class FormFilterService extends AbstractService
         return count($ret) ? [$form->getName() => $ret] : [];
     }
 
-    protected function prepareDataForUrl($value, Form $form)
+    protected function prepareDataForUrl(mixed $value, Form $form): mixed
     {
         if ($value) {
             if ($value instanceof DateTime) {

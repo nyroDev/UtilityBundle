@@ -6,12 +6,9 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/**
- * Class PhpSpreadsheetResponse.
- */
 class PhpSpreadsheetResponse extends StreamedResponse
 {
-    public function setPhpSpreadsheet($filename, Spreadsheet $spreadsheet, $format = 'Ods')
+    public function setPhpSpreadsheet(string $filename, Spreadsheet $spreadsheet, string $format = 'Ods'): void
     {
         $this->headers->set('Content-Type', 'application/vnd.oasis.opendocument.spreadsheet');
         $this->headers->set('Content-Disposition', 'attachment;filename="'.$filename.'"');

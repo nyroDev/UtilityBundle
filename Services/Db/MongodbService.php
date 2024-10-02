@@ -6,7 +6,7 @@ use Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType;
 
 class MongodbService extends DbAbstractService
 {
-    public function getFormType()
+    public function getFormType(): string
     {
         return DocumentType::class;
     }

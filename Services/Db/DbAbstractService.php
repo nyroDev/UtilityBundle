@@ -3,42 +3,34 @@
 namespace NyroDev\UtilityBundle\Services\Db;
 
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
+use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Services\AbstractService;
 
 abstract class DbAbstractService extends AbstractService
 {
-    protected $objectManager;
-
-    public function __construct(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
+    public function __construct(
+        protected readonly ObjectManager $objectManager,
+    ) {
     }
 
-    /**
-     * @return ObjectManager
-     */
-    public function getObjectManager()
+    public function getObjectManager(): ObjectManager
     {
         return $this->objectManager;
     }
 
     /**
      * @param string $name class name
-     *
-     * @return \Doctrine\Persistence\ObjectRepository
      */
-    public function getRepository($name)
+    public function getRepository(object|string $name): ObjectRepository
     {
         return is_object($name) ? $name : $this->getObjectManager()->getRepository($name);
     }
 
     /**
-     * @param string $name     class name
-     * @param bool   $elastica True to get elastica query Builder
-     *
-     * @return \NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder
+     * @param bool $elastica True to get elastica query Builder
      */
-    public function getQueryBuilder($name, $elastica = false)
+    public function getQueryBuilder(string|ObjectRepository $name, bool $elastica = false): AbstractQueryBuilder
     {
         if ($elastica) {
             $class = \NyroDev\UtilityBundle\QueryBuilder\ElasticaQueryBuilder::class;
@@ -51,7 +43,7 @@ abstract class DbAbstractService extends AbstractService
         return $queryBuilder;
     }
 
-    public function getNew($name, $persist = true)
+    public function getNew(object|string $name, bool $persist = true): mixed
     {
         $repo = $this->getRepository($name);
         $classname = $repo->getClassName();
@@ -64,25 +56,25 @@ abstract class DbAbstractService extends AbstractService
         return $new;
     }
 
-    public function persist($object)
+    public function persist(mixed $object): void
     {
         $this->getObjectManager()->persist($object);
     }
 
-    public function remove($object)
+    public function remove(mixed $object): void
     {
         $this->getObjectManager()->remove($object);
     }
 
-    public function refresh($object)
+    public function refresh(mixed $object): void
     {
         $this->getObjectManager()->refresh($object);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->getObjectManager()->flush();
     }
 
-    abstract public function getFormType();
+    abstract public function getFormType(): string;
 }

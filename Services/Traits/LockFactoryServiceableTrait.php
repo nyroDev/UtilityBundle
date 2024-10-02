@@ -3,20 +3,19 @@
 namespace NyroDev\UtilityBundle\Services\Traits;
 
 use Symfony\Component\Lock\LockFactory;
+use Symfony\Contracts\Service\Attribute\Required;
 
 trait LockFactoryServiceableTrait
 {
-    protected $lockFactory;
+    protected ?LockFactory $lockFactory = null;
 
-    /**
-     * @Required
-     */
-    public function setLockFactory(LockFactory $lockFactory)
+    #[Required]
+    public function setLockFactory(LockFactory $lockFactory): void
     {
         $this->lockFactory = $lockFactory;
     }
 
-    protected function getLockFactory(): LockFactory
+    protected function getLockFactory(): ?LockFactory
     {
         return $this->lockFactory;
     }

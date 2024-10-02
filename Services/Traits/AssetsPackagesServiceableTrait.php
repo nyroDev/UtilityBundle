@@ -3,20 +3,19 @@
 namespace NyroDev\UtilityBundle\Services\Traits;
 
 use Symfony\Component\Asset\Packages;
+use Symfony\Contracts\Service\Attribute\Required;
 
 trait AssetsPackagesServiceableTrait
 {
-    protected $assetsPackages;
+    protected ?Packages $assetsPackages = null;
 
-    /**
-     * @Required
-     */
-    public function setAssetsPackages(Packages $assetsPackages)
+    #[Required]
+    public function setAssetsPackages(Packages $assetsPackages): void
     {
         $this->assetsPackages = $assetsPackages;
     }
 
-    protected function getAssetsPackages(): Packages
+    protected function getAssetsPackages(): ?Packages
     {
         return $this->assetsPackages;
     }

@@ -10,7 +10,7 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class ValidConfigValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint)
     {
         if (false === $value) {
             $this->context->buildViolation($constraint->message)

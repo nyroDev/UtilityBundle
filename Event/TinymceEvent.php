@@ -8,14 +8,14 @@ class TinymceEvent extends Event
 {
     public const BROWSER_CONFIG = 'nyrodev.events.tinymce.browser.config';
 
-    protected $config;
+    protected ?array $config = null;
 
-    public function getConfig()
+    public function getConfig(): ?array
     {
         return $this->config;
     }
 
-    public function setConfig(array $config)
+    public function setConfig(?array $config): void
     {
         $this->config = $config;
     }

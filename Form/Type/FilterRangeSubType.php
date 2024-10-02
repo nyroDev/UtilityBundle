@@ -25,7 +25,7 @@ class FilterRangeSubType extends SrcAbstractType
             ], $options['options']));
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setRequired(['type'])

@@ -24,7 +24,7 @@ abstract class AbstractAdminController extends AbstractController
     public const ADD = 'add';
     public const EDIT = 'edit';
 
-    protected function createList(Request $request, $repository, $route, array $routePrm = [], $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, $exportConfig = false, array $filterDefaults = [])
+    protected function createList(Request $request, $repository, $route, array $routePrm = [], $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, ?AbstractQueryBuilder $queryBuilder = null, $exportConfig = false, array $filterDefaults = [])
     {
         $nbPerPageParam = 'admin.nbPerPage.'.$route;
         $nbPerPage = $this->getParameter($nbPerPageParam, $this->getParameter('nyroDev_utility.admin.nbPerPage'));
@@ -140,7 +140,7 @@ abstract class AbstractAdminController extends AbstractController
         ];
     }
 
-    protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, AbstractQueryBuilder $queryBuilder = null, array $filterDefaults = [])
+    protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, ?AbstractQueryBuilder $queryBuilder = null, array $filterDefaults = [])
     {
         $filter = null;
         if (!is_null($filterType)) {
@@ -212,7 +212,7 @@ abstract class AbstractAdminController extends AbstractController
         ];
     }
 
-    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = [], $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = [], $callbackAfterFlush = null, ObjectManager $objectManager = null, array $moreFormOptions = [], $formName = null)
+    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = [], $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = [], $callbackAfterFlush = null, ?ObjectManager $objectManager = null, array $moreFormOptions = [], $formName = null)
     {
         if (is_null($groups)) {
             $groups = ['Default', $action];

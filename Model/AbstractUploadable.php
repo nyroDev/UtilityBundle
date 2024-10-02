@@ -26,17 +26,17 @@ abstract class AbstractUploadable
 
     protected ?NyrodevService $service;
 
-    public function setService(NyrodevService $service = null)
+    protected $temps = [];
+    protected $directs = [];
+
+    public function setService(?NyrodevService $service = null)
     {
         $this->service = $service;
     }
 
-    abstract protected function getFileFields();
+    abstract protected function getFileFields(): array;
 
-    protected $temps = [];
-    protected $directs = [];
-
-    public function getFilePath($field, $place = self::PATH_ORIGINAL)
+    public function getFilePath(string $field, string $place = self::PATH_ORIGINAL): mixed
     {
         $fieldFile = $this->getFileConfig($field, self::CONFIG_FIELD);
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -44,7 +44,7 @@ abstract class AbstractUploadable
         $original = $accessor->getValue($this, $fieldFile);
 
         if (!$original) {
-            return;
+            return null;
         }
 
         switch ($place) {
@@ -58,29 +58,29 @@ abstract class AbstractUploadable
         }
     }
 
-    public function getWebPath($field)
+    public function getWebPath(string $field): ?string
     {
         return $this->getFilePath($field, self::PATH_WEB);
     }
 
-    public function getAbsolutePath($field)
+    public function getAbsolutePath(string $field): ?string
     {
         return $this->getFilePath($field, self::PATH_ABSOLUTE);
     }
 
-    public function setFilePath($field, $value, $step)
+    public function setFilePath(string $field, ?string $value, $step): void
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         $accessor->setValue($this, $this->getFileConfig($field, self::CONFIG_FIELD), $value);
     }
 
-    public function removeFile($field)
+    public function removeFile(string $field): void
     {
         $this->removeFileReal($this->getFilePath($field, self::PATH_ABSOLUTE));
         $this->setFilePath($field, null, self::FILEPATH_REMOVE);
     }
 
-    public function getFileConfig($field, $config)
+    public function getFileConfig(string $field, string $config)
     {
         $fileFields = $this->getFileFields();
         if (isset($fileFields[$field]) && isset($fileFields[$field][$config])) {
@@ -98,7 +98,7 @@ abstract class AbstractUploadable
         return;
     }
 
-    public function setDirectFile($field, $source, $filename = null, $sourceIsContent = false)
+    public function setDirectFile(string $field, mixed $source, string $filename = null, bool $sourceIsContent = false): void
     {
         $this->directs[$field] = [
             'source' => $source,
@@ -116,7 +116,7 @@ abstract class AbstractUploadable
         $this->setFilePath($field, $value, self::FILEPATH_DIRECT);
     }
 
-    protected function setUploadFile($field, UploadedFile $file = null)
+    protected function setUploadFile(string $field, ?UploadedFile $file = null): void
     {
         $this->$field = $file;
 
@@ -147,12 +147,12 @@ abstract class AbstractUploadable
         }
     }
 
-    protected function getNewFilename($field, $originalName, $extension = null)
+    protected function getNewFilename(string $field, string $originalName, string $extension = null): string
     {
         return $this->getNewFilenameInDir($this->getFileConfig($field, self::CONFIG_ROOTDIR), $originalName, $extension);
     }
 
-    protected function getNewFilenameInDir($dir, $originalName, $extension = null)
+    protected function getNewFilenameInDir(string $dir, string $originalName, string $extension = null): string
     {
         $value = $originalName;
         if ($this->service) {
@@ -237,7 +237,7 @@ abstract class AbstractUploadable
         }
     }
 
-    protected function removeFileReal($file)
+    protected function removeFileReal(string $file)
     {
         $fs = new Filesystem();
         if ($file && $fs->exists($file)) {

@@ -18,17 +18,10 @@ class ShareService extends AbstractService
         'quality' => 80,
     ];
 
-    protected $metas = [];
-    protected $metasProp = [];
+    protected array $metas = [];
+    protected array $metasProp = [];
 
-    /**
-     * Set a share meta value.
-     *
-     * @param string $type        Meta name
-     * @param string $value       Meta value
-     * @param bool   $useProperty Indicates if the default should use property
-     */
-    public function set($type, $value, $useProperty = false)
+    public function setValue(string $type, string $value, bool $useProperty = false): void
     {
         $value = preg_replace('/\s\s+/', ' ', $this->trans($value));
         $keys = [];
@@ -48,7 +41,7 @@ class ShareService extends AbstractService
                 $keysProp[] = 'og:image';
                 $keys[] = 'twitter:image:src';
                 if (false === strpos($value, '://')) {
-                    $value = $this->container->get(NyrodevService::class)->getFullUrl($value);
+                    $value = $this->get(NyrodevService::class)->getFullUrl($value);
                 }
                 break;
             default:
@@ -81,14 +74,7 @@ class ShareService extends AbstractService
         }
     }
 
-    /**
-     * Get a share meta value.
-     *
-     * @param string $type Meta name
-     *
-     * @return string Meta value
-     */
-    public function get($type)
+    public function getValue(string $type): string
     {
         $ret = null;
         if ('image' == $type) {
@@ -110,12 +96,8 @@ class ShareService extends AbstractService
 
     /**
      * Set all default values at once.
-     *
-     * @param string      $title       Title
-     * @param string      $description Description
-     * @param string|null $image       Absolute image URL
      */
-    public function setAll($title, $description, $image = null)
+    public function setAll(string $title, string $description, ?string $image = null): void
     {
         $this->setTitle($title);
         $this->setDescription($description);
@@ -127,9 +109,9 @@ class ShareService extends AbstractService
     /**
      * Set Sharable values from object.
      */
-    public function setSharable(Sharable $sharable, $useToStringTitle = true)
+    public function setSharable(Sharable $sharable, bool $useToStringTitle = true): void
     {
-        $nyrodev = $this->container->get(NyrodevService::class);
+        $nyrodev = $this->get(NyrodevService::class);
 
         if ($useToStringTitle) {
             $this->setTitle($nyrodev->inlineText($sharable.''));
@@ -139,16 +121,16 @@ class ShareService extends AbstractService
             $this->setTitle($nyrodev->inlineText($sharable->getMetaTitle()));
         }
         if ($sharable->getOgTitle()) {
-            $this->set('og:title', $nyrodev->inlineText($sharable->getOgTitle()), true);
-            $this->set('twitter:title', $nyrodev->inlineText($sharable->getOgTitle()));
+            $this->setValue('og:title', $nyrodev->inlineText($sharable->getOgTitle()), true);
+            $this->setValue('twitter:title', $nyrodev->inlineText($sharable->getOgTitle()));
         }
 
         if ($sharable->getMetaDescription()) {
             $this->setDescription($nyrodev->inlineText($sharable->getMetaDescription()));
         }
         if ($sharable->getOgDescription()) {
-            $this->set('og:description', $nyrodev->inlineText($sharable->getOgDescription()), true);
-            $this->set('twitter:description', $nyrodev->inlineText($sharable->getOgDescription()));
+            $this->setValue('og:description', $nyrodev->inlineText($sharable->getOgDescription()), true);
+            $this->setValue('twitter:description', $nyrodev->inlineText($sharable->getOgDescription()));
         }
 
         if ($sharable->getMetaKeywords()) {
@@ -159,7 +141,7 @@ class ShareService extends AbstractService
             $image = $sharable->getShareOgImage();
             if (false !== strpos($image, '/public/') && file_exists($image)) {
                 // This is a full path name, resize it
-                $image = $this->container->get(ImageService::class)->resize($image, self::IMAGE_CONFIG_NAME);
+                $image = $this->get(ImageService::class)->resize($image, self::IMAGE_CONFIG_NAME);
             }
             $this->setImage($image);
         }
@@ -167,107 +149,62 @@ class ShareService extends AbstractService
         if ($sharable->getShareOthers() && count($sharable->getShareOthers())) {
             foreach ($sharable->getShareOthers() as $k => $v) {
                 if (is_array($v)) {
-                    $this->set($k, $nyrodev->inlineText($v[0]), $v[1]);
+                    $this->setValue($k, $nyrodev->inlineText($v[0]), $v[1]);
                 } else {
-                    $this->set($k, $nyrodev->inlineText($v));
+                    $this->setValue($k, $nyrodev->inlineText($v));
                 }
             }
         }
     }
 
-    /**
-     * Set the share title.
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
-        $this->set('title', $title);
+        $this->setValue('title', $title);
     }
 
-    /**
-     * Get the share title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
-        return $this->get('title');
+        return $this->getValue('title');
     }
 
-    /**
-     * Set the share description.
-     *
-     * @param string $description
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): void
     {
-        $this->set('description', $description);
+        $this->setValue('description', $description);
     }
 
-    /**
-     * Get the share description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
-        return $this->get('description');
+        return $this->getValue('description');
     }
 
-    /**
-     * Set the share keywords.
-     *
-     * @param string $keywords
-     */
-    public function setKeywords($keywords)
+    public function setKeywords(string $keywords): void
     {
-        $this->set('keywords', $keywords);
+        $this->setValue('keywords', $keywords);
     }
 
-    /**
-     * Get the share keywords.
-     *
-     * @return string
-     */
-    public function getKeywords()
+    public function getKeywords(): stirng
     {
-        return $this->get('keywords');
+        return $this->getValue('keywords');
     }
 
-    /**
-     * Set the share absolute image URL.
-     *
-     * @param string $image Absolute image URL
-     */
-    public function setImage($image, $getAndSetDimensions = true)
+    public function setImage(string $image, bool $getAndSetDimensions = true): void
     {
-        $this->set('image', $image);
+        $this->setValue('image', $image);
         if ($getAndSetDimensions) {
-            $imageSize = $this->container->get(ImageService::class)->getImageSize($image);
+            $imageSize = $this->get(ImageService::class)->getImageSize($image);
             if (is_array($imageSize) && count($imageSize)) {
-                $this->set('og:image:width', $imageSize[0], true);
-                $this->set('og:image:height', $imageSize[1], true);
+                $this->setValue('og:image:width', $imageSize[0], true);
+                $this->setValue('og:image:height', $imageSize[1], true);
             }
         }
     }
 
-    /**
-     * Get the share absolute image URL.
-     *
-     * @return string
-     */
-    public function getImage()
+    public function getImage(): string
     {
-        return $this->get('image');
+        return $this->getValue('image');
     }
 
-    /**
-     * Get all metas set, to be shown in html header.
-     *
-     * @return string metas
-     */
-    public function getMetas()
+    public function getMetas(): string
     {
         $ret = [];
 
@@ -278,7 +215,7 @@ class ShareService extends AbstractService
             $this->setDescription($this->getParameter('nyroDev_utility.share.description'));
         }
         if (!isset($this->metas['keywords']) && $this->getParameter('nyroDev_utility.share.keywords')) {
-            $this->set('keywords', $this->getParameter('nyroDev_utility.share.keywords'));
+            $this->setValue('keywords', $this->getParameter('nyroDev_utility.share.keywords'));
         }
         if (!isset($this->metasProp['og:image']) && $this->getParameter('nyroDev_utility.share.image')) {
             $this->setImage($this->getParameter('nyroDev_utility.share.image'));
@@ -302,12 +239,8 @@ class ShareService extends AbstractService
     /**
      * Get number of share for an URL.
      * Cache the response of this function!
-     *
-     * @param string $url
-     *
-     * @return array
      */
-    public function getNumberOfShares($url)
+    public function getNumberOfShares(string $url): array
     {
         $urlEncoded = urlencode($url);
         $data = [
@@ -386,20 +319,5 @@ class ShareService extends AbstractService
         }
 
         return $data;
-    }
-
-    /**
-     * Get the translation for a given keyword.
-     *
-     * @param string $key        Translation key
-     * @param array  $parameters Parameters to replace
-     * @param string $domain     Translation domain
-     * @param string $locale     Local to use
-     *
-     * @return string The translation
-     */
-    public function trans($key, array $parameters = [], $domain = 'messages', $locale = null)
-    {
-        return $this->container->get('translator')->trans($key, $parameters, $domain, $locale);
     }
 }

@@ -31,7 +31,7 @@ class Rem2pxCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $src = $input->getArgument('src');
         $dst = $input->getArgument('dst');
@@ -108,6 +108,6 @@ class Rem2pxCommand extends Command
         $output->writeln('Write '.$dst);
         file_put_contents($dst, $dstCssDoc->render(\Sabberworm\CSS\OutputFormat::createPretty()));
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

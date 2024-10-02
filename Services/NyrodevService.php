@@ -32,7 +32,7 @@ class NyrodevService extends AbstractService
      *
      * @param RequestEvent $event Kernel request event
      */
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         if ($event->isMainRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
             $locale = $event->getRequest()->getLocale();
@@ -75,7 +75,7 @@ class NyrodevService extends AbstractService
      *
      * @param ResponseEvent $event Kernel response event
      */
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
         if ($this->getParameter('nyroDev_utility.setContentLanguageResponse') && $event->getResponse() && $event->getResponse()->headers && $event->getRequest()->getLocale()) {
             $event->getResponse()->headers->set('Content-Language', $event->getRequest()->getLocale());
@@ -84,30 +84,20 @@ class NyrodevService extends AbstractService
 
     /**
      * Generates a URL from the given parameters, allowing extra parameters (like comma).
-     *
-     * @param string $name       The name of the route
-     * @param mixed  $parameters An array of parameters
-     * @param bool   $absolute   Whether to generate an absolute URL
-     *
-     * @return string The generated URL
      */
-    public function generateUrl($name, $parameters = [], $absolute = false)
+    public function generateUrl(string $route, array $parameters = [], bool $absolute = false): string
     {
-        if ('#' == $name) {
+        if ('#' == $route) {
             return '#';
         }
 
-        return str_replace('%2C', ',', $this->get('router')->generate($name, $parameters, $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH));
+        return str_replace('%2C', ',', $this->get('router')->generate($route, $parameters, $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH));
     }
 
     /**
      * Absolutize an URL.
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    public function getFullUrl($path)
+    public function getFullUrl(string $path): string
     {
         if (0 === strpos($path, 'http') || 0 === strpos($path, 'mailto:') || 0 === strpos($path, '#')) {
             return $path;
@@ -146,31 +136,24 @@ class NyrodevService extends AbstractService
 
     /**
      * Set a templating slot.
-     *
-     * @param string $name  Slot name
-     * @param mixed  $value Slot value
      */
-    public function setSlot($name, $value)
+    public function setSlot(string $name, mixed $value): void
     {
         $this->get('nyrodev.templating.helper.slots')->set($name, $value);
     }
 
     /**
      * Get parametred analytics UA.
-     *
-     * @return string
      */
-    public function getAnalyticsUA()
+    public function getAnalyticsUA(): ?string
     {
         return $this->getParameter('analyticsUA');
     }
 
     /**
      * Get tracking code for analytics if parametered.
-     *
-     * @return string
      */
-    public function getTrackingAnalytics()
+    public function getTrackingAnalytics(): ?string
     {
         $ret = null;
         $ua = $this->getAnalyticsUA();
@@ -190,12 +173,8 @@ class NyrodevService extends AbstractService
 
     /**
      * Get url with assetic version if configured.
-     *
-     * @param string $url
-     *
-     * @return string
      */
-    public function getAsseticVersionUrl($url)
+    public function getAsseticVersionUrl(string $url): string
     {
         $tmp = $this->getParameter('assetic_versions');
 
@@ -209,24 +188,16 @@ class NyrodevService extends AbstractService
 
     /**
      * Inline a texte to remove all new line and various characters.
-     *
-     * @param string $text
-     *
-     * @return string
      */
-    public function inlineText($text)
+    public function inlineText(string $text): string
     {
         return preg_replace('/\s\s+/', ' ', preg_replace('/\s/', ' ', trim($text, " \t\n\r\0\x0B:·-")));
     }
 
     /**
      * Urlify a string.
-     *
-     * @param string $text
-     *
-     * @return string
      */
-    public function urlify($text)
+    public function urlify(string $text): string
     {
         $text = str_replace(
             ['ß', 'æ',  'Æ',  'Œ', 'œ', '¼',   '½',   '¾',   '‰',   '™', '&', '	', ' '], // Last characters are tabs and non-breaking space
@@ -246,10 +217,8 @@ class NyrodevService extends AbstractService
      *
      * @param int    $len    String length
      * @param string $ignore Characters to exclude
-     *
-     * @return string
      */
-    public function randomStr($len = 20, $ignore = null)
+    public function randomStr(int $len = 20, ?string $ignore = null): string
     {
         $source = 'abcdefghikjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         if (!is_null($ignore)) {
@@ -271,10 +240,8 @@ class NyrodevService extends AbstractService
 
     /**
      * Indicates if the request is post.
-     *
-     * @return bool
      */
-    public function isPost()
+    public function isPost(): bool
     {
         return $this->getRequest()->isMethod('POST');
     }
@@ -285,10 +252,8 @@ class NyrodevService extends AbstractService
      * @param ObjectRepository $repository The repository
      * @param string           $field      Field name
      * @param int              $length     Random string length
-     *
-     * @return string
      */
-    public function getNewUniqRandomKey(ObjectRepository $repository, $field, $length)
+    public function getNewUniqRandomKey(ObjectRepository $repository, string $field, int $length): string
     {
         $entity = true;
         while ($entity) {
@@ -303,22 +268,18 @@ class NyrodevService extends AbstractService
      * Returns true if the request is Ajax.
      * It works if your JavaScript library set an X-Requested-With HTTP header.
      * It is known to work with Prototype, Mootools, jQuery.
-     *
-     * @return bool
      */
-    public function isAjax()
+    public function isAjax(): bool
     {
         return $this->getRequest()->isXmlHttpRequest();
     }
 
-    protected $isExternalAgent;
+    protected ?bool $isExternalAgent = null;
 
     /**
      * Return true if the request comes from an external agent (like facebook external hit).
-     *
-     * @return bool
      */
-    public function isExternalAgent()
+    public function isExternalAgent(): bool
     {
         if (is_null($this->isExternalAgent)) {
             $this->isExternalAgent = false;
@@ -335,10 +296,8 @@ class NyrodevService extends AbstractService
 
     /**
      * Indicates if the PHP limits have been increased.
-     *
-     * @var bool
      */
-    protected $increasedPhpLimits = false;
+    protected bool $increasedPhpLimits = false;
 
     /**
      * Increase PHP Limits.
@@ -354,35 +313,23 @@ class NyrodevService extends AbstractService
 
     /**
      * Create a pager.
-     *
-     * @param string $route     Route name
-     * @param array  $routePrm  Route parameters
-     * @param int    $total     Total number of results
-     * @param int    $page      Current page
-     * @param int    $nbPerPage Number per page
-     *
-     * @return Pager
      */
-    public function getPager($route, $routePrm, $total, $page, $nbPerPage)
+    public function getPager(string $route, array $routePrm, int $total, int $page, int $nbPerPage): Pager
     {
         return new Pager($this, $route, $routePrm, $total, $page, $nbPerPage);
     }
 
     /**
      * Get the file extension.
-     *
-     * @param string $file The filename
-     *
-     * @return string|null The extension
      */
-    public function getExt($file)
+    public function getExt(string $file): ?string
     {
         $tmp = explode('?', pathinfo($file, PATHINFO_EXTENSION));
 
         return $tmp[0];
     }
 
-    protected $uniqFileNames = [];
+    protected array $uniqFileNames = [];
 
     /**
      * Get a new uniq filename in a directory.
@@ -390,10 +337,8 @@ class NyrodevService extends AbstractService
      * @param string $dir  Destination directory
      * @param string $name Original filename
      * @param string $sep  Spearator used in case file already exists
-     *
-     * @return string
      */
-    public function getUniqFileName($dir, $name, $sep = '-')
+    public function getUniqFileName(string $dir, string $name, string $sep = '-'): string
     {
         list($name, $ext) = $this->standardizeFileName($name, true);
 
@@ -413,10 +358,8 @@ class NyrodevService extends AbstractService
      *
      * @param string $name    Original filename
      * @param bool   $asArray Indicates if the return should be an array or a string
-     *
-     * @return string
      */
-    public function standardizeFileName($name, $asArray = false)
+    public function standardizeFileName(string $name, bool $asArray = false): string|array
     {
         $name = mb_strtolower($name);
         $ext = $this->getExt($name);
@@ -441,7 +384,7 @@ class NyrodevService extends AbstractService
      *
      * @return string The human size
      */
-    public function humanFileSize($file)
+    public function humanFileSize(string $file): string
     {
         $size = filesize($file);
         $mod = 1024;
@@ -453,16 +396,12 @@ class NyrodevService extends AbstractService
         return round($size, 2).' '.$units[$i];
     }
 
-    protected $html2textLoaded = false;
+    protected bool $html2textLoaded = false;
 
     /**
      * Transform HTML content into text.
-     *
-     * @param string $html HTML text
-     *
-     * @return string Text
      */
-    public function html2text($html)
+    public function html2text(string $html): string
     {
         if (!$this->html2textLoaded) {
             require dirname(__FILE__).'/../Utility/Html2Text.php';
@@ -475,13 +414,8 @@ class NyrodevService extends AbstractService
 
     /**
      * Join rows in a single string.
-     *
-     * @param array  $rows
-     * @param string $separator
-     *
-     * @return string
      */
-    public function joinRows($rows, $separator = ', ')
+    public function joinRows(array $rows, string $separator = ', '): string
     {
         $ret = [];
         foreach ($rows as $r) {
@@ -496,10 +430,8 @@ class NyrodevService extends AbstractService
      *
      * @param string $url         The desired URL
      * @param array  $allowParams List of allowed parameters
-     *
-     * @return RedirectResponse|bool
      */
-    public function redirectIfNotUrl($url, array $allowParams = [])
+    public function redirectIfNotUrl(string $url, array $allowParams = []): RedirectResponse|bool
     {
         if ($url != $this->getRequest()->getRequestUri()) {
             $redirect = true;
@@ -535,10 +467,8 @@ class NyrodevService extends AbstractService
      *
      * @param string $format    Format translation ident
      * @param bool   $useOffset Use offset of datetime
-     *
-     * @return string
      */
-    public function formatDate(DateTime $datetime, $format, $useOffset = null)
+    public function formatDate(DateTime $datetime, string $format, ?bool $useOffset = null): string
     {
         if (is_null($useOffset)) {
             $useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');
@@ -564,7 +494,7 @@ class NyrodevService extends AbstractService
      *
      * @return string Trucnated text
      */
-    public function truncate($text, $limit, $isFile = false, $encoding = 'UTF-8')
+    public function truncate(string $text, int $limit, bool $isFile = false, string $encoding = 'UTF-8'): string
     {
         $ext = null;
         if ($isFile) {
@@ -582,12 +512,12 @@ class NyrodevService extends AbstractService
         return $text.($ext ? '.'.$ext : null);
     }
 
-    protected function getCryptKey()
+    protected function getCryptKey(): string
     {
         return sha1($this->getParameter('secret'));
     }
 
-    protected function doCryptAction($action, $string, $excludeSlash = true)
+    protected function doCryptAction(string $action, string $string, bool $excludeSlash = true): string
     {
         $cryptKey = $this->getCryptKey();
 
@@ -614,12 +544,12 @@ class NyrodevService extends AbstractService
         return $output;
     }
 
-    public function crypt($text, $excludeSlash = true)
+    public function crypt(string $text, bool $excludeSlash = true): string
     {
         return $this->doCryptAction('encrypt', $text, $excludeSlash);
     }
 
-    public function decrypt($encoded)
+    public function decrypt(string $encoded): string
     {
         return $this->doCryptAction('decrypt', $encoded);
     }

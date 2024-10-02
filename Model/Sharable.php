@@ -4,19 +4,19 @@ namespace NyroDev\UtilityBundle\Model;
 
 interface Sharable
 {
-    public function getMetaTitle();
+    public function getMetaTitle(): ?string;
 
-    public function getOgTitle();
+    public function getOgTitle(): ?string;
 
-    public function getMetaDescription();
+    public function getMetaDescription(): ?string;
 
-    public function getOgDescription();
+    public function getOgDescription(): ?string;
 
-    public function getMetaKeywords();
+    public function getMetaKeywords(): ?string;
 
-    public function getShareOgImage();
+    public function getShareOgImage(): ?string;
 
-    public function getShareOthers();
+    public function getShareOthers(): ?array;
 
     public function __toString();
 }

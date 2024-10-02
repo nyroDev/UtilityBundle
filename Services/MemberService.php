@@ -7,15 +7,10 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class MemberService extends AbstractService
 {
-    private $tokenStorage;
-    private $authorizationChecker;
-
     public function __construct(
-        TokenStorageInterface $tokenStorage,
-        AuthorizationCheckerInterface $authorizationChecker
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
     ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -30,32 +25,24 @@ class MemberService extends AbstractService
 
     /**
      * Indicates if the user is logged or not.
-     *
-     * @return bool
      */
-    public function isLogged()
+    public function isLogged(): bool
     {
         return is_object($this->getUser());
     }
 
     /**
      * Check if the user is logged and granted with the given role.
-     *
-     * @param string $role Role name
-     *
-     * @return bool
      */
-    public function isGranted($role)
+    public function isGranted(string $role): bool
     {
         return $this->isLogged() && $this->authorizationChecker->isGranted($role);
     }
 
     /**
      * Indicates if the logged user is impersonated.
-     *
-     * @return bool
      */
-    public function isImpersonated()
+    public function isImpersonated(): bool
     {
         return $this->isGranted('ROLE_PREVIOUS_ADMIN');
     }

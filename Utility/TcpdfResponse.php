@@ -5,12 +5,9 @@ namespace NyroDev\UtilityBundle\Utility;
 use Symfony\Component\HttpFoundation\Response;
 use TCPDF;
 
-/**
- * Class TcpdfResponse.
- */
 class TcpdfResponse extends Response
 {
-    public function setTcpdf(TCPDF $tcpdf, $fileDownload = false)
+    public function setTcpdf(TCPDF $tcpdf, bool $fileDownload = false): void
     {
         $this->headers->set('Content-Type', 'application/pdf');
         $this->setContent($tcpdf->Output('export.pdf', 'S'));

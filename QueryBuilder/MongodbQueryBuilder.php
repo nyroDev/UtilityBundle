@@ -12,7 +12,7 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
      *
      * @return \Doctrine\ODM\MongoDB\Query\Builder
      */
-    public function getNewQueryBuilder($complete = false)
+    public function getNewQueryBuilder(bool $complete = false)
     {
         $queryBuilder = $this->or->createQueryBuilder();
 
@@ -108,7 +108,7 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
         return $nbWhere;
     }
 
-    protected function applyFilter($object, $field, $transformer, $value, $queryBuilder)
+    protected function applyFilter($object, string $field, string $transformer, mixed $value, $queryBuilder): bool
     {
         switch ($transformer) {
             case self::OPERATOR_EQUALS:
@@ -177,7 +177,7 @@ class MongodbQueryBuilder extends AbstractQueryBuilder
                 ->execute();
     }
 
-    protected function _count()
+    protected function _count(): int
     {
         return $this->getNewQueryBuilder(true)
                 ->count()

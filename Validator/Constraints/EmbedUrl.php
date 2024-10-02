@@ -17,7 +17,7 @@ class EmbedUrl extends Constraint
     public $messageNoType = 'The URL you provided does not seem to contain a %type%.';
     public $messageNoEmbed = 'The URL you provided does not seem to contain embed informations.';
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return EmbedValidatorService::class;
     }

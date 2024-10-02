@@ -27,10 +27,8 @@ abstract class AbstractService implements HelperInterface
 
     /**
      * Get name of the service.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         $tmp = explode('\\', get_class($this));
 

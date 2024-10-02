@@ -13,7 +13,7 @@ class TinymceType extends AbstractType
 {
     use AssetsPackagesServiceableTrait;
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $attrs = $view->vars['attr'];
         if (!is_array($attrs)) {
@@ -67,7 +67,7 @@ class TinymceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'tinymceBrowser' => [],

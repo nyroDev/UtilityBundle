@@ -39,7 +39,7 @@ class FilterCustomType extends FilterType
         return $applyFilter ? $applyFilter($queryBuilder, $name, $data) : $queryBuilder;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'applyFilter' => null,

@@ -20,7 +20,7 @@ class ImageService extends AbstractService
     use KernelInterfaceServiceableTrait;
     use AssetsPackagesServiceableTrait;
 
-    public function resize($file, $configKey = 'default', $force = false)
+    public function resize(string $file, string $configKey = 'default', bool $force = false): string
     {
         try {
             $resizedPath = $this->_resize($file, $this->getConfig($configKey), $force);
@@ -33,7 +33,7 @@ class ImageService extends AbstractService
         return $ret;
     }
 
-    public function mask($originalFile, $maskFile, $destName = 'masked', $useMaskSize = true, $force = false)
+    public function mask(string $originalFile, string $maskFile, string $destName = 'masked', bool $useMaskSize = true, bool $force = false): string
     {
         $cachePath = $this->getCachePath($originalFile);
         $destFile = $cachePath.$destName.'.png';
@@ -72,7 +72,7 @@ class ImageService extends AbstractService
         return $this->getAssetsPackages()->getUrl($tmp[1]);
     }
 
-    public function getConfig($configKey = 'default')
+    public function getConfig(string $configKey = 'default'): array
     {
         if (is_array($configKey)) {
             return $configKey;
@@ -83,7 +83,7 @@ class ImageService extends AbstractService
         return $prm;
     }
 
-    public function getCachePath($file, $autoCreate = true)
+    public function getCachePath(string $file, bool $autoCreate = true): string
     {
         if (false !== strpos($file, '/public/cache/')) {
             $dir = $file.'_cache/';
@@ -99,7 +99,7 @@ class ImageService extends AbstractService
         return $dir;
     }
 
-    public function removeCache($file)
+    public function removeCache(string $file): void
     {
         $dir = $this->getCachePath($file, false);
         $fs = new Filesystem();
@@ -108,7 +108,7 @@ class ImageService extends AbstractService
         }
     }
 
-    public function _resize($file, array $config, $force = false, $dest = null)
+    public function _resize(string $file, array $config, bool $force = false, ?string $dest = null): string
     {
         if (!file_exists($file)) {
             throw new Exception('File '.$file.' not found');
@@ -151,7 +151,7 @@ class ImageService extends AbstractService
         return $dest;
     }
 
-    public function saveImageResource($dest, $img, $quality = 100)
+    public function saveImageResource(string $dest, $img, int $quality = 100): void
     {
         switch ($this->get(NyrodevService::class)->getExt($dest)) {
             case 'jpg':
@@ -171,7 +171,7 @@ class ImageService extends AbstractService
         imagedestroy($img);
     }
 
-    public function resizeResource(array $imageData, array $config, $destroySrcResource = true)
+    public function resizeResource(array $imageData, array $config, bool $destroySrcResource = true)
     {
         $src = $imageData['src'];
         $info = $imageData['info'];
@@ -364,13 +364,8 @@ class ImageService extends AbstractService
 
     /**
      * Get image size array, possibily using a cache if configured.
-     *
-     * @param string $file
-     * @param bool   $force
-     *
-     * @return array
      */
-    public function getImageSize($file, $force = false)
+    public function getImageSize(string $file, bool $force = false): array
     {
         $cache = false;
         if ($this->container->has('nyrodev_image_cache')) {
@@ -398,7 +393,7 @@ class ImageService extends AbstractService
         return $imageSize;
     }
 
-    public function createImgSrc($file, $allowTransparent = true)
+    public function createImgSrc(string $file, bool $allowTransparent = true): array
     {
         $info = $this->getImageSize($file);
         $src = null;
@@ -515,6 +510,7 @@ class ImageService extends AbstractService
                 }
             }
 
+            $curWidth = 0;
             $nbWords = count($words);
             for ($i = 0; $i < $nbWords; ++$i) {
                 $tmpString .= $words[$i].' ';
@@ -604,7 +600,7 @@ class ImageService extends AbstractService
     }
 
     // From http://php.net/manual/en/function.imagecreatefromgif.php#104473
-    public function isAnimatedGif($file)
+    public function isAnimatedGif(string $file): bool
     {
         if (!($fh = @fopen($file, 'rb'))) {
             return false;
@@ -636,7 +632,7 @@ class ImageService extends AbstractService
      *
      * @return array Numeric index (0: R, 1: V and 2: B)
      */
-    public function hexa2dec($col)
+    public function hexa2dec(string $col): array
     {
         if ('#' === substr($col, 0, 1)) {
             $col = substr($col, 1);
@@ -657,7 +653,7 @@ class ImageService extends AbstractService
      *
      * @return resource
      */
-    protected function imagecreatefrombmp($filename)
+    protected function imagecreatefrombmp(string $filename)
     {
         //    Load the image into a string
         $file = fopen($filename, 'rb');
@@ -756,10 +752,8 @@ class ImageService extends AbstractService
      * @param string $html          HTML content
      * @param bool   $absolutizeUrl Indicates if the src should be absolutized
      * @param bool   $addBody       Indicates if the content contains body
-     *
-     * @return string
      */
-    public function resizeImagesInHtml($html, $absolutizeUrl = false, $addBody = false)
+    public function resizeImagesInHtml(string $html, bool $absolutizeUrl = false, bool $addBody = false): string
     {
         if (!$html) {
             return $html;
@@ -787,7 +781,7 @@ class ImageService extends AbstractService
      *
      * @param bool $absolutizeUrl Indicates if the src should be absolutized
      */
-    protected function resizeImagesInHtmlDom(DOMElement $node, $absolutizeUrl = false)
+    protected function resizeImagesInHtmlDom(DOMElement $node, bool $absolutizeUrl = false): void
     {
         if (
             'img' == strtolower($node->tagName)
