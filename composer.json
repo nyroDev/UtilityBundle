@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "nyrodev/php-template-bundle": "dev-master",
+        "nyrodev/php-template-bundle": "^6",
         "symfony/framework-bundle": "^6",
         "symfony/templating": "^6"
     },
