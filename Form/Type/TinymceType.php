@@ -24,10 +24,10 @@ class TinymceType extends AbstractType
 
         $attrs = array_merge($attrs, [
             'class' => 'tinymce'.(isset($attrs['class']) && $attrs['class'] ? ' '.$attrs['class'] : ''),
-            'data-tinymceurl' => $this->getAssetsPackages()->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
+            'data-tinymceurl' => $this->getAssetsPackages()->getUrl('tinymce/tinymce.min.js'),
             $prefixTinymce.'language' => $this->container->get(NyrodevService::class)->getRequest()->getLocale(),
             $prefixTinymce.'height' => 450,
-            $prefixTinymce.'width' => 771,
+            $prefixTinymce.'width' => 720,
             $prefixTinymce.'theme' => 'silver',
             $prefixTinymce.'plugins' => 'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount'.(isset($options['tinymcePlugins']) && $options['tinymcePlugins'] ? ','.$options['tinymcePlugins'] : null),
             $prefixTinymce.'toolbar' => 'responsivefilemanager, undo redo | styleselect | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | image media fullpage',

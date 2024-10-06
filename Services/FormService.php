@@ -63,8 +63,8 @@ class FormService extends AbstractService
             'data-'.$pluploadKey.'complete' => $this->trans('nyrodev.plupload.complete'),
             'data-'.$pluploadKey.'cancelall' => $this->trans('nyrodev.plupload.cancelAll'),
             'data-'.$pluploadKey.'filters' => json_encode($filters),
-            'data-'.$pluploadKey.'swf' => $this->getAssetsPackages()->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.swf'),
-            'data-'.$pluploadKey.'xap' => $this->getAssetsPackages()->getUrl('bundles/nyrodevutility/vendor/plupload/Moxie.xap'),
+            'data-'.$pluploadKey.'swf' => $this->getAssetsPackages()->getUrl('plupload/Moxie.swf'),
+            'data-'.$pluploadKey.'xap' => $this->getAssetsPackages()->getUrl('plupload/Moxie.xap'),
         ];
 
         $pluploadMaxFileSize = $this->getParameter('nyroDev_utility.pluploadMaxFileSize');

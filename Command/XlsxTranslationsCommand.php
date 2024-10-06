@@ -3,8 +3,9 @@
 namespace NyroDev\UtilityBundle\Command;
 
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use PHPExcel;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,17 +14,11 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Symfony2 command to update confidentielles tags.
- */
-class XlsTranslationsCommand extends Command
+class XlsxTranslationsCommand extends Command
 {
-    protected $nyrodev;
-
-    public function __construct(NyrodevService $nyrodev)
-    {
-        $this->nyrodev = $nyrodev;
-
+    public function __construct(
+        private readonly NyrodevService $nyrodev
+    ) {
         parent::__construct();
     }
 
@@ -33,17 +28,13 @@ class XlsTranslationsCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('nyrodev:xlsTranslations')
+            ->setName('nyrodev:xlsxTranslations')
             ->setDescription('Fill XLS file with translations')
             ->addArgument('dest', InputArgument::REQUIRED, 'Destination file')
-            ->addArgument('dir', InputArgument::OPTIONAL, 'Directory to search in', 'src')
+            ->addArgument('dir', InputArgument::OPTIONAL, 'Directory to search in', '')
             ->addArgument('suffix', InputArgument::OPTIONAL, 'Translation file suffix', '')
-            ->addArgument('extension', InputArgument::OPTIONAL, 'Translation file extension', 'yml');
+            ->addArgument('extension', InputArgument::OPTIONAL, 'Translation file extension', 'yaml');
     }
-
-    protected $existing;
-    protected $className;
-    protected $accessor;
 
     /**
      * Executes the command.
@@ -90,32 +81,29 @@ class XlsTranslationsCommand extends Command
             ], $locales);
 
             if (!file_exists($dest)) {
-                $phpExcel = new PHPExcel();
+                $spreadsheet = new Spreadsheet();
                 $title = $creator = 'Translations';
-                $phpExcel->getProperties()->setCreator($creator)
+                $spreadsheet->getProperties()->setCreator($creator)
                                 ->setLastModifiedBy($creator)
                                 ->setTitle($title)
                                 ->setSubject($title);
-                $sheet = $phpExcel->setActiveSheetIndex(0);
-                $sheet->setTitle($title);
+                $worksheet = $spreadsheet->getActiveSheet();
+                $worksheet->setTitle($title);
 
                 $row = 1;
-                $col = 0;
+                $col = 1;
                 foreach ($cols as $field) {
-                    $sheet->setCellValueByColumnAndRow($col, $row, $field);
-                    $sheet->getStyleByColumnAndRow($col, $row)->getFont()->setBold(true);
-                    $sheet->getColumnDimensionByColumn($col)->setAutoSize(true);
+                    $worksheet->setCellValue([$col, $row], $field);
+                    $worksheet->getStyle([$col, $row])->getFont()->setBold(true);
+                    $worksheet->getColumnDimensionByColumn($col)->setAutoSize(true);
                     ++$col;
                 }
                 ++$row;
             } else {
-                $fileType = PHPExcel_IOFactory::identify($dest);
-                $objReader = PHPExcel_IOFactory::createReader($fileType);
+                $spreadsheet = IOFactory::load($dest);
+                $worksheet = $spreadsheet->getActiveSheet();
 
-                $phpExcel = $objReader->load($dest);
-                $sheet = $phpExcel->getActiveSheet();
-
-                $row = $sheet->getHighestDataRow() + 1;
+                $row = $worksheet->getHighestDataRow() + 1;
             }
 
             $output->writeln('Parsing '.$nbO.' translation files');
@@ -155,25 +143,25 @@ class XlsTranslationsCommand extends Command
                 }
 
                 foreach ($foundTr as $ident => $trans) {
-                    $col = 0;
-                    $sheet->setCellValueByColumnAndRow($col, $row, $domain);
+                    $col = 1;
+                    $worksheet->setCellValue([$col, $row], $domain);
                     ++$col;
-                    $sheet->setCellValueByColumnAndRow($col, $row, $ident);
+                    $worksheet->setCellValue([$col, $row], $ident);
                     ++$col;
-                    $sheet->setCellValueByColumnAndRow($col, $row, $trans[$locale]);
+                    $worksheet->setCellValue([$col, $row], $trans[$locale]);
                     ++$col;
                     foreach ($locales as $loc) {
-                        $sheet->setCellValueByColumnAndRow($col, $row, $trans[$loc]);
+                        $worksheet->setCellValue([$col, $row], $trans[$loc]);
                         ++$col;
                     }
                     ++$row;
                 }
             }
 
-            $sheet->calculateColumnWidths();
+            $worksheet->calculateColumnWidths();
 
-            $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel5');
-            $objWriter->save($dest);
+            $writer = new Xlsx($spreadsheet);
+            $writer->save($dest);
 
             $output->writeln('XLS file saved: '.$dest);
 
@@ -181,11 +169,11 @@ class XlsTranslationsCommand extends Command
         } else {
             $output->writeln('No original translation files found.');
 
-            return Command::INVALID;
+            return Command::FAILURE;
         }
     }
 
-    protected function flattenTrans(array $trans, $prefix = null)
+    private function flattenTrans(array $trans, ?string $prefix = null): array
     {
         $ret = [];
         if (!is_null($prefix)) {

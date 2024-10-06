@@ -3,8 +3,8 @@
 namespace NyroDev\UtilityBundle\Command;
 
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use PhpExcel_Cell;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,14 +15,11 @@ use Symfony\Component\Yaml\Dumper;
 /**
  * Symfony2 command to update confidentielles tags.
  */
-class DumpXlsTranslationsCommand extends Command
+class DumpXlsxTranslationsCommand extends Command
 {
-    protected $nyrodev;
-
-    public function __construct(NyrodevService $nyrodev)
-    {
-        $this->nyrodev = $nyrodev;
-
+    public function __construct(
+        private readonly NyrodevService $nyrodev
+    ) {
         parent::__construct();
     }
 
@@ -32,13 +29,13 @@ class DumpXlsTranslationsCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('nyrodev:dumpXlsTranslations')
+            ->setName('nyrodev:dumpXlsxTranslations')
             ->setDescription('Dump XLS file into YAML translations')
             ->addArgument('file', InputArgument::REQUIRED, 'XLS file')
             ->addArgument('dir', InputArgument::OPTIONAL, 'Directory to save in', '.');
     }
 
-    protected $locales = [];
+    protected array $locales = [];
 
     /**
      * Executes the command.
@@ -49,29 +46,27 @@ class DumpXlsTranslationsCommand extends Command
         $file = $input->getArgument('file');
         $dir = $input->getArgument('dir');
 
-        $output->writeln('Open XLS file');
-        $fileType = PHPExcel_IOFactory::identify($file);
-        $objReader = PHPExcel_IOFactory::createReader($fileType);
+        $output->writeln('Open XLSX file');
 
-        $phpExcel = $objReader->load($file);
-        $sheet = $phpExcel->getActiveSheet();
-        $maxCol = PhpExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn(1));
-        $maxRow = $sheet->getHighestDataRow();
+        $spreadsheet = IOFactory::load($file);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $maxCol = Coordinate::columnIndexFromString($worksheet->getHighestDataColumn(1));
+        $maxRow = $worksheet->getHighestDataRow();
 
         $localesCols = [];
-        for ($i = 3; $i < $maxCol; ++$i) {
-            $locale = $sheet->getCellByColumnAndRow($i, 1)->getValue();
+        for ($i = 4; $i <= $maxCol; ++$i) {
+            $locale = $worksheet->getCell([$i, 1])->getValue();
             $localesCols[$i] = $locale;
             $this->locales[$locale] = [];
         }
 
         $output->writeln('Parse XLS file');
         for ($i = 2; $i <= $maxRow; ++$i) {
-            $domain = $sheet->getCellByColumnAndRow(0, $i)->getValue();
-            $ident = $sheet->getCellByColumnAndRow(1, $i)->getValue();
+            $domain = $worksheet->getCell([1, $i])->getValue();
+            $ident = $worksheet->getCell([2, $i])->getValue();
             $idents = explode('.', $ident);
-            for ($j = 3; $j < $maxCol; ++$j) {
-                $this->addTrans($localesCols[$j], $domain, $idents, $sheet->getCellByColumnAndRow($j, $i)->getValue());
+            for ($j = 4; $j <= $maxCol; ++$j) {
+                $this->addTrans($localesCols[$j], $domain, $idents, $worksheet->getCell([$j, $i])->getValue());
             }
         }
 
@@ -89,7 +84,7 @@ class DumpXlsTranslationsCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function addTrans($locale, $domain, array $idents, $trans)
+    protected function addTrans(string $locale, string $domain, array $idents, ?string $trans = null): void
     {
         if (!isset($this->locales[$locale])) {
             $this->locales[$locale] = [];
@@ -101,7 +96,7 @@ class DumpXlsTranslationsCommand extends Command
         $this->addTransRec($this->locales[$locale][$domain], $idents, $trans);
     }
 
-    protected function addTransRec(array &$values, array $idents, $trans)
+    protected function addTransRec(array &$values, array $idents, ?string $trans = null)
     {
         if (1 == count($idents)) {
             $values[$idents[0]] = $trans;

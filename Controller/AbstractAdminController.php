@@ -9,9 +9,9 @@ use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\FormFilterService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use NyroDev\UtilityBundle\Utility\PhpExcelResponse;
-use PHPExcel;
-use PHPExcel_Cell_DataType;
+use NyroDev\UtilityBundle\Utility\PhpSpreadsheetResponse;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -43,31 +43,31 @@ abstract class AbstractAdminController extends AbstractController
         if ($canExport && $request->query->get('export')) {
             // Start XLS export
             $this->get(NyrodevService::class)->increasePhpLimits();
-            $phpExcel = new PHPExcel();
+            $spreadsheet = new Spreadsheet();
             $title = isset($exportConfig['title']) ? $exportConfig['title'] : 'Export';
             $creator = isset($exportConfig['creator']) ? $exportConfig['creator'] : 'Export';
-            $phpExcel->getProperties()->setCreator($creator)
+            $spreadsheet->getProperties()->setCreator($creator)
                              ->setLastModifiedBy($creator)
                              ->setTitle($title)
                              ->setSubject($title);
-            $sheet = $phpExcel->setActiveSheetIndex(0);
-            $sheet->setTitle($title);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $worksheet->setTitle($title);
 
             $row = 1;
-            $col = 0;
+            $col = 1;
             foreach ($exportConfig['fields'] as $field) {
                 $fieldName = isset($exportConfig['prefix']) ? $this->trans('admin.'.$exportConfig['prefix'].'.'.$field) : $field;
-                $sheet->setCellValueByColumnAndRow($col, $row, $fieldName);
-                $sheet->getStyleByColumnAndRow($col, $row)->getFont()->setBold(true);
-                $sheet->getColumnDimensionByColumn($col)->setAutoSize(true);
+                $worksheet->setCellValue([$col, $row], $fieldName);
+                $worksheet->getStyle([$col, $row])->getFont()->setBold(true);
+                $worksheet->getColumnDimensionByColumn($col)->setAutoSize(true);
                 if (isset($exportConfig['doubleFirstRows']) && $exportConfig['doubleFirstRows']) {
-                    $sheet->setCellValueByColumnAndRow($col, $row + 1, $fieldName);
+                    $worksheet->setCellValue([$row + 1, $col], $fieldName);
                 }
                 ++$col;
             }
             if (isset($exportConfig['callbackHeader']) && $exportConfig['callbackHeader']) {
                 $fct = $exportConfig['callbackHeader'];
-                $this->$fct($tmpList, $sheet, $row, $col, $exportConfig);
+                $this->$fct($tmpList, $worksheet, $row, $col, $exportConfig);
             }
             ++$row;
             if (isset($exportConfig['doubleFirstRows']) && $exportConfig['doubleFirstRows']) {
@@ -78,7 +78,7 @@ abstract class AbstractAdminController extends AbstractController
 
             $accessor = PropertyAccess::createPropertyAccessor();
             foreach ($results as $r) {
-                $col = 0;
+                $col = 1;
                 foreach ($exportConfig['fields'] as $field) {
                     $val = $accessor->getValue($r, $field);
                     if (is_object($val)) {
@@ -92,23 +92,22 @@ abstract class AbstractAdminController extends AbstractController
                     } elseif (isset($exportConfig['boolFields']) && isset($exportConfig['boolFields'][$field]) && $exportConfig['boolFields'][$field]) {
                         $val = $this->trans('admin.misc.'.($val ? 'yes' : 'no'));
                     }
-                    $sheet->setCellValueExplicitByColumnAndRow($col, $row, $val, PHPExcel_Cell_DataType::TYPE_STRING);
-                    // $sheet->setCellValueByColumnAndRow($col, $row, $val);
+                    $worksheet->setCellValueExplicit([$col, $row], $val, DataType::TYPE_STRING);
                     ++$col;
                 }
                 if (isset($exportConfig['callbackLine']) && $exportConfig['callbackLine']) {
                     $fct = $exportConfig['callbackLine'];
-                    $this->$fct($tmpList, $r, $sheet, $row, $col, $exportConfig);
+                    $this->$fct($tmpList, $r, $worksheet, $row, $col, $exportConfig);
                 }
                 ++$row;
             }
 
-            $sheet->calculateColumnWidths();
+            $worksheet->calculateColumnWidths();
 
             $filename = isset($exportConfig['filename']) ? $exportConfig['filename'] : (isset($exportConfig['prefix']) ? $exportConfig['prefix'] : 'export');
 
-            $response = new PhpExcelResponse();
-            $response->setPhpExcel($filename.'.xlsx', $phpExcel);
+            $response = new PhpSpreadsheetResponse();
+            $response->setPhpSpreadsheet($filename.'.xlsx', $spreadsheet);
 
             return $response;
         }

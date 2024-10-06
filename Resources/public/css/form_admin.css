@@ -135,13 +135,26 @@ select {
     cursor: not-allowed;
 }
 
+.form_button .cancel {
+    margin-right: 10px;
+    opacity: 0.7;
+}
+
+.form_row .help-text,
+.form_errors, .form_row .form_errors {
+    margin: 3px 0 3px 220px;
+    padding: 0;
+}
+
+.form_row .help-text {
+    opacity: 0.7;
+}
+
 .form_errors,
 .form_row .form_errors {
     display: block;
     list-style-type: none;
     color: red;
-    margin: 3px 0 3px 220px;
-    padding: 0;
 }
 
 .formRequiredFields {
@@ -240,7 +253,7 @@ select {
     margin-left: 10px;
 }
 
-.form_row_tinymce .mce-tinymce,
+.form_row_tinymce .tox-tinymce,
 .form_row_rawhtml .form_rawhtml {
     float: left;
 }
@@ -258,7 +271,7 @@ select {
 }
 
 .filterForm .filterFormRange {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: space-between;
     width: 280px;
@@ -267,6 +280,7 @@ select {
 .filterForm .filterFormRange .form_row {
     display: inline-flex;
     align-items: center;
+    margin-bottom: 0;
 }
 
 .filterForm .filterFormRange .form_row label {
@@ -275,8 +289,9 @@ select {
 }
 
 .filterForm .filterFormRange .form_row input[type="number"],
-.filterForm .filterFormRange .form_row input[type="text"] {
-    font-size: 12pxx;
+.filterForm .filterFormRange .form_row input[type="text"],
+.filterForm .filterFormRange .form_row input[type="date"] {
+    font-size: 12px;
     width: 80px;
     box-sizing: border-box;
 }
