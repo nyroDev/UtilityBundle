@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class ValidConfig extends Constraint
 {
-    public $message = 'The config is not a valid json.';
+    public string $message = 'The config is not a valid json.';
 }

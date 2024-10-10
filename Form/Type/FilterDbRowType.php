@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FilterDbRowType extends FilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $nyrodevDb = $this->get(DbAbstractService::class);
         $myOptions = [
@@ -64,14 +64,11 @@ class FilterDbRowType extends FilterType
             ->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
     }
 
-    public function applyValue($value)
+    public function applyValue(mixed $value): mixed
     {
         return $value->getId();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -83,12 +80,12 @@ class FilterDbRowType extends FilterType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_dbRow';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }

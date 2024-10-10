@@ -8,8 +8,6 @@ use MongoRegex;
 class MongodbQueryBuilder extends AbstractQueryBuilder
 {
     /**
-     * @param bool $complete
-     *
      * @return \Doctrine\ODM\MongoDB\Query\Builder
      */
     public function getNewQueryBuilder(bool $complete = false)

@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 abstract class AbstractFilterType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->setMethod('get')

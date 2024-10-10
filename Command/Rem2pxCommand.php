@@ -9,15 +9,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
-/**
- * Symfony2 command to convert CSS file from rem to px.
- */
 class Rem2pxCommand extends Command
 {
-    /**
-     * Configure the command.
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrodev:rem2px')
@@ -28,9 +22,6 @@ class Rem2pxCommand extends Command
             ->addOption('append', 'a', InputOption::VALUE_NONE, 'Append to dst file?');
     }
 
-    /**
-     * Executes the command.
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $src = $input->getArgument('src');

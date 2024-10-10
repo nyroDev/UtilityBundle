@@ -15,7 +15,7 @@ class FilterCustomType extends FilterType
 {
     protected $applyFilters = [];
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $this->applyFilters[$builder->getName()] = $options['applyFilter'];
         if (isset($options['transformerChoices']) && $options['transformerChoices'] && count($options['transformerChoices'])) {
@@ -32,7 +32,7 @@ class FilterCustomType extends FilterType
             ], $options['valueOptions']));
     }
 
-    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         $applyFilter = $this->applyFilters[$name];
 
@@ -52,12 +52,12 @@ class FilterCustomType extends FilterType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_custom';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }

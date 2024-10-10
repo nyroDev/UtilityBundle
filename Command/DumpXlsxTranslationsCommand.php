@@ -12,21 +12,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Dumper;
 
-/**
- * Symfony2 command to update confidentielles tags.
- */
 class DumpXlsxTranslationsCommand extends Command
 {
+    private array $locales = [];
+
     public function __construct(
-        private readonly NyrodevService $nyrodev
+        private readonly NyrodevService $nyrodev,
     ) {
         parent::__construct();
     }
 
-    /**
-     * Configure the command.
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrodev:dumpXlsxTranslations')
@@ -35,11 +31,6 @@ class DumpXlsxTranslationsCommand extends Command
             ->addArgument('dir', InputArgument::OPTIONAL, 'Directory to save in', '.');
     }
 
-    protected array $locales = [];
-
-    /**
-     * Executes the command.
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->nyrodev->increasePhpLimits();
@@ -84,7 +75,7 @@ class DumpXlsxTranslationsCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function addTrans(string $locale, string $domain, array $idents, ?string $trans = null): void
+    private function addTrans(string $locale, string $domain, array $idents, ?string $trans = null): void
     {
         if (!isset($this->locales[$locale])) {
             $this->locales[$locale] = [];
@@ -96,7 +87,7 @@ class DumpXlsxTranslationsCommand extends Command
         $this->addTransRec($this->locales[$locale][$domain], $idents, $trans);
     }
 
-    protected function addTransRec(array &$values, array $idents, ?string $trans = null)
+    private function addTransRec(array &$values, array $idents, ?string $trans = null)
     {
         if (1 == count($idents)) {
             $values[$idents[0]] = $trans;

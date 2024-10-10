@@ -6,7 +6,6 @@ use NyroDev\UtilityBundle\Services\NyrodevService;
 
 class Pager
 {
-
     private int $nbPages = 1;
 
     public function __construct(
@@ -34,7 +33,7 @@ class Pager
      * @param bool  $absolute Indicate if the URI should be absolute
      * @param array $routePrm Route parameter array to use instead of the configured one
      */
-    public function getUrl(int $page, bool $absolute = false, array $routePrm = null): string
+    public function getUrl(int $page, bool $absolute = false, ?array $routePrm = null): string
     {
         $prm = !is_null($routePrm) ? $routePrm : $this->routePrm;
         $prm['page'] = $page;
@@ -81,7 +80,7 @@ class Pager
     /**
      * Get the previous page number, null if not.
      */
-    public function getPrevious(): int|null
+    public function getPrevious(): ?int
     {
         return $this->hasPrevious() ? $this->curPage - 1 : null;
     }
@@ -91,7 +90,7 @@ class Pager
      *
      * @param bool $absolute Indicate if the URI should be absolute
      */
-    public function getPreviousUrl(bool $absolute = false): string|null
+    public function getPreviousUrl(bool $absolute = false): ?string
     {
         return $this->hasPrevious() ? $this->getUrl($this->getPrevious(), $absolute) : null;
     }
@@ -107,7 +106,7 @@ class Pager
     /**
      * Get the next page number, null if not.
      */
-    public function getNext(): int|null
+    public function getNext(): ?int
     {
         return $this->hasNext() ? $this->curPage + 1 : null;
     }
@@ -117,7 +116,7 @@ class Pager
      *
      * @param bool $absolute Indicate if the URI should be absolute
      */
-    public function getNextUrl(bool $absolute = false): string|null
+    public function getNextUrl(bool $absolute = false): ?string
     {
         return $this->hasNext() ? $this->getUrl($this->getNext(), $absolute) : null;
     }

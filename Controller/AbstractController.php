@@ -9,7 +9,7 @@ abstract class AbstractController extends SrcAbstractController implements Conta
 {
     use Traits\SubscribedServiceTrait;
 
-    public function get(string $id)
+    public function get(string $id): mixed
     {
         return $this->container->get($id);
     }
@@ -19,9 +19,6 @@ abstract class AbstractController extends SrcAbstractController implements Conta
         return $this->container->has($id);
     }
 
-    /**
-     * Get the translation for a given keyword.
-     */
     protected function trans(string $key, array $parameters = [], string $domain = 'messages', ?string $locale = null): string
     {
         return $this->get('translator')->trans($key, $parameters, $domain, $locale);

@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $nyrodevDb = $this->get(DbAbstractService::class);
 
@@ -66,7 +66,7 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
             ->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
     }
 
-    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         if (
             isset($data['transformer']) && $data['transformer']
@@ -82,9 +82,6 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
         return $queryBuilder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -96,12 +93,12 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_dbRowMultipleSingleChoice';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }

@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FilterChoiceType extends FilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('transformer', ChoiceType::class, array_merge([
@@ -25,20 +25,17 @@ class FilterChoiceType extends FilterType
             ], $options['valueOptions']));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['choiceOptions']);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_choice';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }

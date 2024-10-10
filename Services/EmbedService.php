@@ -10,7 +10,7 @@ class EmbedService extends AbstractService
 {
     public const CACHE_KEY_URLPARSER = 'urlParser_';
 
-    public function getChacheKey(string $url, $prefix = self::CACHE_KEY_URLPARSER): string
+    public function getChacheKey(string $url, string $prefix = self::CACHE_KEY_URLPARSER): string
     {
         return $prefix.sha1($url);
     }

@@ -16,32 +16,23 @@ class MemberService extends AbstractService
     /**
      * Get the logged user. Will retrun anon. If user not logged.
      *
-     * @return string|Entity
+     * @return string|Entity|Document
      */
     public function getUser()
     {
         return $this->tokenStorage->getToken() ? $this->tokenStorage->getToken()->getUser() : null;
     }
 
-    /**
-     * Indicates if the user is logged or not.
-     */
     public function isLogged(): bool
     {
         return is_object($this->getUser());
     }
 
-    /**
-     * Check if the user is logged and granted with the given role.
-     */
     public function isGranted(string $role): bool
     {
         return $this->isLogged() && $this->authorizationChecker->isGranted($role);
     }
 
-    /**
-     * Indicates if the logged user is impersonated.
-     */
     public function isImpersonated(): bool
     {
         return $this->isGranted('ROLE_PREVIOUS_ADMIN');

@@ -10,29 +10,21 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Symfony2 command to update confidentielles tags.
- */
 class FillTranslationsCommand extends Command
 {
-    protected $nyrodev;
-    protected $db;
+    private array $existing;
+    private string $className;
 
-    public function __construct(NyrodevService $nyrodev, DbAbstractService $db)
-    {
-        $this->nyrodev = $nyrodev;
-        $this->db = $db;
-
+    public function __construct(
+        private readonly NyrodevService $nyrodev,
+        private readonly DbAbstractService $db,
+    ) {
         parent::__construct();
     }
 
-    /**
-     * Configure the command.
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrodev:fillTranslations')
@@ -42,13 +34,6 @@ class FillTranslationsCommand extends Command
             ->addArgument('extension', InputArgument::OPTIONAL, 'Translation file extension', 'yml');
     }
 
-    protected $existing;
-    protected $className;
-    protected $accessor;
-
-    /**
-     * Executes the command.
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->nyrodev->increasePhpLimits();
@@ -91,7 +76,6 @@ class FillTranslationsCommand extends Command
         if ($nbO) {
             $repo = $this->db->getRepository($translationDb);
             $this->className = $repo->getClassName();
-            $this->accessor = PropertyAccess::createPropertyAccessor();
 
             $output->writeln('Retrieving existing translations');
             $this->existing = [];

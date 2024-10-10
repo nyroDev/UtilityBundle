@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class FilterRangeDateType extends FilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($builder->has('transformer')) {
             $builder->remove('transformer');
@@ -27,7 +27,7 @@ class FilterRangeDateType extends FilterType
             ], $options['valueOptions']));
     }
 
-    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         if (isset($data['value']) && $data['value']) {
             $value = array_filter($this->applyValue($data['value']));
@@ -40,7 +40,7 @@ class FilterRangeDateType extends FilterType
         return $queryBuilder;
     }
 
-    public function applyValue($value)
+    public function applyValue(mixed $value): array
     {
         if (isset($value['start']) && is_object($value['start'])) {
             $value['start']->setTime(0, 0, 0);
@@ -52,12 +52,12 @@ class FilterRangeDateType extends FilterType
         return $value;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_range_date';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }

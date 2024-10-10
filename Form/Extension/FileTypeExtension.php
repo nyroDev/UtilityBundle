@@ -30,9 +30,6 @@ class FileTypeExtension extends AbstractTypeExtension
         ]);
     }
 
-    /**
-     * Pass the image URL to the view.
-     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $data = $form->getParent()->getData();

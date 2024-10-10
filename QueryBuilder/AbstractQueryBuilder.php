@@ -79,17 +79,17 @@ abstract class AbstractQueryBuilder
         return $this->add('joinWhere', [$table, $whereId, $subSelectField], true);
     }
 
-    public function addWhere(string $field, string $transformer, mixed $value = null, mixed $forceType = null): self
+    public function addWhere(string $field, array|string $transformer, mixed $value = null, mixed $forceType = null): self
     {
         return $this->add('where', [$field, $transformer, $value, $forceType], true);
     }
 
-    public function orderBy(string $sort, string $order = null): self
+    public function orderBy(string $sort, ?string $order = null): self
     {
         return $this->add('orderBy', [$sort, $order]);
     }
 
-    public function addOrderBy(string $sort, string $order = null): self
+    public function addOrderBy(string $sort, ?string $order = null): self
     {
         return $this->add('orderBy', [$sort, $order], true);
     }
@@ -129,8 +129,6 @@ abstract class AbstractQueryBuilder
     }
 
     /**
-     * @param bool $complete
-     *
      * @return Specific query builder
      */
     abstract public function getNewQueryBuilder(bool $complete = false);

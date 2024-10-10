@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FilterRangeSubType extends SrcAbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('start', $options['type'], array_merge([
@@ -35,12 +35,12 @@ class FilterRangeSubType extends SrcAbstractType
             ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_range_sub';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FormType::class;
     }

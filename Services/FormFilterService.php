@@ -12,9 +12,6 @@ use Symfony\Component\Form\Form;
  */
 class FormFilterService extends AbstractService
 {
-    /**
-     * Build the QueryBuilder object.
-     */
     public function buildQuery(Form $form, AbstractQueryBuilder $queryBuilder): void
     {
         $data = $form->getData();

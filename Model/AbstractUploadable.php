@@ -26,8 +26,8 @@ abstract class AbstractUploadable
 
     protected ?NyrodevService $service;
 
-    protected $temps = [];
-    protected $directs = [];
+    protected array $temps = [];
+    protected array $directs = [];
 
     public function setService(?NyrodevService $service = null)
     {
@@ -98,7 +98,7 @@ abstract class AbstractUploadable
         return;
     }
 
-    public function setDirectFile(string $field, mixed $source, string $filename = null, bool $sourceIsContent = false): void
+    public function setDirectFile(string $field, mixed $source, ?string $filename = null, bool $sourceIsContent = false): void
     {
         $this->directs[$field] = [
             'source' => $source,
@@ -147,12 +147,12 @@ abstract class AbstractUploadable
         }
     }
 
-    protected function getNewFilename(string $field, string $originalName, string $extension = null): string
+    protected function getNewFilename(string $field, string $originalName, ?string $extension = null): string
     {
         return $this->getNewFilenameInDir($this->getFileConfig($field, self::CONFIG_ROOTDIR), $originalName, $extension);
     }
 
-    protected function getNewFilenameInDir(string $dir, string $originalName, string $extension = null): string
+    protected function getNewFilenameInDir(string $dir, string $originalName, ?string $extension = null): string
     {
         $value = $originalName;
         if ($this->service) {

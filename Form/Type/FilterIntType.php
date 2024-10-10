@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class FilterIntType extends FilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('transformer', ChoiceType::class, array_merge([
@@ -29,12 +29,12 @@ class FilterIntType extends FilterType
             ], $options['valueOptions']));
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_int';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }

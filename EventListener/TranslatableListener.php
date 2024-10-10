@@ -7,7 +7,7 @@ use Gedmo\Translatable\TranslatableListener as SrcTranslatableListener;
 
 class TranslatableListener extends SrcTranslatableListener
 {
-    public function postLoad(EventArgs $args)
+    public function postLoad(EventArgs $args): void
     {
         parent::postLoad($args);
 

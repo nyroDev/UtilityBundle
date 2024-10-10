@@ -19,18 +19,13 @@ class NyrodevService extends AbstractService
 {
     use KernelInterfaceServiceableTrait;
 
-    /**
-     * @return KernelInterface
-     */
-    public function getKernel()
+    public function getKernel(): KernelInterface
     {
         return $this->getKernelInterface();
     }
 
     /**
      * Kernel request listener to setLocale if configured.
-     *
-     * @param RequestEvent $event Kernel request event
      */
     public function onKernelRequest(RequestEvent $event): void
     {
@@ -72,8 +67,6 @@ class NyrodevService extends AbstractService
 
     /**
      * Kernel response listener to add content-language if configured.
-     *
-     * @param ResponseEvent $event Kernel response event
      */
     public function onKernelResponse(ResponseEvent $event): void
     {
@@ -134,25 +127,16 @@ class NyrodevService extends AbstractService
         return $router->getContext()->getScheme().'://'.$host.$baseUrl.$path;
     }
 
-    /**
-     * Set a templating slot.
-     */
     public function setSlot(string $name, mixed $value): void
     {
         $this->get('nyrodev.templating.helper.slots')->set($name, $value);
     }
 
-    /**
-     * Get parametred analytics UA.
-     */
     public function getAnalyticsUA(): ?string
     {
         return $this->getParameter('analyticsUA');
     }
 
-    /**
-     * Get tracking code for analytics if parametered.
-     */
     public function getTrackingAnalytics(): ?string
     {
         $ret = null;
@@ -238,9 +222,6 @@ class NyrodevService extends AbstractService
         return $ret;
     }
 
-    /**
-     * Indicates if the request is post.
-     */
     public function isPost(): bool
     {
         return $this->getRequest()->isMethod('POST');

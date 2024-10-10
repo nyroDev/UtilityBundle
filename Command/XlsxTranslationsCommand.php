@@ -17,15 +17,12 @@ use Symfony\Component\Yaml\Yaml;
 class XlsxTranslationsCommand extends Command
 {
     public function __construct(
-        private readonly NyrodevService $nyrodev
+        private readonly NyrodevService $nyrodev,
     ) {
         parent::__construct();
     }
 
-    /**
-     * Configure the command.
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrodev:xlsxTranslations')
@@ -36,9 +33,6 @@ class XlsxTranslationsCommand extends Command
             ->addArgument('extension', InputArgument::OPTIONAL, 'Translation file extension', 'yaml');
     }
 
-    /**
-     * Executes the command.
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->nyrodev->increasePhpLimits();

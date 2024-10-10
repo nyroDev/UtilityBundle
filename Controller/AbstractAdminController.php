@@ -24,8 +24,18 @@ abstract class AbstractAdminController extends AbstractController
     public const ADD = 'add';
     public const EDIT = 'edit';
 
-    protected function createList(Request $request, $repository, $route, array $routePrm = [], $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, ?AbstractQueryBuilder $queryBuilder = null, $exportConfig = false, array $filterDefaults = [])
-    {
+    protected function createList(
+        Request $request,
+        $repository,
+        string $route,
+        array $routePrm = [],
+        string $defaultSort = 'id',
+        string $defaultOrder = 'desc',
+        ?string $filterType = null,
+        ?AbstractQueryBuilder $queryBuilder = null,
+        ?array $exportConfig = null,
+        array $filterDefaults = [],
+    ): Response|array {
         $nbPerPageParam = 'admin.nbPerPage.'.$route;
         $nbPerPage = $this->getParameter($nbPerPageParam, $this->getParameter('nyroDev_utility.admin.nbPerPage'));
 
@@ -139,8 +149,16 @@ abstract class AbstractAdminController extends AbstractController
         ];
     }
 
-    protected function getListElements(Request $request, $repository, $route, $defaultSort = 'id', $defaultOrder = 'desc', $filterType = null, ?AbstractQueryBuilder $queryBuilder = null, array $filterDefaults = [])
-    {
+    protected function getListElements(
+        Request $request,
+        $repository,
+        string $route,
+        string $defaultSort = 'id',
+        string $defaultOrder = 'desc',
+        ?string $filterType = null,
+        ?AbstractQueryBuilder $queryBuilder = null,
+        array $filterDefaults = [],
+    ): array {
         $filter = null;
         if (!is_null($filterType)) {
             $filter = $this->get('nyrodev_form')->getFormFactory()->create($filterType, $filterDefaults, [
@@ -211,8 +229,23 @@ abstract class AbstractAdminController extends AbstractController
         ];
     }
 
-    protected function createAdminForm(Request $request, $name, $action, $row, array $fields, $route, $routePrm = [], $callbackForm = null, $callbackFlush = null, $groups = null, array $moreOptions = [], $callbackAfterFlush = null, ?ObjectManager $objectManager = null, array $moreFormOptions = [], $formName = null)
-    {
+    protected function createAdminForm(
+        Request $request,
+        string $name,
+        string $action,
+        object $row,
+        array $fields,
+        string $route,
+        array $routePrm = [],
+        ?string $callbackForm = null,
+        ?string $callbackFlush = null,
+        ?array $groups = null,
+        array $moreOptions = [],
+        ?string $callbackAfterFlush = null,
+        ?ObjectManager $objectManager = null,
+        array $moreFormOptions = [],
+        ?string $formName = null,
+    ): Response|array {
         if (is_null($groups)) {
             $groups = ['Default', $action];
         }

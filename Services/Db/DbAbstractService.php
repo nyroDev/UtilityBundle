@@ -5,6 +5,7 @@ namespace NyroDev\UtilityBundle\Services\Db;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use NyroDev\UtilityBundle\QueryBuilder\ElasticaQueryBuilder;
 use NyroDev\UtilityBundle\Services\AbstractService;
 
 abstract class DbAbstractService extends AbstractService
@@ -19,28 +20,20 @@ abstract class DbAbstractService extends AbstractService
         return $this->objectManager;
     }
 
-    /**
-     * @param string $name class name
-     */
     public function getRepository(object|string $name): ObjectRepository
     {
         return is_object($name) ? $name : $this->getObjectManager()->getRepository($name);
     }
 
-    /**
-     * @param bool $elastica True to get elastica query Builder
-     */
-    public function getQueryBuilder(string|ObjectRepository $name, bool $elastica = false): AbstractQueryBuilder
+    public function getQueryBuilder(string|ObjectRepository $name, bool $getElasticaQb = false): AbstractQueryBuilder
     {
-        if ($elastica) {
-            $class = \NyroDev\UtilityBundle\QueryBuilder\ElasticaQueryBuilder::class;
+        if ($getElasticaQb) {
+            $class = ElasticaQueryBuilder::class;
         } else {
             $class = $this->getParameter('nyroDev_utility.queryBuilder.class');
         }
 
-        $queryBuilder = new $class(is_object($name) ? $name : $this->getRepository($name), $this->getObjectManager(), $this);
-
-        return $queryBuilder;
+        return new $class(is_object($name) ? $name : $this->getRepository($name), $this->getObjectManager(), $this);
     }
 
     public function getNew(object|string $name, bool $persist = true): mixed

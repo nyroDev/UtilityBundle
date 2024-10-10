@@ -10,12 +10,12 @@ use Symfony\Component\Validator\Constraint;
  */
 class EmbedUrl extends Constraint
 {
-    public $type = 'video';
-    public $allowNotFetched = false;
-    public $allowNoUrlEmbed = false;
-    public $messageNotFetched = 'The URL you provided cannot be fetched.';
-    public $messageNoType = 'The URL you provided does not seem to contain a %type%.';
-    public $messageNoEmbed = 'The URL you provided does not seem to contain embed informations.';
+    public string $type = 'video';
+    public bool $allowNotFetched = false;
+    public bool $allowNoUrlEmbed = false;
+    public string $messageNotFetched = 'The URL you provided cannot be fetched.';
+    public string $messageNoType = 'The URL you provided does not seem to contain a %type%.';
+    public string $messageNoEmbed = 'The URL you provided does not seem to contain embed informations.';
 
     public function validatedBy(): string
     {

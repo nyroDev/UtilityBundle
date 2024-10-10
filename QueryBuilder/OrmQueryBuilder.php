@@ -155,7 +155,7 @@ class OrmQueryBuilder extends AbstractQueryBuilder
         return $ret;
     }
 
-    protected function useAlias(string $alias, string $field): string|null
+    protected function useAlias(string $alias, string $field): ?string
     {
         return false === strpos($field, '.') ? $alias.'.' : null;
     }

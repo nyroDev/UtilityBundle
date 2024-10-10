@@ -35,7 +35,7 @@ abstract class AbstractService implements HelperInterface
         return $tmp[count($tmp) - 1];
     }
 
-    public function setCharset($charset)
+    public function setCharset(string $charset): void
     {
     }
 

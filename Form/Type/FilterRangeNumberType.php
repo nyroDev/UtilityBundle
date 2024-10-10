@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class FilterRangeNumberType extends FilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($builder->has('transformer')) {
             $builder->remove('transformer');
@@ -26,7 +26,7 @@ class FilterRangeNumberType extends FilterType
             ], $options['valueOptions']));
     }
 
-    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         if (isset($data['value']) && $data['value']) {
             $value = array_filter($this->applyValue($data['value']));
@@ -39,12 +39,12 @@ class FilterRangeNumberType extends FilterType
         return $queryBuilder;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_range_number';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }

@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class FilterBoolType extends FilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('transformer', ChoiceType::class, array_merge([
@@ -28,7 +28,7 @@ class FilterBoolType extends FilterType
             ], $options['valueOptions']));
     }
 
-    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         if (
             isset($data['transformer']) && $data['transformer']
@@ -50,17 +50,17 @@ class FilterBoolType extends FilterType
         return $queryBuilder;
     }
 
-    public function applyValue($value)
+    public function applyValue(mixed $value): bool
     {
         return 'no' == $value ? false : true;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_bool';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }

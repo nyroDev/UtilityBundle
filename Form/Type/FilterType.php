@@ -15,15 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FilterType extends AbstractType implements FilterTypeInterface
 {
-    /**
-     * Builds the form.
-     *
-     * @see FormTypeExtensionInterface::buildForm()
-     *
-     * @param FormBuilderInterface $builder The form builder
-     * @param array                $options The options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $choices = [
             'LIKE %...%' => AbstractQueryBuilder::OPERATOR_CONTAINS,
@@ -42,7 +34,7 @@ class FilterType extends AbstractType implements FilterTypeInterface
             ], $options['valueOptions']));
     }
 
-    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         if (
             isset($data['transformer']) && $data['transformer']
@@ -61,14 +53,11 @@ class FilterType extends AbstractType implements FilterTypeInterface
         return $queryBuilder;
     }
 
-    public function applyValue($value)
+    public function applyValue(mixed $value): mixed
     {
         return $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -78,22 +67,12 @@ class FilterType extends AbstractType implements FilterTypeInterface
         ]);
     }
 
-    /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter';
     }
 
-    /**
-     * Returns the name of the parent type.
-     *
-     * @return string|null The name of the parent type if any otherwise null
-     */
-    public function getParent()
+    public function getParent(): ?string
     {
         return FormType::class;
     }

@@ -9,7 +9,7 @@ class EmbedValidatorService extends AbstractService implements Validator\Constra
 {
     protected ?ExecutionContextInterface $context = null;
 
-    public function initialize(ExecutionContextInterface $context)
+    public function initialize(ExecutionContextInterface $context): void
     {
         $this->context = $context;
     }

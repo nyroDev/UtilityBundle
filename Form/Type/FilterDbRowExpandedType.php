@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FilterDbRowExpandedType extends FilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $nyrodevDb = $this->get(DbAbstractService::class);
         $myOptions = [
@@ -66,7 +66,7 @@ class FilterDbRowExpandedType extends FilterType
             ->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
     }
 
-    public function applyFilter(AbstractQueryBuilder $queryBuilder, $name, $data)
+    public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         if (
             isset($data['transformer']) && $data['transformer']
@@ -82,7 +82,7 @@ class FilterDbRowExpandedType extends FilterType
         return $queryBuilder;
     }
 
-    public function applyValue($value)
+    public function applyValue(mixed $value): array
     {
         $ret = [];
         foreach ($value as $val) {
@@ -92,9 +92,6 @@ class FilterDbRowExpandedType extends FilterType
         return array_filter($ret);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -106,14 +103,14 @@ class FilterDbRowExpandedType extends FilterType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'filter_dbRowMultiple';
 
         return 'filter_dbRowExpanded';
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return FilterType::class;
     }
