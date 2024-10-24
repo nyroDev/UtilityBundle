@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "nyrodev/php-template-bundle": "dev-master",
+        "nyrodev/php-template-bundle": "^6",
         "symfony/framework-bundle": "^7",
         "symfony/templating": "^7"
     },
@@ -25,6 +25,8 @@
         "sabberworm/php-css-parser": "Required to use rem2px command"
     },
     "autoload": {
-        "psr-4": { "NyroDev\\UtilityBundle\\": "" }
+        "psr-4": {
+            "NyroDev\\UtilityBundle\\": ""
+        }
     }
 }
