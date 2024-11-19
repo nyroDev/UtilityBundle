@@ -20,7 +20,7 @@ class ImageService extends AbstractService
     use KernelInterfaceServiceableTrait;
     use AssetsPackagesServiceableTrait;
 
-    public function resize(string $file, string $configKey = 'default', bool $force = false): string
+    public function resize(string $file, array|string $configKey = 'default', bool $force = false): string
     {
         try {
             $resizedPath = $this->_resize($file, $this->getConfig($configKey), $force);
@@ -72,7 +72,7 @@ class ImageService extends AbstractService
         return $this->getAssetsPackages()->getUrl($tmp[1]);
     }
 
-    public function getConfig(string $configKey = 'default'): array
+    public function getConfig(array|string $configKey = 'default'): array
     {
         if (is_array($configKey)) {
             return $configKey;
