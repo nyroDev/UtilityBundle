@@ -117,7 +117,7 @@ abstract class AbstractAdminController extends AbstractController
             $filename = isset($exportConfig['filename']) ? $exportConfig['filename'] : (isset($exportConfig['prefix']) ? $exportConfig['prefix'] : 'export');
 
             $response = new PhpSpreadsheetResponse();
-            $response->setPhpSpreadsheet($filename.'.xlsx', $spreadsheet);
+            $response->setPhpSpreadsheet($filename.'.ods', $spreadsheet);
 
             return $response;
         }
