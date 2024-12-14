@@ -19,9 +19,9 @@
     },
     "suggest": {
         "becklyn/ordered-form-bundle": "Used for form positionning",
+        "tinymce/tinymce": "Required to use TinymceType",
         "embed/embed": "Required to use EmbedService",
         "slim/psr7": "Required to use EmbedService, or any other PS7 implementation",
-        "doctrine/doctrine-cache-bundle": "Required to cache EmbedService result",
         "sabberworm/php-css-parser": "Required to use rem2px command"
     },
     "autoload": {

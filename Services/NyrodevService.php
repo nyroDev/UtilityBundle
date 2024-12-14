@@ -7,6 +7,7 @@ use DateTimeZone;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
 use Html2Text\Html2Text;
+use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Utility\Pager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class NyrodevService extends AbstractService
 {
     use KernelInterfaceServiceableTrait;
+    use AssetsPackagesServiceableTrait;
 
     public function getKernel(): KernelInterface
     {
@@ -85,6 +87,11 @@ class NyrodevService extends AbstractService
         }
 
         return str_replace('%2C', ',', $this->get('router')->generate($route, $parameters, $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH));
+    }
+
+    public function getUrl(string $path): string
+    {
+        return $this->getAssetsPackages()->getUrl($path);
     }
 
     /**
@@ -367,7 +374,11 @@ class NyrodevService extends AbstractService
      */
     public function humanFileSize(string $file): string
     {
-        $size = filesize($file);
+        return $this->humanSize(filesize($file));
+    }
+
+    public function humanSize(int $size): string
+    {
         $mod = 1024;
         $units = explode(' ', 'B KB MB GB TB PB');
         for ($i = 0; $size > $mod; ++$i) {

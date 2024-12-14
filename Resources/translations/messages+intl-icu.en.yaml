@@ -1,0 +1,93 @@
+date:
+  long: "%B, %#d, %Y at %I:%M %P"
+  short: "%m/%d/%Y"
+  shortText: "%B, %d, %Y"
+  fullDate: "%A, %B %d, %Y"
+  full: "%m/%d/%Y at %I:%M %P"
+  hour: "%I:%M %P"
+login:
+  errors:
+    unknown: "An unknown error has occured."
+    "Bad credentials": "Sorry, your email address does not match an existing account."
+    "Bad credentials.": "Sorry, your email address does not match an existing account."
+    "The presented key does not match.": "The automatic connection did not work. Please log in regularly."
+    "The credentials were changed from another session.": "The password were changed in a previous session."
+    "The presented password cannot be empty.": "Please enter your correct password."
+    "The presented password is invalid.": "Sorry, the password you entered was not correct. Please try again."
+    "User account is disabled.": "User account is disabled."
+    "User account is locked.": "User account is locked."
+    "User account has expired.": "User account has expired."
+    "User credentials have expired.": "User credentials have expired."
+admin:
+  misc:
+    actions: Actions
+    send: Send
+    filter: Filter
+    clearFilter: Clear filter
+    add: Add
+    edit: Edit
+    export: Export
+    delete: Delete
+    cancel: Cancel
+    currentFile: "Current File: %currentFile%"
+    currentFileDelete: "Delete"
+    currentFileDeleteConfirm: "Are you sure you want to delete this file?"
+    noResults: No results
+    start: Start
+    end: End
+    from: From
+    to: To
+    yes: Yes
+    no: No
+    collectionAdd: Add
+    collectionDelete: Delete
+    collectionDeleteConfirm: "Are you sure you want to delete this item?"
+  pager:
+    next: Next
+    prev: Previous
+nyrodev:
+  required: "*Required fields"
+  browser:
+    title: Browser
+    name: Name
+    rename: Rename
+    nameAlreadyExists: This name already exists.
+    createFolder: Create folder
+    folderName: Folder name
+    view: View
+    delete: Delete
+    deletion:
+      confirm: Confirm deletion
+      message: "Are you sure you cant to delete %name%?"
+      messageDir: All files and subdirectories contained in this directory will also be deleted.
+      cancel: Cancel
+      confirmBut: Confirm
+      confirmed: Deletion confirmed
+      confirmedMessage: "%name% was correctly deleted."
+      close: Close
+    sort:
+      name: Name
+      date: Date
+      size: Size
+    filter: Filter
+    refresh: Refresh
+    files: >-
+      {nbFiles, plural,
+          =0    {0 file}
+          =1    {1 file}
+          other {# files}
+      }
+    folders: >-
+      {nbFolders, plural,
+          =0    {0 folder}
+          =1    {1 folder}
+          other {# folders}
+      }
+  plupload:
+    images: Images
+    browse: Browse...
+    waiting: Waiting
+    error: Error
+    cancel: Canceled
+    complete: Complete
+    cancelAll: Cancel all

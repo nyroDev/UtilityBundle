@@ -6,6 +6,7 @@ services:
         calls:
             - [setContainerInterface, ['@service_container']]
             - [setKernelInterface, ['@kernel']]
+            - [setAssetsPackages, ['@assets.packages']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev }

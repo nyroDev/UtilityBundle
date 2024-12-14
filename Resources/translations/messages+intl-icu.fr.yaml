@@ -1,0 +1,93 @@
+date:
+  long: "%#d %B %Y à %H:%M"
+  short: "%d/%m/%Y"
+  shortText: "%d %B %Y"
+  fullDate: "%A %d %B %Y"
+  full: "%d/%m/%Y à %H:%M"
+  hour: "%H:%M"
+login:
+  errors:
+    unknown: "Une erreur inconnue est survenue."
+    "Bad credentials": "Désolé, votre adresse email ne correspond à aucun compte existant."
+    "Bad credentials.": "Désolé, votre adresse email ne correspond à aucun compte existant."
+    "The presented key does not match.": "La connexion automatique a échouée. Veuillez vous connecter noramlement."
+    "The credentials were changed from another session.": "Le mot de passe a été changé dans une autre session."
+    "The presented password cannot be empty.": "Le mot de passe est erroné."
+    "The presented password is invalid.": "Désolé, le mot de passe n'est pas correct. Veuillez rééssayer."
+    "User account is disabled.": "Le compte utilisateur a été désactivé."
+    "User account is locked.": "Le compte utilisateur est verrouillé."
+    "User account has expired.": "Le compte utilisateur a expiré."
+    "User credentials have expired.": "Les informations d'identification ont expiré."
+admin:
+  misc:
+    actions: Actions
+    send: Envoyer
+    filter: Filtrer
+    clearFilter: Vider le filtre
+    add: Ajouter
+    edit: Modifier
+    export: Exporter
+    delete: Supprimer
+    cancel: Annuler
+    currentFile: "Fichier actuel : %currentFile%"
+    currentFileDelete: "Supprimer"
+    currentFileDeleteConfirm: "Êtes-vous sûr de vouloir supprimer ce fichier ?"
+    noResults: Pas de résultats
+    start: Début
+    end: Fin
+    from: entre
+    to: et
+    yes: Oui
+    no: Non
+    collectionAdd: Ajouter
+    collectionDelete: Supprimer
+    collectionDeleteConfirm: "Êtes-vous sûr de vouloir supprimer cet élément ?"
+  pager:
+    next: Suivant
+    prev: Précédent
+nyrodev:
+  required: "*Champs requis"
+  browser:
+    title: Navigateur
+    name: Nom
+    rename: Renommer
+    nameAlreadyExists: Ce nom existe déjà.
+    createFolder: Créer un dossier
+    folderName: Nom du dossier
+    view: Voir
+    delete: Supprimer
+    deletion:
+      confirm: Confirmation de suppression
+      message: "Êtes-vous sûr de voulour supprimer %name%? "
+      messageDir: Tous les fichier et sous-dossiers de ce dossier seront aussi supprimés.
+      cancel: Annuler
+      confirmBut: Confirmer
+      confirmed: Suppression confirmée
+      confirmedMessage: "%name% a été correctement supprimé."
+      close: Fermer
+    sort:
+      name: Nom
+      date: Date
+      size: Taille
+    filter: Filtrer
+    refresh: Rafraichîr
+    files: >-
+      {nbFiles, plural,
+          =0    {0 fichier}
+          =1    {1 fichier}
+          other {# fichiers}
+      }
+    folders: >-
+      {nbFolders, plural,
+          =0    {0 dossier}
+          =1    {1 dossier}
+          other {# dossiers}
+      }
+  plupload:
+    images: Images
+    browse: Parcourir...
+    waiting: En attente
+    error: Erreur
+    cancel: Annulé
+    complete: Terminé
+    cancelAll: Tout annuler
