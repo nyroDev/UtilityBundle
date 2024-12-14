@@ -17,6 +17,30 @@ Add tinymce depency your webpack encore config:
     }))
 ```
 
+## Translate Tinymce
+
+Require tinymce npm dependancy:  
+```
+npm i tinymce-i18n
+```
+
+Then copy the language file you need by adding to your webpack encore config:  
+```js
+    .addPlugin(new CopyWebpackPlugin({
+        patterns: [
+            {from: 'vendor/tinymce/tinymce', to: '../tinymce'},
+            {from: 'node_modules/tinymce-i18n/langs7/fr_FR.js', to: '../tinymce/langs/'},
+            {
+                from: 'node_modules/tinymce-i18n/langs7/fr_FR.js',
+                to: '../tinymce/langs/fr.js',
+                transform: (input, filename) => {
+                    return input.toString().replace('tinymce.addI18n("fr_FR", {', 'tinymce.addI18n("fr", {');
+                }
+            }
+        ]
+    }))
+```
+
 ## Using tinymce browser feature
 
 Add JS and CSS generation to your webpack encore config:  
@@ -30,7 +54,15 @@ Add tinymce plugins depency your webpack encore config:
     .addPlugin(new CopyWebpackPlugin({
         patterns: [
             {from: 'vendor/tinymce/tinymce', to: '../tinymce'},
-            {from: 'vendor/nyrodev/utility-bundle/Resources/public/js/filemanager', to: '../tinymce/plugins/filemanager'}
+            {from: 'vendor/nyrodev/utility-bundle/Resources/public/js/filemanager', to: '../tinymce/plugins/filemanager'},
+            {from: 'node_modules/tinymce-i18n/langs7/fr_FR.js', to: '../tinymce/langs/'},
+            {
+                from: 'node_modules/tinymce-i18n/langs7/fr_FR.js',
+                to: '../tinymce/langs/fr.js',
+                transform: (input, filename) => {
+                    return input.toString().replace('tinymce.addI18n("fr_FR", {', 'tinymce.addI18n("fr", {');
+                }
+            }
         ]
     }))
 ```
