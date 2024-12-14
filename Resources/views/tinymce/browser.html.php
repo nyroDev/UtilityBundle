@@ -99,10 +99,10 @@
                     <?php endif; ?>
                 </nav>
                 <?php echo $view['translator']->trans('nyrodev.browser.files.'.($tinymceBrowser->getNbFiles() > 1 ? 'plural' : 'single'), [
-                    'nbFiles' => $tinymceBrowser->getNbFiles(),
+                    '%nbFiles%' => $tinymceBrowser->getNbFiles(),
                 ]); ?>
                 <?php echo $view['translator']->trans('nyrodev.browser.folders.'.($tinymceBrowser->getNbDirs() > 1 ? 'plural' : 'single'), [
-                    'nbFolders' => $tinymceBrowser->getNbDirs(),
+                    '%nbFolders%' => $tinymceBrowser->getNbDirs(),
                 ]); ?>
                 <?php echo $view['nyrodev']->humanSize($tinymceBrowser->getFullSize()); ?>
             </div>
