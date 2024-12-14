@@ -71,18 +71,12 @@ nyrodev:
       size: Size
     filter: Filter
     refresh: Refresh
-    files: >-
-      {nbFiles, plural,
-          =0    {0 file}
-          =1    {1 file}
-          other {# files}
-      }
-    folders: >-
-      {nbFolders, plural,
-          =0    {0 folder}
-          =1    {1 folder}
-          other {# folders}
-      }
+    files:
+      single: "%nbFiles% file"
+      plural: "%nbFiles% files"
+    folders:
+      single: "%nbFolders% folder"
+      plural: "%nbFolders% folders"
   plupload:
     images: Images
     browse: Browse...

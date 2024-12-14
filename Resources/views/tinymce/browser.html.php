@@ -98,10 +98,10 @@
                         / <strong><?php echo $tinymceBrowser->getLastPath(); ?></strong>
                     <?php endif; ?>
                 </nav>
-                <?php echo $view['translator']->trans('nyrodev.browser.files', [
+                <?php echo $view['translator']->trans('nyrodev.browser.files.'.($tinymceBrowser->getNbFiles() > 1 ? 'plural' : 'single'), [
                     'nbFiles' => $tinymceBrowser->getNbFiles(),
                 ]); ?>
-                <?php echo $view['translator']->trans('nyrodev.browser.folders', [
+                <?php echo $view['translator']->trans('nyrodev.browser.folders.'.($tinymceBrowser->getNbDirs() > 1 ? 'plural' : 'single'), [
                     'nbFolders' => $tinymceBrowser->getNbDirs(),
                 ]); ?>
                 <?php echo $view['nyrodev']->humanSize($tinymceBrowser->getFullSize()); ?>
