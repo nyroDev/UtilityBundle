@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Form\Type;
 
+use Doctrine\DBAL\ParameterType;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use PDO;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -46,7 +47,7 @@ class FilterType extends AbstractType implements FilterTypeInterface
             if (AbstractQueryBuilder::OPERATOR_IS_NULL == $transformer || AbstractQueryBuilder::OPERATOR_IS_NOT_NULL == $transformer) {
                 $queryBuilder->addWhere($name, $transformer);
             } else {
-                $queryBuilder->addWhere($name, $transformer, $value, PDO::PARAM_STR);
+                $queryBuilder->addWhere($name, $transformer, $value, ParameterType::STRING);
             }
         }
 
