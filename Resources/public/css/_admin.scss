@@ -1,2 +1,2 @@
-@import "form_admin";
-@import "list_admin";
+@use "form_admin" as *;
+@use "list_admin"as *;
