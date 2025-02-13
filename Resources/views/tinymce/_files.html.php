@@ -1,4 +1,4 @@
-<?php foreach($tinymceBrowser->getDirectories() as $directory): ?>
+<?php foreach ($tinymceBrowser->getDirectories() as $directory): ?>
     <div class="dir">
         <a href="<?php echo $tinymceBrowser->getUrl('path', ($tinymceBrowser->getPath() ? $tinymceBrowser->getPath().'/' : '').$directory->getBasename()); ?>" class="dir">
             <svg class="icon icon-folder media"><use href="#folder"></use></svg>
@@ -17,7 +17,7 @@
         </nav>
     </div>
 <?php endforeach; ?>
-<?php foreach($tinymceBrowser->getFiles() as $file): ?>
+<?php foreach ($tinymceBrowser->getFiles() as $file): ?>
     <div class="file">
         <a href="<?php echo $view->escape($tinymceBrowser->getFileUrl($file)); ?>" class="chooseMedia">
             <img src="<?php echo $tinymceBrowser->getResizeFileUrl($file); ?>" alt="<?php echo $view->escape($file->getBasename()); ?>" class="media" />

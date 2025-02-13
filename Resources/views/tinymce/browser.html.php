@@ -78,7 +78,7 @@
             */ ?>
         </nav>
         <form method="get" action="<?php echo $tinymceBrowser->getUrl('current'); ?>">
-            <?php foreach($tinymceBrowser->getQueryStings() as $k=>$v): ?>
+            <?php foreach ($tinymceBrowser->getQueryStings() as $k => $v): ?>
                 <input type="hidden" name="<?php echo $k; ?>" value="<?php echo $view->escape($v); ?>" />
             <?php endforeach; ?>
             <label for="q"><?php echo $view['translator']->trans('nyrodev.browser.filter'); ?></label>
@@ -91,7 +91,7 @@
             <div>
                 <nav>
                     <a href="<?php echo $tinymceBrowser->getUrl('path', ''); ?>"><svg class="icon icon-home"><use href="#home"></use></svg></a>
-                    <?php foreach($tinymceBrowser->getPaths() as $path): ?>
+                    <?php foreach ($tinymceBrowser->getPaths() as $path): ?>
                         / <a href="<?php echo $tinymceBrowser->getUrl('path', $path); ?>"><?php echo $path; ?></a>
                     <?php endforeach; ?>
                     <?php if ($tinymceBrowser->getLastPath()): ?>
@@ -108,7 +108,7 @@
             </div>
             <div>
                 <select id="sortBy">
-                    <?php foreach($tinymceBrowser->getSorts() as $sort=>$name): ?>
+                    <?php foreach ($tinymceBrowser->getSorts() as $sort => $name): ?>
                         <option value="<?php echo $view->escape($tinymceBrowser->getUrl('sortBy', $sort)); ?>"<?php echo $sort === $tinymceBrowser->getSortBy() ? ' selected' : ''; ?>><?php echo $name; ?></option>
                     <?php endforeach; ?>
                 </select>

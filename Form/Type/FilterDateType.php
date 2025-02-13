@@ -4,7 +4,6 @@ namespace NyroDev\UtilityBundle\Form\Type;
 
 use Doctrine\DBAL\ParameterType;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use PDO;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
