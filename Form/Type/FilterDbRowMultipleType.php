@@ -49,7 +49,7 @@ class FilterDbRowMultipleType extends FilterDbRowType
                     }
                 }
                 if (isset($options['order'])) {
-                    $ret->orderBy($options['order'], 'ASC');
+                    $ret->orderBy($options['order'], $options['orderBy']);
                 }
 
                 return $ret->getQueryBuilder();
@@ -102,6 +102,7 @@ class FilterDbRowMultipleType extends FilterDbRowType
             'query_builder' => null,
             'where' => null,
             'order' => null,
+            'orderBy' => 'ASC',
         ]);
     }
 
