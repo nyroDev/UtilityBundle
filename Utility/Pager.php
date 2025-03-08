@@ -16,6 +16,7 @@ class Pager
         private int $curPage = 1,
         private int $nbPerPage = 10,
     ) {
+        $this->calcNbPages();
     }
 
     /**
