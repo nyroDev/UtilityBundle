@@ -47,7 +47,7 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
                     }
                 }
                 if (isset($options['order'])) {
-                    $ret->orderBy($options['order'], $options['orderBy']);
+                    $ret->orderBy($options['order'], $options['orderDir']);
                 }
 
                 return $ret->getQueryBuilder();
@@ -90,7 +90,7 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
             'query_builder' => null,
             'where' => null,
             'order' => null,
-            'orderBy' => 'ASC',
+            'orderDir' => 'ASC',
         ]);
     }
 
