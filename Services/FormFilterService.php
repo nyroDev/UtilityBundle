@@ -2,7 +2,8 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use DateTime;
+use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use NyroDev\UtilityBundle\Form\Type\FilterTypeInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use Symfony\Component\Form\Form;
@@ -62,10 +63,9 @@ class FormFilterService extends AbstractService
     public function prepareValueForSession(mixed $value, Form $form): mixed
     {
         if (is_object($value)) {
-            $class = get_class($value);
-            if ('DateTime' == $class) {
+            if ($value instanceof DateTimeInterface) {
                 $value = $form->getViewData();
-            } elseif ('Doctrine\Common\Collections\ArrayCollection' == $class) {
+            } elseif ($value instanceof Collection) {
                 $values = [];
                 foreach ($value as $vv) {
                     $values[] = $vv->getId();
@@ -122,10 +122,10 @@ class FormFilterService extends AbstractService
     protected function prepareDataForUrl(mixed $value, Form $form): mixed
     {
         if ($value) {
-            if ($value instanceof DateTime) {
+            if ($value instanceof DateTimeInterface) {
                 $value = $form->getViewData();
             } elseif (is_object($value)) {
-                if ('Doctrine\Common\Collections\ArrayCollection' == get_class($value)) {
+                if ($value instanceof Collection) {
                     $tmp = [];
                     foreach ($value as $vv) {
                         $tmp[] = $vv->getId();

@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
-use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
@@ -460,7 +460,7 @@ class NyrodevService extends AbstractService
      * @param string $format    Format translation ident
      * @param bool   $useOffset Use offset of datetime
      */
-    public function formatDate(DateTime $datetime, string $format, ?bool $useOffset = null): string
+    public function formatDate(DateTimeInterface $datetime, string $format, ?bool $useOffset = null): string
     {
         if (is_null($useOffset)) {
             $useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');

@@ -2,7 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Controller;
 
-use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ObjectManager;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
@@ -92,7 +92,7 @@ abstract class AbstractAdminController extends AbstractController
                 foreach ($exportConfig['fields'] as $field) {
                     $val = $accessor->getValue($r, $field);
                     if (is_object($val)) {
-                        if ($val instanceof DateTime) {
+                        if ($val instanceof DateTimeInterface) {
                             $val = strftime($this->trans('date.short'), $val->getTimestamp());
                         } elseif ($val instanceof Collection) {
                             $val = $this->get(NyrodevService::class)->joinRows($val);
