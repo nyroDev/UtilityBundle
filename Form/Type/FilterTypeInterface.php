@@ -18,6 +18,11 @@ interface FilterTypeInterface
     public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder;
 
     /**
+     * Define the transforme to use when showTransformer is set to false.
+     */
+    public function getDefaultTransformer(): string;
+
+    /**
      * Prepare a value to be applied into AbstractQueryBuilder.
      * Useful for Object values.
      */

@@ -18,13 +18,15 @@ class FilterCustomType extends FilterType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $this->applyFilters[$builder->getName()] = $options['applyFilter'];
-        if (isset($options['transformerChoices']) && $options['transformerChoices'] && count($options['transformerChoices'])) {
-            $builder
-                ->add('transformer', ChoiceType::class, array_merge([
-                    'choices' => $options['transformerChoices'],
-                ], $options['transformerOptions']));
-        } elseif ($builder->has('transformer')) {
-            $builder->remove('transformer');
+        if ($options['showTransformer']) {
+            if (isset($options['transformerChoices']) && $options['transformerChoices'] && count($options['transformerChoices'])) {
+                $builder
+                    ->add('transformer', ChoiceType::class, array_merge([
+                        'choices' => $options['transformerChoices'],
+                    ], $options['transformerOptions']));
+            } elseif ($builder->has('transformer')) {
+                $builder->remove('transformer');
+            }
         }
         $builder
             ->add('value', $options['valueType'], array_merge([
@@ -32,9 +34,17 @@ class FilterCustomType extends FilterType
             ], $options['valueOptions']));
     }
 
+    public function getDefaultTransformer(): string
+    {
+        return AbstractQueryBuilder::OPERATOR_EQUALS;
+    }
+
     public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         $applyFilter = $this->applyFilters[$name];
+        if (!isset($data['transformer'])) {
+            $data['transformer'] = $this->getDefaultTransformer();
+        }
 
         return $applyFilter ? $applyFilter($queryBuilder, $name, $data) : $queryBuilder;
     }

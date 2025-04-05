@@ -17,6 +17,14 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['showTransformer']) {
+            $builder->add('transformer', ChoiceType::class, array_merge([
+                'choices' => [
+                    '=' => AbstractQueryBuilder::OPERATOR_IN,
+                ],
+            ], $options['transformerOptions']));
+        }
+
         $nyrodevDb = $this->get(DbAbstractService::class);
 
         $myOptions = [
@@ -57,22 +65,19 @@ class FilterDbRowMultipleSingleChoiceType extends FilterDbRowType
         if (isset($options['property'])) {
             $myOptions['choice_label'] = $options['property'];
         }
-        $builder
-            ->add('transformer', ChoiceType::class, array_merge([
-                'choices' => [
-                    '=' => AbstractQueryBuilder::OPERATOR_IN,
-                ],
-            ], $options['transformerOptions']))
-            ->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
+        $builder->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
+    }
+
+    public function getDefaultTransformer(): string
+    {
+        return AbstractQueryBuilder::OPERATOR_IN;
     }
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
-        if (
-            isset($data['transformer']) && $data['transformer']
-            && isset($data['value']) && $data['value']
-        ) {
+        if (isset($data['value']) && $data['value']) {
             $value = $this->applyValue($data['value']);
+            $transformer = isset($data['transformer']) && $data['transformer'] ? $data['transformer'] : $this->getDefaultTransformer();
 
             if ($value) {
                 $queryBuilder->addJoinWhere($name, [$value]);

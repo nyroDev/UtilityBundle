@@ -13,12 +13,14 @@ class FilterBoolType extends FilterType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('transformer', ChoiceType::class, array_merge([
+        if ($options['showTransformer']) {
+            $builder->add('transformer', ChoiceType::class, array_merge([
                 'choices' => [
                     AbstractQueryBuilder::OPERATOR_EQUALS => '=',
                 ],
-            ], $options['transformerOptions']))
+            ], $options['transformerOptions']));
+        }
+        $builder
             ->add('value', ChoiceType::class, array_merge([
                 'required' => false,
                 'choices' => [
@@ -28,14 +30,16 @@ class FilterBoolType extends FilterType
             ], $options['valueOptions']));
     }
 
+    public function getDefaultTransformer(): string
+    {
+        return AbstractQueryBuilder::OPERATOR_CONTAINS;
+    }
+
     public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
-        if (
-            isset($data['transformer']) && $data['transformer']
-            && isset($data['value']) && $data['value']
-        ) {
+        if (isset($data['value']) && $data['value']) {
             $value = $this->applyValue($data['value']);
-            $transformer = $data['transformer'];
+            $transformer = isset($data['transformer']) && $data['transformer'] ? $data['transformer'] : $this->getDefaultTransformer();
 
             if (false === $value) {
                 $queryBuilder->addWhere(AbstractQueryBuilder::WHERE_OR, [

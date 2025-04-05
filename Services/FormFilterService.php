@@ -44,6 +44,11 @@ class FormFilterService extends AbstractService
 
     public function saveSession(Form $form, string $route): void
     {
+        $this->get('request_stack')->getSession()->set('filter_'.$route, $this->prepareValuesForSession($form));
+    }
+
+    public function prepareValuesForSession(Form $form): array
+    {
         $tmp = $form->getData();
         $data = [];
         foreach ($tmp as $k => $v) {
@@ -57,7 +62,8 @@ class FormFilterService extends AbstractService
                 }
             }
         }
-        $this->get('request_stack')->getSession()->set('filter_'.$route, $data);
+
+        return $data;
     }
 
     public function prepareValueForSession(mixed $value, Form $form): mixed

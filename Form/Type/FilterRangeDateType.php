@@ -27,6 +27,11 @@ class FilterRangeDateType extends FilterType
             ], $options['valueOptions']));
     }
 
+    public function getDefaultTransformer(): string
+    {
+        return AbstractQueryBuilder::OPERATOR_EQUALS;
+    }
+
     public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
         if (isset($data['value']) && $data['value']) {

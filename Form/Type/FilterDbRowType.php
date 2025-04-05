@@ -17,6 +17,16 @@ class FilterDbRowType extends FilterType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['showTransformer']) {
+            $builder
+            ->add('transformer', ChoiceType::class, array_merge([
+                'choices' => [
+                    '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
+                ],
+            ], $options['transformerOptions']))
+            ;
+        }
+
         $nyrodevDb = $this->get(DbAbstractService::class);
         $myOptions = [
             'required' => false,
@@ -55,13 +65,13 @@ class FilterDbRowType extends FilterType
         if (isset($options['property'])) {
             $myOptions['choice_label'] = $options['property'];
         }
-        $builder
-            ->add('transformer', ChoiceType::class, array_merge([
-                'choices' => [
-                    '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
-                ],
-            ], $options['transformerOptions']))
-            ->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
+
+        $builder->add('value', $this->get(DbAbstractService::class)->getFormType(), array_merge($myOptions, $options['valueOptions']));
+    }
+
+    public function getDefaultTransformer(): string
+    {
+        return AbstractQueryBuilder::OPERATOR_EQUALS;
     }
 
     public function applyValue(mixed $value): mixed

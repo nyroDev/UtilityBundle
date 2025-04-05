@@ -14,19 +14,28 @@ class FilterIntType extends FilterType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['showTransformer']) {
+            $builder
+                ->add('transformer', ChoiceType::class, array_merge([
+                    'choices' => [
+                        '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
+                        '>=' => AbstractQueryBuilder::OPERATOR_GTE,
+                        '<=' => AbstractQueryBuilder::OPERATOR_LTE,
+                        '>' => AbstractQueryBuilder::OPERATOR_GT,
+                        '<' => AbstractQueryBuilder::OPERATOR_LT,
+                    ],
+                ], $options['transformerOptions']))
+            ;
+        }
         $builder
-            ->add('transformer', ChoiceType::class, array_merge([
-                'choices' => [
-                    '=' => AbstractQueryBuilder::OPERATOR_EQUALS,
-                    '>=' => AbstractQueryBuilder::OPERATOR_GTE,
-                    '<=' => AbstractQueryBuilder::OPERATOR_LTE,
-                    '>' => AbstractQueryBuilder::OPERATOR_GT,
-                    '<' => AbstractQueryBuilder::OPERATOR_LT,
-                ],
-            ], $options['transformerOptions']))
             ->add('value', IntegerType::class, array_merge([
                 'required' => false,
             ], $options['valueOptions']));
+    }
+
+    public function getDefaultTransformer(): string
+    {
+        return AbstractQueryBuilder::OPERATOR_EQUALS;
     }
 
     public function getBlockPrefix(): string

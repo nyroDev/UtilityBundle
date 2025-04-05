@@ -14,15 +14,24 @@ class FilterChoiceType extends FilterType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['showTransformer']) {
+            $builder
+                ->add('transformer', ChoiceType::class, array_merge([
+                    'choices' => [
+                        AbstractQueryBuilder::OPERATOR_EQUALS => '=',
+                    ],
+                ], $options['transformerOptions']))
+            ;
+        }
         $builder
-            ->add('transformer', ChoiceType::class, array_merge([
-                'choices' => [
-                    AbstractQueryBuilder::OPERATOR_EQUALS => '=',
-                ],
-            ], $options['transformerOptions']))
             ->add('value', ChoiceType::class, array_merge($options['choiceOptions'], [
                 'required' => false,
             ], $options['valueOptions']));
+    }
+
+    public function getDefaultTransformer(): string
+    {
+        return AbstractQueryBuilder::OPERATOR_EQUALS;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

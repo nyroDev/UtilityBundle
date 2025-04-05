@@ -15,7 +15,8 @@ class FilterDateType extends FilterType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
+        if ($options['showTransformer']) {
+            $builder
             ->add('transformer', ChoiceType::class, array_merge([
                 'choices' => [
                     '=' => AbstractQueryBuilder::OPERATOR_LIKEDATE,
@@ -24,20 +25,24 @@ class FilterDateType extends FilterType
                     '>' => AbstractQueryBuilder::OPERATOR_GT,
                     '<' => AbstractQueryBuilder::OPERATOR_LT,
                 ],
-            ], $options['transformerOptions']))
+            ], $options['transformerOptions']));
+        }
+        $builder
             ->add('value', DateType::class, array_merge([
                 'required' => false,
             ], $options['valueOptions']));
     }
 
+    public function getDefaultTransformer(): string
+    {
+        return AbstractQueryBuilder::OPERATOR_LIKEDATE;
+    }
+
     public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
-        if (
-            isset($data['transformer']) && $data['transformer']
-            && isset($data['value']) && $data['value']
-        ) {
+        if (isset($data['value']) && $data['value']) {
             $value = $this->applyValue($data['value']);
-            $transformer = $data['transformer'];
+            $transformer = isset($data['transformer']) && $data['transformer'] ? $data['transformer'] : $this->getDefaultTransformer();
 
             $queryBuilder->addWhere($name, $transformer, $value, ParameterType::STRING);
         }
