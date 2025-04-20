@@ -100,6 +100,10 @@
     {%- if errors|length > 0 -%}
         {% set classes = classes|merge(['form_error']) %}
     {%- endif -%}
+
+    {%- if row_attr.class -%}
+        {% set classes = classes|merge([row_attr.class]) %}
+    {%- endif -%}
     
     {% set row_attr = row_attr|merge({'class': classes|join(' ')|trim}) %}
 

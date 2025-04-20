@@ -1,1 +1,0 @@
-<div <?php echo $view['form']->block($form, 'widget_attributes'); ?> class="form_rawhtml"><?php echo $value; ?></div>
