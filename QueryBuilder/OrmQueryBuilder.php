@@ -4,6 +4,8 @@ namespace NyroDev\UtilityBundle\QueryBuilder;
 
 class OrmQueryBuilder extends AbstractQueryBuilder
 {
+    public const MEMBER_OF = 'MEMBER OF';
+
     private int $prmNb = 0;
 
     public function getNewQueryBuilder(bool $complete = false)
@@ -136,6 +138,12 @@ class OrmQueryBuilder extends AbstractQueryBuilder
                 $prm = 'param_'.$this->prmNb;
                 $ret = $useAlias.$field.' LIKE :'.$prm;
                 $queryBuilder->setParameter($prm, $value.'%', $forceType);
+                ++$this->prmNb;
+                break;
+            case self::MEMBER_OF:
+                $prm = 'param_'.$this->prmNb;
+                $ret = ':'.$prm.' MEMBER OF '.$useAlias.$field;
+                $queryBuilder->setParameter($prm, $value);
                 ++$this->prmNb;
                 break;
             default:
