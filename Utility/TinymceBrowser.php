@@ -260,7 +260,7 @@ class TinymceBrowser
                 $fs->mkdir($newPath);
             }
 
-            $newUrl = $this->getUrl('path', implode('/', array_merge($this->paths, [$newFodlerName])));
+            $newUrl = $this->getUrl('path', trim(implode('/', array_merge($this->paths, [$newFodlerName])), '/'));
         }
 
         return [
