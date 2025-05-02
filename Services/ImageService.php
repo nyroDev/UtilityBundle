@@ -379,9 +379,28 @@ class ImageService extends AbstractService
             try {
                 $fs = new Filesystem();
                 if (filter_var($file, FILTER_VALIDATE_URL) || $fs->exists($file)) {
-                    $imageSize = @getimagesize($file);
-                    if (is_array($imageSize) && count($imageSize) && $cache) {
-                        $cache->save($cacheKey, $imageSize, 24 * 60 * 60); // cache for 24 hours
+                    if ($this->isSvgPath($file)) {
+                        $xml = simplexml_load_file($file);
+                        $attr = $xml->attributes();
+
+                        $imageSize = [
+                            0,
+                            0,
+                            'svg'
+                        ];
+                        if (isset($attr['width'], $attr['height']) && $attr['width'] && $attr['height']) {
+                            $imageSize[0] = intval($attr['width']);
+                            $imageSize[1] = intval($attr['height']);
+                        } elseif (isset($attr['viewBox']) && $attr['viewBox']) {
+                            $tmp = explode(' ', $attr['viewBox']);
+                            $imageSize[0] = intval($tmp[2]) - intval($tmp[0]);
+                            $imageSize[1] = intval($tmp[3]) - intval($tmp[1]);
+                        }
+                    } else {
+                        $imageSize = @getimagesize($file);
+                        if (is_array($imageSize) && count($imageSize) && $cache) {
+                            $cache->save($cacheKey, $imageSize, 24 * 60 * 60); // cache for 24 hours
+                        }
                     }
                 }
             } catch (Exception $ex) {
@@ -391,6 +410,11 @@ class ImageService extends AbstractService
         }
 
         return $imageSize;
+    }
+
+    protected function isSvgPath(string $path): bool
+    {
+        return '.svg' === substr($path, -4) || false !== strpos($path, '.svg?');
     }
 
     public function createImgSrc(string $file, bool $allowTransparent = true): array

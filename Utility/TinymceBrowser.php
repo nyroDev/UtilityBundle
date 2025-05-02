@@ -29,19 +29,22 @@ class TinymceBrowser
     private array $directories;
     private int $fullSize;
 
+    public const TYPE_IMAGE = 'image';
+    public const TYPE_MEDIA = 'media'; // this is actually video for tinymce
+
     public const EXTENSIONS = [
-        'image' => ['jpg', 'jpeg', 'png', 'gif', 'svg'],
-        'media' => ['mov', 'mpeg', 'mp4', 'm4v', 'avi', 'mpg', 'wma', 'flv', 'webm'],
+        self::TYPE_IMAGE => ['jpg', 'jpeg', 'png', 'gif', 'svg'],
+        self::TYPE_MEDIA => ['mov', 'mpeg', 'mp4', 'm4v', 'avi', 'mpg', 'wma', 'flv', 'webm'],
     ];
     public const UPLOAD_MIME_TYPES = [
-        'image' => [
+        self::TYPE_IMAGE => [
             'image/jpg',
             'image/jpeg',
             'image/png',
             'image/gif',
             'image/svg+xml',
         ],
-        'media' => [
+        self::TYPE_MEDIA => [
             'video/quicktime',
             'video/mpeg',
             'video/mp4',
@@ -423,7 +426,6 @@ class TinymceBrowser
         $nameSearch = '*';
         if ($this->getSearch()) {
             $nameSearch .= $this->getSearch().'*';
-            echo $nameSearch;
             $dirFinder->name($nameSearch);
         }
 
@@ -533,6 +535,37 @@ class TinymceBrowser
         $rootRelativePath = str_replace($this->getPublicDirPath(), '', $file->getRealPath());
 
         return $this->nyrodevService->getUrl(substr($rootRelativePath, 1));
+    }
+
+    public function getFileChooseAttrs(SplFileInfo $file): array
+    {
+        $attrs = [];
+
+        $extension = $file->getExtension();
+        $attrs['data-ext'] = $extension;
+        $attrs['data-basename'] = $file->getBasename();
+        $attrs['data-name'] = $file->getBasename($extension ? '.'.$extension : null);
+
+        $type = null;
+        foreach(self::EXTENSIONS as $extType=>$extensions) {
+            if (in_array($extension, $extensions)) {
+                $type = $extType;
+                break;
+            }
+        }
+
+        if ($type) {
+            $attrs['data-type'] = $type;
+            if ($type === self::TYPE_IMAGE) {
+                $imageSize = $this->nyrodevService->get(ImageService::class)->getImageSize($file->getRealPath());
+                $attrs['data-w'] = $imageSize[0];
+                $attrs['data-h'] = $imageSize[1];
+            }
+        }
+
+        $attrs['data-ext'] = $file->getExtension();
+
+        return $attrs;
     }
 
     public function getResizeFileUrl(SplFileInfo $file): string
