@@ -547,7 +547,7 @@ class TinymceBrowser
         $attrs['data-name'] = $file->getBasename($extension ? '.'.$extension : null);
 
         $type = null;
-        foreach(self::EXTENSIONS as $extType=>$extensions) {
+        foreach (self::EXTENSIONS as $extType => $extensions) {
             if (in_array($extension, $extensions)) {
                 $type = $extType;
                 break;
@@ -556,7 +556,7 @@ class TinymceBrowser
 
         if ($type) {
             $attrs['data-type'] = $type;
-            if ($type === self::TYPE_IMAGE) {
+            if (self::TYPE_IMAGE === $type) {
                 $imageSize = $this->nyrodevService->get(ImageService::class)->getImageSize($file->getRealPath());
                 $attrs['data-w'] = $imageSize[0];
                 $attrs['data-h'] = $imageSize[1];

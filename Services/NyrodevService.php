@@ -77,6 +77,11 @@ class NyrodevService extends AbstractService
         }
     }
 
+    public function getPublicDirPath(): string
+    {
+        return $this->getParameter('kernel.project_dir').'/public';
+    }
+
     /**
      * Generates a URL from the given parameters, allowing extra parameters (like comma).
      */

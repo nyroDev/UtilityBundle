@@ -386,7 +386,7 @@ class ImageService extends AbstractService
                         $imageSize = [
                             0,
                             0,
-                            'svg'
+                            'svg',
                         ];
                         if (isset($attr['width'], $attr['height']) && $attr['width'] && $attr['height']) {
                             $imageSize[0] = intval($attr['width']);

@@ -22,8 +22,8 @@
         <a
             href="<?php echo $view->escape($tinymceBrowser->getFileUrl($file)); ?>"
             class="chooseMedia"
-            <?php foreach ($tinymceBrowser->getFileChooseAttrs($file) as $k=>$v): ?>
-                <?php echo $k.'="'.$view->escape($v).'"' ?>
+            <?php foreach ($tinymceBrowser->getFileChooseAttrs($file) as $k => $v): ?>
+                <?php echo $k.'="'.$view->escape($v).'"'; ?>
             <?php endforeach; ?>>
             <img src="<?php echo $tinymceBrowser->getResizeFileUrl($file); ?>" alt="<?php echo $view->escape($file->getBasename()); ?>" class="media" />
             <strong><?php echo $file->getBasename(); ?></strong>
