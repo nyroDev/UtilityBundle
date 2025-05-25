@@ -7,6 +7,7 @@ use DateTimeZone;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
 use Html2Text\Html2Text;
+use NyroDev\UtilityBundle\Helper\IconHelper;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Utility\Pager;
@@ -20,6 +21,18 @@ class NyrodevService extends AbstractService
 {
     use KernelInterfaceServiceableTrait;
     use AssetsPackagesServiceableTrait;
+
+    private ?IconHelper $iconHelper = null;
+
+    public function setIconHelper(?IconHelper $iconHelper): void
+    {
+        $this->iconHelper = $iconHelper;
+    }
+
+    public function getIconHelper(): ?IconHelper
+    {
+        return $this->iconHelper;
+    }
 
     public function getKernel(): KernelInterface
     {

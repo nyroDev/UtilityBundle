@@ -62,9 +62,6 @@ services:
           - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
-    NyroDev\UtilityBundle\Form\Extension\FileTypeExtension:
-        tags:
-          - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }
     NyroDev\UtilityBundle\Form\Type\TinymceType:
         calls:
           - [setContainerInterface, ['@service_container']]
@@ -84,3 +81,21 @@ services:
     NyroDev\UtilityBundle\Form\Type\DummyCaptchaType:
         tags:
           - { name: form.type }
+    NyroDev\UtilityBundle\Form\Extension\FieldsetExtension:
+        tags:
+          - { name: form.type_extension }
+    NyroDev\UtilityBundle\Form\Extension\SubmitExtension:
+        tags:
+          - { name: form.type_extension }
+    NyroDev\UtilityBundle\Form\Extension\WcTextExtension:
+        tags:
+          - { name: form.type_extension }
+    NyroDev\UtilityBundle\Form\Extension\WcSelectExtension:
+        tags:
+          - { name: form.type_extension }
+    NyroDev\UtilityBundle\Form\Extension\FileTypeExtension:
+        tags:
+          - { name: form.type_extension }
+    NyroDev\UtilityBundle\Form\Extension\IconExtension:
+        tags:
+          - { name: form.type_extension }

@@ -1,25 +1,67 @@
 {% use "form_div_layout.html.twig" %}
 
+{%- block form_widget_simple -%}
+    {% if icon %}
+        <div class="iconWidget {{ icon }}Widget">
+            {{ icon | nyrodev_icon | raw }}
+    {% endif %}
+    {{ parent() }}
+    {% if icon %}
+        </div>
+    {% endif %}
+{%- endblock form_widget_simple -%}
+
+{%- block button_widget -%}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {%- elseif label is not same as(false) -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+    <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>
+        {% if icon %}
+            {{ icon | nyrodev_icon | raw }}
+            <span>
+        {% endif %}
+        {%- if translation_domain is same as(false) -%}
+            {%- if label_html is same as(false) -%}
+                {{- label -}}
+            {%- else -%}
+                {{- label|raw -}}
+            {%- endif -%}
+        {%- else -%}
+            {%- if label_html is same as(false) -%}
+                {{- label|trans(label_translation_parameters, translation_domain) -}}
+            {%- else -%}
+                {{- label|trans(label_translation_parameters, translation_domain)|raw -}}
+            {%- endif -%}
+        {%- endif -%}
+        {% if icon %}
+            </span>
+        {% endif %}
+    </button>
+{%- endblock button_widget -%}
+
 {%- block button_row -%}
     <div class="form_button">
         <span class="formRequiredFields">
             {{ 'nyrodev.required'|trans }}
         </span>
         
-        {% set cancelUrl = '' %}
-        {% if attr['data-cancelurl'] -%}
-            {% set cancelUrl = attr['data-cancelurl'] %}
+        {% if cancelUrl -%}
+            <a href="{{ cancelUrl }}" class="button cancel">
+                {% if cancelIcon %}
+                    {{ cancelIcon | nyrodev_icon | raw }}
+                {% endif %}
+                <span>{{ cancelText|trans }}</span>
+            </a>
         {% endif %}
 
         {{- form_widget(form) -}}
-
-        {% if cancelUrl -%}
-            {% set cancelText = 'admin.misc.cancel' %}
-            {% if attr['data-canceltext'] -%}
-                {% set cancelText = attr['data-canceltext'] %}
-            {% endif %}
-            <a href="{{ cancelUrl }}" class="button cancel">{{ cancelText|trans }}</a>
-        {% endif %}
     </div>
 {%- endblock button_row -%}
 
@@ -37,12 +79,36 @@
 {%- endblock collection_widget -%}
 
 {%- block choice_widget -%}
-    {% if expanded %}
+    {% if wc_select %}
+        {{- block('choice_widget_wc') -}}
+    {% elseif expanded %}
         {{- block('choice_widget_expanded') -}}
     {% else %}
         <div class="selectCont">{{- block('choice_widget_collapsed') -}}</div>
     {% endif %}
 {%- endblock choice_widget -%}
+
+{%- block choice_widget_wc -%}
+    <{{ wc_select }} {{ expanded ? 'multiple' : '' }} {{ block('widget_attributes') }}>
+        {%- if placeholder is not none -%}
+            <nyro-select-option value=""{% if placeholder_attr|default({}) %}{% with { attr: placeholder_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</nyro-select-option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {% set render_preferred_choices = true %}
+            {{- block('choice_widget_wc_options') -}}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {%- set render_preferred_choices = false -%}
+        {{- block('choice_widget_wc_options') -}}
+    </{{ wc_select }}>
+{%- endblock choice_widget_wc -%}
+
+{%- block choice_widget_wc_options -%}
+    {% for group_label, choice in options %}
+        <nyro-select-option value="{{ choice.value }}"{% if choice.attr %}{% with { attr: choice.attr } %}{{ block('attributes') }}{% endwith %}{% endif %}{% if not render_preferred_choices|default(false) and choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label|raw : choice.label|trans(choice.labelTranslationParameters, choice_translation_domain) }}</nyro-select-option>
+    {% endfor %}
+{%- endblock choice_widget_wc_options -%}
 
 {%- block choice_widget_expanded -%}
     <ul {{ block('widget_container_attributes') }}>
@@ -54,6 +120,31 @@
     {% endfor -%}
     </ul>
 {%- endblock choice_widget_expanded -%}
+
+{%- block text_widget -%}
+    {% if wc_text %}
+        {% if icon %}
+            <div class="iconWidget {{ icon }}Widget">
+                {{ icon | nyrodev_icon | raw }}
+        {% endif %}
+        <{{ wc_text }} {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
+            {{ wc_html | raw }}
+        </{{ wc_text }}>
+        {% if icon %}
+            </div>
+        {% endif %}
+    {% else %}
+        {{ block('form_widget_simple') }}
+    {% endif %}
+{%- endblock text_widget -%}
+
+{%- block password_widget -%}
+    {% if wc_text %}
+        {{ block('text_widget') }}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{%- endblock password_widget -%}
 
 {%- block file_widget -%}
     {{- form_widget(form) -}}
@@ -79,6 +170,32 @@
     </ul>
     {%- endif -%}
 {%- endblock form_errors -%}
+
+{%- block form_rows -%}
+    {% if form is rootform and formTabs %}
+        <nyro-tabs selector="fieldset" title-selector="legend">
+    {% endif %}
+    {%- set cur_fieldset = false -%}
+    {% for child in form|filter(child => not child.rendered) %}
+        {% if form is rootform and child.vars.fieldset and child.vars.fieldset.name != cur_fieldset %}
+            {% if cur_fieldset %}
+                </fieldset>
+            {% endif %}
+            <fieldset name="{{ child.vars.fieldset.name }}"{% with { attr: child.vars.fieldset.attr } %}{{ block('attributes') }}{% endwith %}>
+                {% if child.vars.fieldset.label is not empty %}
+                    <legend>{{ child.vars.fieldset.label|trans|raw }}</legend>
+                {% endif %}
+            {%- set cur_fieldset = child.vars.fieldset.name -%}
+        {% endif %}
+        {{- form_row(child) -}}
+    {% endfor %}
+    {% if cur_fieldset %}
+        </fieldset>
+    {% endif %}
+    {% if form is rootform and formTabs %}
+        </nyro-tabs>
+    {% endif %}
+{%- endblock form_rows -%}
 
 {%- block form_row -%}
     {%- set widget_attr = {} -%}
@@ -124,18 +241,6 @@
         {{- form_errors(form) -}}
     </div>
 {%- endblock form_row -%}
-
-{%- block form_widget_compound -%}
-    <div {{ block('widget_container_attributes') }}>
-        {%- if form is rootform -%}
-            <div class="errors">
-                {{ form_errors(form) }}
-            </div>
-        {%- endif -%}
-        {{- block('form_rows') -}}
-        {{- form_rest(form) -}}
-    </div>
-{%- endblock form_widget_compound -%}
 
 {%- block filter_widget -%}
     {{ form_errors(form) }}

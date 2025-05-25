@@ -280,6 +280,10 @@ abstract class AbstractAdminController extends AbstractController
                 $options = array_merge($options, $moreOptions[$f]);
             }
 
+            if (SubmitType::class === $type) {
+                unset($options['required']);
+            }
+
             if ($classMetadata->hasPropertyMetadata($f)) {
                 $memberMetadatas = $classMetadata->getPropertyMetadata($f);
                 foreach ($memberMetadatas as $memberMetadata) {
@@ -349,6 +353,8 @@ abstract class AbstractAdminController extends AbstractController
             'name' => $name,
             'action' => $action,
             'row' => $row,
+            'route' => $route,
+            'routePrm' => $routePrm,
             'form' => $form->createView(),
         ];
     }

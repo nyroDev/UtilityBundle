@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Services;
 
+use NyroDev\UtilityBundle\Model\SecurityUserEntityableInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -21,6 +22,17 @@ class MemberService extends AbstractService
     public function getUser()
     {
         return $this->tokenStorage->getToken() ? $this->tokenStorage->getToken()->getUser() : null;
+    }
+
+    public function getEntityUser(): mixed
+    {
+        $user = $this->getUser();
+
+        if ($user && $user instanceof SecurityUserEntityableInterface) {
+            return $user->getEntityUser();
+        }
+
+        return $user;
     }
 
     public function isLogged(): bool

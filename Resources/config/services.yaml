@@ -7,6 +7,7 @@ services:
             - [setContainerInterface, ['@service_container']]
             - [setKernelInterface, ['@kernel']]
             - [setAssetsPackages, ['@assets.packages']]
+            - [setIconHelper, ['@NyroDev\UtilityBundle\Helper\IconHelper']]
         public: true
         tags:
           - { name: templating.helper, alias: nyrodev }
@@ -92,3 +93,16 @@ services:
     nyrodev_embed_validator:
         alias: NyroDev\UtilityBundle\Services\EmbedValidatorService
         public: true
+    
+    NyroDev\UtilityBundle\Helper\IconHelper:
+        calls:
+            - [setKernelInterface, ['@kernel']]
+            - [setAssetsPackages, ['@assets.packages']]
+        tags:
+          - { name: templating.helper, alias: nyrodev_icon }
+    
+    NyroDev\UtilityBundle\Twig\IconExtension:
+        arguments:
+            - '@NyroDev\UtilityBundle\Helper\IconHelper'
+        tags:
+          - { name: twig.extension }

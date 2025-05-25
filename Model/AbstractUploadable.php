@@ -237,7 +237,7 @@ abstract class AbstractUploadable
         }
     }
 
-    protected function removeFileReal(string $file)
+    protected function removeFileReal(?string $file)
     {
         $fs = new Filesystem();
         if ($file && $fs->exists($file)) {
