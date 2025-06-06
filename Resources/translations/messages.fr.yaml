@@ -23,7 +23,7 @@ admin:
     actions: Actions
     send: Envoyer
     filter: Filtrer
-    clearFilter: Vider le filtre
+    clearFilter: Réinitialiser
     add: Ajouter
     edit: Modifier
     export: Exporter
