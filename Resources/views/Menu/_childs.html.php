@@ -5,7 +5,7 @@
     <ul
         <?php echo $view->render('@NyroDevUtility/Tpl/_attrs.html.php', ['attrs' => $menu->getChildOuterAttrs()]); ?>
     >
-    <?php foreach($menu->getChilds() as $child): ?>
+    <?php foreach ($menu->getChilds() as $child): ?>
         <li
             <?php echo $view->render('@NyroDevUtility/Tpl/_attrs.html.php', ['attrs' => $child->getOuterAttrs()]); ?>
         >
