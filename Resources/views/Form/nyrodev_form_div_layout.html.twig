@@ -112,14 +112,46 @@
 
 {%- block choice_widget_expanded -%}
     <ul {{ block('widget_container_attributes') }}>
-    {%- for child in form %}
-        <li>
-            {{- form_widget(child) -}}
-            {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
-        </li>
-    {% endfor -%}
+        {%- set options = choices -%}
+        {{- block('choice_widget_expanded_options') -}}
     </ul>
 {%- endblock choice_widget_expanded -%}
+
+{%- block choice_widget_expanded_options -%}
+    {#- See https://github.com/symfony/symfony/issues/19514#issuecomment-2038417922 -#}
+
+    {%- if form.children.placeholder is defined -%}
+        {%- with {child: form.children.placeholder} -%}
+            {{- block('choice_widget_expanded_option') -}}
+        {%- endwith -%}
+    {%- endif -%}
+
+    {%- for group_label, option in options -%}
+        {%- if option is iterable -%}
+            <li class="form_expanded_group">
+                <label>{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}</label>
+                {%- set options = option -%}
+                <ul>
+                    {{- block('choice_widget_expanded_options') -}}
+                </ul>
+            </li>
+        {%- else -%}
+            {%- with {child: form.children|filter(child => child.vars.value == option.value)|first} -%}
+                {{- block('choice_widget_expanded_option') -}}
+            {%- endwith -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock -%}
+
+{%- block choice_widget_expanded_option -%}
+    <li>
+        {{- form_widget(child) -}}
+        {{- form_label(child, null, {
+            translation_domain: choice_translation_domain,
+            label_attr: child.vars.label_attr,
+        }) -}}
+    </li>
+{%- endblock -%}
 
 {%- block text_widget -%}
     {% if wc_text %}

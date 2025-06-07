@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -31,7 +32,7 @@ abstract class AbstractAdminController extends AbstractController
         array $routePrm = [],
         string $defaultSort = 'id',
         string $defaultOrder = 'desc',
-        ?string $filterType = null,
+        FormInterface|string|null $filterType = null,
         ?AbstractQueryBuilder $queryBuilder = null,
         ?array $exportConfig = null,
         array $filterDefaults = [],
@@ -149,26 +150,36 @@ abstract class AbstractAdminController extends AbstractController
         ];
     }
 
+    protected function getDefaultFilterOptions(): array
+    {
+        return [
+            'csrf_protection' => false,
+            'validation_groups' => false,
+            'allow_extra_fields' => true,
+            'attr' => [
+                'class' => 'filterForm',
+            ],
+        ];
+    }
+
     protected function getListElements(
         Request $request,
         $repository,
         string $route,
         string $defaultSort = 'id',
         string $defaultOrder = 'desc',
-        ?string $filterType = null,
+        FormInterface|string|null $filterType = null,
         ?AbstractQueryBuilder $queryBuilder = null,
         array $filterDefaults = [],
     ): array {
         $filter = null;
         if (!is_null($filterType)) {
-            $filter = $this->get('nyrodev_form')->getFormFactory()->create($filterType, $filterDefaults, [
-                'csrf_protection' => false,
-                'validation_groups' => false,
-                'allow_extra_fields' => true,
-                'attr' => [
-                    'class' => 'filterForm',
-                ],
-            ]);
+            if ($filterType instanceof FormInterface) {
+                // if we have a form object, use it directly
+                $filter = $filterType;
+            } elseif (is_string($filterType)) {
+                $filter = $this->get('nyrodev_form')->getFormFactory()->create($filterType, $filterDefaults, $this->getDefaultFilterOptions());
+            }
         }
 
         $page = $request->query->get('page', $request->getSession()->get('admin_list_'.$route.'_page', 1));

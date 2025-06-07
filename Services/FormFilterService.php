@@ -6,14 +6,14 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use NyroDev\UtilityBundle\Form\Type\FilterTypeInterface;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * Service used to update AbstractQueryBuilder object regarding a form containing some FilterTypeInterface.
  */
 class FormFilterService extends AbstractService
 {
-    public function buildQuery(Form $form, AbstractQueryBuilder $queryBuilder): void
+    public function buildQuery(FormInterface $form, AbstractQueryBuilder $queryBuilder): void
     {
         $data = $form->getData();
 
@@ -30,7 +30,7 @@ class FormFilterService extends AbstractService
         }
     }
 
-    public function fillFromSession(Form $form, string $route): bool
+    public function fillFromSession(FormInterface $form, string $route): bool
     {
         $filled = false;
         $data = $this->get('request_stack')->getSession()->get('filter_'.$route);
@@ -42,12 +42,12 @@ class FormFilterService extends AbstractService
         return $filled;
     }
 
-    public function saveSession(Form $form, string $route): void
+    public function saveSession(FormInterface $form, string $route): void
     {
         $this->get('request_stack')->getSession()->set('filter_'.$route, $this->prepareValuesForSession($form));
     }
 
-    public function prepareValuesForSession(Form $form): array
+    public function prepareValuesForSession(FormInterface $form): array
     {
         $tmp = $form->getData();
         $data = [];
@@ -66,7 +66,7 @@ class FormFilterService extends AbstractService
         return $data;
     }
 
-    public function prepareValueForSession(mixed $value, Form $form): mixed
+    public function prepareValueForSession(mixed $value, FormInterface $form): mixed
     {
         if (is_object($value)) {
             if ($value instanceof DateTimeInterface) {
@@ -112,7 +112,7 @@ class FormFilterService extends AbstractService
     /**
      * Get parameter from a form for creating a pager URL.
      */
-    public function getPrmForUrl(Form $form): array
+    public function getPrmForUrl(FormInterface $form): array
     {
         $ret = [];
         foreach ($form->getData() as $k => $data) {
@@ -125,7 +125,7 @@ class FormFilterService extends AbstractService
         return count($ret) ? [$form->getName() => $ret] : [];
     }
 
-    protected function prepareDataForUrl(mixed $value, Form $form): mixed
+    protected function prepareDataForUrl(mixed $value, FormInterface $form): mixed
     {
         if ($value) {
             if ($value instanceof DateTimeInterface) {

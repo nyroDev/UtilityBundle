@@ -21,11 +21,11 @@ label {
     vertical-align: top;
 }
 
-input[type=text],
-input[type=number],
-input[type=email],
-input[type=url],
-input[type=password],
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
 textarea {
     border: 1px solid #ccc;
     padding: 3px;
@@ -141,7 +141,8 @@ select {
 }
 
 .form_row .help-text,
-.form_errors, .form_row .form_errors {
+.form_errors,
+.form_row .form_errors {
     margin: 3px 0 3px 220px;
     padding: 0;
 }
@@ -179,6 +180,14 @@ select {
     margin: 0;
     padding: 0;
     width: 27.5rem;
+}
+
+.form_row_choice .form_expanded_group ul {
+    margin-left: 2rem;
+}
+
+.form_row_choice .form_expanded_group > label {
+    font-weight: bold;
 }
 
 .form_row_choice li {

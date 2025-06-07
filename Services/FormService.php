@@ -4,8 +4,8 @@ namespace NyroDev\UtilityBundle\Services;
 
 use NyroDev\UtilityBundle\Form\Type\DummyCaptchaType;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -31,7 +31,7 @@ class FormService extends AbstractService
         return $this->validator;
     }
 
-    public function addDummyCaptcha(Form $form): void
+    public function addDummyCaptcha(FormInterface $form): void
     {
         $form->add('dummytcha', DummyCaptchaType::class, [
             'mapped' => false,

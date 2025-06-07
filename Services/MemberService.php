@@ -40,9 +40,9 @@ class MemberService extends AbstractService
         return is_object($this->getUser());
     }
 
-    public function isGranted(string $role): bool
+    public function isGranted(string $role, mixed $subject = null): bool
     {
-        return $this->isLogged() && $this->authorizationChecker->isGranted($role);
+        return $this->isLogged() && $this->authorizationChecker->isGranted($role, $subject);
     }
 
     public function isImpersonated(): bool
