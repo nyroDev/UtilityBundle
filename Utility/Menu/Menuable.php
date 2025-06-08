@@ -2,6 +2,7 @@
 
 namespace NyroDev\UtilityBundle\Utility\Menu;
 
+use Closure;
 use InvalidArgumentException;
 
 abstract class Menuable
@@ -178,6 +179,30 @@ abstract class Menuable
     {
         $child->setParent($this);
         $this->childs[$name] = $child;
+
+        return $this;
+    }
+
+    public function reorderChilds(Closure|array $reorder): self
+    {
+        if (is_array($reorder)) {
+            $reorder = function (string $a, string $b) use ($reorder): int {
+                $posA = array_search($a, $reorder, true);
+                $posB = array_search($b, $reorder, true);
+
+                if (false === $posA && false === $posB) {
+                    return 0; // Keep original order if not found
+                } elseif (false === $posA) {
+                    return 1; // $a comes after $b
+                } elseif (false === $posB) {
+                    return -1; // $b comes after $a
+                }
+
+                return $posA <=> $posB;
+            };
+        }
+
+        uksort($this->childs, $reorder);
 
         return $this;
     }
