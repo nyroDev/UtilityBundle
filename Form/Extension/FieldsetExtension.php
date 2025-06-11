@@ -26,14 +26,22 @@ class FieldsetExtension extends AbstractTypeExtension
         }
         if ($options['formTabs']) {
             $view->vars['formTabs'] = $options['formTabs'];
+            if ($options['formTabsAttrs']) {
+                $view->vars['formTabsAttrs'] = $options['formTabsAttrs'];
+            }
+            if ($options['formTabsHtmlNav']) {
+                $view->vars['formTabsHtmlNav'] = $options['formTabsHtmlNav'];
+            }
         }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'formTabs' => false,
             'fieldset' => false,
+            'formTabs' => false,
+            'formTabsAttrs' => false,
+            'formTabsHtmlNav' => false,
         ]);
     }
 }

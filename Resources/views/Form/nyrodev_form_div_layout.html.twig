@@ -61,6 +61,10 @@
             </a>
         {% endif %}
 
+        {% if buttonHtml -%}
+            {{ buttonHtml|raw }}
+        {% endif %}
+
         {{- form_widget(form) -}}
     </div>
 {%- endblock button_row -%}
@@ -205,7 +209,13 @@
 
 {%- block form_rows -%}
     {% if form is rootform and formTabs %}
-        <nyro-tabs selector="fieldset" title-selector="legend">
+        <nyro-tabs selector="fieldset" title-selector="legend"
+            {% if formTabsHtmlNav %}html-nav{% endif %}
+            {% if formTabsAttrs %}{% with { attr: formTabsAttrs } %}{{ block('attributes') }}{% endwith %}{% endif %}
+        >
+        {% if formTabsHtmlNav %}
+            {{ formTabsHtmlNav|raw }}
+        {% endif %}
     {% endif %}
     {%- set cur_fieldset = false -%}
     {% for child in form|filter(child => not child.rendered) %}

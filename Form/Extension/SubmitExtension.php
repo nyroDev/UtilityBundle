@@ -27,6 +27,9 @@ class SubmitExtension extends AbstractTypeExtension
                 $view->vars['cancelIcon'] = $options['cancelIcon'];
             }
         }
+        if ($options['buttonHtml']) {
+            $view->vars['buttonHtml'] = $options['buttonHtml'];
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -35,6 +38,7 @@ class SubmitExtension extends AbstractTypeExtension
             'cancelUrl' => null,
             'cancelText' => null,
             'cancelIcon' => null,
+            'buttonHtml' => null,
         ]);
     }
 }
