@@ -1,45 +1,44 @@
 (function () {
-    let divTpl,
-        addToCollection,
-        addDeleteLink;
+    let divTpl, addToCollection, addDeleteLink;
 
-    const dataPrototypeds = document.querySelectorAll('[data-prototype][data-allow-add]'),
+    const dataPrototypeds = document.querySelectorAll("[data-prototype][data-allow-add]"),
         initDataPrototypeds = () => {
             if (addToCollection) {
                 return;
             }
-            divTpl = document.createElement('div');
+            divTpl = document.createElement("div");
             addToCollection = (dataPrototyped, divAdd, value) => {
-                divTpl.innerHTML = dataPrototyped.dataset.prototype
-                    .replace(/__name__/g, dataPrototyped.dataset.index);
+                divTpl.innerHTML = dataPrototyped.dataset.prototype.replace(/__name__/g, dataPrototyped.dataset.index);
 
                 while (divTpl.lastElementChild) {
-                    if (divTpl.lastElementChild.matches('.form_row_collection_entry')) {
+                    if (divTpl.lastElementChild.matches(".form_row_collection_entry")) {
                         if (value) {
-                            divTpl.lastElementChild.querySelector('input, textarea').value = value;
+                            divTpl.lastElementChild.querySelector("input, textarea").value = value;
                         }
                         addDeleteLink(dataPrototyped, divTpl.lastElementChild);
                     }
-                    divAdd.insertAdjacentElement('beforebegin', divTpl.lastElementChild);
+                    divAdd.insertAdjacentElement("beforebegin", divTpl.lastElementChild);
                 }
 
                 dataPrototyped.dataset.index++;
-                dataPrototyped.dispatchEvent(new CustomEvent('formCollectionAdd', {
-                    bubbles: true,
-                    cancelable: true,
-                }));
+                dataPrototyped.dispatchEvent(
+                    new CustomEvent("formCollectionAdd", {
+                        bubbles: true,
+                        cancelable: true,
+                    })
+                );
             };
             addDeleteLink = (dataPrototyped, collectionEntry) => {
                 if (!dataPrototyped.dataset.allowDelete) {
                     return;
                 }
 
-                const spanDel = document.createElement('span')
-                spanDel.classList.add('deleteFromCollectionCont');
-                if (dataPrototyped.dataset.tplAdd) {
-                    spanDel.innerHTML = dataPrototyped.dataset.tplAdd;
+                const spanDel = document.createElement("span");
+                spanDel.classList.add("deleteFromCollectionCont");
+                if (dataPrototyped.dataset.tplDelete) {
+                    spanDel.innerHTML = dataPrototyped.dataset.tplDelete;
                 } else {
-                    spanDel.innerHTML = '<a href="#" class="btn deleteFromCollection">' + dataPrototyped.dataset.allowDelete + '</a>';
+                    spanDel.innerHTML = '<a href="#" class="btn deleteFromCollection">' + dataPrototyped.dataset.allowDelete + "</a>";
                 }
 
                 collectionEntry.appendChild(spanDel);
@@ -54,19 +53,19 @@
 
             dataPrototyped.dataset.formCollectionInited = true;
 
-            const divAdd = document.createElement('div'),
-                entries = dataPrototyped.querySelectorAll('.form_row_collection_entry'),
+            const divAdd = document.createElement("div"),
+                entries = dataPrototyped.querySelectorAll(".form_row_collection_entry"),
                 allowDelete = dataPrototyped.dataset.allowDelete;
 
             dataPrototyped.dataset.index = entries.length;
             if (allowDelete && entries.length) {
-                entries.forEach(entry => {
+                entries.forEach((entry) => {
                     addDeleteLink(dataPrototyped, entry);
                 });
             }
 
-            dataPrototyped.addEventListener('click', (e) => {
-                const addBtn = e.target.closest('.addToCollection');
+            dataPrototyped.addEventListener("click", (e) => {
+                const addBtn = e.target.closest(".addToCollection");
                 if (addBtn) {
                     e.preventDefault();
                     // Add new element
@@ -74,26 +73,28 @@
                     return;
                 }
 
-                const delBtn = e.target.closest('.deleteFromCollection');
+                const delBtn = e.target.closest(".deleteFromCollection");
                 if (delBtn && allowDelete) {
                     e.preventDefault();
                     if (dataPrototyped.dataset.deleteConfirm && !confirm(dataPrototyped.dataset.deleteConfirm)) {
                         return;
                     }
-                    delBtn.closest('.form_row_collection_entry').remove();
-                    dataPrototyped.dispatchEvent(new CustomEvent('formCollectionDelete', {
-                        bubbles: true,
-                        cancelable: true,
-                    }));
+                    delBtn.closest(".form_row_collection_entry").remove();
+                    dataPrototyped.dispatchEvent(
+                        new CustomEvent("formCollectionDelete", {
+                            bubbles: true,
+                            cancelable: true,
+                        })
+                    );
                     return;
                 }
             });
 
-            divAdd.classList.add('addToCollectionCont');
+            divAdd.classList.add("addToCollectionCont");
             if (dataPrototyped.dataset.tplAdd) {
                 divAdd.innerHTML = dataPrototyped.dataset.tplAdd;
             } else {
-                divAdd.innerHTML = '<a href="#" class="btn addToCollection">' + dataPrototyped.dataset.allowAdd + '</a>';
+                divAdd.innerHTML = '<a href="#" class="btn addToCollection">' + dataPrototyped.dataset.allowAdd + "</a>";
             }
 
             dataPrototyped.appendChild(divAdd);
@@ -102,16 +103,18 @@
                 addToCollection(dataPrototyped, divAdd);
             }
 
-            dataPrototyped.addEventListener('formCollectionSetValue', (e) => {
-                dataPrototyped.querySelectorAll('.form_row_collection_entry').forEach(entry => {
+            dataPrototyped.addEventListener("formCollectionSetValue", (e) => {
+                dataPrototyped.querySelectorAll(".form_row_collection_entry").forEach((entry) => {
                     entry.remove();
                 });
-                dataPrototyped.dispatchEvent(new CustomEvent('formCollectionDelete', {
-                    bubbles: true,
-                    cancelable: true,
-                }));
+                dataPrototyped.dispatchEvent(
+                    new CustomEvent("formCollectionDelete", {
+                        bubbles: true,
+                        cancelable: true,
+                    })
+                );
                 if (e.detail && Array.isArray(e.detail)) {
-                    e.detail.forEach(detail => {
+                    e.detail.forEach((detail) => {
                         addToCollection(dataPrototyped, divAdd, detail);
                     });
                 }
@@ -119,20 +122,20 @@
         };
 
     if (dataPrototypeds.length) {
-        dataPrototypeds.forEach(dataPrototyped => {
+        dataPrototypeds.forEach((dataPrototyped) => {
             initDataPrototyped(dataPrototyped);
         });
     }
 
-    document.body.addEventListener('formCollectionInitDataPrototyped', (e) => {
+    document.body.addEventListener("formCollectionInitDataPrototyped", (e) => {
         initDataPrototyped(e.target);
     });
 
-    document.body.addEventListener('formCollectionSearchDataPrototyped', (e) => {
-        const dataPrototypeds = e.target.querySelectorAll('[data-prototype][data-allow-add]');
+    document.body.addEventListener("formCollectionSearchDataPrototyped", (e) => {
+        const dataPrototypeds = e.target.querySelectorAll("[data-prototype][data-allow-add]");
 
         if (dataPrototypeds.length) {
-            dataPrototypeds.forEach(dataPrototyped => {
+            dataPrototypeds.forEach((dataPrototyped) => {
                 initDataPrototyped(dataPrototyped);
             });
         }
