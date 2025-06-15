@@ -83,12 +83,19 @@
 {%- endblock collection_widget -%}
 
 {%- block choice_widget -%}
+    {% if icon %}
+        <div class="iconWidget {{ icon }}Widget">
+            {{ icon | nyrodev_icon | raw }}
+    {% endif %}
     {% if wc_select %}
         {{- block('choice_widget_wc') -}}
     {% elseif expanded %}
         {{- block('choice_widget_expanded') -}}
     {% else %}
         <div class="selectCont">{{- block('choice_widget_collapsed') -}}</div>
+    {% endif %}
+    {% if icon %}
+        </div>
     {% endif %}
 {%- endblock choice_widget -%}
 
