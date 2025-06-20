@@ -1,7 +1,8 @@
 (function () {
     let divTpl, addToCollection, addDeleteLink;
 
-    const dataPrototypeds = document.querySelectorAll("[data-prototype][data-allow-add]"),
+    const prototypeSelector = "[data-prototype][data-allow-add]",
+        dataPrototypeds = document.querySelectorAll(prototypeSelector),
         initDataPrototypeds = () => {
             if (addToCollection) {
                 return;
@@ -20,11 +21,21 @@
                     divAdd.insertAdjacentElement("beforebegin", divTpl.lastElementChild);
                 }
 
+                const entryAdded = divAdd.previousElementSibling,
+                    dataPrototypeds = entryAdded.querySelectorAll(prototypeSelector);
+
+                if (dataPrototypeds.length) {
+                    dataPrototypeds.forEach((dataPrototyped) => {
+                        initDataPrototyped(dataPrototyped);
+                    });
+                }
+
                 dataPrototyped.dataset.index++;
                 dataPrototyped.dispatchEvent(
                     new CustomEvent("formCollectionAdd", {
                         bubbles: true,
                         cancelable: true,
+                        detail: entryAdded,
                     })
                 );
             };
@@ -54,7 +65,7 @@
             dataPrototyped.dataset.formCollectionInited = true;
 
             const divAdd = document.createElement("div"),
-                entries = dataPrototyped.querySelectorAll(".form_row_collection_entry"),
+                entries = dataPrototyped.querySelectorAll(":scope > .form_row_collection_entry"),
                 allowDelete = dataPrototyped.dataset.allowDelete;
 
             dataPrototyped.dataset.index = entries.length;
@@ -68,6 +79,7 @@
                 const addBtn = e.target.closest(".addToCollection");
                 if (addBtn) {
                     e.preventDefault();
+                    e.stopPropagation();
                     // Add new element
                     addToCollection(dataPrototyped, divAdd);
                     return;
@@ -76,6 +88,7 @@
                 const delBtn = e.target.closest(".deleteFromCollection");
                 if (delBtn && allowDelete) {
                     e.preventDefault();
+                    e.stopPropagation();
                     if (dataPrototyped.dataset.deleteConfirm && !confirm(dataPrototyped.dataset.deleteConfirm)) {
                         return;
                     }
