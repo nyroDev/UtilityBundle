@@ -52,6 +52,7 @@ nyrodev:
     name: Name
     rename: Rename
     nameAlreadyExists: This name already exists.
+    upload: Upload files
     createFolder: Create folder
     folderName: Folder name
     view: View

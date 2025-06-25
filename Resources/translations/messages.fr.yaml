@@ -52,6 +52,7 @@ nyrodev:
     name: Nom
     rename: Renommer
     nameAlreadyExists: Ce nom existe déjà.
+    upload: Envoyer des fichiers
     createFolder: Créer un dossier
     folderName: Nom du dossier
     view: Voir
