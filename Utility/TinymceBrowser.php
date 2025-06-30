@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -56,6 +57,12 @@ class TinymceBrowser
             'video/webm',
         ],
     ];
+
+    private const EXTENSIONS_NEED_THUMBNAILS = [
+        'pdf',
+    ];
+
+    private const THUMNAIL_PATH = '.tinyBrowserThumbnail.jpg';
 
     public function __construct(
         private readonly NyrodevService $nyrodevService,
@@ -207,10 +214,85 @@ class TinymceBrowser
 
             $file->move($fullDirPath, $uniqFileName);
 
+            $fullPath = $fullDirPath.$uniqFileName;
+            $ext = $this->nyrodevService->getExt($fullPath);
+            if (in_array($ext, self::EXTENSIONS_NEED_THUMBNAILS)) {
+                $this->createThumbnail($fullPath);
+            } elseif (in_array($ext, self::EXTENSIONS[self::TYPE_MEDIA])) {
+                $this->createVideoThumbnail($fullPath);
+            }
+
             return new Response($uniqFileName);
         }
 
         throw new Exception('Post not supported');
+    }
+
+    private function hasThumbnail(string $ext): bool
+    {
+        return in_array($ext, self::EXTENSIONS_NEED_THUMBNAILS) || in_array($ext, self::EXTENSIONS[self::TYPE_MEDIA]);
+    }
+
+    private function createThumbnail(string $fullPath): void
+    {
+        $thumbnailDest = $fullPath.self::THUMNAIL_PATH;
+
+        $cmd = [
+            'convert',
+            '-density', '150',
+            '-trim',
+            $fullPath.'[0]',
+            '-quality', '100',
+            '-flatten',
+            '-background', 'white',
+            $thumbnailDest,
+        ];
+
+        try {
+            $process = new Process($cmd);
+            $process->mustRun();
+        } catch (Exception $e) {
+        }
+    }
+
+    private function createVideoThumbnail(string $fullPath): void
+    {
+        $thumbnailDest = $fullPath.self::THUMNAIL_PATH;
+
+        $cmdDuration = [
+            'ffprobe',
+            '-v', 'error',
+            '-show_entries', 'format=duration',
+            '-of', 'default=noprint_wrappers=1:nokey=1',
+            $fullPath,
+        ];
+
+        try {
+            $process = new Process($cmdDuration);
+            $process->mustRun();
+            $duration = (float) trim($process->getOutput());
+        } catch (Exception $e) {
+        }
+
+        if (!$duration) {
+            return;
+        }
+
+        $cmd = [
+            'ffmpeg',
+            '-ss', (string) round($duration / 2), // Get the middle of the video
+            '-i', $fullPath,
+            '-vframes', '1',
+            $thumbnailDest,
+        ];
+        dump(implode(' ', $cmd));
+
+        try {
+            $process = new Process($cmd);
+            $process->mustRun();
+        } catch (Exception $e) {
+            dump($e);
+        }
     }
 
     private function handleAction(): Response|array
@@ -328,10 +410,17 @@ class TinymceBrowser
             $data = $form->getData();
             $newName = $this->nyrodevService->urlify($data['name']);
 
+            $newName = $this->getFullDirPath().'/'.$newName.($ext ? '.'.$ext : '');
             $fs->rename(
                 $fullPath,
-                $this->getFullDirPath().'/'.$newName.($ext ? '.'.$ext : '')
+                $newName
             );
+            if ($ext && $this->hasThumbnail($ext)) {
+                $fs->rename(
+                    $fullPath.self::THUMNAIL_PATH,
+                    $newName.self::THUMNAIL_PATH,
+                );
+            }
 
             $newUrl = $this->getUrl('current');
         }
@@ -361,7 +450,13 @@ class TinymceBrowser
 
         $confirmed = false;
         if ($this->request->query->getBoolean('confirm')) {
+            $ext = $this->nyrodevService->getExt($fullPath);
             $fs->remove($fullPath);
+
+            if ($ext && $this->hasThumbnail($ext)) {
+                $fs->remove($fullPath.self::THUMNAIL_PATH);
+            }
+
             $confirmed = true;
         }
 
@@ -437,7 +532,10 @@ class TinymceBrowser
             $nameSearch = $nameSearchTmp;
         }
 
-        $fileFinder->name($nameSearch);
+        $fileFinder
+            ->name($nameSearch)
+            ->notName('*'.self::THUMNAIL_PATH) // Exclude thumbnails
+        ;
 
         $this->files = iterator_to_array($fileFinder);
         $this->directories = iterator_to_array($dirFinder);
@@ -570,7 +668,12 @@ class TinymceBrowser
 
     public function getResizeFileUrl(SplFileInfo $file): string
     {
-        return $this->nyrodevService->get(ImageService::class)->resize($file->getRealPath(), [
+        $realPath = $file->getRealPath();
+        if ($this->hasThumbnail($file->getExtension())) {
+            $realPath .= self::THUMNAIL_PATH;
+        }
+
+        return $this->nyrodevService->get(ImageService::class)->resize($realPath, [
             'name' => 'tinyBrowser',
             'w' => 200,
             'h' => 200,
