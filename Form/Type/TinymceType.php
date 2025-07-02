@@ -37,6 +37,7 @@ class TinymceType extends AbstractType
             $prefixTinymce.'promotion' => 'false',
             $prefixTinymce.'license_key' => 'gpl',
             $prefixTinymce.'browser_spellcheck' => 'true',
+            $prefixTinymce.'contextmenu' => 'false',
         ]);
 
         if ((isset($options['tinymceBrowser']) && $options['tinymceBrowser']) || ($this->container->hasParameter('nyroDev_utility.browser.defaultEnable') && $this->container->getParameter('nyroDev_utility.browser.defaultEnable'))) {
