@@ -1,0 +1,5 @@
+nyrodev_assets_resize:
+    path: /resize/{dims}/{path}
+    defaults: { _controller: NyroDev\UtilityBundle\Controller\AssetsController::resize }
+    requirements:
+        path: '.+'

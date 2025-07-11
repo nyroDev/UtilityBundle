@@ -79,3 +79,13 @@ tiny_browser:
     dir: '.+'
 ```
 
+
+## Using resize assets URL
+
+Simply import this in your `config/routes/nyrodev.yaml`:
+```yaml
+nyrodev_assets:
+    resource: "@NyroDevUtilityBundle/Resources/config/routingAssets.yaml"
+```
+
+Then you can use the `nyrodev_assets_resize` route.

@@ -95,6 +95,9 @@ class NyroDevUtilityExtension extends Extension
             ->setAutoconfigured(true)
             ->addMethodCall('setContainer', [new Reference('service_container')])
             ->addTag('controller.service_arguments')
+            ->setBindings([
+                '$projectDir' => $container->getParameter('kernel.project_dir'),
+            ])
         ;
         $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Controller'));
         $dirLoader->registerClasses($definition, 'NyroDev\\UtilityBundle\\Controller\\', './*');
