@@ -190,19 +190,45 @@
 {%- endblock password_widget -%}
 
 {%- block file_widget -%}
-    {{- form_widget(form) -}}
+    {% if wc_file %}
+        {{- block('file_widget_wc') -}}
+    {% else %}
+        {{- form_widget(form) -}}
 
-    {% if currentFile %}
-        <a href="{{ asset(currentFileUrl) }} " target="_blank" class="currentFile">
-            {{ 'admin.misc.currentFile'|trans({'%currentFile%': currentFileName}) }}
-        </a>
-        {% if showDelete %}
-            <a href="#" class="currentFileDelete" data-name="{{ showDelete }}" data-confirm="{{ 'admin.misc.currentFileDeleteConfirm'|trans }}">
-                {{ 'admin.misc.currentFileDelete'|trans }}
+        {% if currentFile %}
+            <a href="{{ asset(currentFileUrl) }}" target="_blank" class="currentFile">
+                {{ 'admin.misc.currentFile'|trans({'%currentFile%': currentFileName}) }}
             </a>
+            {% if showDelete %}
+                <a href="#" class="currentFileDelete" data-name="{{ showDelete }}" data-confirm="{{ 'admin.misc.currentFileDeleteConfirm'|trans }}">
+                    {{ 'admin.misc.currentFileDelete'|trans }}
+                </a>
+            {% endif %}
         {% endif %}
     {% endif %}
 {%- endblock file_widget -%}
+
+{%- block file_widget_wc -%}
+    <{{ wc_file }} {{ block('widget_attributes') }}>
+        <button slot="choose">
+        {% if wc_choose %}
+            {{ wc_choose }}
+        {% elseif wc_choose_icon %}
+            {{ wc_choose_icon | nyrodev_icon | raw }}
+        {% else %}
+            {{ 'nyrodev.chooseFile'|trans }}
+        {% endif %}
+        </button>
+        {% if currentFile %}
+            <a href="{{ asset(currentFileUrl) }}" slot="current"><span>{{ currentFileName }}</span></a>
+        {% endif %}
+        {% if wc_delete %}
+            <a href="#" slot="delete">{{ wc_delete }}</a>
+        {% elseif wc_delete_icon %}
+            <a href="#" slot="delete">{{ wc_delete_icon | nyrodev_icon | raw }}</a>
+        {% endif %}
+    </{{ wc_file }}>
+{%- endblock file_widget_wc -%}
 
 {%- block form_errors -%}
     {%- if errors|length > 0 -%}

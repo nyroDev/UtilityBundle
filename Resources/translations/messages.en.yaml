@@ -47,6 +47,7 @@ admin:
     prev: Previous
 nyrodev:
   required: "*Required fields"
+  chooseFile: "Choose a file"
   browser:
     title: Browser
     name: Name

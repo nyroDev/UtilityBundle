@@ -22,6 +22,11 @@ class FileTypeExtension extends AbstractTypeExtension
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'wc' => false,
+            'wcChoose' => false,
+            'wcChooseIcon' => false,
+            'wcDelete' => false,
+            'wcDeleteIcon' => false,
             'currentFile' => false,
             'currentFileName' => false,
             'currentFileUrl' => false,
@@ -33,6 +38,25 @@ class FileTypeExtension extends AbstractTypeExtension
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $data = $form->getParent()->getData();
+        if ($options['wc']) {
+            $view->vars['wc_file'] = true === $options['wc'] ? 'nyro-file' : $options['wc'];
+            if ($options['wcChoose']) {
+                $view->vars['wc_choose'] = $options['wcChoose'];
+            } elseif ($options['wcChooseIcon']) {
+                $view->vars['wc_choose_icon'] = $options['wcChooseIcon'];
+            }
+            if ($options['wcDelete']) {
+                $view->vars['wc_delete'] = $options['wcDelete'];
+            } elseif ($options['wcDeleteIcon']) {
+                $view->vars['wc_delete_icon'] = $options['wcDeleteIcon'];
+            }
+            if ($options['showDelete'] && is_string($options['showDelete'])) {
+                if (isset($view->vars['attr'])) {
+                    $view->vars['attr'] = [];
+                }
+                $view->vars['attr']['name-delete'] = $options['showDelete'];
+            }
+        }
         if ($options['currentFile'] || $data instanceof AbstractUploadable) {
             try {
                 $currentFile = isset($options['currentFile']) && $options['currentFile'] ? $options['currentFile'] : $data->getWebPath($form->getName());
