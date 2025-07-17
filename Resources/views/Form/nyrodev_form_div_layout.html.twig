@@ -210,7 +210,7 @@
 
 {%- block file_widget_wc -%}
     <{{ wc_file }} {{ block('widget_attributes') }}>
-        <button slot="choose">
+        <button slot="choose" type="button">
         {% if wc_choose %}
             {{ wc_choose }}
         {% elseif wc_choose_icon %}

@@ -50,10 +50,13 @@ class FileTypeExtension extends AbstractTypeExtension
             } elseif ($options['wcDeleteIcon']) {
                 $view->vars['wc_delete_icon'] = $options['wcDeleteIcon'];
             }
+            if (!isset($view->vars['attr'])) {
+                $view->vars['attr'] = [];
+            }
+            if (!isset($view->vars['attr']['placeholder'])) {
+                $view->vars['attr']['placeholder'] = 'nyrodev.noFileSelected';
+            }
             if ($options['showDelete'] && is_string($options['showDelete'])) {
-                if (isset($view->vars['attr'])) {
-                    $view->vars['attr'] = [];
-                }
                 $view->vars['attr']['name-delete'] = $options['showDelete'];
             }
         }

@@ -47,6 +47,7 @@ admin:
     prev: Précédent
 nyrodev:
   required: "*Champs requis"
+  noFileSelected: "Aucun fichier choisi"
   chooseFile: "Choisir un fichier"
   browser:
     title: Navigateur
