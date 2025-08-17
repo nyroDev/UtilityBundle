@@ -11,7 +11,9 @@ use NyroDev\UtilityBundle\Helper\IconHelper;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Utility\Pager;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -39,20 +41,36 @@ class NyrodevService extends AbstractService
         return $this->getKernelInterface();
     }
 
+    public function onConsoleCommand(ConsoleCommandEvent $event): void
+    {
+        $this->setLocaleOnEvent();
+    }
+
     /**
      * Kernel request listener to setLocale if configured.
      */
     public function onKernelRequest(RequestEvent $event): void
     {
-        if ($event->isMainRequest() && $this->getParameter('nyroDev_utility.setLocale')) {
-            $locale = $event->getRequest()->getLocale();
+        if ($event->isMainRequest()) {
+            $this->setLocaleOnEvent($event->getRequest());
+        }
+    }
 
-            if (0 === strpos($locale, 'change_')) {
-                $tmp = explode('change_', $locale);
-                $locale = $tmp[1];
-                // Update already instanciated objects
-                $event->getRequest()->setLocale($locale);
-                $this->get('translator')->setLocale($locale);
+    protected function setLocaleOnEvent(?Request $request = null): void
+    {
+        if ($this->getParameter('nyroDev_utility.setLocale')) {
+            if ($request) {
+                $locale = $request->getLocale();
+
+                if (0 === strpos($locale, 'change_')) {
+                    $tmp = explode('change_', $locale);
+                    $locale = $tmp[1];
+                    // Update already instanciated objects
+                    $request->setLocale($locale);
+                    $this->get('translator')->setLocale($locale);
+                }
+            } else {
+                $locale = $this->get('translator')->getLocale();
             }
 
             if (!defined('NYRO_LOCALE')) {
