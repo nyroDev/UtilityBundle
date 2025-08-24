@@ -26,6 +26,7 @@ class SubmitExtension extends AbstractTypeExtension
             if ($options['cancelIcon']) {
                 $view->vars['cancelIcon'] = $options['cancelIcon'];
             }
+            $view->vars['cancelClass'] = $options['cancelClass'] ?? 'cancel';
         }
         if ($options['buttonHtml']) {
             $view->vars['buttonHtml'] = $options['buttonHtml'];

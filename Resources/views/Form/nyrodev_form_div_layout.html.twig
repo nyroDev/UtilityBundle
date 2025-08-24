@@ -53,7 +53,7 @@
         </span>
         
         {% if cancelUrl -%}
-            <a href="{{ cancelUrl }}" class="button cancel">
+            <a href="{{ cancelUrl }}" class="button {{ cancelClass }}">
                 {% if cancelIcon %}
                     {{ cancelIcon | nyrodev_icon | raw }}
                 {% endif %}
