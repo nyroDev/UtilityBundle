@@ -9,6 +9,8 @@ use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\FormFilterService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use NyroDev\UtilityBundle\Utility\Menu\LinkRoute;
+use NyroDev\UtilityBundle\Utility\Menu\RootMenu;
 use NyroDev\UtilityBundle\Utility\PhpSpreadsheetResponse;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -24,6 +26,9 @@ abstract class AbstractAdminController extends AbstractController
 {
     public const ADD = 'add';
     public const EDIT = 'edit';
+    public const DELETE = 'delete';
+
+    public const LINK_ID_REPLACE = '--ID--';
 
     protected function createList(
         Request $request,
@@ -134,6 +139,33 @@ abstract class AbstractAdminController extends AbstractController
                         ->setMaxResults($nbPerPage)
                         ->getResult();
 
+        $resultMenu = new RootMenu();
+        $resultMenu->addChildOuterAttr('class', 'resultActions');
+        $resultMenu->addChild(self::EDIT, new LinkRoute(
+            route: $route.'_edit',
+            routePrm: [
+                'id' => self::LINK_ID_REPLACE,
+            ],
+            label: '',
+            icon: 'edit',
+            attrs: [
+                'class' => 'btn btnSmall edit',
+                'title' => $this->trans('admin.misc.edit'),
+            ]
+        ));
+        $resultMenu->addChild(self::DELETE, new LinkRoute(
+            route: $route.'_delete',
+            routePrm: [
+                'id' => self::LINK_ID_REPLACE,
+            ],
+            label: '',
+            icon: 'delete',
+            attrs: [
+                'class' => 'btn btnSmall btnDelete delete',
+                'title' => $this->trans('admin.misc.delete'),
+            ]
+        ));
+
         return [
             'filter' => !is_null($filter) ? $filter->createView() : null,
             'filterFilled' => $filterFilled,
@@ -145,6 +177,12 @@ abstract class AbstractAdminController extends AbstractController
             'sort' => $sort,
             'total' => $total,
             'results' => $results,
+            'resultMenu' => $resultMenu,
+            'resultMenuApply' => function (RootMenu $menu, $row): RootMenu {
+                $menu->setLinkRoutePrmReplace(self::LINK_ID_REPLACE, $row->getId());
+
+                return $menu;
+            },
             'queryBuilder' => $rawQueryBuilder,
             'canExport' => $canExport,
         ];
@@ -280,21 +318,6 @@ abstract class AbstractAdminController extends AbstractController
                 'required' => false,
             ];
 
-            if (isset($moreOptions[$f])) {
-                if (isset($moreOptions[$f]['useType'])) {
-                    $type = $moreOptions[$f]['useType'];
-                    unset($moreOptions[$f]['useType']);
-                } elseif (isset($moreOptions[$f]['type'])) {
-                    $type = $moreOptions[$f]['type'];
-                    unset($moreOptions[$f]['type']);
-                }
-                $options = array_merge($options, $moreOptions[$f]);
-            }
-
-            if (SubmitType::class === $type) {
-                unset($options['required']);
-            }
-
             if ($classMetadata->hasPropertyMetadata($f)) {
                 $memberMetadatas = $classMetadata->getPropertyMetadata($f);
                 foreach ($memberMetadatas as $memberMetadata) {
@@ -311,6 +334,22 @@ abstract class AbstractAdminController extends AbstractController
                     }
                 }
             }
+
+            if (isset($moreOptions[$f])) {
+                if (isset($moreOptions[$f]['useType'])) {
+                    $type = $moreOptions[$f]['useType'];
+                    unset($moreOptions[$f]['useType']);
+                } elseif (isset($moreOptions[$f]['type'])) {
+                    $type = $moreOptions[$f]['type'];
+                    unset($moreOptions[$f]['type']);
+                }
+                $options = array_merge($options, $moreOptions[$f]);
+            }
+
+            if (SubmitType::class === $type) {
+                unset($options['required']);
+            }
+
             $form->add($f, $type, $options);
         }
 
