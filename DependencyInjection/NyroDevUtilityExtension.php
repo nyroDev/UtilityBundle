@@ -93,8 +93,8 @@ class NyroDevUtilityExtension extends Extension
         $definition
             ->setAutowired(true)
             ->setAutoconfigured(true)
-            ->addMethodCall('setContainer', [new Reference('service_container')])
             ->addTag('controller.service_arguments')
+            ->addTag('container.service_subscriber')
             ->setBindings([
                 '$projectDir' => $container->getParameter('kernel.project_dir'),
             ])

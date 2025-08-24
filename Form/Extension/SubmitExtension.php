@@ -39,6 +39,7 @@ class SubmitExtension extends AbstractTypeExtension
             'cancelUrl' => null,
             'cancelText' => null,
             'cancelIcon' => null,
+            'cancelClass' => null,
             'buttonHtml' => null,
         ]);
     }
