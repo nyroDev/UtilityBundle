@@ -1,5 +1,5 @@
 <a
-    href="<?php echo $menu->url; ?>"
+    href="<?php echo isset($menu->route) ? $view['router']->path($menu->route, $menu->getRoutePrm()) : $menu->url; ?>"
     <?php if ($menu->goBlank): ?>
         target="_blank" rel="noopener"
     <?php endif; ?>

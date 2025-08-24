@@ -110,6 +110,11 @@ abstract class Menuable
         return $this->parent;
     }
 
+    protected function getVeryParent(): Menuable
+    {
+        return $this->getParent() ? $this->getParent()->getVeryParent() : $this;
+    }
+
     protected function setParent(Menuable $parent): self
     {
         $this->parent = $parent;
@@ -144,6 +149,11 @@ abstract class Menuable
     public function hasChilds(): bool
     {
         return !empty($this->childs);
+    }
+
+    public function hasChild(string $name): bool
+    {
+        return isset($this->childs[$name]);
     }
 
     public function getChild(string $name): ?Menuable
@@ -239,5 +249,14 @@ abstract class Menuable
         $class = explode('\\', static::class);
 
         return strtolower(array_pop($class));
+    }
+
+    public function __clone()
+    {
+        $oldChilds = $this->childs;
+        $this->childs = [];
+        foreach ($oldChilds as $name => $child) {
+            $this->addChild($name, clone $child);
+        }
     }
 }
