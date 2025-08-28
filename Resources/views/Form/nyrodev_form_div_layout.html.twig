@@ -160,6 +160,7 @@
         {{- form_label(child, null, {
             translation_domain: choice_translation_domain,
             label_attr: child.vars.label_attr,
+            expanded_option: true
         }) -}}
     </li>
 {%- endblock -%}
@@ -300,7 +301,6 @@
     {% set row_attr = row_attr|merge({'class': classes|join(' ')|trim}) %}
 
     <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
-    
         {%- if isCheckbox -%}
             {{- form_widget(form, widget_attr) -}}
         {%- endif -%}
