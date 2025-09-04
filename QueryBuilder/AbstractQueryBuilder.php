@@ -65,9 +65,9 @@ abstract class AbstractQueryBuilder
         return isset($this->config[$type]) ? $this->config[$type] : null;
     }
 
-    public function addJoin(string $table, string $alias): self
+    public function addJoin(string $table, string $alias, bool $leftJoin = false): self
     {
-        return $this->add('join', [$table, $alias], true);
+        return $this->add('join', [$table, $alias, $leftJoin], true);
     }
 
     public function addJoinWhere(string $table, string|array $whereId, string $subSelectField = 'id'): self

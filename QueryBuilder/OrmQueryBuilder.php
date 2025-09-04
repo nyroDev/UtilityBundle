@@ -23,8 +23,12 @@ class OrmQueryBuilder extends AbstractQueryBuilder
 
         if (isset($this->config['join'])) {
             foreach ($this->config['join'] as $join) {
-                list($table, $aliasJoin) = $join;
-                $queryBuilder->join($this->useAlias($alias, $table).$table, $aliasJoin);
+                list($table, $aliasJoin, $leftJoin) = $join;
+                if ($leftJoin) {
+                    $queryBuilder->leftJoin($this->useAlias($alias, $table).$table, $aliasJoin);
+                } else {
+                    $queryBuilder->innerJoin($this->useAlias($alias, $table).$table, $aliasJoin);
+                }
             }
         }
 
