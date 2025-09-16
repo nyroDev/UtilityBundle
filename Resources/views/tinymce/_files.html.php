@@ -25,7 +25,11 @@
             <?php foreach ($tinymceBrowser->getFileChooseAttrs($file) as $k => $v): ?>
                 <?php echo $k.'="'.$view->escape($v).'"'; ?>
             <?php endforeach; ?>>
-            <img src="<?php echo $tinymceBrowser->getResizeFileUrl($file); ?>" alt="<?php echo $view->escape($file->getBasename()); ?>" class="media" />
+            <?php if ($thumbnailUrl = $tinymceBrowser->getResizeFileUrl($file)): ?>
+                <img src="<?php echo $thumbnailUrl; ?>" alt="<?php echo $view->escape($file->getBasename()); ?>" class="media" />
+            <?php else: ?>
+                <span class="noThumbnail"><?php echo $file->getBasename(); ?></span>
+            <?php endif; ?>
             <strong><?php echo $file->getBasename(); ?></strong>
         </a>
         <nav>

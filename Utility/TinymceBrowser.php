@@ -666,8 +666,12 @@ class TinymceBrowser
         return $attrs;
     }
 
-    public function getResizeFileUrl(SplFileInfo $file): string
+    public function getResizeFileUrl(SplFileInfo $file): string|false
     {
+        if (!$this->hasThumbnail($file->getExtension()) && !in_array($file->getExtension(), self::EXTENSIONS[self::TYPE_IMAGE])) {
+            return false;
+        }
+
         $realPath = $file->getRealPath();
         if ($this->hasThumbnail($file->getExtension())) {
             $realPath .= self::THUMNAIL_PATH;

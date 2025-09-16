@@ -1,327 +1,325 @@
 :root {
-  --t-icon-size: 16px;
+    --t-icon-size: 16px;
 
-  --s-font-size: 14px;
-  --font: "Open Sans", sans-serif;
-  --c-bg: #ececec;
-  --c-header: #fafafa;
-  --c-text: #333;
-  --c-border: #bbb;
-  --c-highlight: #fff;
-  --c-alert: #f43f5e;
+    --s-font-size: 14px;
+    --font: "Open Sans", sans-serif;
+    --c-bg: #ececec;
+    --c-header: #fafafa;
+    --c-text: #333;
+    --c-border: #bbb;
+    --c-highlight: #fff;
+    --c-alert: #f43f5e;
 
-  --s-header: 36px;
-  --s-padding-h: 4px;
-  --s-padding-w: 8px;
+    --s-header: 36px;
+    --s-padding-h: 4px;
+    --s-padding-w: 8px;
 
-  --shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+    --shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 }
 
 body {
-  font-size: var(--s-font-size);
-  font-family: var(--font);
-  color: var(--c-text);
-  background: var(--c-bg);
-  margin: calc(var(--s-header) + var(--s-padding-h)) var(--s-padding-w)
-    var(--s-padding-h);
+    font-size: var(--s-font-size);
+    font-family: var(--font);
+    color: var(--c-text);
+    background: var(--c-bg);
+    margin: calc(var(--s-header) + var(--s-padding-h)) var(--s-padding-w) var(--s-padding-h);
 }
 
 a {
-  color: var(--c-text);
+    color: var(--c-text);
 }
 
 input {
-  font-size: var(--s-font-size);
-  font-family: var(--font);
-  color: var(--c-text);
-  border: 1px solid var(--c-border);
-  outline: none;
+    font-size: var(--s-font-size);
+    font-family: var(--font);
+    color: var(--c-text);
+    border: 1px solid var(--c-border);
+    outline: none;
 }
 
 dialog {
-  border: none;
-  padding: 6px 12px 12px;
-  width: 350px;
+    border: none;
+    padding: 6px 12px 12px;
+    width: 350px;
 }
 
 dialog .closeDialog {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+    position: absolute;
+    top: 12px;
+    right: 12px;
 }
 
 dialog .closeDialog:hover {
-  color: #000;
+    color: #000;
 }
 
 dialog h1 {
-  font-size: calc(1.2 * var(--s-font-size));
-  margin: 0;
-  padding-bottom: var(--s-padding-h);
-  border-bottom: 1px solid var(--c-border);
-  margin-bottom: 12px;
+    font-size: calc(1.2 * var(--s-font-size));
+    margin: 0;
+    padding-bottom: var(--s-padding-h);
+    border-bottom: 1px solid var(--c-border);
+    margin-bottom: 12px;
 }
 
 dialog::backdrop {
-  background-color: rgba(60, 60, 60, 0.3);
-  backdrop-filter: blur(2px);
+    background-color: rgba(60, 60, 60, 0.3);
+    backdrop-filter: blur(2px);
 }
 
 dialog label,
 dialog .formIndicator,
 dialog .formRequiredFields {
-  display: none;
+    display: none;
 }
 
 dialog input {
-  width: 100%;
-  box-sizing: border-box;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 dialog .form_button {
-  margin-top: 8px;
-  text-align: right;
+    margin-top: 8px;
+    text-align: right;
 }
 
 dialog nav {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 4px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
 }
 
 .icon {
-  width: var(--t-icon-size);
-  height: var(--t-icon-size);
+    width: var(--t-icon-size);
+    height: var(--t-icon-size);
 }
 
 nyro-upload {
-  --nyro-upload-font-size: var(--s-font-size);
-  --nyro-upload-font-family: var(--font);
-  --nyro-upload-color: var(--c-text);
-  --nyro-upload-background-color: var(--c-header);
+    --nyro-upload-font-size: var(--s-font-size);
+    --nyro-upload-font-family: var(--font);
+    --nyro-upload-color: var(--c-text);
+    --nyro-upload-background-color: var(--c-header);
 
-  --nyro-upload-color-hover: var(--nyro-upload-background-color);
-  --nyro-upload-background-color-hover: var(--nyro-upload-color);
+    --nyro-upload-color-hover: var(--nyro-upload-background-color);
+    --nyro-upload-background-color-hover: var(--nyro-upload-color);
 
-  --nyro-upload-border-color: var(--c-text);
-  --nyro-upload-border-radius: 0;
+    --nyro-upload-border-color: var(--c-text);
+    --nyro-upload-border-radius: 0;
 
-  --nyro-upload-uploading-max-height: 40vh;
-  --nyro-upload-file-margin: 5px;
-  --nyro-upload-file-min-width: min(300px, 100vw - 20px);
-  --nyro-upload-file-retry-color: blue;
-  --nyro-upload-file-error-color: red;
-  --nyro-upload-file-error-color-text: #fff;
+    --nyro-upload-uploading-max-height: 40vh;
+    --nyro-upload-file-margin: 5px;
+    --nyro-upload-file-min-width: min(300px, 100vw - 20px);
+    --nyro-upload-file-retry-color: blue;
+    --nyro-upload-file-error-color: red;
+    --nyro-upload-file-error-color-text: #fff;
 
-  outline: none;
+    outline: none;
 }
 nyro-upload-file {
-  --nyro-upload-padding: var(--s-padding-h);
+    --nyro-upload-padding: var(--s-padding-h);
 }
 
 nyro-upload .icon {
-  margin: 2px;
+    margin: 2px;
 }
 
 header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  box-sizing: border-box;
-  height: var(--s-header);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--c-header);
-  padding: var(--s-padding-h) var(--s-padding-w);
-  border-bottom: 1px solid var(--c-border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    height: var(--s-header);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--c-header);
+    padding: var(--s-padding-h) var(--s-padding-w);
+    border-bottom: 1px solid var(--c-border);
 }
 header label {
-  display: none;
+    display: none;
 }
 header form {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 header form input {
-  border-right: none;
-  background: #fff;
-  height: 24px;
-  box-sizing: border-box;
+    border-right: none;
+    background: #fff;
+    height: 24px;
+    box-sizing: border-box;
 }
 header button {
-  border-left: none;
-  padding: 0 var(--s-padding-h);
-  background: #fff;
-  height: 24px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+    border-left: none;
+    padding: 0 var(--s-padding-h);
+    background: #fff;
+    height: 24px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 #currentDir {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--c-header);
-  padding: var(--s-padding-h) var(--s-padding-w);
-  border: 1px solid var(--c-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--c-header);
+    padding: var(--s-padding-h) var(--s-padding-w);
+    border: 1px solid var(--c-border);
 }
 
 #currentDir nav {
-  display: inline;
-  justify-content: space-between;
-  align-items: center;
-  vertical-align: baseline;
+    display: inline;
+    justify-content: space-between;
+    align-items: center;
+    vertical-align: baseline;
 }
 
 #currentDir div {
-  display: flex;
+    display: flex;
 }
 
 #currentDir div select {
-  cursor: pointer;
-  padding: 2px;
-  border: 1px solid var(--c-border);
-  background: transparent;
-  margin-right: var(--s-padding-w);
-  transition: background-color 300ms, color 300ms, border-color 300ms;
-  outline: none;
+    cursor: pointer;
+    padding: 2px;
+    border: 1px solid var(--c-border);
+    background: transparent;
+    margin-right: var(--s-padding-w);
+    transition: background-color 300ms, color 300ms, border-color 300ms;
+    outline: none;
 }
 
 .btn,
 button {
-  appearance: none;
-  display: inline-flex;
-  padding: 2px;
-  border: 1px solid var(--c-border);
-  background-color: transparent;
-  transition: background-color 300ms, color 300ms, border-color 300ms;
-  cursor: pointer;
-  text-decoration: none;
+    appearance: none;
+    display: inline-flex;
+    padding: 2px;
+    border: 1px solid var(--c-border);
+    background-color: transparent;
+    transition: background-color 300ms, color 300ms, border-color 300ms;
+    cursor: pointer;
+    text-decoration: none;
 }
 .btn.btnLightBorder {
-  border-color: transparent;
+    border-color: transparent;
 }
 .btn:hover,
 .btn.active,
 button:hover,
 #currentDir div select:hover {
-  color: var(--c-highlight);
-  background-color: var(--c-text);
-  border-color: var(--c-text);
+    color: var(--c-highlight);
+    background-color: var(--c-text);
+    border-color: var(--c-text);
 }
 
 .btnConfirm {
-  font-weight: bold;
-  color: var(--c-alert);
-  border-color: var(--c-alert);
+    font-weight: bold;
+    color: var(--c-alert);
+    border-color: var(--c-alert);
 }
 .btnConfirm:hover {
-  color: var(--c-highlight);
-  background-color: var(--c-alert);
-  border-color: var(--c-alert);
+    color: var(--c-highlight);
+    background-color: var(--c-alert);
+    border-color: var(--c-alert);
 }
 
 article {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 article > div {
-  position: relative;
-  border: 1px solid var(--c-border);
-  width: 200px;
-  height: 160px;
-  margin: var(--s-padding-w);
-  overflow: hidden;
+    position: relative;
+    border: 1px solid var(--c-border);
+    width: 200px;
+    height: 160px;
+    margin: var(--s-padding-w);
+    overflow: hidden;
 }
 article > div > a {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 
-  background-color: var(--c-bg);
-  background-image: repeating-linear-gradient(
-      45deg,
-      var(--c-border) 25%,
-      transparent 25%,
-      transparent 75%,
-      var(--c-border) 75%,
-      var(--c-border)
-    ),
-    repeating-linear-gradient(
-      45deg,
-      var(--c-border) 25%,
-      var(--c-bg) 25%,
-      var(--c-bg) 75%,
-      var(--c-border) 75%,
-      var(--c-border)
-    );
-  background-position: 0 0, 10px 10px;
-  background-size: 20px 20px;
+    background-color: var(--c-bg);
+    background-image: repeating-linear-gradient(45deg, var(--c-border) 25%, transparent 25%, transparent 75%, var(--c-border) 75%, var(--c-border)),
+        repeating-linear-gradient(45deg, var(--c-border) 25%, var(--c-bg) 25%, var(--c-bg) 75%, var(--c-border) 75%, var(--c-border));
+    background-position: 0 0, 10px 10px;
+    background-size: 20px 20px;
 }
 article > div:hover {
-  border-color: var(--c-text);
-  box-shadow: var(--shadow);
+    border-color: var(--c-text);
+    box-shadow: var(--shadow);
 }
 article > div > a > .media {
-  max-width: 100%;
-  max-height: 100%;
+    max-width: 100%;
+    max-height: 100%;
 }
 article > div > a > strong {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  color: var(--c-highlight);
-  font-size: calc(0.9 * var(--s-font-size));
-  line-height: 1.1em;
-  padding: var(--s-padding-h) var(--s-padding-w);
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.85) 100%
-  );
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: var(--c-highlight);
+    font-size: calc(0.9 * var(--s-font-size));
+    line-height: 1.1em;
+    word-break: break-all;
+    padding: var(--s-padding-h) var(--s-padding-w);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+article > div > a > .noThumbnail {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.1em;
+    word-break: break-all;
+    padding: var(--s-padding-h) var(--s-padding-w);
+    box-sizing: border-box;
+    font-weight: bold;
+    background-color: var(--c-bg);
+}
+
+article > div > a > .noThumbnail + strong {
+    display: none;
 }
 
 article > div > nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(255, 255, 255, 0.85) 100%
-  );
-  height: 24px;
-  padding-left: var(--s-padding-w);
-  transform: translate(0, -24px);
-  transition: transform 300ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.85) 100%);
+    height: 24px;
+    padding-left: var(--s-padding-w);
+    transform: translate(0, -24px);
+    transition: transform 300ms;
 }
 article > div:hover > nav {
-  transform: translate(0, 0);
+    transform: translate(0, 0);
 }
 
 article > div.dir > a {
-  background: var(--c-bg);
+    background: var(--c-bg);
 }
 article > div.dir > a .icon {
-  width: 120px;
-  height: 120px;
-  margin-left: 20px;
-  color: #ffca28;
+    width: 120px;
+    height: 120px;
+    margin-left: 20px;
+    color: #ffca28;
 }
 article > div.dir > a > strong {
-  color: var(--c-text);
-  background: none;
+    color: var(--c-text);
+    background: none;
 }
