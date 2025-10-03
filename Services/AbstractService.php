@@ -10,7 +10,7 @@ abstract class AbstractService implements HelperInterface
 {
     use ContainerInterfaceServiceableTrait;
 
-    public function getRequest(): Request
+    public function getRequest(): ?Request
     {
         return $this->container->get('request_stack')->getCurrentRequest();
     }
