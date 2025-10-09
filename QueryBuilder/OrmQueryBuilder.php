@@ -6,11 +6,13 @@ class OrmQueryBuilder extends AbstractQueryBuilder
 {
     public const MEMBER_OF = 'MEMBER OF';
 
+    public const ALIAS = 'l';
+
     private int $prmNb = 0;
 
     public function getNewQueryBuilder(bool $complete = false)
     {
-        $alias = 'l';
+        $alias = self::ALIAS;
         $queryBuilder = $this->or->createQueryBuilder($alias);
 
         $this->prmNb = 0;

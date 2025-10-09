@@ -4,8 +4,11 @@ namespace NyroDev\UtilityBundle\Controller;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
+use NyroDev\UtilityBundle\Model\StringablePropertyable;
 use NyroDev\UtilityBundle\QueryBuilder\AbstractQueryBuilder;
+use NyroDev\UtilityBundle\QueryBuilder\OrmQueryBuilder;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\FormFilterService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
@@ -263,7 +266,14 @@ abstract class AbstractAdminController extends AbstractController
             $this->get(FormFilterService::class)->buildQuery($filter, $queryBuilder);
         }
 
-        $queryBuilder->orderBy($sort, $order);
+        $this->applySort(
+            $request,
+            $repository,
+            $route,
+            $queryBuilder,
+            $sort,
+            $order
+        );
 
         // Retrieve the number of total results
         $total = $queryBuilder->count();
@@ -277,6 +287,52 @@ abstract class AbstractAdminController extends AbstractController
             'queryBuilder' => $queryBuilder,
             'total' => $total,
         ];
+    }
+
+    protected function applySort(
+        Request $request,
+        EntityRepository $repository,
+        string $route,
+        AbstractQueryBuilder $queryBuilder,
+        string $sort,
+        string $order,
+    ): void {
+        if ($repository->getClassMetadata()->hasAssociation($sort)) {
+            $targetEntity = $repository->getClassMetadata()->getAssociationMapping($sort)->targetEntity;
+
+            if (is_a($targetEntity, StringablePropertyable::class, true)) {
+                $stringableProperty = $targetEntity::getStringableProperty();
+
+                $joinSort = '_sort';
+
+                $queryBuilder->addJoin(OrmQueryBuilder::ALIAS.'.'.$sort, $joinSort);
+                if (is_array($stringableProperty)) {
+                    foreach ($stringableProperty as $stringableProp) {
+                        if (false !== strpos($stringableProp, '.')) {
+                            [$relation, $stringableProp] = explode('.', $stringableProp, 2);
+                            $newJoinSort = $joinSort.'_'.$relation;
+                            $queryBuilder->addJoin($joinSort.'.'.$relation, $newJoinSort);
+                            $queryBuilder->orderBy($newJoinSort.'.'.$stringableProp, $order);
+                        } else {
+                            $queryBuilder->orderBy($joinSort.'.'.$stringableProp, $order);
+                        }
+                    }
+
+                    return;
+                }
+
+                if (false !== strpos($stringableProperty, '.')) {
+                    [$relation, $stringableProperty] = explode('.', $stringableProperty, 2);
+                    $newJoinSort = $joinSort.'_'.$relation;
+                    $queryBuilder->addJoin($joinSort.'.'.$relation, $newJoinSort);
+                    $joinSort = $newJoinSort;
+                }
+
+                $sort = $joinSort.'.'.$stringableProperty;
+            }
+        }
+
+        $queryBuilder->orderBy($sort, $order);
     }
 
     protected function createAdminForm(
