@@ -9,7 +9,8 @@
             }
             divTpl = document.createElement("div");
             addToCollection = (dataPrototyped, divAdd, value) => {
-                divTpl.innerHTML = dataPrototyped.dataset.prototype.replace(/__name__/g, dataPrototyped.dataset.index);
+                const prototypeName = dataPrototyped.dataset.prototypeName || "__name__";
+                divTpl.innerHTML = dataPrototyped.dataset.prototype.replace(new RegExp(prototypeName, "g"), dataPrototyped.dataset.index);
 
                 while (divTpl.lastElementChild) {
                     if (divTpl.lastElementChild.matches(".form_row_collection_entry")) {
