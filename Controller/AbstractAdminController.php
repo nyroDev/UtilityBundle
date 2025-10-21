@@ -297,8 +297,9 @@ abstract class AbstractAdminController extends AbstractController
         string $sort,
         string $order,
     ): void {
-        if ($repository->getClassMetadata()->hasAssociation($sort)) {
-            $targetEntity = $repository->getClassMetadata()->getAssociationMapping($sort)->targetEntity;
+        $classMetadata = $this->get(DbAbstractService::class)->getClassMetadata($repository->getClassName());
+        if ($classMetadata->hasAssociation($sort)) {
+            $targetEntity = $classMetadata->getAssociationMapping($sort)->targetEntity;
 
             if (is_a($targetEntity, StringablePropertyable::class, true)) {
                 $stringableProperty = $targetEntity::getStringableProperty();
