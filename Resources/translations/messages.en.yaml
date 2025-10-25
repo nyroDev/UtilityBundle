@@ -59,6 +59,11 @@ nyrodev:
     folderName: Folder name
     view: View
     delete: Delete
+    multiple:
+      select: "Select/Deselect"
+      useSelection: "Use selection"
+      clearSelection: "Clear selection"
+      nbSelected: "file<span class=\"s\">s</span> selected."
     deletion:
       confirm: Confirm deletion
       message: "Are you sure you cant to delete %name%?"

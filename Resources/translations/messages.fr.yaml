@@ -59,6 +59,11 @@ nyrodev:
     folderName: Nom du dossier
     view: Voir
     delete: Supprimer
+    multiple:
+      select: "Sélectionner/Désélectionner"
+      useSelection: "Utiliser la sélection"
+      clearSelection: "Effacer la sélection"
+      nbSelected: "fichier<span class=\"s\">s</span> sélectionné<span class=\"s\">s</span>."
     deletion:
       confirm: Confirmation de suppression
       message: "Êtes-vous sûr de voulour supprimer %name%? "

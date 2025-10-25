@@ -1,5 +1,5 @@
 <?php foreach ($tinymceBrowser->getDirectories() as $directory): ?>
-    <div class="dir">
+    <div class="dir fileDir">
         <a href="<?php echo $tinymceBrowser->getUrl('path', ($tinymceBrowser->getPath() ? $tinymceBrowser->getPath().'/' : '').$directory->getBasename()); ?>" class="dir">
             <svg class="icon icon-folder media"><use href="#folder"></use></svg>
             <strong><?php echo $directory->getBasename(); ?></strong>
@@ -18,7 +18,7 @@
     </div>
 <?php endforeach; ?>
 <?php foreach ($tinymceBrowser->getFiles() as $file): ?>
-    <div class="file">
+    <div class="file fileDir">
         <a
             href="<?php echo $view->escape($tinymceBrowser->getFileUrl($file)); ?>"
             class="chooseMedia"
@@ -34,6 +34,9 @@
         </a>
         <nav>
             <span>
+                <?php if ($tinymceBrowser->hasMultiple()): ?>
+                    <input type="checkbox" class="checkMedia" title="<?php echo $view['translator']->trans('nyrodev.browser.multiple.select'); ?>" />
+                <?php endif; ?>
                 <?php echo $view['nyrodev']->humanSize($file->getSize()); ?>
             </span>
             <span>

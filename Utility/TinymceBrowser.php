@@ -135,6 +135,7 @@ class TinymceBrowser
             'path',
             'sortBy',
             'action',
+            'multiple',
         ];
 
         foreach ($search as $s) {
@@ -567,6 +568,16 @@ class TinymceBrowser
         return $this->request->query->get('sortBy', 'nameAsc');
     }
 
+    public function hasMultiple(): bool
+    {
+        return $this->request->query->has('multiple');
+    }
+
+    public function getMultiple(): ?string
+    {
+        return $this->request->query->get('multiple');
+    }
+
     public function getSorts(): array
     {
         return [
@@ -670,6 +681,10 @@ class TinymceBrowser
     {
         if (!$this->hasThumbnail($file->getExtension()) && !in_array($file->getExtension(), self::EXTENSIONS[self::TYPE_IMAGE])) {
             return false;
+        }
+
+        if ('svg' === $file->getExtension()) {
+            return $this->getFileUrl($file);
         }
 
         $realPath = $file->getRealPath();

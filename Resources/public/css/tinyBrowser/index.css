@@ -10,6 +10,12 @@
     --c-highlight: #fff;
     --c-alert: #f43f5e;
 
+    --fileDir-w: 200px;
+    --fileDir-h: 160px;
+
+    --nb-selection-col: 2;
+    --selection-width: calc(var(--nb-selection-col) * (var(--fileDir-w) + 2px + 2 * var(--s-padding-w)) + 2px);
+
     --s-header: 36px;
     --s-padding-h: 4px;
     --s-padding-w: 8px;
@@ -102,7 +108,7 @@ nyro-upload {
     --nyro-upload-color-hover: var(--nyro-upload-background-color);
     --nyro-upload-background-color-hover: var(--nyro-upload-color);
 
-    --nyro-upload-border-color: var(--c-text);
+    --nyro-upload-border-color: var(--c-border);
     --nyro-upload-border-radius: 0;
 
     --nyro-upload-uploading-max-height: 40vh;
@@ -164,6 +170,8 @@ header button {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: var(--s-header);
+    box-sizing: border-box;
     background: var(--c-header);
     padding: var(--s-padding-h) var(--s-padding-w);
     border: 1px solid var(--c-border);
@@ -174,6 +182,7 @@ header button {
     justify-content: space-between;
     align-items: center;
     vertical-align: baseline;
+    margin-right: var(--s-padding-w);
 }
 
 #currentDir div {
@@ -201,6 +210,9 @@ button {
     cursor: pointer;
     text-decoration: none;
 }
+.btnText {
+    padding: 2px 4px;
+}
 .btn.btnLightBorder {
     border-color: transparent;
 }
@@ -224,20 +236,21 @@ button:hover,
     border-color: var(--c-alert);
 }
 
-article {
+.fileDirCont {
     display: flex;
     flex-wrap: wrap;
+    margin: 0 calc(-1 * var(--s-padding-w));
 }
 
-article > div {
+.fileDir {
     position: relative;
     border: 1px solid var(--c-border);
-    width: 200px;
-    height: 160px;
+    width: var(--fileDir-w);
+    height: var(--fileDir-h);
     margin: var(--s-padding-w);
     overflow: hidden;
 }
-article > div > a {
+.fileDir > a {
     position: relative;
     width: 100%;
     height: 100%;
@@ -252,15 +265,15 @@ article > div > a {
     background-position: 0 0, 10px 10px;
     background-size: 20px 20px;
 }
-article > div:hover {
+.fileDir:hover {
     border-color: var(--c-text);
     box-shadow: var(--shadow);
 }
-article > div > a > .media {
+.fileDir > a > .media {
     max-width: 100%;
     max-height: 100%;
 }
-article > div > a > strong {
+.fileDir > a > strong {
     position: absolute;
     left: 0;
     right: 0;
@@ -273,7 +286,7 @@ article > div > a > strong {
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 100%);
 }
 
-article > div > a > .noThumbnail {
+.fileDir > a > .noThumbnail {
     width: 100%;
     height: 100%;
     display: flex;
@@ -288,11 +301,11 @@ article > div > a > .noThumbnail {
     background-color: var(--c-bg);
 }
 
-article > div > a > .noThumbnail + strong {
+.fileDir > a > .noThumbnail + strong {
     display: none;
 }
 
-article > div > nav {
+.fileDir > nav {
     position: absolute;
     top: 0;
     left: 0;
@@ -306,20 +319,69 @@ article > div > nav {
     transform: translate(0, -24px);
     transition: transform 300ms;
 }
-article > div:hover > nav {
+.fileDir:hover > nav,
+.fileDir:has(.checkMedia:checked) > nav {
     transform: translate(0, 0);
 }
 
-article > div.dir > a {
+.fileDir.dir > a {
     background: var(--c-bg);
 }
-article > div.dir > a .icon {
+.fileDir.dir > a .icon {
     width: 120px;
     height: 120px;
     margin-left: 20px;
     color: #ffca28;
 }
-article > div.dir > a > strong {
+.fileDir.dir > a > strong {
     color: var(--c-text);
     background: none;
+}
+
+body.hasSelection article {
+    padding-right: calc(var(--selection-width) + 2 * var(--s-padding-w));
+}
+
+#multipleSelection {
+    display: none;
+    position: fixed;
+    top: calc(2 * (var(--s-header) + var(--s-padding-h)));
+    right: var(--s-padding-w);
+    bottom: calc(2 * var(--s-padding-h));
+    width: var(--selection-width);
+    overflow: auto;
+    box-sizing: border-box;
+    background: var(--c-header);
+    padding: var(--s-padding-w);
+    border: 1px solid var(--c-border);
+}
+
+#multipleSelection > nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#multipleSelection > p {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+#multipleSelection > p .s {
+    display: none;
+}
+#multipleSelection.needSelectionS > p .s {
+    display: inline;
+}
+
+#multipleSelection .fileDir .chooseMedia {
+    pointer-events: none;
+}
+
+#multipleSelection .fileDir .popin {
+    display: none;
+}
+
+body.hasSelection #multipleSelection {
+    display: block;
 }

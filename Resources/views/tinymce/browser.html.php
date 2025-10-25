@@ -55,7 +55,7 @@
     </symbol>
 </svg>
 </head>
-<body>
+<body<?php echo $tinymceBrowser->hasMultiple() ? ' data-multiple="'.$tinymceBrowser->getMultiple().'"' : ''; ?>>
     <header>
         <nav>
             <?php if ($tinymceBrowser->canUpload()): ?>
@@ -117,11 +117,21 @@
                 </a>
             </div>
         </div>
-        <article>
+        <article class="fileDirCont">
             <?php echo $view->render('@NyroDevUtiliy/tinymce/_files.html.php', [
                 'tinymceBrowser' => $tinymceBrowser,
             ]); ?>
         </article>
+        <?php if ($tinymceBrowser->hasMultiple()): ?>
+            <aside id="multipleSelection">
+                <nav>
+                    <a href="#" data-action="useSelection" class="btn btnText"><?php echo $view['translator']->trans('nyrodev.browser.multiple.useSelection'); ?></a>
+                    <a href="#" data-action="clearSelection" class="btn btnText"><?php echo $view['translator']->trans('nyrodev.browser.multiple.clearSelection'); ?></a>
+                </nav>
+                <p><span id="nbSelected">0</span> <?php echo $view['translator']->trans('nyrodev.browser.multiple.nbSelected'); ?></p>
+                <div class="fileDirCont"></div>
+            </aside>
+        <?php endif; ?>
     </section>
     <?php echo $view['nyrodev_tagRenderer']->renderWebpackScriptTags('js/admin/tinyBrowser', 'defer'); ?>
 </body>
