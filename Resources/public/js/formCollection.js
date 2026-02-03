@@ -1,5 +1,5 @@
 (function () {
-    let divTpl, addToCollection, addDeleteLink;
+    let divTpl, addToCollection, toggleAddIfLimit, addDeleteLink;
 
     const prototypeSelector = "[data-prototype][data-allow-add]",
         dataPrototypeds = document.querySelectorAll(prototypeSelector),
@@ -9,6 +9,12 @@
             }
             divTpl = document.createElement("div");
             addToCollection = (dataPrototyped, divAdd, value) => {
+                if (dataPrototyped.dataset.limit) {
+                    if (dataPrototyped.querySelectorAll(".form_row_collection_entry").length >= parseInt(dataPrototyped.dataset.limit)) {
+                        return;
+                    }
+                }
+
                 const prototypeName = dataPrototyped.dataset.prototypeName || "__name__";
                 divTpl.innerHTML = dataPrototyped.dataset.prototype.replace(new RegExp(prototypeName, "g"), dataPrototyped.dataset.index);
 
@@ -31,6 +37,7 @@
                     });
                 }
 
+                toggleAddIfLimit(dataPrototyped, divAdd);
                 dataPrototyped.dataset.index++;
                 dataPrototyped.dispatchEvent(
                     new CustomEvent("formCollectionAdd", {
@@ -39,6 +46,16 @@
                         detail: entryAdded,
                     })
                 );
+            };
+            toggleAddIfLimit = (dataPrototyped, divAdd) => {
+                if (dataPrototyped.dataset.limit) {
+                    const currentEntries = dataPrototyped.querySelectorAll(".form_row_collection_entry").length;
+                    if (currentEntries >= parseInt(dataPrototyped.dataset.limit)) {
+                        divAdd.style.display = "none";
+                    } else {
+                        divAdd.style.display = "";
+                    }
+                }
             };
             addDeleteLink = (dataPrototyped, collectionEntry) => {
                 if (!dataPrototyped.dataset.allowDelete) {
@@ -94,6 +111,7 @@
                         return;
                     }
                     delBtn.closest(".form_row_collection_entry").remove();
+                    toggleAddIfLimit(dataPrototyped, divAdd);
                     dataPrototyped.dispatchEvent(
                         new CustomEvent("formCollectionDelete", {
                             bubbles: true,
@@ -115,6 +133,8 @@
 
             if (entries.length === 0 && dataPrototyped.dataset.addOnInit) {
                 addToCollection(dataPrototyped, divAdd);
+            } else {
+                toggleAddIfLimit(dataPrototyped, divAdd);
             }
 
             dataPrototyped.addEventListener("formCollectionSetValue", (e) => {
