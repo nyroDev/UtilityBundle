@@ -113,11 +113,10 @@ class FillTranslationsCommand extends Command
             $this->db->flush();
 
             return Command::SUCCESS;
-        } else {
-            $output->writeln('No original translation files found.');
-
-            return Command::INVALID;
         }
+        $output->writeln('No original translation files found.');
+
+        return Command::INVALID;
     }
 
     protected function mergeTr(array $tr1, array $tr2)

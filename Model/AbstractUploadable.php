@@ -94,8 +94,6 @@ abstract class AbstractUploadable
             case self::CONFIG_ROOTDIR:
                 return __DIR__.'/../../../../public/'.$this->getFileConfig($field, self::CONFIG_DIR);
         }
-
-        return;
     }
 
     public function setDirectFile(string $field, mixed $source, ?string $filename = null, bool $sourceIsContent = false): void

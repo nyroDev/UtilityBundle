@@ -160,11 +160,10 @@ class XlsxTranslationsCommand extends Command
             $output->writeln('XLS file saved: '.$dest);
 
             return Command::SUCCESS;
-        } else {
-            $output->writeln('No original translation files found.');
-
-            return Command::FAILURE;
         }
+        $output->writeln('No original translation files found.');
+
+        return Command::FAILURE;
     }
 
     private function flattenTrans(array $trans, ?string $prefix = null): array
