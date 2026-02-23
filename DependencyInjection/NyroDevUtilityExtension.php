@@ -33,8 +33,6 @@ class NyroDevUtilityExtension extends Extension
             $container->setDefinition('nyroDev_utility.dbLoader', $definition);
         }
 
-        $container->setParameter('nyroDev_utility.pluploadMaxFileSize', isset($config['pluploadMaxFileSize']) && $config['pluploadMaxFileSize'] ? $config['pluploadMaxFileSize'] : false);
-
         if (isset($config['browser']) && is_array($config['browser'])) {
             foreach ($config['browser'] as $k => $v) {
                 $container->setParameter('nyroDev_utility.browser.'.$k, $v);

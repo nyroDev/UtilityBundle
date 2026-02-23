@@ -39,7 +39,6 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('allowAddDir')->defaultFalse()->end()
                     ->end()
                 ->end()
-                ->scalarNode('pluploadMaxFileSize')->defaultValue('')->end()
                 ->arrayNode('share')
                     ->addDefaultsIfNotSet()
                     ->children()

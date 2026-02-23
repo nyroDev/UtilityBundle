@@ -29,12 +29,13 @@ Then copy the language file you need by adding to your webpack encore config:
     .addPlugin(new CopyWebpackPlugin({
         patterns: [
             {from: 'vendor/tinymce/tinymce', to: '../tinymce'},
-            {from: 'node_modules/tinymce-i18n/langs7/fr_FR.js', to: '../tinymce/langs/'},
+            {from: 'vendor/nyrodev/utility-bundle/Resources/public/js/filemanager', to: '../tinymce/plugins/filemanager'},
+            {from: 'node_modules/tinymce-i18n/langs8/fr-FR.js', to: '../tinymce/langs/'},
             {
-                from: 'node_modules/tinymce-i18n/langs7/fr_FR.js',
+                from: 'node_modules/tinymce-i18n/langs8/fr-FR.js',
                 to: '../tinymce/langs/fr.js',
                 transform: (input, filename) => {
-                    return input.toString().replace('tinymce.addI18n("fr_FR", {', 'tinymce.addI18n("fr", {');
+                    return input.toString().replace('tinymce.addI18n("fr-FR", {', 'tinymce.addI18n("fr", {');
                 }
             }
         ]
@@ -55,12 +56,12 @@ Add tinymce plugins depency your webpack encore config:
         patterns: [
             {from: 'vendor/tinymce/tinymce', to: '../tinymce'},
             {from: 'vendor/nyrodev/utility-bundle/Resources/public/js/filemanager', to: '../tinymce/plugins/filemanager'},
-            {from: 'node_modules/tinymce-i18n/langs7/fr_FR.js', to: '../tinymce/langs/'},
+            {from: 'node_modules/tinymce-i18n/langs8/fr-FR.js', to: '../tinymce/langs/'},
             {
-                from: 'node_modules/tinymce-i18n/langs7/fr_FR.js',
+                from: 'node_modules/tinymce-i18n/langs8/fr-FR.js',
                 to: '../tinymce/langs/fr.js',
                 transform: (input, filename) => {
-                    return input.toString().replace('tinymce.addI18n("fr_FR", {', 'tinymce.addI18n("fr", {');
+                    return input.toString().replace('tinymce.addI18n("fr-FR", {', 'tinymce.addI18n("fr", {');
                 }
             }
         ]
@@ -71,12 +72,21 @@ Create a route for the browser page, in `config/routes/browser.yaml`:
 **Be sure to protect this route behind a security firewall!**  
 ```yaml
 tiny_browser:
-  path: "%adminPrefix%/tinyBrowser/{type}/{dir}"
-  controller: NyroDev\UtilityBundle\Controller\TinymceController::browserAction
-  defaults:
-    dir: null
-  requirements:
-    dir: '.+'
+    path: "%adminPrefix%/tinyBrowser/{type}/{dir}"
+    controller: NyroDev\UtilityBundle\Controller\TinymceController::browserAction
+    defaults:
+        dir: null
+    requirements:
+        dir: '.+'
+```
+
+If you want to enable on every TinymceType by default:
+```yaml
+nyro_dev_utility:
+    browser:
+        defaultEnable: true
+        defaultRoute: 'tiny_browser'
+        allowAddDir: true
 ```
 
 

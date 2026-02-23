@@ -85,11 +85,3 @@ nyrodev:
     folders:
       single: "%nbFolders% folder"
       plural: "%nbFolders% folders"
-  plupload:
-    images: Images
-    browse: Browse...
-    waiting: Waiting
-    error: Error
-    cancel: Canceled
-    complete: Complete
-    cancelAll: Cancel all

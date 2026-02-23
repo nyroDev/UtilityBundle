@@ -17,7 +17,7 @@ abstract class AbstractFilterType extends AbstractType
             ], $options['submitOptions']));
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'submitOptions' => [],

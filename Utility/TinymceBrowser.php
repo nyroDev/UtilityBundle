@@ -71,7 +71,7 @@ class TinymceBrowser
         private readonly string $type,
         private readonly string $dirName = 'tinymce',
     ) {
-        $requestPath = $this->request->get('path');
+        $requestPath = $this->request->query->get('path');
         if (false !== strpos($requestPath, '.')) {
             throw new AccessDeniedException();
         }

@@ -13,6 +13,10 @@ class TinymceType extends AbstractType
 {
     use AssetsPackagesServiceableTrait;
 
+    public const OPTION_TINYMCE_BROWSER = 'tinymceBrowser';
+    public const OPTION_TINYMCE = 'tinymce';
+    public const OPTION_TINYMCE_PLUGINS = 'tinymcePlugins';
+
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $attrs = $view->vars['attr'];
@@ -20,46 +24,45 @@ class TinymceType extends AbstractType
             $attrs = [];
         }
 
-        $prefixTinymce = 'data-tinymce_';
+        $attrs['class'] = 'tinymce'.(isset($attrs['class']) && $attrs['class'] ? ' '.$attrs['class'] : '');
+        $attrs['data-tinymce-url'] = $this->getAssetsPackages()->getUrl('tinymce/tinymce.min.js');
 
-        $attrs = array_merge($attrs, [
-            'class' => 'tinymce'.(isset($attrs['class']) && $attrs['class'] ? ' '.$attrs['class'] : ''),
-            'data-tinymceurl' => $this->getAssetsPackages()->getUrl('tinymce/tinymce.min.js'),
-            $prefixTinymce.'language' => $this->container->get(NyrodevService::class)->getRequest()->getLocale(),
-            $prefixTinymce.'height' => 450,
-            $prefixTinymce.'width' => 720,
-            $prefixTinymce.'skin' => 'tinymce-5',
-            $prefixTinymce.'plugins' => 'anchor,autolink,charmap,code,fullscreen,image,insertdatetime,link,lists,advlist,media,nonbreaking,preview,searchreplace,table,visualblocks,visualchars,wordcount'.(isset($options['tinymcePlugins']) && $options['tinymcePlugins'] ? ','.$options['tinymcePlugins'] : null),
-            $prefixTinymce.'toolbar' => 'undo redo | styles | bold italic | removeformat | alignleft aligncenter alignright alignjustify | link unlink | image media | fullscreen | bullist numlist outdent indent',
-            $prefixTinymce.'menubar' => 'insert edit view table tools',
-            $prefixTinymce.'relative_urls' => 'false',
-            $prefixTinymce.'branding' => 'false',
-            $prefixTinymce.'promotion' => 'false',
-            $prefixTinymce.'license_key' => 'gpl',
-            $prefixTinymce.'browser_spellcheck' => 'true',
-            $prefixTinymce.'contextmenu' => 'false',
-        ]);
+        $tinymceOptions = [
+            'language' => $this->container->get(NyrodevService::class)->getRequest()->getLocale(),
+            'height' => 450,
+            'width' => 720,
+            'skin' => 'tinymce-5',
+            'plugins' => 'anchor,autolink,charmap,code,fullscreen,image,insertdatetime,link,lists,advlist,media,nonbreaking,preview,searchreplace,table,visualblocks,visualchars,wordcount'.(isset($options[self::OPTION_TINYMCE_PLUGINS]) && $options[self::OPTION_TINYMCE_PLUGINS] ? ','.$options[self::OPTION_TINYMCE_PLUGINS] : null),
+            'toolbar' => 'undo redo | styles | bold italic | removeformat | alignleft aligncenter alignright alignjustify | link unlink | image media | fullscreen | bullist numlist outdent indent',
+            'menubar' => 'insert edit view table tools',
+            'relative_urls' => false,
+            'branding' => false,
+            'promotion' => false,
+            'license_key' => 'gpl',
+            'browser_spellcheck' => true,
+            'contextmenu' => false,
+        ];
 
-        if ((isset($options['tinymceBrowser']) && $options['tinymceBrowser']) || ($this->container->hasParameter('nyroDev_utility.browser.defaultEnable') && $this->container->getParameter('nyroDev_utility.browser.defaultEnable'))) {
-            $canBrowse = isset($options['tinymceBrowser']['url']) || ($this->container->hasParameter('nyroDev_utility.browser.defaultRoute') && $this->container->getParameter('nyroDev_utility.browser.defaultRoute'));
+        if ((isset($options[self::OPTION_TINYMCE_BROWSER]) && $options[self::OPTION_TINYMCE_BROWSER]) || ($this->container->hasParameter('nyroDev_utility.browser.defaultEnable') && $this->container->getParameter('nyroDev_utility.browser.defaultEnable'))) {
+            $canBrowse = isset($options[self::OPTION_TINYMCE_BROWSER]['url']) || ($this->container->hasParameter('nyroDev_utility.browser.defaultRoute') && $this->container->getParameter('nyroDev_utility.browser.defaultRoute'));
             if ($canBrowse) {
-                $attrs[$prefixTinymce.'plugins'] .= ',filemanager';
+                $tinymceOptions['plugins'] .= ',filemanager';
 
-                $attrs[$prefixTinymce.'external_filemanager_path'] = (isset($options['tinymceBrowser']['url'])
-                    ? $options['tinymceBrowser']['url']
+                $tinymceOptions['external_filemanager_path'] = (isset($options[self::OPTION_TINYMCE_BROWSER]['url'])
+                    ? $options[self::OPTION_TINYMCE_BROWSER]['url']
                     : $this->container->get(NyrodevService::class)->generateUrl(
                         $this->container->getParameter('nyroDev_utility.browser.defaultRoute'),
                         ['type' => '_TYPE_']
                     ));
-                $attrs[$prefixTinymce.'filemanager_title'] = isset($options['tinymceBrowser']['title']) ? $options['tinymceBrowser']['title'] : $this->container->get('translator')->trans('nyrodev.browser.title');
+                $tinymceOptions['filemanager_title'] = isset($options[self::OPTION_TINYMCE_BROWSER]['title']) ? $options[self::OPTION_TINYMCE_BROWSER]['title'] : $this->container->get('translator')->trans('nyrodev.browser.title');
             }
         }
 
-        if (isset($options['tinymce']) && is_array($options['tinymce'])) {
-            foreach ($options['tinymce'] as $k => $v) {
-                $attrs[$prefixTinymce.$k] = is_array($v) ? json_encode($v) : $v;
-            }
+        if (isset($options[self::OPTION_TINYMCE]) && is_array($options[self::OPTION_TINYMCE])) {
+            $tinymceOptions = array_merge($tinymceOptions, $options[self::OPTION_TINYMCE]);
         }
+
+        $attrs['data-tinymce-options'] = json_encode($tinymceOptions);
 
         $view->vars['attr'] = $attrs;
     }
@@ -70,9 +73,9 @@ class TinymceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'tinymceBrowser' => [],
-            'tinymce' => [],
-            'tinymcePlugins' => null,
+            self::OPTION_TINYMCE_BROWSER => [],
+            self::OPTION_TINYMCE => [],
+            self::OPTION_TINYMCE_PLUGINS => null,
         ]);
     }
 

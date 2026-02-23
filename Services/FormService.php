@@ -42,36 +42,4 @@ class FormService extends AbstractService
             ],
         ]);
     }
-
-    public function getPluploadAttrs(string $filters = 'images', string $pluploadKey = 'plupload_'): array
-    {
-        if ('images' == $filters) {
-            $filters = [
-                [
-                    'title' => $this->trans('nyrodev.plupload.images'),
-                    'extensions' => 'jpg,jpeg,gif,png',
-                ],
-            ];
-        }
-
-        $ret = [
-            'class' => 'pluploadInit',
-            'data-'.$pluploadKey.'browse' => $this->trans('nyrodev.plupload.browse'),
-            'data-'.$pluploadKey.'waiting' => $this->trans('nyrodev.plupload.waiting'),
-            'data-'.$pluploadKey.'error' => $this->trans('nyrodev.plupload.error'),
-            'data-'.$pluploadKey.'cancel' => $this->trans('nyrodev.plupload.cancel'),
-            'data-'.$pluploadKey.'complete' => $this->trans('nyrodev.plupload.complete'),
-            'data-'.$pluploadKey.'cancelall' => $this->trans('nyrodev.plupload.cancelAll'),
-            'data-'.$pluploadKey.'filters' => json_encode($filters),
-            'data-'.$pluploadKey.'swf' => $this->getAssetsPackages()->getUrl('plupload/Moxie.swf'),
-            'data-'.$pluploadKey.'xap' => $this->getAssetsPackages()->getUrl('plupload/Moxie.xap'),
-        ];
-
-        $pluploadMaxFileSize = $this->getParameter('nyroDev_utility.pluploadMaxFileSize');
-        if ($pluploadMaxFileSize) {
-            $ret['data-'.$pluploadKey.'max_file_size'] = $pluploadMaxFileSize;
-        }
-
-        return $ret;
-    }
 }
