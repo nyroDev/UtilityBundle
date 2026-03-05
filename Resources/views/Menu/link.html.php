@@ -6,7 +6,7 @@
     <?php echo $view->render('@NyroDevUtility/Tpl/_attrs.html.php', ['attrs' => $menu->attrs]); ?>
 >
     <?php if ($menu->icon): ?>
-        <?php echo $view['nyrocms_admin']->getIcon($menu->icon); ?>
+        <?php echo $view['nyrodev_icon']->getIcon($menu->icon); ?>
     <?php endif; ?>
     <?php echo $menu->label; ?>
 </a>

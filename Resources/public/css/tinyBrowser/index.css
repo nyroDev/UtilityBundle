@@ -195,7 +195,10 @@ header button {
     border: 1px solid var(--c-border);
     background: transparent;
     margin-right: var(--s-padding-w);
-    transition: background-color 300ms, color 300ms, border-color 300ms;
+    transition:
+        background-color 300ms,
+        color 300ms,
+        border-color 300ms;
     outline: none;
 }
 
@@ -206,7 +209,10 @@ button {
     padding: 2px;
     border: 1px solid var(--c-border);
     background-color: transparent;
-    transition: background-color 300ms, color 300ms, border-color 300ms;
+    transition:
+        background-color 300ms,
+        color 300ms,
+        border-color 300ms;
     cursor: pointer;
     text-decoration: none;
 }
@@ -260,9 +266,12 @@ button:hover,
     text-decoration: none;
 
     background-color: var(--c-bg);
-    background-image: repeating-linear-gradient(45deg, var(--c-border) 25%, transparent 25%, transparent 75%, var(--c-border) 75%, var(--c-border)),
+    background-image:
+        repeating-linear-gradient(45deg, var(--c-border) 25%, transparent 25%, transparent 75%, var(--c-border) 75%, var(--c-border)),
         repeating-linear-gradient(45deg, var(--c-border) 25%, var(--c-bg) 25%, var(--c-bg) 75%, var(--c-border) 75%, var(--c-border));
-    background-position: 0 0, 10px 10px;
+    background-position:
+        0 0,
+        10px 10px;
     background-size: 20px 20px;
 }
 .fileDir:hover {

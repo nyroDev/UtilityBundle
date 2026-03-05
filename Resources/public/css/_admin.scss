@@ -1,2 +1,6 @@
-@use "form_admin" as *;
-@use "list_admin"as *;
+@use "./admin/000_fonts" as *;
+@use "./admin/000_vars" as *;
+@use "./admin/500_global" as *;
+@use "./admin/501_ui" as *;
+@use "./admin/502_header" as *;
+@use "./admin/503_form" as *;

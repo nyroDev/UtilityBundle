@@ -1,4 +1,4 @@
-import NyroUpload from "./nyro-upload";
+import NyroUpload from "./nyro-upload.js";
 
 (function () {
     const fetchOptions = (options = {}) => {

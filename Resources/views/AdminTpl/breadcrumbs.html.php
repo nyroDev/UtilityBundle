@@ -1,0 +1,13 @@
+<nav id="breadcrumbs">
+    <a href="<?php echo $view['router']->path('admin_home'); ?>" rel="home">
+        <?php echo $view['nyrodev_icon']->getIcon('home'); ?>
+        <span><?php echo $view['translator']->trans('admin.menu.home'); ?></span>
+    </a>
+    /
+    <?php if (isset($links) && is_array($links)) : ?>
+        <?php foreach ($links as $link): ?>
+            <a href="<?php echo $link['url']; ?>"><?php echo $link['label']; ?></a> /
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <strong><?php echo $title; ?></strong>
+</nav>

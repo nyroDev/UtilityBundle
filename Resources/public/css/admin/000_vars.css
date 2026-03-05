@@ -1,0 +1,56 @@
+:root {
+    --font: "Roboto", sans-serif;
+    --font-bold-weight: 600;
+
+    --c-text: #000;
+    --c-white: #fff;
+    --s-text: 1.4rem;
+
+    --s-svg-size: 2.4rem;
+
+    --s-padding: 1.4rem;
+
+    --c-secondary: #87888a;
+    --c-light-background: #f2f2f1;
+    --c-light-background2: #d3d1d1;
+    --c-border: #d9d9d9;
+
+    --c-highlight-dark: #0f5876;
+    --c-highlight: #009ee0;
+    --c-hightlight-hover: #83d3f5;
+    --c-highlight-text: #fff;
+
+    --c-delete: #e52113;
+    --c-delete-text: #fff;
+    --c-error: var(--c-delete);
+    --c-error-text: var(--c-delete-text);
+    --c-alert: #fabb00;
+    --c-alert-text: #fff;
+    --c-warning: var(--c-alert);
+    --c-warning-text: var(--c-alert-text);
+    --c-success: #a2c862;
+    --c-success-text: #fff;
+    --c-info: var(--c-highlight);
+    --c-info-text: var(--c-highlight-text);
+
+    --s-header-height: 5rem;
+    --s-header-padding: 1.5rem;
+    --c-header-bg: var(--c-highlight-dark);
+    --c-header-text: #fff;
+
+    --s-nav-width: 100vw;
+    --c-nav-bg: #fff;
+    --c-nav-text: #000;
+
+    --s-radius: 0.5rem;
+    --transition-time: 300ms;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+html,
+body {
+    min-height: 100vh;
+}

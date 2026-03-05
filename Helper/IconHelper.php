@@ -11,6 +11,8 @@ class IconHelper extends AbstractService
     use KernelInterfaceServiceableTrait;
     use AssetsPackagesServiceableTrait;
 
+    public const ICON_PATH = 'bundles/nyrodevutility/images/nyrodevUtility.svg';
+
     public static function getAlias()
     {
         return 'icon';
@@ -18,9 +20,7 @@ class IconHelper extends AbstractService
 
     private function getSvgUrl(string $svgFile): string
     {
-        $realFilePath = $this->getKernelInterface()->getProjectDir().'/public/'.$svgFile;
-
-        return $this->getAssetsPackages()->getUrl($svgFile).'?t='.filemtime($realFilePath);
+        return $this->getAssetsPackages()->getUrl($svgFile);
     }
 
     private function getSvgTag(string $url, string $name, ?string $class = null, ?string $attrs = null): string
@@ -32,7 +32,7 @@ class IconHelper extends AbstractService
         return '<svg class="icon icon-'.$name.$class.'" '.$attrs.'><use href="'.$url.'#'.$name.'"></use></svg>';
     }
 
-    public function getIcon(string $name, ?string $class = null, ?string $attrs = null, $svgFile = 'images/icons.svg'): string
+    public function getIcon(string $name, ?string $class = null, ?string $attrs = null, string $svgFile = self::ICON_PATH): string
     {
         if (false !== strpos($name, '#')) {
             $tmp = explode('#', $name);

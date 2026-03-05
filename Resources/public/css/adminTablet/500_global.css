@@ -1,0 +1,43 @@
+:root {
+    --s-header-height: 6rem;
+    --s-nav-width: 27rem;
+}
+
+h1 {
+    font-size: 2.8rem;
+}
+
+body:has(#adminNav) {
+    padding-left: var(--s-nav-width);
+}
+
+.mobileOnly {
+    display: none !important;
+}
+
+nyro-dialog .filter,
+nyro-dialog .data {
+    width: 75rem;
+    min-width: 0;
+}
+
+nyro-dialog .filter form > div {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.resultActions .menu-has-childs > ul {
+    left: auto;
+    right: 100%;
+    top: 0;
+    margin-top: 0;
+    margin-right: 0.5rem;
+}
+
+nyro-tooltip {
+    z-index: 1800;
+}
+
+nyro-tooltip:hover,
+nyro-tooltip[open] {
+    z-index: 1801;
+}

@@ -1,0 +1,707 @@
+.form form {
+    padding: var(--s-padding);
+    background: var(--c-light-background);
+}
+.form form > div {
+    background: var(--c-white);
+    border-radius: var(--s-radius);
+    max-width: 75rem;
+}
+
+.form_button {
+    margin-top: var(--s-padding);
+    border-top: 1px solid var(--c-border);
+    padding-top: calc(var(--s-padding) * 2);
+    padding-bottom: var(--s-padding);
+    width: 100%;
+    text-align: right;
+}
+
+.form_button:has(.cancel, .closeDialog) {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form form nyro-tabs {
+    --nyro-tab-nav-border: 0 solid var(--c-white);
+    --nyro-tab-border-color: var(--c-light-background);
+    --nyro-tab-nav-background: var(--c-light-background);
+    background: var(--c-light-background);
+}
+.form form nyro-tabs nyro-tab {
+    display: flex;
+    align-items: center;
+    border-top-right-radius: var(--s-radius);
+    border-top-left-radius: var(--s-radius);
+}
+.form form nyro-tabs nyro-tab .icon {
+    margin-right: 1rem;
+}
+.form form nyro-tabs nyro-tab[selected],
+.form form nyro-tabs nyro-tab:hover {
+    background: var(--c-white);
+}
+
+.form form > div:not(:has(fieldset)) {
+    padding: var(--s-padding);
+}
+
+.form form fieldset {
+    border: none;
+    background: var(--c-white);
+    padding: var(--s-padding);
+    margin: 0;
+}
+.form form fieldset:not([slot="footer"]) {
+    border-top-right-radius: var(--s-radius);
+}
+.form form fieldset[slot="footer"] {
+    border-bottom-right-radius: var(--s-radius);
+    border-bottom-left-radius: var(--s-radius);
+}
+.form form fieldset legend {
+    display: none;
+}
+
+textarea,
+input[type="text"],
+input[type="button"],
+input[type="submit"] {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+select,
+nyro-select,
+nyro-password,
+nyro-select-autocomplete {
+    border-radius: 0;
+}
+
+nyro-select,
+nyro-select-autocomplete {
+    overflow: hidden;
+    --nyro-select-placeholder-color: var(--c-border);
+    --nyro-select-dropdown-border-color: var(--c-border);
+    --nyro-select-arrow-focused-opacity: 1;
+    --nyro-select-dropdown-max-width: 0px;
+}
+
+nyro-select[multiple],
+nyro-select-autocomplete[multiple] {
+    --nyro-select-searchCont-margin: -0.5rem 0;
+    --nyro-select-search-padding: 0.5rem 0.8rem;
+    --nyro-select-search-margin: 0 0.5rem 0.5rem 0;
+}
+
+nyro-select-option {
+    font-family: var(--font);
+    color: var(--c-secondary);
+    padding: 0.5rem 1rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+nyro-select-selected {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font);
+    font-size: 1.6rem;
+    color: var(--c-white);
+    background-color: var(--c-highlight);
+    padding: 0.5rem 0.8rem;
+    margin: 0 0.5rem 0.5rem 0;
+    border: none;
+    border-radius: var(--s-radius);
+}
+nyro-select-selected a {
+    display: inline-flex;
+    align-items: center;
+    color: var(--c-white);
+    text-decoration: none;
+    padding-left: 0.5rem;
+    --s-svg-size: 2rem;
+    transition: color var(--transition-time);
+}
+nyro-select-selected a:hover {
+    color: var(--c-hightlight-hover);
+}
+
+nyro-select-option:hover,
+nyro-select-option[focused] {
+    background-color: var(--c-light-background);
+}
+
+nyro-select-option[selected] {
+    color: var(--c-highlight-text);
+    background-color: var(--c-highlight);
+}
+
+nyro-select-option[selected]:hover,
+nyro-select-option[selected][focused] {
+    text-decoration: underline;
+}
+
+.form_row {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.form_row label {
+    display: block;
+    font-size: 1.4rem;
+    color: var(--c-secondary);
+    margin-bottom: 1rem;
+}
+
+select,
+nyro-select,
+.form_row input,
+.form_row select,
+.form_row nyro-file,
+.form_row nyro-select,
+.form_row nyro-password,
+.form_row nyro-select-autocomplete,
+.form_row textarea {
+    --c-cur-border: var(--c-border);
+    border: 1px solid var(--c-cur-border);
+    border-radius: var(--s-radius);
+    background-color: var(--c-white);
+    font-family: var(--font);
+    padding: 1rem;
+    font-size: 1.6rem;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+}
+
+select,
+nyro-select {
+    width: auto;
+}
+
+.form_row nyro-file {
+    padding: 0;
+    height: 4.1rem;
+}
+
+nyro-file button[slot="choose"] {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    padding: 0 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+nyro-file a[slot="current"] {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    color: var(--c-highlight);
+    padding: 0 0.8rem;
+    flex-grow: 1;
+    min-width: 0;
+    text-decoration: none;
+}
+nyro-file a[slot="current"] span {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+nyro-file a[slot="current"]:hover {
+    text-decoration: underline;
+}
+nyro-file a[slot="current"][href="#"] {
+    color: #767676;
+    pointer-events: none;
+}
+nyro-file a[slot="delete"] {
+    flex-shrink: 0;
+    color: var(--c-secondary);
+    border-left: 1px solid var(--c-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    --s-svg-size: 2rem;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+nyro-file a[slot="delete"]:hover {
+    color: var(--c-delete);
+}
+
+.form_row nyro-select[multiple],
+.form_row nyro-select-autocomplete[multiple] {
+    padding-bottom: 0.5rem;
+}
+
+.form_row input[type="file"] {
+    padding: 0.8rem 0.8rem 0.7rem 0.8rem;
+}
+
+.form_row select,
+.form_row input[type="date"] {
+    padding: 0.9rem 1rem 0.9rem 1rem;
+}
+
+.form_row nyro-select,
+.form_row nyro-select-autocomplete {
+    --nyro-select-search-font-size: 1.6rem;
+}
+
+.form_row nyro-password {
+    padding: 0.5rem 1rem;
+}
+
+.form_row input[disabled],
+.form_row select[disabled],
+.form_row nyro-select[disabled],
+.form_row nyro-password[disabled],
+.form_row nyro-select-autocomplete[disabled],
+.form_row textarea[disabled] {
+    background-color: var(--c-light-background);
+    cursor: not-allowed;
+}
+
+.form_error input,
+.form_error select,
+.form_error nyro-select,
+.form_error nyro-password,
+.form_error nyro-select-autocomplete,
+.form_error textarea {
+    --c-cur-border: var(--c-error);
+}
+
+.form_row_checkbox {
+    display: flex;
+    align-items: center;
+}
+.form_row_checkbox input {
+    display: inline;
+    width: auto;
+    margin-left: 0;
+}
+
+.form_row.form_row_checkbox label {
+    display: inline;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.form_row textarea {
+    min-height: 5em;
+    resize: vertical;
+}
+
+.form_row input:focus,
+.form_row textarea:focus,
+.form_row select:focus {
+    box-shadow: 0 0 0 1px var(--c-cur-border);
+}
+
+ul.form_errors {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.form_errors.form_errors {
+    max-width: none;
+    text-align: left;
+    color: var(--c-error);
+}
+
+.iconWidget {
+    position: relative;
+}
+
+.iconWidget::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--s-svg-size) + 1rem);
+    top: 1px;
+    bottom: 1px;
+    width: 1px;
+    background-color: var(--c-border);
+    z-index: 1;
+}
+
+.iconWidget > .icon {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    color: var(--c-secondary);
+    z-index: 1;
+}
+
+.form_row .iconWidget input,
+.form_row .iconWidget select,
+.form_row .iconWidget nyro-select,
+.form_row .iconWidget nyro-select-autocomplete,
+.form_row .iconWidget nyro-password {
+    padding-left: calc(1.5rem + var(--s-svg-size));
+}
+
+.calendarWidget .icon {
+    left: auto;
+    right: 1rem;
+    pointer-events: none;
+}
+
+.form_row .calendarWidget input {
+    padding-left: 1rem;
+    padding-right: calc(1.5rem + var(--s-svg-size));
+}
+
+.form_row .calendarWidget input::-webkit-inner-spin-button,
+.form_row .calendarWidget input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    opacity: 0;
+    width: var(--s-svg-size);
+    height: var(--s-svg-size);
+}
+
+nyro-select-option:not(:defined) {
+    display: none;
+}
+
+.form_row_dummy_captcha {
+    display: none;
+}
+
+.form_row_choice ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.form_row_choice .form_expanded_group > label {
+    font-weight: var(--font-bold-weight);
+}
+
+.form_row_choice .form_expanded_group ul {
+    margin-left: 2rem;
+}
+
+.form_row_choice input {
+    width: auto;
+}
+.form_row_choice ul label {
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+.radioList {
+    display: inline-flex;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    border: 1px solid var(--c-border);
+    border-radius: var(--s-radius);
+    overflow: hidden;
+}
+.radioList.radioListFull > li {
+    flex-grow: 1;
+}
+.radioList.radioList50 > li {
+    width: 50%;
+    box-sizing: border-box;
+}
+.radioList.radioList33 > li {
+    width: 33.33%;
+    box-sizing: border-box;
+}
+.radioList.radioList25 > li {
+    width: 25%;
+    box-sizing: border-box;
+}
+.radioList input {
+    display: none;
+}
+.radioList label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    color: var(--c-secondary);
+    font-weight: var(--font-bold-weight);
+    text-align: center;
+    cursor: pointer;
+    transition:
+        color var(--transition-time),
+        background-color var(--transition-time);
+}
+.radioList li:not(:first-child) {
+    border-left: 1px solid var(--c-border);
+}
+
+.radioList input:checked + label {
+    color: var(--c-white);
+    background-color: var(--c-highlight);
+}
+
+.form_row_choice .radioList.radioListFull,
+.form_row_filter .radioList.radioListFull {
+    width: 100%;
+}
+.form_row_choice .radioList label,
+.form_row_filter .radioList label {
+    display: flex;
+    padding: 1rem 2rem;
+    height: 1.9rem;
+    margin: 0;
+}
+
+.filter {
+    position: relative;
+}
+.filter > input {
+    display: none;
+}
+.filter > label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: calc(var(--s-padding) / 2) calc(var(--s-padding) / 2) calc(var(--s-padding) / 2) var(--s-padding);
+    background: var(--c-white);
+    color: var(--c-secondary);
+    border: 1px solid var(--c-border);
+    border-radius: var(--s-radius);
+    cursor: pointer;
+    transition: background-color var(--transition-time);
+}
+.filter > label:hover {
+    background-color: var(--c-light-background);
+}
+.filter > label .icon-filter {
+    margin-right: 0.5rem;
+}
+.filter > label .icon-chevron {
+    rotate: 90deg;
+    transition: rotate var(--transition-time);
+}
+.filter .row_form_transformer,
+.filter form,
+.filter .formIndicator {
+    display: none;
+}
+
+.filter > input:checked ~ label {
+    border-radius: var(--s-radius) var(--s-radius) 0 0;
+}
+
+.filter > input:checked ~ label .icon-chevron {
+    rotate: 270deg;
+}
+
+.filter .form_button {
+    padding-top: var(--s-padding);
+}
+
+.filter > input:checked ~ form {
+    display: block;
+    border: 1px solid var(--c-border);
+    background: var(--c-white);
+    border-top: none;
+    border-radius: 0 0 var(--s-radius) var(--s-radius);
+    padding: calc(var(--s-padding) / 2) var(--s-padding);
+}
+
+.filterFormRange {
+    display: flex;
+    justify-content: space-between;
+}
+.filterFormRange > .form_row {
+    position: relative;
+    width: 48%;
+}
+.filterFormRange > .form_row > label {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 0.5rem;
+    margin: 0;
+}
+.filterFormRange > .form_row > input {
+    padding-left: 2.7rem;
+    padding-right: 0.2rem;
+    font-size: 1.3rem;
+    line-height: 1.9rem;
+}
+
+.contentLvl1 {
+    margin-left: var(--s-padding);
+}
+.contentLvl2 {
+    margin-left: calc(var(--s-padding) * 2);
+}
+.contentLvl3 {
+    margin-left: calc(var(--s-padding) * 3);
+}
+.contentLvl4 {
+    margin-left: calc(var(--s-padding) * 4);
+}
+.contentLvl5 {
+    margin-left: calc(var(--s-padding) * 5);
+}
+.form_errors,
+.form_row .form_errors {
+    margin: 3px 0;
+}
+.mapGeoloc {
+    float: left;
+    width: 407px;
+    height: 350px;
+    margin: 5px 0 10px;
+}
+
+.formCentered {
+    margin: var(--s-padding);
+    text-align: center;
+    padding: var(--s-padding);
+    background: var(--c-white);
+    border-radius: var(--s-radius);
+    border: 1px solid var(--c-border);
+}
+
+.formCentered > .form_errors.form_errors {
+    text-align: center;
+    font-weight: bold;
+}
+
+.formCentered h1,
+.formCentered p,
+.formCentered form {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.formCentered form {
+    margin-top: 2rem;
+}
+
+.formCentered form label {
+    text-align: left;
+}
+
+.formCentered .form_row_password .forgotCont {
+    display: block;
+    margin-top: 0.5rem;
+    text-align: right;
+}
+
+.formCentered .form_button {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.tox-tinymce-aux {
+    z-index: 999999 !important;
+}
+
+@media all and (min-width: 32em) {
+    .filter form > div {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0 var(--s-padding);
+        box-sizing: border-box;
+    }
+
+    .filter form > div .form_row {
+        box-sizing: border-box;
+        min-width: 0;
+    }
+
+    .filter form > div .form_button {
+        grid-column: span 2;
+    }
+}
+
+@media all and (min-width: 40em) {
+    .form form > div:not(:has(fieldset)),
+    .form form > div fieldset,
+    .form_row_grid > div {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--s-padding);
+        box-sizing: border-box;
+    }
+    .form form > div > .form_row,
+    .form form > div fieldset > .form_row,
+    .form_row_grid > div > .form_row {
+        grid-column: span 2;
+        box-sizing: border-box;
+        min-width: 0;
+    }
+
+    .form form > div > .form_row_25,
+    .form form > div fieldset > .form_row_25,
+    .form_row_grid > div > .form_row_25 {
+        grid-column: span 1;
+    }
+
+    .form form > div > .form_row_75,
+    .form form > div fieldset > .form_row_75,
+    .form_row_grid > div > .form_row_75 {
+        grid-column: span 3;
+    }
+
+    .form form > div > .form_errors,
+    .form form > div > .form_row_100,
+    .form form > div fieldset > .form_row_100,
+    .form form > div > .form_row_tinymce,
+    .form form > div fieldset > .form_row_tinymce,
+    .form form > div > .form_button,
+    .form form > div fieldset > .form_button,
+    .form_row_grid > div > .form_row_100,
+    .form_row_grid > div > .form_row_tinymce,
+    .form_row_grid > div > .form_button {
+        grid-column: span 4;
+    }
+
+    .form form > div > .form_row_new_line,
+    .form form > div fieldset > .form_row_new_line,
+    .form_row_grid > div > .form_row_new_line {
+        grid-column: 1 / span 2;
+    }
+    .form form > div > .form_row_new_line.form_row_25,
+    .form form > div fieldset > .form_row_new_line.form_row_25,
+    .form_row_grid > div > .form_row_row_new_line.form_row_25 {
+        grid-column: 1 / span 1;
+    }
+    .form form > div > .form_row_new_line.form_row_75,
+    .form form > div fieldset > .form_row_new_line.form_row_75,
+    .form_row_grid > div > .form_row_new_line.form_row_75 {
+        grid-column: 1 / span 3;
+    }
+    .form form > div > .form_row_new_line.form_row_100,
+    .form form > div fieldset > .form_row_new_line.form_row_100,
+    .form_row_grid > div > .form_row_new_line.form_row_100 {
+        grid-column: 1 / span 4;
+    }
+
+    .filter form > div {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .filter form > div .form_button {
+        grid-column: span 4;
+    }
+}
+
+@media all and (min-width: 100em) {
+    .filter form > div {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .filter form > div .form_button {
+        grid-column: span 5;
+    }
+}

@@ -1,6 +1,15 @@
 UtilityBundle
 =============
 
+# Using form twig template
+
+Add in `config/packages/twig.yaml`
+```yaml
+twig:
+    form_themes:
+        - '@NyroDevUtility/Form/nyrodev_form_div_layout.html.twig'
+```
+
 # Using `TinymceType`
 
 Add tinymce to your dependancies:  

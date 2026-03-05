@@ -98,6 +98,16 @@ class NyrodevService extends AbstractService
         }
     }
 
+    public function getLocale(): string
+    {
+        return $this->getRequest()?->getLocale() ?? $this->getDefaultLocale();
+    }
+
+    public function getDefaultLocale(): string
+    {
+        return $this->getParameter('locale');
+    }
+
     /**
      * Kernel response listener to add content-language if configured.
      */

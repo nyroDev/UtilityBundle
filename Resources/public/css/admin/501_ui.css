@@ -1,0 +1,206 @@
+.btn,
+.button,
+button {
+    --c-btn-text: var(--c-highlight-text);
+    --c-btn-bg: var(--c-highlight);
+    --c-btn-border: var(--c-highlight);
+    --c-btn-text-hover: var(--c-highlight);
+    --c-btn-bg-hover: var(--c-highlight-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--s-svg-size);
+    font-family: var(--font);
+    font-weight: var(--font-bold-weight);
+    font-size: 1.4rem;
+    color: var(--c-btn-text);
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--c-btn-border);
+    border-color: var(--c-btn-border);
+    border-radius: var(--s-radius);
+    background-color: var(--c-btn-bg);
+    transition:
+        background-color var(--transition-time),
+        color var(--transition-time);
+    cursor: pointer;
+}
+
+.btn.disabled,
+.button.disabled,
+button.disabled,
+button[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.btnDelete {
+    --c-btn-border: var(--c-delete);
+    --c-btn-text: var(--c-delete-text);
+    --c-btn-bg: var(--c-delete);
+    --c-btn-text-hover: var(--c-delete);
+}
+
+.btnGray {
+    --c-btn-border: var(--c-light-background2);
+    --c-btn-text: var(--c-white);
+    --c-btn-bg: var(--c-light-background2);
+    --c-btn-text-hover: var(--c-highlight-text);
+    --c-btn-bg-hover: var(--c-highlight);
+}
+
+.btnLightGray {
+    --c-btn-border: var(--c-white);
+    --c-btn-text: var(--c-text);
+    --c-btn-bg: var(--c-light-background);
+    --c-btn-text-hover: var(--c-text);
+    --c-btn-bg-hover: var(--c-white);
+}
+
+.btnLightWhite {
+    border: none;
+    --c-btn-text: var(--c-text);
+    --c-btn-bg: var(--c-white);
+    --c-btn-text-hover: var(--c-text);
+    --c-btn-bg-hover: var(--c-light-background);
+}
+
+.btn:hover,
+.button:hover,
+button:hover {
+    text-decoration: none;
+    color: var(--c-btn-text-hover);
+    background-color: var(--c-btn-bg-hover);
+}
+
+.btn.cancel,
+.button.cancel,
+.btnLight {
+    --c-btn-text: var(--c-highlight);
+    --c-btn-bg: var(--c-highlight-text);
+    --c-btn-text-hover: var(--c-highlight-text);
+    --c-btn-bg-hover: var(--c-highlight);
+    --c-btn-border: var(--c-highlight);
+}
+
+.btn:has(.icon),
+.button:has(.icon),
+button:has(.icon),
+.btnWithIcon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn .icon + span,
+.button .icon + span,
+button .icon + span,
+.btnWithIcon .icon + span,
+.btn span + .icon,
+.button span + .icon,
+button span + .icon,
+.btnWithIcon span + .icon {
+    margin-left: 1rem;
+}
+
+.btnSmall.btnSmall {
+    display: inline-flex;
+    padding: 0.6rem;
+}
+
+nyro-dialog .nyroDialogClose {
+    position: absolute;
+    top: calc(var(--s-padding) / 1);
+    right: calc(var(--s-padding) / 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--c-secondary);
+    --s-svg-size: 2.4rem;
+    transition: color var(--transition-time);
+}
+nyro-dialog .nyroDialogClose:hover {
+    color: var(--c-delete);
+}
+
+nyro-dialog.nyroDialogConfirm p {
+    max-width: 35rem;
+    line-height: 1.5;
+}
+
+nyro-dialog.nyroDialogConfirm p[slot="title"] {
+    margin: 0;
+    padding: 0 4rem;
+    font-size: 2.1rem;
+    font-weight: var(--font-bold-weight);
+    text-align: center;
+    text-wrap: balance;
+}
+
+nyro-dialog.nyroDialogConfirm p[slot="content"] {
+    margin-bottom: 2rem;
+}
+
+nyro-dialog h1 {
+    font-size: 2.8rem;
+    margin: 0;
+    text-align: left;
+}
+
+nyro-dialog .actions:not(th, td) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 20rem;
+}
+
+nyro-dialog .actions:not(th, td) * + * {
+    margin-left: var(--s-padding);
+}
+
+nyro-dialog .data {
+    width: 100%;
+    margin: 0;
+    margin-top: var(--s-padding);
+    min-width: calc(100vw - 5 * var(--s-padding));
+}
+
+nyro-dialog .form form,
+nyro-dialog .form form > div {
+    padding: 0;
+    background: none;
+}
+
+nyro-tooltip {
+    --nyro-tooltip-background-color: var(--c-white);
+    --nyro-tooltip-border-color: var(--c-alert);
+    --nyro-tooltip-move: calc(-1 * var(--s-padding) / 2);
+    --nyro-tooltip-arrow-move: calc(var(--s-padding) / 4 + 3px);
+    --nyro-tooltip-border-radius: var(--s-radius);
+    z-index: 800;
+}
+
+nyro-tooltip:hover,
+nyro-tooltip[open] {
+    z-index: 801;
+}
+
+nyro-tooltip > .icon {
+    display: block;
+    color: var(--nyro-tooltip-border-color);
+    cursor: help;
+}
+
+nyro-tooltip > div[slot="content"] {
+    padding: calc(var(--s-padding) / 2);
+    width: 25rem;
+    max-width: calc(100vw - var(--s-padding) * 2);
+    max-height: min(20vh, 20rem);
+    overflow: auto;
+    text-align: left;
+    color: var(--c-text);
+    font-size: 1.4rem;
+    font-weight: normal;
+    font-style: italic;
+    line-height: 1.4em;
+    word-break: break-word;
+    text-transform: none;
+}

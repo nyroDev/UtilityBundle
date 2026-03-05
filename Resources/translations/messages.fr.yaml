@@ -22,12 +22,16 @@ admin:
   misc:
     actions: Actions
     send: Envoyer
+    save: Enregistrer
+    watch: Voir
+    back: Retour
     filter: Filtrer
     clearFilter: Réinitialiser
     add: Ajouter
     edit: Modifier
     export: Exporter
     delete: Supprimer
+    deleteConfirm: Êtes-vous sûr de vouloir supprimer cet élément ?
     cancel: Annuler
     currentFile: "Fichier actuel : %currentFile%"
     currentFileDelete: "Supprimer"
@@ -42,6 +46,19 @@ admin:
     collectionAdd: Ajouter
     collectionDelete: Supprimer
     collectionDeleteConfirm: "Êtes-vous sûr de vouloir supprimer cet élément ?"
+    filters: Filtres
+    filter: Filtrer
+    sortAsc: Trier par ordre Croissant
+    sortDesc: Trier par ordre Décroissant
+    labelSpacer: ' '
+    login: Connexion
+    logout: Déconnexion
+  menu:
+    home: Accueil
+    account: Mon compte
+    password: Mon mot de passe
+    logout: Me déconnecter
+    logoutConfirm: Êtes-vous sûr de vouloir vous déconnecter ?
   pager:
     next: Suivant
     prev: Précédent

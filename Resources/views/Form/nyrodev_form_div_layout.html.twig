@@ -1,5 +1,12 @@
 {% use "form_div_layout.html.twig" %}
 
+{%- block form_label_content -%}
+    {{ parent() }}
+    {% if required and not expanded_option -%}
+        <span class="formIndicator">*</span>
+    {%- endif -%}
+{%- endblock form_label_content -%}
+
 {%- block form_widget_simple -%}
     {% if icon %}
         <div class="iconWidget {{ icon }}Widget">
@@ -48,10 +55,6 @@
 
 {%- block button_row -%}
     <div class="form_button">
-        <span class="formRequiredFields">
-            {{ 'nyrodev.required'|trans }}
-        </span>
-        
         {% if cancelUrl -%}
             <a href="{{ cancelUrl }}" class="button {{ cancelClass }}">
                 {% if cancelIcon %}
@@ -276,7 +279,7 @@
 {%- block form_row -%}
     {%- set widget_attr = {} -%}
     {%- if help is not empty -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help" } } -%}
     {%- endif -%}
 
     {%- set isCheckbox = false -%}
@@ -311,7 +314,6 @@
             {{- form_widget(form, widget_attr) -}}
         {%- endif -%}
         
-         <span class="formIndicator"> *</span>
         {{- form_help(form) -}}
         {{- form_errors(form) -}}
     </div>
