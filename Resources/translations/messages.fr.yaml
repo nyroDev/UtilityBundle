@@ -25,8 +25,6 @@ admin:
     save: Enregistrer
     watch: Voir
     back: Retour
-    filter: Filtrer
-    clearFilter: Réinitialiser
     add: Ajouter
     edit: Modifier
     export: Exporter
@@ -48,6 +46,7 @@ admin:
     collectionDeleteConfirm: "Êtes-vous sûr de vouloir supprimer cet élément ?"
     filters: Filtres
     filter: Filtrer
+    clearFilter: Réinitialiser
     sortAsc: Trier par ordre Croissant
     sortDesc: Trier par ordre Décroissant
     labelSpacer: ' '
