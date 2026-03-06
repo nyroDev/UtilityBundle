@@ -107,18 +107,34 @@
                 if (delBtn && allowDelete) {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (dataPrototyped.dataset.deleteConfirm && !confirm(dataPrototyped.dataset.deleteConfirm)) {
+
+                    const _doDelete = () => {
+                        delBtn.closest(".form_row_collection_entry").remove();
+                        toggleAddIfLimit(dataPrototyped, divAdd);
+                        dataPrototyped.dispatchEvent(
+                            new CustomEvent("formCollectionDelete", {
+                                bubbles: true,
+                                cancelable: true,
+                            })
+                        );
+                    };
+
+                    if (dataPrototyped.dataset.deleteConfirm) {
+                        if (window.confirmDialog) {
+                            const dialog = window.confirmDialog({
+                                confirmText: dataPrototyped.dataset.deleteConfirm,
+                                clb: () => {
+                                    _doDelete();
+                                    dialog.close();
+                                },
+                            });
+                        } else if (confirm(dataPrototyped.dataset.deleteConfirm)) {
+                            _doDelete();
+                        }
                         return;
                     }
-                    delBtn.closest(".form_row_collection_entry").remove();
-                    toggleAddIfLimit(dataPrototyped, divAdd);
-                    dataPrototyped.dispatchEvent(
-                        new CustomEvent("formCollectionDelete", {
-                            bubbles: true,
-                            cancelable: true,
-                        })
-                    );
-                    return;
+
+                    _doDelete();
                 }
             });
 

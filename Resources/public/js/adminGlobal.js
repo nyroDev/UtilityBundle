@@ -1,12 +1,8 @@
 (function () {
     const templateIcon = document.querySelector("template#iconTpl");
     const templateClose = document.querySelector("template#closeTpl");
-    const templateConfirmTitle = document.querySelector(
-        "template#deleteConfirmTitleTpl",
-    );
-    const templateConfirmContent = document.querySelector(
-        "template#deleteConfirmContentTpl",
-    );
+    const templateConfirmTitle = document.querySelector("template#deleteConfirmTitleTpl");
+    const templateConfirmContent = document.querySelector("template#deleteConfirmContentTpl");
 
     const customizeSelected = (selected) => {
         if (selected.classList.contains("hideRemove")) {
@@ -16,10 +12,7 @@
         const remove = document.createElement("a");
         remove.classList.add("remove");
         remove.href = "#";
-        remove.innerHTML = templateIcon.innerHTML.replaceAll(
-            "IDENT",
-            "closeCircle",
-        );
+        remove.innerHTML = templateIcon.innerHTML.replaceAll("IDENT", "closeCircle");
 
         selected.classList.add("hideRemove");
         selected.appendChild(remove);
@@ -29,9 +22,42 @@
         customizeSelected(e.detail);
     });
 
-    document
-        .querySelectorAll("nyro-select-selected")
-        .forEach(customizeSelected);
+    document.querySelectorAll("nyro-select-selected").forEach(customizeSelected);
+
+    window.confirmDialog = (options) => {
+        const dialog = document.createElement("nyro-dialog");
+
+        dialog.appendChild(templateClose.content.cloneNode(true));
+
+        const title = templateConfirmTitle.content.cloneNode(true);
+        const content = templateConfirmContent.content.cloneNode(true);
+
+        if (options.confirmText) {
+            title.querySelector("p").innerHTML = options.confirmText;
+        }
+        if (options.confirmBtnText) {
+            content.querySelector(".confirm").innerHTML = options.confirmBtnText;
+        }
+
+        if (options.clb) {
+            content.querySelector(".actions").addEventListener("click", (e) => {
+                const confirm = e.target.closest(".confirm");
+                if (!confirm) {
+                    return;
+                }
+                e.preventDefault();
+                options.clb();
+            });
+        }
+
+        dialog.appendChild(title);
+        dialog.appendChild(content);
+        dialog.classList.add("nyroDialogConfirm");
+        document.body.appendChild(dialog);
+        dialog.open();
+
+        return dialog;
+    };
 
     document.body.addEventListener("click", function (e) {
         const dialogLink = e.target.closest(".dialogLink");
@@ -51,39 +77,16 @@
         const deleteConfirm = e.target.closest(".delete, .confirmLink");
         if (deleteConfirm) {
             e.preventDefault();
-            const confirmText = deleteConfirm.classList.contains("confirmLink")
-                ? deleteConfirm.dataset.confirmtxt
-                : deleteConfirm.dataset.deletetxt;
+            const confirmText = deleteConfirm.classList.contains("confirmLink") ? deleteConfirm.dataset.confirmtxt : deleteConfirm.dataset.deletetxt;
             const confirmBtnText = deleteConfirm.dataset.confirmbtntxt;
 
-            const dialog = document.createElement("nyro-dialog");
-
-            dialog.appendChild(templateClose.content.cloneNode(true));
-
-            const title = templateConfirmTitle.content.cloneNode(true);
-            const content = templateConfirmContent.content.cloneNode(true);
-
-            if (confirmText) {
-                title.querySelector("p").innerHTML = confirmText;
-            }
-            if (confirmBtnText) {
-                content.querySelector(".confirm").innerHTML = confirmBtnText;
-            }
-
-            content.querySelector(".actions").addEventListener("click", (e) => {
-                const confirm = e.target.closest(".confirm");
-                if (!confirm) {
-                    return;
-                }
-                e.preventDefault();
-                document.location.href = deleteConfirm.href;
+            window.confirmDialog({
+                confirmText: confirmText,
+                confirmBtnText: confirmBtnText,
+                clb: () => {
+                    document.location.href = deleteConfirm.href;
+                },
             });
-
-            dialog.appendChild(title);
-            dialog.appendChild(content);
-            dialog.classList.add("nyroDialogConfirm");
-            document.body.appendChild(dialog);
-            dialog.open();
         }
     });
 
@@ -113,9 +116,6 @@
     };
 
     document.querySelectorAll(".filterFormRange").forEach((filterFormRange) => {
-        window.startEndFields(
-            filterFormRange.querySelector('input[name*="[start]"'),
-            filterFormRange.querySelector('input[name*="[end]"'),
-        );
+        window.startEndFields(filterFormRange.querySelector('input[name*="[start]"'), filterFormRange.querySelector('input[name*="[end]"'));
     });
 })();

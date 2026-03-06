@@ -9,7 +9,7 @@
 
 {%- block form_widget_simple -%}
     {% if icon %}
-        <div class="iconWidget {{ icon }}Widget">
+        <div class="iconWidget {{ iconName }}Widget">
             {{ icon | nyrodev_icon | raw }}
     {% endif %}
     {{ parent() }}

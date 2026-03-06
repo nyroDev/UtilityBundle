@@ -370,19 +370,22 @@ ul.form_errors {
     padding-left: calc(1.5rem + var(--s-svg-size));
 }
 
-.calendarWidget .icon {
+.form_row_date .calendarWidget .icon {
     left: auto;
     right: 1rem;
     pointer-events: none;
 }
+.form_row_date .calendarWidget::before {
+    display: none;
+}
 
-.form_row .calendarWidget input {
+.form_row_date .calendarWidget input {
     padding-left: 1rem;
     padding-right: calc(1.5rem + var(--s-svg-size));
 }
 
-.form_row .calendarWidget input::-webkit-inner-spin-button,
-.form_row .calendarWidget input::-webkit-calendar-picker-indicator {
+.form_row_date .calendarWidget input::-webkit-inner-spin-button,
+.form_row_date .calendarWidget input::-webkit-calendar-picker-indicator {
     position: absolute;
     right: 1rem;
     top: 50%;

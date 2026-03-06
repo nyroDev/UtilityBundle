@@ -30,6 +30,9 @@ class IconExtension extends AbstractTypeExtension
     {
         if (isset($options['icon']) && $options['icon']) {
             $view->vars['icon'] = $options['icon'];
+
+            $iconSplitted = explode('#', $options['icon']);
+            $view->vars['iconName'] = $iconSplitted[count($iconSplitted) - 1];
         }
     }
 }
