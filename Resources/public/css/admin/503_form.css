@@ -63,6 +63,42 @@
     display: none;
 }
 
+.form form > div:not(:has(fieldset)),
+.form form > div fieldset,
+.form_row_grid > div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-padding);
+    box-sizing: border-box;
+}
+.form form > div > .form_row,
+.form form > div fieldset > .form_row,
+.form_row_grid > div > .form_row,
+.form form > div > .form_button,
+.form form > div fieldset > .form_button,
+.form_row_grid > div > .form_button {
+    grid-column: span 2;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.form form > div > .form_row_25,
+.form form > div fieldset > .form_row_25,
+.form_row_grid > div > .form_row_25 {
+    grid-column: span 1;
+}
+
+.form_row {
+    position: relative;
+}
+
+.form_row label {
+    display: block;
+    font-size: 1.4rem;
+    color: var(--c-secondary);
+    margin-bottom: 1rem;
+}
+
 textarea,
 input[type="text"],
 input[type="button"],
@@ -140,18 +176,6 @@ nyro-select-option[selected] {
 nyro-select-option[selected]:hover,
 nyro-select-option[selected][focused] {
     text-decoration: underline;
-}
-
-.form_row {
-    position: relative;
-    margin-bottom: 1rem;
-}
-
-.form_row label {
-    display: block;
-    font-size: 1.4rem;
-    color: var(--c-secondary);
-    margin-bottom: 1rem;
 }
 
 select,
@@ -628,23 +652,7 @@ nyro-select-option:not(:defined) {
     .form form > div:not(:has(fieldset)),
     .form form > div fieldset,
     .form_row_grid > div {
-        display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: var(--s-padding);
-        box-sizing: border-box;
-    }
-    .form form > div > .form_row,
-    .form form > div fieldset > .form_row,
-    .form_row_grid > div > .form_row {
-        grid-column: span 2;
-        box-sizing: border-box;
-        min-width: 0;
-    }
-
-    .form form > div > .form_row_25,
-    .form form > div fieldset > .form_row_25,
-    .form_row_grid > div > .form_row_25 {
-        grid-column: span 1;
     }
 
     .form form > div > .form_row_75,
