@@ -220,16 +220,25 @@ class NyroTabs extends HTMLElement {
                 (e) => {
                     if (!lastInvalidTimestamp || lastInvalidTimestamp + 250 < e.timeStamp) {
                         lastInvalidTimestamp = e.timeStamp;
-                        this.elements.forEach((el, index) => {
-                            if (el.contains(e.target)) {
-                                this.tab = index;
-                            }
-                        });
+                        this.selectTabContaining(e.target);
                     }
                 },
                 true
             );
+
+            const formErrors = form.querySelector('.form_errors');
+            if (formErrors) {
+                this.selectTabContaining(formErrors);
+            }
         }
+    }
+
+    selectTabContaining(element) {
+        this.elements.forEach((el, index) => {
+            if (el.contains(element)) {
+                this.tab = index;
+            }
+        });
     }
 
     setupHtmlNav() {
