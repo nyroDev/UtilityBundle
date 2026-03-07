@@ -569,21 +569,12 @@ nyro-select-option:not(:defined) {
     line-height: 1.9rem;
 }
 
-.contentLvl1 {
-    margin-left: var(--s-padding);
+.form_row .help-text {
+    color: var(--c-secondary);
+    margin: 0.5rem 1rem;
+    line-height: 1.3em;
 }
-.contentLvl2 {
-    margin-left: calc(var(--s-padding) * 2);
-}
-.contentLvl3 {
-    margin-left: calc(var(--s-padding) * 3);
-}
-.contentLvl4 {
-    margin-left: calc(var(--s-padding) * 4);
-}
-.contentLvl5 {
-    margin-left: calc(var(--s-padding) * 5);
-}
+
 .form_errors,
 .form_row .form_errors {
     margin: 3px 0;
