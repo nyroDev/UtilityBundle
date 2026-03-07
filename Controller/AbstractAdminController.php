@@ -179,6 +179,7 @@ abstract class AbstractAdminController extends AbstractController
             'order' => $order,
             'sort' => $sort,
             'total' => $total,
+            'accessor' => PropertyAccess::createPropertyAccessor(),
             'results' => $results,
             'resultMenu' => $resultMenu,
             'resultMenuApply' => function (RootMenu $menu, $row): RootMenu {

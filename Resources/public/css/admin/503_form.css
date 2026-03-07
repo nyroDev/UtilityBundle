@@ -65,12 +65,18 @@
 
 .form form > div:not(:has(fieldset)),
 .form form > div fieldset,
-.form_row_grid > div {
+.form_row_grid > div,
+.formCentered form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--s-padding);
     box-sizing: border-box;
 }
+
+.formCentered form {
+    grid-template-columns: repeat(1, 1fr);
+}
+
 .form form > div > .form_row,
 .form form > div fieldset > .form_row,
 .form_row_grid > div > .form_row,
