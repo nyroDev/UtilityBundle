@@ -123,16 +123,22 @@
   
   /* start CTA HOVER EFFECTS */
   .cta { transition: 0.3s !important; }
-  .cta span { transition: 0.3s !important; color: #ffffff; }
+  .cta span { transition: 0.3s !important; color: <?php echo $view['translator']->trans('nyrodev.email.highlightText'); ?>; }
   .cta:hover {
         transition: 0.5s !important;
-        background-color: #004265 !important;
+        background-color: <?php echo $view['translator']->trans('nyrodev.email.highlightColorDark'); ?> !important;
         transform: scale(1.05);
   }
   .cta:hover span { transition: 0.3s !important; }
   .cta-border:hover { border-bottom: 3px solid transparent !important; }
   /* end CTA HOVER EFFECTS */
   
+  .header a {
+    color: <?php echo $view['translator']->trans('nyrodev.email.headerText'); ?> !important;
+    text-decoration: none !important;
+    font-weight: bold;
+  }
+
   .footer p { font-size: 14px; line-height: 24px; color:#4B525D; }
   .footer a { color: #4B525D !important; }
   .footer-dark p { font-size: 14px; line-height: 24px; color:#fefefe; } 
@@ -192,7 +198,7 @@
       background-color: #0e0e0e !important; background: #0e0e0e !important;
     }
   
-    h1, h2, h3, p, span, .plainTxt li, h1 a, h2 a, h3 a, .header a , img, strong {
+    h1, h2, h3, p, span, .plainTxt li, h1 a, h2 a, h3 a , img, strong {
       color: #EDEEEF !important;
     }
       

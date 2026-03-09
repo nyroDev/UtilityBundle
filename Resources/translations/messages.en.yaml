@@ -66,9 +66,11 @@ nyrodev:
   noFileSelected: "No file selected"
   chooseFile: "Choose a file"
   email:
-    bodyColor: "#EDEEEF"
-    headerColor: "#262524"
+    headerColor: "#0f5876"
+    headerText: "#ffffff"
     highlightColor: "#009ee0"
+    highlightColorDark: "#0f5876"
+    highlightText: '#ffffff'
   browser:
     title: Browser
     name: Name
