@@ -3,4 +3,5 @@
 @use "./admin/500_global" as *;
 @use "./admin/501_ui" as *;
 @use "./admin/502_header" as *;
-@use "./admin/503_form" as *;
+@use "./admin/503_footer" as *;
+@use "./admin/505_form" as *;

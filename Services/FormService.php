@@ -36,7 +36,7 @@ class FormService extends AbstractService
         $form->add('dummytcha', DummyCaptchaType::class, [
             'mapped' => false,
             'required' => false,
-            'position' => 'first',
+            'priority' => 1000,
             'constraints' => [
                 new \Symfony\Component\Validator\Constraints\Blank(),
             ],

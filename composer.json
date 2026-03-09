@@ -17,7 +17,6 @@
         "symfony/framework-bundle": "^8"
     },
     "suggest": {
-        "becklyn/ordered-form-bundle": "Used for form positionning",
         "tinymce/tinymce": "Required to use TinymceType",
         "embed/embed": "Required to use EmbedService",
         "slim/psr7": "Required to use EmbedService, or any other PS7 implementation",

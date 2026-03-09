@@ -226,9 +226,13 @@ class NyroTabs extends HTMLElement {
                 true
             );
 
-            const formErrors = form.querySelector('.form_errors');
+            const formErrors = form.querySelector(".form_errors");
             if (formErrors) {
                 this.selectTabContaining(formErrors);
+                formErrors.scrollIntoView({
+                    block: "center",
+                    inline: "center",
+                });
             }
         }
     }
@@ -273,6 +277,7 @@ class NyroTabs extends HTMLElement {
             return;
         }
 
+        let lastInsertedTab = null;
         elements.forEach((el, index) => {
             const tab = new NyroTab();
             tab.slot = "nav";
@@ -293,8 +298,21 @@ class NyroTabs extends HTMLElement {
                 tab.selected = true;
                 el.slot = "content";
             }
-            this.appendChild(tab);
+
+            if (lastInsertedTab) {
+                lastInsertedTab.insertAdjacentElement("afterend", tab);
+            } else {
+                this.insertBefore(tab, this.firstChild);
+            }
+            lastInsertedTab = tab;
         });
+
+        this.dispatchEvent(
+            new CustomEvent("tabwritten", {
+                bubbles: true,
+                cancelable: true,
+            })
+        );
     }
 
     _selectTab() {
