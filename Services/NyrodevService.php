@@ -453,7 +453,7 @@ class NyrodevService extends AbstractService
     /**
      * Join rows in a single string.
      */
-    public function joinRows(array $rows, string $separator = ', '): string
+    public function joinRows(iterable $rows, string $separator = ', '): string
     {
         $ret = [];
         foreach ($rows as $r) {

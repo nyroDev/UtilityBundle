@@ -79,9 +79,6 @@ abstract class AbstractAdminController extends AbstractController
                 $worksheet->setCellValue([$col, $row], $fieldName);
                 $worksheet->getStyle([$col, $row])->getFont()->setBold(true);
                 $worksheet->getColumnDimensionByColumn($col)->setAutoSize(true);
-                if (isset($exportConfig['doubleFirstRows']) && $exportConfig['doubleFirstRows']) {
-                    $worksheet->setCellValue([$row + 1, $col], $fieldName);
-                }
                 ++$col;
             }
             if (isset($exportConfig['callbackHeader']) && $exportConfig['callbackHeader']) {
@@ -89,9 +86,6 @@ abstract class AbstractAdminController extends AbstractController
                 $this->$fct($tmpList, $worksheet, $row, $col, $exportConfig);
             }
             ++$row;
-            if (isset($exportConfig['doubleFirstRows']) && $exportConfig['doubleFirstRows']) {
-                ++$row;
-            }
 
             $results = $queryBuilder->getResult();
 
@@ -100,7 +94,9 @@ abstract class AbstractAdminController extends AbstractController
                 $col = 1;
                 foreach ($exportConfig['fields'] as $field) {
                     $val = $accessor->getValue($r, $field);
-                    if (is_object($val)) {
+                    if (isset($exportConfig['formatter']) && is_array($exportConfig['formatter']) && isset($exportConfig['formatter'][$field])) {
+                        $val = $exportConfig['formatter'][$field]($r, $val);
+                    } elseif (is_object($val)) {
                         if ($val instanceof DateTimeInterface) {
                             $val = strftime($this->trans('date.short'), $val->getTimestamp());
                         } elseif ($val instanceof Collection) {
@@ -108,6 +104,8 @@ abstract class AbstractAdminController extends AbstractController
                         } else {
                             $val = $val.'';
                         }
+                    } elseif (isset($exportConfig['choices']) && is_array($exportConfig['choices']) && isset($exportConfig['choices'][$field]) && isset($exportConfig['choices'][$field][$val])) {
+                        $val = $exportConfig['choices'][$field][$val];
                     } elseif (isset($exportConfig['boolFields']) && isset($exportConfig['boolFields'][$field]) && $exportConfig['boolFields'][$field]) {
                         $val = $this->trans('admin.misc.'.($val ? 'yes' : 'no'));
                     }
