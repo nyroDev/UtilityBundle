@@ -63,6 +63,7 @@
     display: none;
 }
 
+.filter form > div,
 .form form > div:not(:has(fieldset)),
 .form form > div fieldset,
 .form_row_grid > div,
@@ -73,6 +74,7 @@
     box-sizing: border-box;
 }
 
+.filter form > div,
 .formCentered form {
     grid-template-columns: repeat(1, 1fr);
 }
@@ -550,6 +552,7 @@ nyro-select-option:not(:defined) {
 .filterFormRange {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .filterFormRange > .form_row {
     position: relative;
@@ -632,10 +635,7 @@ nyro-select-option:not(:defined) {
 
 @media all and (min-width: 32em) {
     .filter form > div {
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 0 var(--s-padding);
-        box-sizing: border-box;
     }
 
     .filter form > div .form_row {
