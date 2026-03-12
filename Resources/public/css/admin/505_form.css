@@ -67,7 +67,8 @@
 .form form > div:not(:has(fieldset)),
 .form form > div fieldset,
 .form_row_grid > div,
-.formCentered form {
+.formCentered form,
+.formCentered form > div#form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--s-padding);
@@ -75,7 +76,8 @@
 }
 
 .filter form > div,
-.formCentered form {
+.formCentered form,
+.formCentered form > div#form {
     grid-template-columns: repeat(1, 1fr);
 }
 
@@ -504,7 +506,8 @@ nyro-select-option:not(:defined) {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding: calc(var(--s-padding) / 2) calc(var(--s-padding) / 2) calc(var(--s-padding) / 2) var(--s-padding);
+    padding: calc(var(--s-padding) / 2) calc(var(--s-padding) / 2)
+        calc(var(--s-padding) / 2) var(--s-padding);
     background: var(--c-white);
     color: var(--c-secondary);
     border: 1px solid var(--c-border);
