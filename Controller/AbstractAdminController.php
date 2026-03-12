@@ -126,6 +126,13 @@ abstract class AbstractAdminController extends AbstractController
             $response = new PhpSpreadsheetResponse();
             $response->setPhpSpreadsheet($filename.'.ods', $spreadsheet);
 
+            if (isset($exportConfig['callbackResponse']) && $exportConfig['callbackResponse']) {
+                $tmp = $exportConfig['callbackResponse']($response, $spreadsheet, $results, $exportConfig);
+                if ($tmp && $tmp instanceof Response) {
+                    $response = $tmp;
+                }
+            }
+
             return $response;
         }
 
