@@ -118,4 +118,16 @@
     document.querySelectorAll(".filterFormRange").forEach((filterFormRange) => {
         window.startEndFields(filterFormRange.querySelector('input[name*="[start]"'), filterFormRange.querySelector('input[name*="[end]"'));
     });
+
+    window.addEventListener("beforeprint", () => {
+        document.querySelectorAll("nyro-tabs").forEach((tabs) => {
+            tabs.beforeprint();
+        });
+    });
+
+    window.addEventListener("afterprint", () => {
+        document.querySelectorAll("nyro-tabs").forEach((tabs) => {
+            tabs.afterprint();
+        });
+    });
 })();

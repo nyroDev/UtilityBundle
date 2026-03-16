@@ -1,0 +1,9 @@
+#adminNav,
+header label[for="switch_adminMenu"] {
+    display: none;
+}
+
+#breadcrumbs {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}

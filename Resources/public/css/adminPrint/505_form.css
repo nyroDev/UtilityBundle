@@ -1,0 +1,16 @@
+.form_button,
+.addToCollectionCont,
+.deleteFromCollectionCont,
+.filter:not(.filterFilled) {
+    display: none !important;
+}
+
+.form form nyro-tabs nyro-tab {
+    font-weight: var(--c-font-weight-bold) !important;
+    color: var(--c-highlight-text) !important;
+    background: var(--c-highlight-dark) !important;
+}
+
+.form form nyro-tabs nyro-tab:not([index="0"]) {
+    margin-top: calc(var(--s-padding) * 2) !important;
+}

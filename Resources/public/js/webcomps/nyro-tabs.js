@@ -277,7 +277,6 @@ class NyroTabs extends HTMLElement {
             return;
         }
 
-        let lastInsertedTab = null;
         elements.forEach((el, index) => {
             const tab = new NyroTab();
             tab.slot = "nav";
@@ -299,12 +298,7 @@ class NyroTabs extends HTMLElement {
                 el.slot = "content";
             }
 
-            if (lastInsertedTab) {
-                lastInsertedTab.insertAdjacentElement("afterend", tab);
-            } else {
-                this.insertBefore(tab, this.firstChild);
-            }
-            lastInsertedTab = tab;
+            this.insertBefore(tab, el);
         });
 
         this.dispatchEvent(
@@ -313,6 +307,20 @@ class NyroTabs extends HTMLElement {
                 cancelable: true,
             })
         );
+    }
+
+    beforeprint() {
+        this.querySelectorAll(':scope > *:not([slot="header"], [slot="footer"], [slot="htmlNav"])').forEach((slotted) => {
+            slotted.dataset.slotBeforePrint = slotted.slot;
+            slotted.slot = "content";
+        });
+    }
+
+    afterprint() {
+        this.querySelectorAll(":scope > [data-slot-before-print]").forEach((slotted) => {
+            slotted.slot = slotted.dataset.slotBeforePrint;
+            delete slotted.dataset.slotBeforePrint;
+        });
     }
 
     _selectTab() {
