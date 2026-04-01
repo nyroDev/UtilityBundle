@@ -69,7 +69,7 @@ class FilterType extends AbstractType implements FilterTypeInterface
         }
 
         if (isset($data['value']) && $data['value']) {
-            $value = $data['value']->getId();
+            $value = $this->applyValue($data['value']);
 
             if (AbstractQueryBuilder::OPERATOR_IS_NULL == $data['transformer'] || AbstractQueryBuilder::OPERATOR_IS_NOT_NULL == $data['transformer']) {
                 $queryBuilder->addWhere($name, $data['transformer']);
