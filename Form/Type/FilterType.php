@@ -15,8 +15,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FilterType extends AbstractType implements FilterTypeInterface
 {
+    protected static array $applyFilters = [];
+
+    public static function addApplyFilter(string $name, callable $applyFilter): void
+    {
+        self::$applyFilters[$name] = $applyFilter;
+    }
+
+    public static function getApplyFilter(string $name): ?callable
+    {
+        return self::$applyFilters[$name] ?? null;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['applyFilter']) {
+            self::addApplyFilter($builder->getName(), $options['applyFilter']);
+        }
+
         if ($options['showTransformer']) {
             $choices = [
                 'LIKE %...%' => AbstractQueryBuilder::OPERATOR_CONTAINS,
@@ -44,14 +60,21 @@ class FilterType extends AbstractType implements FilterTypeInterface
 
     public function applyFilter(AbstractQueryBuilder $queryBuilder, string $name, array $data): AbstractQueryBuilder
     {
+        if (!isset($data['transformer']) || !$data['transformer']) {
+            $data['transformer'] = $this->getDefaultTransformer();
+        }
+
+        if ($applyFilter = self::getApplyFilter($name)) {
+            return $applyFilter($queryBuilder, $name, $data);
+        }
+
         if (isset($data['value']) && $data['value']) {
             $value = $this->applyValue($data['value']);
-            $transformer = isset($data['transformer']) && $data['transformer'] ? $data['transformer'] : $this->getDefaultTransformer();
 
-            if (AbstractQueryBuilder::OPERATOR_IS_NULL == $transformer || AbstractQueryBuilder::OPERATOR_IS_NOT_NULL == $transformer) {
-                $queryBuilder->addWhere($name, $transformer);
+            if (AbstractQueryBuilder::OPERATOR_IS_NULL == $data['transformer'] || AbstractQueryBuilder::OPERATOR_IS_NOT_NULL == $data['transformer']) {
+                $queryBuilder->addWhere($name, $data['transformer']);
             } else {
-                $queryBuilder->addWhere($name, $transformer, $value, ParameterType::STRING);
+                $queryBuilder->addWhere($name, $data['transformer'], $value, ParameterType::STRING);
             }
         }
 
@@ -66,6 +89,7 @@ class FilterType extends AbstractType implements FilterTypeInterface
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'applyFilter' => null,
             'showTransformer' => true,
             'addNullTransformer' => false,
             'transformerOptions' => [],
