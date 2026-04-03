@@ -2771,6 +2771,10 @@ class imageLib {
 
 ## --------------------------------------------------------
 
+private function validateResource($resource) {
+	return is_resource($this->imageResized) || $this->imageResized instanceof \GdImage;
+}
+
 	public function saveImage($savePath, $imageQuality = "100")
 		# Author:     Jarrod Oberto
 		# Date:       27-02-08
@@ -2788,7 +2792,7 @@ class imageLib {
 	{
 
 		// *** Perform a check or two.
-		if ( ! is_resource($this->imageResized))
+		if ( ! $this->validateResource($this->imageResized))
 		{
 			if ($this->debug)
 			{
@@ -2899,7 +2903,7 @@ class imageLib {
 		#
 	{
 
-		if ( ! is_resource($this->imageResized))
+		if ( ! $this->validateResource($this->imageResized))
 		{
 			if ($this->debug)
 			{
@@ -3469,7 +3473,7 @@ class imageLib {
 		# Notes:
 		#
 	{
-		if ( ! is_resource($img))
+		if ( ! $this->validateResource($img))
 		{
 			return false;
 		}
@@ -3718,7 +3722,7 @@ class imageLib {
 
 	public function __destruct()
 	{
-		if (is_resource($this->imageResized))
+		if ($this->validateResource($this->imageResized))
 		{
 			imagedestroy($this->imageResized);
 		}
