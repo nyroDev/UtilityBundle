@@ -52,11 +52,31 @@
         if (!options) {
             options = {};
         }
+
+        options = {
+            ...options,
+            ...JSON.parse(element.dataset.tinymceOptions || "{}"),
+        };
+
+        if (options._autoSave) {
+            if (!options.setup) {
+                options.setup = (editor) => {
+                    editor.on("change", () => {
+                        editor.save();
+                    });
+                };
+            } else {
+                console.warn(
+                    "Cannot use _autosave option with a custom setup function, as it will be ignored",
+                );
+            }
+            delete options._autoSave;
+        }
+
         window.nyroTinymceLoad(tinymceUrl, () => {
             tinymce.init({
                 target: element,
                 ...options,
-                ...JSON.parse(element.dataset.tinymceOptions || "{}"),
                 oninit: (ed) => {
                     element.dispatchEvent(
                         new CustomEvent("tinmceInit", { detail: ed }),

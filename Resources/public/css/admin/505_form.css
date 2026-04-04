@@ -636,6 +636,13 @@ nyro-select-option:not(:defined) {
     z-index: 999999 !important;
 }
 
+.form_row_tinymce textarea.tinymce {
+    display: block !important;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
 @media all and (min-width: 32em) {
     .filter form > div {
         grid-template-columns: repeat(2, 1fr);

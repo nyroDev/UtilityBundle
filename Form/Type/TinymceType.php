@@ -41,6 +41,7 @@ class TinymceType extends AbstractType
             'license_key' => 'gpl',
             'browser_spellcheck' => true,
             'contextmenu' => false,
+            '_autoSave' => true,
         ];
 
         if ((isset($options[self::OPTION_TINYMCE_BROWSER]) && $options[self::OPTION_TINYMCE_BROWSER]) || ($this->container->hasParameter('nyroDev_utility.browser.defaultEnable') && $this->container->getParameter('nyroDev_utility.browser.defaultEnable'))) {

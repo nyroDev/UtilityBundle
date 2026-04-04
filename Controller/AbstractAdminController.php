@@ -416,7 +416,13 @@ abstract class AbstractAdminController extends AbstractController
             $form->add($f, $type, $options);
         }
 
-        $submitOptions = ['label' => $this->trans('admin.misc.send')];
+        $submitOptions = [
+            'label' => $this->trans('admin.misc.send'),
+            'icon' => 'save',
+            'cancelIcon' => 'reset',
+            'cancelUrl' => $this->generateUrl($route, $routePrm),
+            'priority' => -1000,
+        ];
         if (isset($moreOptions['submit']) && is_array($moreOptions['submit'])) {
             $submitOptions = array_merge($submitOptions, $moreOptions['submit']);
         }
