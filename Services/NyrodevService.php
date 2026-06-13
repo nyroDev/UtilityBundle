@@ -94,7 +94,7 @@ class NyrodevService extends AbstractService
             foreach (array_reverse($locales) as $loc) {
                 $tmp = setlocale(LC_ALL, $loc);
                 if (mb_strtolower($tmp) == mb_strtolower($loc)) {
-                    Locale::setDefault($request->getLocale());
+                    Locale::setDefault($loc);
                     break;
                 }
             }
