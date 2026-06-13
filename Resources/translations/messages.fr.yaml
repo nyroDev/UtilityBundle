@@ -1,10 +1,10 @@
 date:
-  long: "%#d %B %Y à %H:%M"
-  short: "%d/%m/%Y"
-  shortText: "%d %B %Y"
-  fullDate: "%A %d %B %Y"
-  full: "%d/%m/%Y à %H:%M"
-  hour: "%H:%M"
+  long: "d MMMM yyyy 'à' HH:mm"
+  short: "dd/MM/yyyy"
+  shortText: "d MMMM yyyy"
+  fullDate: "EEEE d MMMM yyyy"
+  full: "dd/MM/yyyy 'à' HH:mm"
+  hour: "HH:mm"
 login:
   errors:
     unknown: "Une erreur inconnue est survenue."

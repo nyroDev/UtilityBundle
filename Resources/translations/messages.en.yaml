@@ -1,10 +1,10 @@
 date:
-  long: "%B, %#d, %Y at %I:%M %P"
-  short: "%m/%d/%Y"
-  shortText: "%B, %d, %Y"
-  fullDate: "%A, %B %d, %Y"
-  full: "%m/%d/%Y at %I:%M %P"
-  hour: "%I:%M %P"
+  long: "MMMM d, yyyy 'at' hh:mm a"
+  short: "MM/dd/yyyy"
+  shortText: "MMMM d, yyyy"
+  fullDate: "EEEE, MMMM d, yyyy"
+  full: "MM/dd/yyyy 'at' hh:mm a"
+  hour: "hh:mm a"
 login:
   errors:
     unknown: "An unknown error has occured."

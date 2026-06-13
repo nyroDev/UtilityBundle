@@ -7,6 +7,8 @@ use DateTimeZone;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
 use Html2Text\Html2Text;
+use IntlDateFormatter;
+use Locale;
 use NyroDev\UtilityBundle\Helper\IconHelper;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
@@ -92,6 +94,7 @@ class NyrodevService extends AbstractService
             foreach (array_reverse($locales) as $loc) {
                 $tmp = setlocale(LC_ALL, $loc);
                 if (mb_strtolower($tmp) == mb_strtolower($loc)) {
+                    Locale::setDefault($request->getLocale());
                     break;
                 }
             }
@@ -501,12 +504,13 @@ class NyrodevService extends AbstractService
     }
 
     /**
-     * Format a date using strftime.
+     * Format a date using IntlDateFormatter.
      *
      * @param string $format    Format translation ident
      * @param bool   $useOffset Use offset of datetime
+     * @param string $locale    Locale to use for formatting
      */
-    public function formatDate(DateTimeInterface $datetime, string $format, ?bool $useOffset = null): string
+    public function formatDate(DateTimeInterface $datetime, string $format, ?bool $useOffset = null, ?string $locale = null): string
     {
         if (is_null($useOffset)) {
             $useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');
@@ -518,19 +522,28 @@ class NyrodevService extends AbstractService
             $offset = -1 * $tz->getOffset($datetime) + $datetime->getOffset();
         }
 
-        return strftime($this->trans($format), $datetime->getTimestamp() + $offset);
+        $formatter = new IntlDateFormatter(
+            $locale ?? Locale::getDefault(),
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::NONE,
+            'UTC', // On utilise UTC car vous gérez le décalage manuellement via $offset
+            IntlDateFormatter::GREGORIAN,
+            $this->trans($format) // Le format doit être compatible ICU
+        );
+
+        // Ajustement du timestamp avec votre offset calculé
+        return $formatter->format($datetime->getTimestamp() + $offset);
     }
 
     /**
      * Truncate text to not be too large.
      *
-     * @param string $text   Text to truncate
-     * @param int    $limit  Limit
-     * @param bool   $isFile Indicate if it should be treated as file to keep the extension
+     * @param string $text     Text to truncate
+     * @param int    $limit    Limit
+     * @param bool   $isFile   Indicate if it should be treated as file to keep the extension
+     * @param string $encoding Encoding to use
      *
-     * @parame string $encoding Encoding to use
-     *
-     * @return string Trucnated text
+     * @return string Truncated text
      */
     public function truncate(string $text, int $limit, bool $isFile = false, string $encoding = 'UTF-8'): string
     {
@@ -547,7 +560,7 @@ class NyrodevService extends AbstractService
             $text = mb_substr($text, 0, $limit - 3, $encoding).'...';
         }
 
-        return $text.($ext ? '.'.$ext : null);
+        return $text.($ext ? '.'.$ext : '');
     }
 
     protected function getCryptKey(): string

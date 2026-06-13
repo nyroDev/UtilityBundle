@@ -98,7 +98,7 @@ abstract class AbstractAdminController extends AbstractController
                         $val = $exportConfig['formatter'][$field]($r, $val);
                     } elseif (is_object($val)) {
                         if ($val instanceof DateTimeInterface) {
-                            $val = strftime($this->trans('date.short'), $val->getTimestamp());
+                            $val = $this->get(NyrodevService::class)->formatDate($val, 'date.short');
                         } elseif ($val instanceof Collection) {
                             $val = $this->get(NyrodevService::class)->joinRows($val);
                         } else {
