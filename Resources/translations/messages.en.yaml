@@ -2,6 +2,8 @@ date:
   long: "MMMM d, yyyy 'at' hh:mm a"
   short: "MM/dd/yyyy"
   shortText: "MMMM d, yyyy"
+  shortMonthText: "MMMM d, yyyy"
+  shortMonthNoYearText: "MMMM d"
   fullDate: "EEEE, MMMM d, yyyy"
   full: "MM/dd/yyyy 'at' hh:mm a"
   hour: "hh:mm a"

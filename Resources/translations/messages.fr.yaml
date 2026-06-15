@@ -2,9 +2,15 @@ date:
   long: "d MMMM yyyy 'à' HH:mm"
   short: "dd/MM/yyyy"
   shortText: "d MMMM yyyy"
+  shortMonthText: "d MMM yyyy"
+  shortMonthNoYearText: "d MMM"
   fullDate: "EEEE d MMMM yyyy"
   full: "dd/MM/yyyy 'à' HH:mm"
   hour: "HH:mm"
+  startEnd:
+    singleDay: "le %start%"
+    regular: "du %start% au %end%"
+    consecutiveDays: "%start% et %end%"
 login:
   errors:
     unknown: "Une erreur inconnue est survenue."
