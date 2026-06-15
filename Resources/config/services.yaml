@@ -95,6 +95,12 @@ services:
         alias: NyroDev\UtilityBundle\Services\EmbedValidatorService
         public: true
     
+    NyroDev\UtilityBundle\Helper\DateHelper:
+        arguments:
+            - '@NyroDev\UtilityBundle\Services\NyrodevService'
+        tags:
+          - { name: templating.helper, alias: nyrodev_date }
+    
     NyroDev\UtilityBundle\Helper\IconHelper:
         calls:
             - [setKernelInterface, ['@kernel']]
