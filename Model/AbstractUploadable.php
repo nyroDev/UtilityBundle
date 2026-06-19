@@ -96,11 +96,17 @@ abstract class AbstractUploadable
         }
     }
 
-    public function setDirectFile(string $field, mixed $source, ?string $filename = null, bool $sourceIsContent = false): void
-    {
+    public function setDirectFile(
+        string $field,
+        mixed $source,
+        ?string $filename = null,
+        bool $sourceIsContent = false,
+        bool $useMove = false,
+    ): void {
         $this->directs[$field] = [
             'source' => $source,
             'sourceIsContent' => $sourceIsContent,
+            'useMove' => $useMove,
             'filename' => $filename ? $filename : basename($source),
         ];
         $original = $this->getFilePath($field);
@@ -207,6 +213,9 @@ abstract class AbstractUploadable
                 } else {
                     if ($file['sourceIsContent']) {
                         $fs->dumpFile($fullPath, $file['source']);
+                    } elseif (isset($file['useMove']) && $file['useMove']) {
+                        $fs->mkdir(dirname($fullPath));
+                        $fs->rename($file['source'], $fullPath);
                     } else {
                         $fs->copy($file['source'], $fullPath);
                     }
