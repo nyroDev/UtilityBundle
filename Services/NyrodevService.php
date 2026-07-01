@@ -3,7 +3,6 @@
 namespace NyroDev\UtilityBundle\Services;
 
 use DateTimeInterface;
-use DateTimeZone;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
 use Html2Text\Html2Text;
@@ -506,33 +505,21 @@ class NyrodevService extends AbstractService
     /**
      * Format a date using IntlDateFormatter.
      *
-     * @param string $format    Format translation ident
-     * @param bool   $useOffset Use offset of datetime
-     * @param string $locale    Locale to use for formatting
+     * @param string $format Format translation ident
+     * @param string $locale Locale to use for formatting
      */
-    public function formatDate(DateTimeInterface $datetime, string $format, ?bool $useOffset = null, ?string $locale = null): string
+    public function formatDate(DateTimeInterface $datetime, string $format, ?string $locale = null): string
     {
-        if (is_null($useOffset)) {
-            $useOffset = $this->getParameter('nyroDev_utility.dateFormatUseOffsetDefault');
-        }
-
-        $offset = 0;
-        if ($useOffset) {
-            $tz = new DateTimeZone(date_default_timezone_get());
-            $offset = -1 * $tz->getOffset($datetime) + $datetime->getOffset();
-        }
-
         $formatter = new IntlDateFormatter(
             $locale ?? Locale::getDefault(),
             IntlDateFormatter::NONE,
             IntlDateFormatter::NONE,
-            'UTC', // On utilise UTC car vous gérez le décalage manuellement via $offset
+            $datetime->getTimezone(),
             IntlDateFormatter::GREGORIAN,
-            $this->trans($format) // Le format doit être compatible ICU
+            $this->trans($format)
         );
 
-        // Ajustement du timestamp avec votre offset calculé
-        return $formatter->format($datetime->getTimestamp() + $offset);
+        return $formatter->format($datetime);
     }
 
     /**
