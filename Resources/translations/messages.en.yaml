@@ -28,6 +28,7 @@ admin:
     watch: Watch
     back: Back
     add: Add
+    duplicate: Duplicate
     edit: Edit
     export: Export
     delete: Delete

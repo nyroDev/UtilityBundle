@@ -32,6 +32,7 @@ admin:
     watch: Voir
     back: Retour
     add: Ajouter
+    duplicate: Dupliquer
     edit: Modifier
     export: Exporter
     delete: Supprimer

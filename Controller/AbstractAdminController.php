@@ -28,8 +28,16 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 abstract class AbstractAdminController extends AbstractController
 {
     public const ADD = 'add';
+    public const DUPLICATE = 'duplicate';
     public const EDIT = 'edit';
     public const DELETE = 'delete';
+
+    public const ACTIONS_ENTITY_ADD = [self::ADD, self::DUPLICATE];
+
+    public static function isActionEntityAdd(string $action): bool
+    {
+        return in_array($action, self::ACTIONS_ENTITY_ADD);
+    }
 
     public const LINK_ID_REPLACE = '--ID--';
 
@@ -44,6 +52,7 @@ abstract class AbstractAdminController extends AbstractController
         ?AbstractQueryBuilder $queryBuilder = null,
         ?array $exportConfig = null,
         array $filterDefaults = [],
+        bool $addDuplicateInResultMenu = false,
     ): Response|array {
         $nbPerPageParam = 'admin.nbPerPage.'.$route;
         $nbPerPage = $this->getParameter($nbPerPageParam, $this->getParameter('nyroDev_utility.admin.nbPerPage'));
@@ -149,6 +158,20 @@ abstract class AbstractAdminController extends AbstractController
 
         $resultMenu = new RootMenu();
         $resultMenu->addChildOuterAttr('class', 'resultActions');
+        if ($addDuplicateInResultMenu) {
+            $resultMenu->addChild(self::DUPLICATE, new LinkRoute(
+                route: $route.'_duplicate',
+                routePrm: [
+                    'id' => self::LINK_ID_REPLACE,
+                ],
+                label: '',
+                icon: 'duplicate',
+                attrs: [
+                    'class' => 'btn btnSmall duplicate',
+                    'title' => $this->trans('admin.misc.duplicate'),
+                ]
+            ));
+        }
         $resultMenu->addChild(self::EDIT, new LinkRoute(
             route: $route.'_edit',
             routePrm: [
@@ -367,7 +390,9 @@ abstract class AbstractAdminController extends AbstractController
             'validation_groups' => $groups,
         ]));
 
-        if (self::ADD != $action && $this->getParameter('nyroDev_utility.show_edit_id')) {
+        $isEntityAdd = self::isActionEntityAdd($action);
+
+        if (!$isEntityAdd && $this->getParameter('nyroDev_utility.show_edit_id')) {
             $form->add('id', TextType::class, ['label' => $this->trans('admin.'.$name.'.id'), 'attr' => ['readonly' => 'readonly'], 'mapped' => false]);
             $form->get('id')->setData($row->getId());
         }
@@ -450,7 +475,7 @@ abstract class AbstractAdminController extends AbstractController
                 $objectManager = $this->get(DbAbstractService::class)->getObjectManager();
             }
 
-            if (self::ADD == $action) {
+            if ($isEntityAdd) {
                 $objectManager->persist($row);
             }
 
