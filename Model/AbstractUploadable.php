@@ -34,7 +34,7 @@ abstract class AbstractUploadable
         $this->service = $service;
     }
 
-    public function __clone(): void
+    public function __clone()
     {
         $this->__cloneAbstractUploadable();
     }
