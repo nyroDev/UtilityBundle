@@ -34,6 +34,34 @@ abstract class AbstractUploadable
         $this->service = $service;
     }
 
+    public function __clone(): void
+    {
+        $this->__cloneAbstractUploadable();
+    }
+
+    protected function __cloneAbstractUploadable(): void
+    {
+        // Guard against an in-progress upload state shallow-copied from the source object.
+        $this->directs = [];
+        $this->temps = [];
+
+        foreach (array_keys($this->getFileFields()) as $field) {
+            $original = $this->getFilePath($field);
+            if ($original) {
+                // The persisted field is left untouched here (the existing file preview
+                // still works until the clone is saved); the actual copy on disk happens
+                // in upload(), triggered by this "direct" entry.
+                $this->directs[$field] = [
+                    'source' => $this->getFilePath($field, self::PATH_ABSOLUTE),
+                    'sourceIsContent' => false,
+                    'useMove' => false,
+                    'filename' => basename($original),
+                ];
+            }
+            $this->$field = null;
+        }
+    }
+
     abstract protected function getFileFields(): array;
 
     public function getFilePath(string $field, string $place = self::PATH_ORIGINAL): mixed
@@ -76,7 +104,12 @@ abstract class AbstractUploadable
 
     public function removeFile(string $field): void
     {
-        $this->removeFileReal($this->getFilePath($field, self::PATH_ABSOLUTE));
+        if (isset($this->directs[$field])) {
+            unset($this->directs[$field]);
+        } else {
+            $this->removeFileReal($this->getFilePath($field, self::PATH_ABSOLUTE));
+        }
+
         $this->setFilePath($field, null, self::FILEPATH_REMOVE);
     }
 
@@ -103,13 +136,16 @@ abstract class AbstractUploadable
         bool $sourceIsContent = false,
         bool $useMove = false,
     ): void {
+        $hadPendingDirect = isset($this->directs[$field]);
+
         $this->directs[$field] = [
             'source' => $source,
             'sourceIsContent' => $sourceIsContent,
             'useMove' => $useMove,
             'filename' => $filename ? $filename : basename($source),
         ];
-        $original = $this->getFilePath($field);
+
+        $original = $hadPendingDirect ? null : $this->getFilePath($field);
         if ($original) {
             $this->temps[$field] = $original;
             $value = null;
@@ -122,9 +158,12 @@ abstract class AbstractUploadable
 
     protected function setUploadFile(string $field, ?UploadedFile $file = null): void
     {
+        $hadPendingDirect = isset($this->directs[$field]);
+        unset($this->directs[$field]);
+
         $this->$field = $file;
 
-        $original = $this->getFilePath($field);
+        $original = $hadPendingDirect ? null : $this->getFilePath($field);
         if ($original) {
             $this->temps[$field] = $original;
             $value = null;
