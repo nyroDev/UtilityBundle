@@ -27,6 +27,7 @@ admin:
     filter: Filter
     clearFilter: Reset
     add: Add
+    duplicate: Duplicate
     edit: Edit
     export: Export
     delete: Delete

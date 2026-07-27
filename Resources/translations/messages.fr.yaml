@@ -31,6 +31,7 @@ admin:
     filter: Filtrer
     clearFilter: Réinitialiser
     add: Ajouter
+    duplicate: Dupliquer
     edit: Modifier
     export: Exporter
     delete: Supprimer
