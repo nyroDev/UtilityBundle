@@ -2,13 +2,14 @@
 
 namespace NyroDev\UtilityBundle\Utility;
 
+use Closure;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PhpSpreadsheetResponse extends StreamedResponse
 {
-    public function setPhpSpreadsheet(string $filename, Spreadsheet $spreadsheet, string $format = 'Ods'): void
+    public function setPhpSpreadsheet(string $filename, Spreadsheet $spreadsheet, string $format = 'Ods', ?Closure $callbackAfterSend = null): void
     {
         $this->headers->set('Content-Type', 'application/vnd.oasis.opendocument.spreadsheet');
         $this->headers->set('Content-Disposition', 'attachment;filename="'.$filename.'"');
@@ -17,8 +18,12 @@ class PhpSpreadsheetResponse extends StreamedResponse
         $this->headers->addCacheControlDirective('must-revalidate', true);
 
         $writer = IOFactory::createWriter($spreadsheet, $format);
-        $this->setCallback(function () use ($writer) {
+        $this->setCallback(function () use ($writer, $callbackAfterSend) {
             $writer->save('php://output');
+
+            if ($callbackAfterSend) {
+                $callbackAfterSend();
+            }
         });
     }
 }
