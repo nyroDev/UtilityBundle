@@ -35,8 +35,19 @@
         if (options.confirmText) {
             title.querySelector("p").innerHTML = options.confirmText;
         }
-        if (options.confirmBtnText) {
-            content.querySelector(".confirm").innerHTML = options.confirmBtnText;
+        const confirmBtn = content.querySelector(".confirm");
+        if (options.confirmBtnClass !== undefined) {
+            confirmBtn.classList.remove("btnDelete");
+            confirmBtn.classList.add(...options.confirmBtnClass.split(" ").filter(Boolean));
+        }
+        if (options.confirmBtnIcon) {
+            confirmBtn.innerHTML =
+                templateIcon.innerHTML.replaceAll("IDENT", options.confirmBtnIcon) +
+                '<span class="confirmTxt">' +
+                (options.confirmBtnText || confirmBtn.querySelector(".confirmTxt").innerHTML) +
+                "</span>";
+        } else if (options.confirmBtnText) {
+            confirmBtn.innerHTML = options.confirmBtnText;
         }
 
         if (options.clb) {
@@ -83,6 +94,8 @@
             window.confirmDialog({
                 confirmText: confirmText,
                 confirmBtnText: confirmBtnText,
+                confirmBtnClass: deleteConfirm.dataset.confirmbtnclass,
+                confirmBtnIcon: deleteConfirm.dataset.confirmbtnicon,
                 clb: () => {
                     document.location.href = deleteConfirm.href;
                 },
