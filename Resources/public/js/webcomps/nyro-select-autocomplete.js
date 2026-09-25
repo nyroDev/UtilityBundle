@@ -1,4 +1,4 @@
-import { NyroSelect, NyroSelectOption, normalizeText } from "./nyro-select";
+import { NyroSelect, NyroSelectOption, normalizeText } from "./nyro-select.js";
 
 const cacheSearchesUrls = new Map();
 
